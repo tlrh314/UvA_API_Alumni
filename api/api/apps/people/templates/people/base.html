@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block stylesheets %}{{ block.super }}<style>div#banner { background-image: url({{ STATIC_URL }}people/images/api-group2011.jpg); } div#banner h1 { text-align: right; color: #fff; padding-right: 1em; font-size: 170%; text-shadow: 2px 2px #000;} </style>{% endblock stylesheets %}
+
+{% block breadcrumbs %}
+{{ block.super }}  &#187; <a href="{% url 'institute:index' %}">Institute</a> &#187; <a href="{% url 'people:person-list' %}">People</a>
+{% endblock breadcrumbs %}
+
+{% block sidemenu %}
+{% include "people/sidemenu.html" %}
+{% endblock sidemenu %}

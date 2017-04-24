@@ -1,0 +1,54 @@
+{% extends "people/base.html" %}
+{% load people_filters %}
+{% block title %}API - people: {{ object.full_name }}{% endblock title %}
+
+{% block breadcrumbs %}
+{{ block.super }} &#187; {{ object.full_name }}
+{% endblock breadcrumbs %}
+
+{% block contents %}
+<h1>{{ object.full_name }}</h1>
+ 
+<table class="person">
+ <tr>
+  <td> {{object.title}} {{object.initials}} {{object.prefix}} {{object.last_name}} </td>
+ <td rowspan="10" align="right" valign="top">{% if object.photo %}<img src="{{ object.photo.url }}" width="200" />{% endif %}</td>
+ </tr>
+ <tr><td> Anton Pannekoek Institute for Astronomy </td></tr>
+ <tr><td> Science Park 904  </td></tr>
+ <tr><td> P.O. Box 94249 </td></tr>
+ <tr><td> 1090 GE Amsterdam </td></tr>
+ <tr><td> The Netherlands </td></tr>
+ <tr><td>&#160;</td></tr>
+ <tr><td> {% if object.work_phone %} Tel: +31 (0) 20 525 {{object.work_phone|cut:"020-525"}} {% else %} Tel: +31 (0) 20 525 7491{% endif %} </td>
+ <tr><td> Fax: +31 (0) 20 525 7484 </td></tr>
+ <tr><td> <a href="mailto:{{ object.email }}">{{ object.email }}</a> </td></tr>
+ <tr><td> {% if object.office %} Office: <a href="{% url institute:contact %}#maps"> {{ object.office }} </a> {% endif %}</td></tr>
+ <tr><td> {% if object.homepage %}<a href="{{object.homepage}}"> Personal Homepage </a>{% endif %}</td></tr>
+ <tr><td> {% if object.ads_name %}<a target="_blank" href="{{object.ads_name|ads_url}}">Publications</a>{% endif %}</td></tr>
+ <tr><td></td></tr>
+ <tr>
+  <td>{% if object.research.all %}Research Interests:
+<ul>
+{% for science in object.research.all %}{% if science.category %}<li> <a href="{{science.get_absolute_url}}"> {{science}}</a> </li>{% endif %}{% endfor %}
+</ul>{% endif %}
+  </td>
+ </tr>
+ <tr>
+  <td>{% if object.contact.all %}Research Contact Person:
+<ul>
+{% for science in object.contact.all %}{% if science.category %}<li> <a href="{{science.get_absolute_url}}"> {{science}}</a> </li>{% endif %}{% endfor %}
+</ul>{% endif %}
+  </td>
+ </tr>
+ <tr>
+  <td>{% if object.comments %}<br /> Personal Notes:
+<p>{{ object.comments|escape|urlize|linebreaks }}</p>
+{% endif %}</td>
+ </tr>
+</table>
+
+{% endblock contents %}
+
+
+

@@ -1,0 +1,10 @@
+<div id="uvalinks"><a href="http://www.science.uva.nl/">Faculty of Science</a> | <a href="http://www.uva.nl/">UvA</a></div>
+<div id="helpers">
+{% if user.username %}
+<a href="{% url 'internal:edit-profile' %}">{{ user.username }}</a> |
+<a href="{% url 'account:logout' %}">logout</a> |
+{% endif %}
+<a href="{% url 'sitemap' %}">sitemap</a> | 
+<a href="mailto:secr-astro-science@uva.nl">webmaster</a> | 
+<form name="helper_searchform" id="helper_search" method="post" action="{% url 'search:index' %}">{% csrf_token %}<input type="text" name="search_terms" size="12" placeholder="search" /> <a href="javascript:document.helper_searchform.submit()">&#9654;</a></form>
+</div>
