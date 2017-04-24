@@ -88,5 +88,8 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# Migrations
+api/apps/*/migrations
+
 db.sqlite3
 *.swp
