@@ -1,0 +1,43 @@
+@media screen {
+  div#base {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 6px 20px 5px #999999;
+    -moz-box-shadow: 6px 20px 5px #999999;
+    -o-box-shadow: 6px 20px 5px #999999;
+    box-shadow: 6px 20px 5px #999999; } }
+@media screen {
+  div#menu > ul > li:hover > ul, div#menu > ul > li:hover {
+    -webkit-box-shadow: 6px 6px 5px rgba(50, 50, 50, 0.6);
+    -moz-box-shadow: 6px 6px 5px rgba(50, 50, 50, 0.6);
+    -o-box-shadow: 6px 6px 5px rgba(50, 50, 50, 0.6);
+    box-shadow: 6px 6px 5px rgba(50, 50, 50, 0.6); }
+
+  .reflect {
+    -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.5, transparent), to(black)); } }
+@media screen {
+  div#menu > ul > li:hover {
+    -webkit-border-top-left-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -o-border-top-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -o-border-top-right-radius: 3px;
+    border-top-right-radius: 3px; } }
+@media screen {
+  div#sidemenu {
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -o-border-top-right-radius: 5px;
+    border-top-right-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -o-border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+    -webkit-box-shadow: 3px 3px 2px #999999;
+    -moz-box-shadow: 3px 3px 2px #999999;
+    -o-box-shadow: 3px 3px 2px #999999;
+    box-shadow: 3px 3px 2px #999999; } }

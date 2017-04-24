@@ -1,0 +1,178 @@
+{% extends "institute/base.html" %}
+{% block title %}API - contact{% endblock title %}
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript" src="{{ STATIC_URL }}institute/javascript/modernizr.js"></script>
+<script type="text/javascript">$(function() { if (Modernizr.svg) { $("p#map").css('display', 'block'); } });</script>
+{% endblock scripts %}
+{% block breadcrumbs %}
+{{ block.super }}  &#187; <a href="{% url institute:contact %}">Contact</a>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+<h1>Contact</h1>
+
+<a name="address"></a><h2>Address</h2>
+<p>
+The Anton Pannekoek Institute can be reached at (postal address):
+</p>
+<img style="float: left; height: 120px; margin-right: 2em;" src="{{ STATIC_URL }}institute/images/api_logo_default_black.png" />
+<address>
+Anton Pannekoek Instituut voor Sterrenkunde<br />
+Universiteit van Amsterdam<br />
+Postbus 94249<br />
+1090 GE  Amsterdam<br />
+<br />
+phone: (+31) (0)20 525 7491<br />
+fax: (+31) (0)20 525 7484<br />
+</address>
+<p>
+</p>
+
+<a name="how"></a><h2>How to find us</h2>
+
+<img src="{{ STATIC_URL }}institute/images/api_building.jpg" style="float: right; margin-left: 1em;" />
+<p>
+Our visitor address is:
+</p>
+
+<address>
+Science Park 904<br />
+1098 XH Amsterdam
+</address>
+
+<p> You can recognise the faculty building by the two domes on top;
+the institute is located right under the domes. The building is also
+the largest building in the Science Park. Walk under the building
+between the pillars into the central area to find the main
+entrance.  </p>
+
+<p> If you are visiting, please present yourself at the reception on
+the ground floor in the central hall (hopefully, someone has notified
+the reception about your arrival in advance). Please state who you are
+visiting and you will be given an access card for the building (you
+may be asked some information and possibly an identification; this is for
+visitors to remind them to return the access card when leaving).</p>
+
+<p> Take the lift to the fourth floor, and exit the lift towards the
+hallway. Then turn left and pass along the vide. You should now find yourself
+at the institute (<a href="#maps">see map</a>). 
+The secretariat is two further turns to the left, around the vide, then the first office on your right.</p>
+
+
+<a name="public-transport"></a><h3>Public transport</h3>
+
+<h4>From Amsterdam Centraal station</h4> 
+
+<p> If you are coming from Amsterdam Centraal
+station, the best option is to take the train to Amsterdam
+Science Park station, and follow the directions as
+above. Trains to the Science Park leave at 10, 22, 40 and 52 minutes past the
+hour.</p>
+
+<p> When exiting the Science Park station, turn left
+into the tunnel. Once through the tunnel, you'll find yourself in the
+Science Park, and probably can spot the API domes towards the right of
+your front. The science faculty building is the largest building in
+the Science Park. </p>
+
+<h4>From Schiphol Airport</h4> 
+
+<p> If you are coming from Schiphol, 
+the best option is to take the train to Amsterdam
+Science Park station, and follow the directions as
+above. Trains to the Science Park leave at 28, and 58 minutes past the
+hour.</p>
+
+
+<h4>Other options</h4>
+
+<p> If Amsterdam Amstel station is more convenient
+for you to reach (there are direct trains from Utrecht to
+Amsterdam Amstel, and the metro stops there as well),
+take bus 40 from Amsterdam Amstel station (every
+fifteen minutes) and get out at bus stop Science Park (some ten
+minutes from the station). The bus may go around the building first
+before stopping here, but there are bus stops at either side of the
+building.<p>
+
+Other options consist of taking bus 40 from Muiderpoort station to
+Amsterdam Amstel in the opposite direction, or taking tram line 9 and
+exiting at stop &quot;Kruislaan&quot;. From there you can walk or
+catch bus 40 again.
+</p>
+
+<h4>General</h4> 
+
+<p> Public transport in Amsterdam is generally very good: trams,
+metro, buses and train will get you to most places. Amsterdam is
+using the so-called &quot;OV-card&quot;, which you can buy
+at the small book kiosks and the public transport vending machines
+(not the &quot;NS&quot; railway ones, but the &quot;GVB&quot;
+ones). Some card types are rechargable if you want to use it more than
+once. You swipe the card when entering and exiting public transport,
+the cost will automatically be deducted from the card.
+For more information see
+<a target="_blank" href="http://en.gvb.nl/reisinformatie/reizenmetovchipkaart/Pages/Reizen.aspx"> "how to use the OV-chipcard".</a>
+</p>
+
+<dl>
+ <dt>links:</dt>
+ <dd>
+  <ul>
+   <li><a target="_blank" href="http://en.gvb.nl/pages/home.aspx">Webpages of the Amsterdam public transport company (GVB), in English</a></li>
+   <li><a href="http://www.gvb.nl/reisinformatie/plattegronden/Documents/lijnenkaart2013.pdf"> Map of tram, bus &amp; metro </a> (PDF, external link).</li>
+   <li>Bus 40, overview of times (Monday to Friday): <a target="_blank" href="http://195.193.209.12/gvbpublicatieinternet/TimeTable.aspx?type=lf&lijnnummer=40&dagsoort=WE&richting=t&key=cc00d939-9e9f-4df6-ba00-06c6956d110a">Amstel station to Muiderpoort station</a>, <a target="_blank" href="http://195.193.209.12/gvbpublicatieinternet/TimeTable.aspx?type=lf&lijnnummer=40&dagsoort=WE&richting=h&key=cc00d939-9e9f-4df6-ba00-06c6956d110a">Muiderpoort station to Amstel station</a> or the <a target="_blank" href="http://195.193.209.12/gvbpublicatieinternet/Repository\20130807155219\lf\Lijn_40.pdf">PDF for the complete schedule both ways</a> (external links).</li>
+  </ul>
+ </dd>
+</dl>
+
+<a name="car"></a><h3>By car</h3>
+
+<p> Get on the A10, the Amsterdam ring road, towards the easterly
+part (direction &quot;Utrecht/Den Haag&quot; if coming from Amersfoort; 
+direction &quot;Amersfoort&quot; from other directions). Find exit S113-Watergraafsmeer.
+
+<p>At the end of the exit, follow the signs for
+Watergraafsmeer/Science Park (turn right coming from the east, turn
+left coming from Utrecht/Schiphol), onto the Middenweg. <br />
+After about half a kilometer, turn right onto the Kruislaan at the traffic lights; 
+at the end of the Kruislaan, you pass under a long railway bridge, 
+and you are in the Science Park (noticable by the various offices). 
+Once there you should at some point see the API domes. 
+Circle around the building until you find a parking place; 
+parking at the Science Park is not free. </p>
+
+<h4> More information </h4>
+
+<p> Some more information is available on the <a target="_blank"  
+href="http://www.scienceparkamsterdam.nl/en/contact/how-to-find-us/">Science
+Park website</a>. </p>
+
+
+<a name="maps"></a><h3>Maps</h3>
+
+<h4>Local map of the Science Park</h4>
+
+<a href="{{ STATIC_URL }}institute/images/science_park.jpg"><img src="{{ STATIC_URL }}institute/images/science_park.jpg" width="500" /></a>
+
+
+
+<h4>Local map of the Anton Pannkoek Institute:</h4>
+
+<p>
+<a href="{{ STATIC_URL }}institute/maps/api-map.jpg"><img src="{{ STATIC_URL }}institute/maps/api-map-small.jpg" /></a>
+</p>
+<p>
+<a href="{{ STATIC_URL }}institute/maps/api-map.pdf">Click here for a pdf version of this map.</a>
+</p>
+
+
+<!--
+<p id="map">
+There is also an <a href="{% url institute:map %}">interactive map</a>.
+</p>
+-->
+
+
+{% endblock contents %}

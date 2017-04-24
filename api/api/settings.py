@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'api.apps.alumni',
     'api.apps.blog',
+    'api.apps.institute',
     'api.apps.people',
     'api.apps.research',
 ]
@@ -67,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
             ],
         },
     },
@@ -122,7 +124,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'api/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'api/static/')
+STATICFILES_DIRS = [
+    '/usr/local/mscproj/UvA_API_Alumni/api/api/static',
+]
+
 
 
 # Allow any settings to be defined in local_settings.py which should be

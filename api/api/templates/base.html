@@ -1,4 +1,5 @@
 {#% load filters %#}
+{% load static %}
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -10,6 +11,8 @@
 {% block stylesheets %}
  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/yui-reset-fonts.css" />
  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+ <link rel="stylesheet" href="{% static 'css/base.css' %}">
+ 
  <link media="only screen and (max-device-width: 480px)" href="{{ STATIC_URL }}css/iphone.css" type="text/css" rel="stylesheet" />
  <!--[if lte IE 6]>
  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" />

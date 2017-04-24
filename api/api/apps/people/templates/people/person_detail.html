@@ -23,7 +23,7 @@
  <tr><td> {% if object.work_phone %} Tel: +31 (0) 20 525 {{object.work_phone|cut:"020-525"}} {% else %} Tel: +31 (0) 20 525 7491{% endif %} </td>
  <tr><td> Fax: +31 (0) 20 525 7484 </td></tr>
  <tr><td> <a href="mailto:{{ object.email }}">{{ object.email }}</a> </td></tr>
- <tr><td> {% if object.office %} Office: <a href="{% url institute:contact %}#maps"> {{ object.office }} </a> {% endif %}</td></tr>
+ <tr><td> {% if object.office %} Office: <a href="{% url 'institute:contact' %}#maps"> {{ object.office }} </a> {% endif %}</td></tr>
  <tr><td> {% if object.homepage %}<a href="{{object.homepage}}"> Personal Homepage </a>{% endif %}</td></tr>
  <tr><td> {% if object.ads_name %}<a target="_blank" href="{{object.ads_name|ads_url}}">Publications</a>{% endif %}</td></tr>
  <tr><td></td></tr>

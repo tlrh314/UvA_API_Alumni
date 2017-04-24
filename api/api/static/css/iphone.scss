@@ -1,0 +1,104 @@
+html
+{
+    background: #afcfef;
+    color: #000;
+}
+
+body
+{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+div#base
+{
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+div#sidemenu
+{
+    float: right;
+    width: 10em;
+    font-size: 170%;
+    text-align: right;
+    padding-left: 1em;
+	padding-right: 1em;
+    padding-top: 1ex;
+    padding-bottom: 1ex;
+	
+	ul
+	{
+		line-height: 200%;
+	}
+}
+
+div#contents
+{
+    margin-left: 1em;
+    margin-right: 1em;
+    width: 100%;
+    font-size: 140%;
+    line-height: 1.4;
+}
+
+div#footer
+{
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+div#header
+{
+    width: 100%;
+}
+
+div#header h1
+{
+    font-size: 300%;
+}
+
+div#bottommenu
+{
+	font-size: 200%;
+	margin-top: 1ex;
+	margin-left: 1em;
+}
+
+div#banner
+{
+    background: url(../images/skyline_banner.jpg) no-repeat center 5.0ex;
+    -webkit-background-size: 100%;
+    text-align: left;
+    color: #000;
+    background-color: transparent;
+}
+
+div#menu
+{
+    font-size: 180%;
+	li
+	{
+		padding-top: 0.5ex;
+
+	}
+	ul ul
+	{
+		li a
+		{
+			height: 4ex;
+			padding-top: 1ex;
+		}
+	}
+	& > ul > li:hover
+	{
+		height: 3ex;
+		
+		ul
+		{
+			top: 3ex;
+		}
+	}
+}

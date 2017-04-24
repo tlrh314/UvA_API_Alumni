@@ -1,0 +1,76 @@
+html {
+  height: 100%; }
+
+body {
+  padding-top: 3ex;
+  padding-bottom: 4ex; }
+
+div#base {
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto; }
+
+div#banner {
+  margin: 0 auto;
+  height: 160px;
+  /* banner picture shows 20px less vertically (?) */
+  padding: 0; }
+
+div#menu {
+  position: relative;
+  top: -160px;
+  right: 0;
+  height: 3ex;
+  /* explicite height, to let div#helpers adjust below it */
+  z-index: 10;
+  /* otherwise, doesn't fall over the page and makes
+   * menu parts inaccessible when at bottom */ }
+
+div#bottommenu {
+  position: relative;
+  top: -3ex;
+  /* height of div#bottommenu (in smaller font) */
+  padding: 0;
+  margin: 1px;
+     /* (bad) fix for an odd alignment problem with Firefox,
+which shows up only under certain unknown conditions */
+  z-index: 10; }
+
+div#uvalinks {
+  position: relative;
+  left: 0;
+  right: 0;
+  float: left;
+  text-align: left; }
+
+div#main {
+  padding-top: 4ex;
+  padding-bottom: 2ex;
+  margin-left: 1em;
+  margin-right: 1.5em; }
+
+div#sidemenu {
+  width: 11em;
+  float: left;
+  margin-left: 0em;
+  padding-left: 0.5em;
+  margin-bottom: 4ex; }
+
+div#contents {
+  margin-left: 13em; }
+
+div.section {
+  margin-left: 1em; }
+
+div#footer {
+  width: 600px;
+  clear: both;
+  margin-top: 2ex;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1ex 0em;
+  padding-top: 3ex; }
+
+div#push-footer {
+  clear: both;
+  height: 0em; }
