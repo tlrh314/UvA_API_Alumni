@@ -2,21 +2,43 @@ from django.contrib import admin
 from .models import Person, Job, MastersDegree, PhdDegree, PostdocPosition
 
 
-class JobAdminInline(admin.TabularInline):
+class JobAdminInline(admin.StackedInline):
     model = Job
+    extra = 1
+    fieldsets = [
+    ('Job information',
+        {'fields':['position_name','current_job','company_name','start_date','stop_date','inside_academia','location_job']}
+        )
+    ]
 
 
-class MastersDegreeAdminInline(admin.TabularInline):
+class MastersDegreeAdminInline(admin.StackedInline):
     model = MastersDegree
+    max_num = 1
+    # fieldsets = [
+    # ('Job information',
+    #     {'fields':['position_name','current_job','company_name','start_date','stop_date','inside_academia','location_job']}
+    #     )
+    # ]
 
-
-class PhdDegreeAdminInline(admin.TabularInline):
+class PhdDegreeAdminInline(admin.StackedInline):
     model = PhdDegree
+    max_num = 1
+    # fieldsets = [
+    # ('Job information',
+    #     {'fields':['position_name','current_job','company_name','start_date','stop_date','inside_academia','location_job']}
+    #     )
+    # ]
 
 
-class PostdocPositionAdminInline(admin.TabularInline):
+class PostdocPositionAdminInline(admin.StackedInline):
     model = PostdocPosition
-
+    max_num = 1
+    # fieldsets = [
+    # ('Job information',
+    #     {'fields':['position_name','current_job','company_name','start_date','stop_date','inside_academia','location_job']}
+    #     )
+    # ]
 
 class PersonAdmin(admin.ModelAdmin):
     list_filter = ('show_person', 'position')

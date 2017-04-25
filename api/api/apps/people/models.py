@@ -198,7 +198,6 @@ class PhdDegree(models.Model):
     phd_defence_date = models.DateField(_('phd defence date'), blank=True, null=True)
     #thesis_file      = models.Fi
     #thesis topic/name/link/field
-    #defence date
     #supervisors
     #students supervised --> class? anders kan je er maar een paar invullen
     #privacy levels
@@ -220,7 +219,3 @@ class PostdocPosition(models.Model):
     #file = ..
     #supervisors = ..
     #thesis name
-
-
-#class Adress(models.Model):
-    #person              = models.ForeignKey(Person, related_name="address")
