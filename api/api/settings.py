@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
     'django_extensions',
     'api.apps.alumni',
     'api.apps.blog',
@@ -129,6 +130,14 @@ STATICFILES_DIRS = [
     '/usr/local/mscproj/UvA_API_Alumni/api/api/static',
 ]
 
+
+# Settings for django-bootstrap3
+BOOTSTRAP3 = {
+    'set_required': False,  # For Django <= 1.8 only
+    'error_css_class': 'bootstrap3-error',
+    'required_css_class': 'bootstrap3-required',
+    'javascript_in_head': True,
+}
 
 
 # Allow any settings to be defined in local_settings.py which should be
