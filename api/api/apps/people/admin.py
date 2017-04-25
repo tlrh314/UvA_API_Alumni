@@ -1,23 +1,33 @@
 from django.contrib import admin
-from .models import Person, Job
+from .models import Person, Job, MastersDegree, PhdDegree, PostdocPosition
 
-class PersonAdminInline(admin.TabularInline):
-    model = Person
-    extra = 1
 
 class JobAdminInline(admin.TabularInline):
     model = Job
-    extra = 1
 
-class JobAdmin(admin.ModelAdmin):
-    inlines = (PersonAdminInline,)
+
+class MastersDegreeAdminInline(admin.TabularInline):
+    model = MastersDegree
+
+
+class PhdDegreeAdminInline(admin.TabularInline):
+    model = PhdDegree
+
+
+class PostdocPositionAdminInline(admin.TabularInline):
+    model = PostdocPosition
+
 
 class PersonAdmin(admin.ModelAdmin):
     list_filter = ('show_person', 'position')
     list_display = ('user','email','show_person', 'first_name', 'prefix', 'last_name')
     search_fields = ('first_name', 'last_name')
     ordering = ('user__username',)
-    inlines = (JobAdminInline,)
+    inlines = (JobAdminInline, MastersDegreeAdminInline,
+        PhdDegreeAdminInline, PostdocPositionAdminInline)
+    # exclude = ('jobs',)
+
+
     fieldsets = [
         ('Account information',
                 {
@@ -53,7 +63,6 @@ class PersonAdmin(admin.ModelAdmin):
         #         'fields': ['jobs']
         #         }),
     ]
-    exclude = ('jobs',)
 
 admin.site.register(Person, PersonAdmin)
 #admin.site.register(Job, PersonAdmin)

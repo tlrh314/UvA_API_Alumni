@@ -12,69 +12,6 @@ import os
 import os.path
 
 
-#class thesis(models.Model):
-    #file = ..
-    #supervisors = ..
-    #thesis name
-
-
-class MastersDegree(models.Model):
-    #Masters information @api
-    date_start_master   = models.DateField(_('date start master'), blank=True, null=True)
-    date_stop_master    = models.DateField(_('date stop master'), blank=True, null=True)
-    #thesis_file = 
-    #Thesis topic/name/link
-    #supervisor(s)
-    #privacy levels
-
-class PhdDegree(models.Model):
-    #PhD information @api
-    date_start_phd   = models.DateField(_('date start phd'), blank=True, null=True)
-    date_stop_phd    = models.DateField(_('date stop phd'), blank=True, null=True)
-    phd_defence_date = models.DateField(_('phd defence date'), blank=True, null=True)
-    #thesis_file      = models.Fi 
-    #thesis topic/name/link/field
-    #defence date
-    #supervisors
-    #students supervised --> class? anders kan je er maar een paar invullen
-    #privacy levels
-
-class PostdocPosition(models.Model):
-    #postdoc information @api
-    date_start_postdoc   = models.DateField(_('date start postdoc'), blank=True, null=True)
-    date_stop_postdoc    = models.DateField(_('date stop postdoc'), blank=True, null=True)
-    #supervisors,
-    #field,
-
-    #privacy levels
-
-class Job(models.Model):
-    currently_occupating_job_choices = (
-        (1,'Yes'),
-        (2,'No'),
-    )
-
-    outside_inside_choices = (
-        (1, 'Yes'),
-        (2, 'No'),
-    )
-
-    location_job_choices = (
-        (1, 'NL'),
-        (2, 'Europe'),
-        (3, 'Great Bitain'),
-        (4, 'US'),
-        (5, 'Other'),
-    )
-
-    position_name       = models.CharField(_('position name'), blank=True,max_length=40)
-    current_job         = models.PositiveSmallIntegerField(_('current occupation'), choices=currently_occupating_job_choices, default=2)
-    company_name        = models.CharField(_('company name'), blank=True, max_length=40)
-    start_date          = models.DateField(_('date start job'), blank=True, null=True)
-    stop_date           = models.DateField(_('date start job'), blank=True, null=True)
-    inside_academia     = models.PositiveSmallIntegerField(_('inside academia'), choices=outside_inside_choices, default=1)
-    location_job        = models.PositiveSmallIntegerField(_('location job'), choices=location_job_choices, default=1)
-
 def get_mugshot_location(instance, filename):
     return os.path.join("uploads", "images", "people", "mugshots",
                         instance.user.username, filename)
@@ -84,11 +21,8 @@ def get_photo_location(instance, filename):
                         instance.user.username, filename)
 
 def get_thesis_location(instance, filename):
-	return os.path.join("uploads","documents","people","thesis", 
-			instance.user.username,filename)
-
-#class Adress(models.Model):
-	
+    return os.path.join("uploads","documents","people","thesis",
+            instance.user.username,filename)
 
 
 class Person(models.Model):
@@ -169,27 +103,10 @@ class Person(models.Model):
     ads_name        = models.CharField(_('ads name'), blank=True, max_length=40)
     research        = models.ManyToManyField(ResearchTopic, verbose_name=_("research"), blank=True, related_name='interest')
     contact         = models.ManyToManyField(ResearchTopic, verbose_name=_("contact"), blank=True, related_name='contact')
-    
+
     #Extra information
     comments        = models.TextField(_('comments'), blank=True)
-    
 
-
-
-    jobs = models.ManyToManyField(Job)
- #   master = models.OneToOneField(MastersDegree)
-
-
-
-
-
-
-
-
-
-
-
-    ############################
     class Meta:
         verbose_name = _('person')
         verbose_name_plural = _('persons')
@@ -232,3 +149,78 @@ class Person(models.Model):
         TODAY = date.today()
         return u'%d' % int((TODAY-self.birth_date).days/365.0)
 
+
+class Job(models.Model):
+    currently_occupating_job_choices = (
+        (1,'Yes'),
+        (2,'No'),
+    )
+
+    outside_inside_choices = (
+        (1, 'Yes'),
+        (2, 'No'),
+    )
+
+    location_job_choices = (
+        (1, 'NL'),
+        (2, 'Europe'),
+        (3, 'Great Bitain'),
+        (4, 'US'),
+        (5, 'Other'),
+    )
+
+    person              = models.ForeignKey(Person, related_name="jobs")
+    position_name       = models.CharField(_('position name'), blank=True,max_length=40)
+    current_job         = models.PositiveSmallIntegerField(_('current occupation'), choices=currently_occupating_job_choices, default=2)
+    company_name        = models.CharField(_('company name'), blank=True, max_length=40)
+    start_date          = models.DateField(_('date start job'), blank=True, null=True)
+    stop_date           = models.DateField(_('date start job'), blank=True, null=True)
+    inside_academia     = models.PositiveSmallIntegerField(_('inside academia'), choices=outside_inside_choices, default=1)
+    location_job        = models.PositiveSmallIntegerField(_('location job'), choices=location_job_choices, default=1)
+
+
+class MastersDegree(models.Model):
+    #Masters information @api
+    person              = models.ForeignKey(Person, related_name="masters")
+    date_start_master   = models.DateField(_('date start master'), blank=True, null=True)
+    date_stop_master    = models.DateField(_('date stop master'), blank=True, null=True)
+    #thesis_file =
+    #Thesis topic/name/link
+    #supervisor(s)
+    #privacy levels
+
+
+class PhdDegree(models.Model):
+    #PhD information @api
+    person           = models.ForeignKey(Person, related_name="phd")
+    date_start_phd   = models.DateField(_('date start phd'), blank=True, null=True)
+    date_stop_phd    = models.DateField(_('date stop phd'), blank=True, null=True)
+    phd_defence_date = models.DateField(_('phd defence date'), blank=True, null=True)
+    #thesis_file      = models.Fi
+    #thesis topic/name/link/field
+    #defence date
+    #supervisors
+    #students supervised --> class? anders kan je er maar een paar invullen
+    #privacy levels
+
+
+class PostdocPosition(models.Model):
+    #postdoc information @api
+    person              = models.ForeignKey(Person, related_name="postdoc")
+    date_start_postdoc  = models.DateField(_('date start postdoc'), blank=True, null=True)
+    date_stop_postdoc   = models.DateField(_('date stop postdoc'), blank=True, null=True)
+    #supervisors,
+    #field,
+
+    #privacy levels
+
+
+#class thesis(models.Model):
+    #person              = models.ForeignKey(Person, related_name="thesis")
+    #file = ..
+    #supervisors = ..
+    #thesis name
+
+
+#class Adress(models.Model):
+    #person              = models.ForeignKey(Person, related_name="address")
