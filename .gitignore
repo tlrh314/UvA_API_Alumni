@@ -89,7 +89,7 @@ ENV/
 .ropeproject
 
 # Migrations
-api/apps/*/migrations
+migrations/
 
 db.sqlite3
 *.swp
