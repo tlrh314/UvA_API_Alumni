@@ -1,29 +1,60 @@
 from django.contrib import admin
-from .models import Person
+from .models import Person, Job
 
+class PersonAdminInline(admin.TabularInline):
+    model = Person
+    extra = 1
+
+class JobAdminInline(admin.TabularInline):
+    model = Job
+    extra = 1
+
+class JobAdmin(admin.ModelAdmin):
+    inlines = (PersonAdminInline,)
 
 class PersonAdmin(admin.ModelAdmin):
-
     list_filter = ('show_person', 'position')
     list_display = ('user','email','show_person', 'first_name', 'prefix', 'last_name')
     search_fields = ('first_name', 'last_name')
     ordering = ('user__username',)
+    inlines = (JobAdminInline,)
     fieldsets = [
         ('Account information',
-                 {'fields': ['user', 'show_person']}),
-        ('Personal information',
-                 {'fields': ['first_name', 'prefix', 'last_name',
-                             'title', 'initials', 'gender', 'birth_date',
-                             'address', 'zipcode', 'city', 'country',
-                             'home_phone', 'mobile', 'mugshot', 'photo']}),
-        ('Science information',
-                 {'fields': ['position', 'office', 'work_phone',
-                             'ads_name', 'email', 'homepage',
-                             'research', 'contact']}),
-        ('Extra information',
-                 {'fields': ['comments']}),
-    ]
+                {
+                'fields': ['user', 'show_person']
+                }),
 
+        ('Personal information',{
+                 'fields': ['first_name', 'prefix', 'last_name',
+                             'title', 'initials', 'gender', 'birth_date',
+                             'place_of_birth','nationality', 'mugshot',
+                              'photo','biography']
+                }),
+
+        ('Contact information',{
+                'fields':['linkedin','facebook','email','home_phone','homepage','mobile']
+                }),
+
+        ('Adress information',{
+                'fields': ['streetname', 'streetnumber', 'zipcode', 'city', 'country']
+                }),
+
+        ('Science information',{
+                 'fields': ['position', 'office', 'work_phone',
+                             'ads_name', 'research', 'contact']
+                }),
+
+        ('Extra information',{
+                'classes': ['collapse'],
+                'fields': ['comments']
+                }),
+
+        # ('Jobs',{
+        #         'fields': ['jobs']
+        #         }),
+    ]
+    exclude = ('jobs',)
 
 admin.site.register(Person, PersonAdmin)
+#admin.site.register(Job, PersonAdmin)
 
