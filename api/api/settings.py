@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'bootstrap3',
     'tinymce',
+    'nested_inline',
     'api.apps.alumni',
     'api.apps.blog',
     'api.apps.institute',

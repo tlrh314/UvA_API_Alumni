@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Person, Job, MastersDegree, PhdDegree, PostdocPosition
+from nested_inline.admin import NestedStackedInline, NestedModelAdmin
+from .models import Person, Job, MastersDegree, PhdDegree, PostdocPosition, MasterThesis, PhdThesis
 
 
-class JobAdminInline(admin.StackedInline):
+class JobAdminInline(NestedStackedInline):
     model = Job
     extra = 1
     fieldsets = [
@@ -11,19 +12,29 @@ class JobAdminInline(admin.StackedInline):
         )
     ]
 
+class MasterThesisInline(NestedStackedInline):
+    model = MasterThesis
+    extra = 1
 
-class MastersDegreeAdminInline(admin.StackedInline):
+class PhdThesisInline(NestedStackedInline):
+    model = PhdThesis
+    extra = 1
+
+class MastersDegreeAdminInline(NestedStackedInline):
     model = MastersDegree
     max_num = 1
+    inlines = (MasterThesisInline,)
     # fieldsets = [
     # ('Job information',
     #     {'fields':['position_name','current_job','company_name','start_date','stop_date','inside_academia','location_job']}
     #     )
     # ]
 
-class PhdDegreeAdminInline(admin.StackedInline):
+
+class PhdDegreeAdminInline(NestedStackedInline):
     model = PhdDegree
     max_num = 1
+    inlines = (PhdThesisInline,)
     # fieldsets = [
     # ('Job information',
     #     {'fields':['position_name','current_job','company_name','start_date','stop_date','inside_academia','location_job']}
@@ -31,16 +42,18 @@ class PhdDegreeAdminInline(admin.StackedInline):
     # ]
 
 
-class PostdocPositionAdminInline(admin.StackedInline):
+class PostdocPositionAdminInline(NestedStackedInline):
     model = PostdocPosition
     max_num = 1
+
     # fieldsets = [
     # ('Job information',
     #     {'fields':['position_name','current_job','company_name','start_date','stop_date','inside_academia','location_job']}
     #     )
     # ]
 
-class PersonAdmin(admin.ModelAdmin):
+
+class PersonAdmin(NestedModelAdmin):
     list_filter = ('show_person', 'position')
     list_display = ('user','email','show_person', 'first_name', 'prefix', 'last_name')
     search_fields = ('first_name', 'last_name')

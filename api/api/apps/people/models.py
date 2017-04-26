@@ -189,22 +189,69 @@ class Job(models.Model):
 
 
 
+
+
+
+
+@python_2_unicode_compatible
+class MastersDegree(models.Model):
+    #Masters information @api
+    person              = models.ForeignKey(Person, related_name="masters")
+    date_start_master   = models.DateField(_('date start master'), blank=True, null=True)
+    date_stop_master    = models.DateField(_('date stop master'), blank=True, null=True)
+    #thesis_file =
+
+
+    #Thesis topic/name/link
+    #supervisor(s)
+    #privacy levels
+
+
+@python_2_unicode_compatible
+class PhdDegree(models.Model):
+    person           = models.ForeignKey(Person, related_name="phd")
+    date_start_phd   = models.DateField(_('date start phd'), blank=True, null=True)
+    date_stop_phd    = models.DateField(_('date stop phd'), blank=True, null=True)
+    phd_defence_date = models.DateField(_('phd defence date'), blank=True, null=True)
+    #thesis_file      = models.
+    
+
+    #thesis topic/name/link/field
+    #supervisors
+    #students supervised --> class? anders kan je er maar een paar invullen
+    #privacy levels
+
+
+@python_2_unicode_compatible
+class PostdocPosition(models.Model):
+    #postdoc information @api
+    person              = models.ForeignKey(Person, related_name="postdoc")
+    date_start_postdoc  = models.DateField(_('date start postdoc'), blank=True, null=True)
+    date_stop_postdoc   = models.DateField(_('date stop postdoc'), blank=True, null=True)
+    #supervisors,
+    #field,
+
+    #privacy levels
+
 @python_2_unicode_compatible
 class Thesis(models.Model):
     """ Represents a thesis at API. """
 
-    THESIS_TYPE = (
-        ('phd', 'PhD'),
-        ('msc', 'Master'),
-        ('bsc', 'Bachelor'),
-    )
+    # THESIS_TYPE = (
+    #     ('phd', 'PhD'),
+    #     ('msc', 'Master'),
+    #     ('bsc', 'Bachelor'),
+    # )
 
-    author = models.ForeignKey(Person, related_name="thesis")
+    #author = models.ForeignKey(Person, related_name="thesis")
     title  = models.CharField(max_length=160, default=_("Title Unknown"))
     date   = models.DateField(help_text=_("Date of the thesis or defense"))
-    type   = models.CharField(max_length=3, choices=THESIS_TYPE, default='PhD')
     url    = models.URLField(blank=True, help_text=_("UvA DARE URL or other URL to thesis"))
     slug   = models.SlugField(max_length=100, blank=False, unique=True)
+    supervisor = models.ManyToManyField(Person, related_name='supervisor')
+
+    #Degree = models.ForeignKey(MastersDegree if self.type == 'msc' else PhdDegree,)
+    #phd = 
 
     class Meta:
         verbose_name = _("thesis")
@@ -234,39 +281,25 @@ class Thesis(models.Model):
                 break
 
 
-@python_2_unicode_compatible
-class MastersDegree(models.Model):
-    #Masters information @api
-    person              = models.ForeignKey(Person, related_name="masters")
-    date_start_master   = models.DateField(_('date start master'), blank=True, null=True)
-    date_stop_master    = models.DateField(_('date stop master'), blank=True, null=True)
-    #thesis_file =
-    #Thesis topic/name/link
-    #supervisor(s)
-    #privacy levels
+class MasterThesis(Thesis):
+    degree = models.OneToOneField(MastersDegree)
+
+    @property
+    def type():
+        return "MSc" 
+
+    @property
+    def author(self):
+        return self.degree.person.full_name
 
 
-@python_2_unicode_compatible
-class PhdDegree(models.Model):
-    #PhD information @api
-    person           = models.ForeignKey(Person, related_name="phd")
-    date_start_phd   = models.DateField(_('date start phd'), blank=True, null=True)
-    date_stop_phd    = models.DateField(_('date stop phd'), blank=True, null=True)
-    phd_defence_date = models.DateField(_('phd defence date'), blank=True, null=True)
-    #thesis_file      = models.Fi
-    #thesis topic/name/link/field
-    #supervisors
-    #students supervised --> class? anders kan je er maar een paar invullen
-    #privacy levels
+class PhdThesis(Thesis):
+    degree = models.OneToOneField(PhdDegree)
 
+    @property
+    def type():
+        return "PhD" 
 
-@python_2_unicode_compatible
-class PostdocPosition(models.Model):
-    #postdoc information @api
-    person              = models.ForeignKey(Person, related_name="postdoc")
-    date_start_postdoc  = models.DateField(_('date start postdoc'), blank=True, null=True)
-    date_stop_postdoc   = models.DateField(_('date stop postdoc'), blank=True, null=True)
-    #supervisors,
-    #field,
-
-    #privacy levels
+    @property
+    def author(self):
+        return self.degree.person.full_name
