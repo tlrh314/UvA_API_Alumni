@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap3',
     'django_extensions',
+    'bootstrap3',
+    'tinymce',
     'api.apps.alumni',
     'api.apps.blog',
     'api.apps.institute',
@@ -120,6 +121,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+# Example: "/home/media/media.lawrence.com/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash.
+MEDIA_URL = '/media/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -138,6 +146,19 @@ BOOTSTRAP3 = {
     'required_css_class': 'bootstrap3-required',
     'javascript_in_head': True,
 }
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    'mode': "textareas",
+    'plugins': "table,spellchecker,paste,searchreplace",
+    'theme': "advanced",
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 10,
+    'width': 600,
+    'height': 400,
+}
+TINYMCE_SPELLCHECKER = True
+TINYMCE_COMPRESSOR = True
 
 
 # Allow any settings to be defined in local_settings.py which should be

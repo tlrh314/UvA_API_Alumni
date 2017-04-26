@@ -59,16 +59,18 @@ class PersonAdmin(admin.ModelAdmin):
         ('Personal information',{
                  'fields': ['first_name', 'prefix', 'last_name',
                              'title', 'initials', 'gender', 'birth_date',
-                             'place_of_birth','nationality', 'mugshot',
-                              'photo','biography']
+                             'place_of_birth', 'nationality', 'mugshot',
+                             'photo', 'biography']
                 }),
 
         ('Contact information',{
-                'fields':['linkedin','facebook','email','home_phone','homepage','mobile']
+                'fields':['linkedin', 'facebook', 'email', 'home_phone',
+                          'homepage', 'mobile']
                 }),
 
         ('Adress information',{
-                'fields': ['streetname', 'streetnumber', 'zipcode', 'city', 'country']
+                'fields': ['streetname', 'streetnumber', 'zipcode',
+                           'city', 'country']
                 }),
 
         ('Science information',{
@@ -80,12 +82,7 @@ class PersonAdmin(admin.ModelAdmin):
                 'classes': ['collapse'],
                 'fields': ['comments']
                 }),
-
-        # ('Jobs',{
-        #         'fields': ['jobs']
-        #         }),
     ]
 
-admin.site.register(Person, PersonAdmin)
-#admin.site.register(Job, PersonAdmin)
 
+admin.site.register(Person, PersonAdmin)

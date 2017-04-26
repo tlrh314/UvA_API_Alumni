@@ -1,10 +1,15 @@
+from __future__ import unicode_literals, absolute_import, division
+
+import os
+
 from django.db import models, IntegrityError
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.db.models import permalink
 from django.core.exceptions import ObjectDoesNotExist
-import os
+
+from tinymce.models import HTMLField
 
 
 class ResearchTopic(models.Model):
@@ -24,7 +29,7 @@ class ResearchTopic(models.Model):
     slug     = models.SlugField(_('slug'), unique=True)
     picture  = models.ImageField(_('picture'), blank=True, null=True,
                                  upload_to='uploads/images/research/topics/')
-    description = models.TextField(_('description'), blank=True, null=True)
+    description = HTMLField(_('description'), blank=True, null=True)
 
     class Meta:
         verbose_name = _('research topic')

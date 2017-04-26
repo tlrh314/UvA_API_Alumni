@@ -1,15 +1,20 @@
+from __future__ import unicode_literals, absolute_import, division
+
+import os
+import os.path
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.db.models import permalink
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.encoding import python_2_unicode_compatible
 
-from datetime import date
+from tinymce.models import HTMLField
+
 from ..research.models import ResearchTopic
-
-import os
-import os.path
 
 
 def get_mugshot_location(instance, filename):
@@ -25,8 +30,9 @@ def get_thesis_location(instance, filename):
             instance.user.username,filename)
 
 
+@python_2_unicode_compatible
 class Person(models.Model):
-    """ Represents a person at API. """
+    """ Represents an alumnus of API. """
 
     GENDER_CHOICES = (
         (1, 'Male'),
@@ -61,11 +67,11 @@ class Person(models.Model):
         (POSITION['DEVELOPER'], _("Software Developer")),
     )
 
-    #account information
+    # Account information
     user            = models.OneToOneField(User, unique=True, related_name='person')
     show_person     = models.BooleanField(_('person visible on website'), default=True)
 
-    #personal information
+    # Personal information
     first_name      = models.CharField(_('first name'), blank=True, max_length=40)
     prefix          = models.CharField(_('prefix'), blank=True, max_length=40)
     last_name       = models.CharField(_('last name'), max_length=40)
@@ -77,10 +83,10 @@ class Person(models.Model):
     place_of_birth  = models.CharField(_('place of birth'), blank=True, max_length=40)
     mugshot         = models.ImageField(_('mugshot'), upload_to=get_mugshot_location, blank=True, null=True)
     photo           = models.ImageField(_('photo'), upload_to=get_photo_location, blank=True, null=True)
-    biography       = models.TextField(_('biography'), blank=True)
+    biography       = HTMLField(_('biography'), blank=True)
     slug            = models.SlugField(_('slug'), unique=True)
 
-    #contact information
+    # Contact information
     linkedin        = models.URLField(_('linkedin'), blank=True, null=True)
     facebook        = models.URLField(_('facebook'), blank=True, null=True)
     email           = models.EmailField(_('email'), blank=True, null=True)
@@ -88,7 +94,7 @@ class Person(models.Model):
     mobile          = models.CharField(_('mobile'), blank=True, max_length=40)
     homepage        = models.URLField(_('homepage'), blank=True, null=True)
 
-    #address information
+    # Address information
     address         = models.CharField(_('address'), blank=True, max_length=40)
     streetname      = models.CharField(_('streetname'),blank = True, max_length=40)
     streetnumber    = models.CharField(_('streetnumber'),blank = True, max_length=40)
@@ -96,7 +102,7 @@ class Person(models.Model):
     city            = models.CharField(_('city'), blank=True, max_length=40)
     country         = models.CharField(_('country'), blank=True, max_length=40)
 
-    #Science information
+    # Science information
     position        = models.PositiveSmallIntegerField(_('position'), choices=POSITION_OPTIONS, default=5)
     office          = models.CharField(_('office'), blank=True, max_length=40)
     work_phone      = models.CharField(_('work telephone'), blank=True, max_length=40)
@@ -113,7 +119,7 @@ class Person(models.Model):
         ordering = ('last_name', 'first_name')
 
     def __unicode__(self):
-        return u'%s' % self.full_name
+        return self.full_name
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.full_name)
@@ -141,16 +147,19 @@ class Person(models.Model):
 
     @property
     def full_name(self):
-        return (u'%s %s %s' % (
+        return ('{} {} {}'.format(
             self.first_name, self.prefix, self.last_name)).replace("  ", " ")
 
     @property
     def age(self):
         TODAY = date.today()
-        return u'%d' % int((TODAY-self.birth_date).days/365.0)
+        return '{}'.format(int((TODAY-self.birth_date).days/365.0))
 
 
+@python_2_unicode_compatible
 class Job(models.Model):
+    """ Represents a job after leaving API """
+
     currently_occupating_job_choices = (
         (1,'Yes'),
         (2,'No'),
@@ -179,6 +188,53 @@ class Job(models.Model):
     location_job        = models.PositiveSmallIntegerField(_('location job'), choices=location_job_choices, default=1)
 
 
+
+@python_2_unicode_compatible
+class Thesis(models.Model):
+    """ Represents a thesis at API. """
+
+    THESIS_TYPE = (
+        ('phd', 'PhD'),
+        ('msc', 'Master'),
+        ('bsc', 'Bachelor'),
+    )
+
+    author = models.ForeignKey(Person, related_name="thesis")
+    title  = models.CharField(max_length=160, default=_("Title Unknown"))
+    date   = models.DateField(help_text=_("Date of the thesis or defense"))
+    type   = models.CharField(max_length=3, choices=THESIS_TYPE, default='PhD')
+    url    = models.URLField(blank=True, help_text=_("UvA DARE URL or other URL to thesis"))
+    slug   = models.SlugField(max_length=100, blank=False, unique=True)
+
+    class Meta:
+        verbose_name = _("thesis")
+        verbose_name_plural = _("theses")
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('research:thesis-detail', [self.slug], {})
+
+    def __unicode__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        MAXCOUNT = 100
+        count = 0
+        base_slug = slugify(self.topic)
+        self.slug = base_slug
+        # The following loop should prevent a DB exception when
+        # two people enter the same title at the same time
+        while count < MAXCOUNT:
+            try:
+                super(ResearchTopic, self).save(*args, **kwargs)
+            except IntegrityError:
+                count += 1
+                self.slug = base_slug + "_%d" % count
+            else:
+                break
+
+
+@python_2_unicode_compatible
 class MastersDegree(models.Model):
     #Masters information @api
     person              = models.ForeignKey(Person, related_name="masters")
@@ -190,6 +246,7 @@ class MastersDegree(models.Model):
     #privacy levels
 
 
+@python_2_unicode_compatible
 class PhdDegree(models.Model):
     #PhD information @api
     person           = models.ForeignKey(Person, related_name="phd")
@@ -203,6 +260,7 @@ class PhdDegree(models.Model):
     #privacy levels
 
 
+@python_2_unicode_compatible
 class PostdocPosition(models.Model):
     #postdoc information @api
     person              = models.ForeignKey(Person, related_name="postdoc")
@@ -212,10 +270,3 @@ class PostdocPosition(models.Model):
     #field,
 
     #privacy levels
-
-
-#class thesis(models.Model):
-    #person              = models.ForeignKey(Person, related_name="thesis")
-    #file = ..
-    #supervisors = ..
-    #thesis name
