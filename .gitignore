@@ -51,7 +51,6 @@ coverage.xml
 
 # Django stuff:
 *.log
-local_settings.py
 
 # Flask stuff:
 instance/
@@ -90,6 +89,11 @@ ENV/
 
 # Migrations
 migrations/
+
+settings/local.py
+databases/
+static/
+media/
 
 db.sqlite3
 *.swp

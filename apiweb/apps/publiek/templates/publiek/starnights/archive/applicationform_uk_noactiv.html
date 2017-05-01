@@ -1,0 +1,103 @@
+{% extends "publiek/starnights/base.html" %}
+{% block title %}API - Stargazing nights{% endblock title %}
+{% block scripts %}{{ block.super }}{{ form.media }}{% endblock scripts%}
+{% block contents %}
+
+<h1> Registration for API stargazing night </h1>
+
+{% if not register_on or register_full %}
+<p>
+At the moment there is no stargazing night for which you can register.
+The night of February 27 is fully booked.
+By sending an email to
+<a href="mailto:F.Buurmeijer@uva.nl">F.Buurmeijer@uva.nl</a>
+you can indicate that you want to be informed about future
+stargazing nights.
+</p>
+
+
+{% else %}
+
+
+<p>
+This form allows you to register for the upcoming stargazing event.
+You will receive an e-mail as soon as you register.
+Please bring a copy of this e-mail to the stargazing event.
+<p>
+We keep you informed with the latest developments concernning
+the API stargazing nights via a newsletter.
+You can indicate in this form whether you want to receive
+this newsletter by email.
+</p>
+
+
+{% if form.non_field_errors %}
+<p>
+Sorry, changes have to be made to the form below.
+{{ form.non_field_errors }}
+</p>
+{% endif %}
+
+{% if form.is_multipart %}
+   <form enctype="multipart/form-data" method="post" action=".">
+{% else %}
+   <form method="post" action=".">
+{% endif %}
+{% csrf_token %}
+
+
+<p>
+<table>
+{% if form.date.errors %}
+<tr><th>{{ form.date.label_tag }}:</th><td>{{ form.date.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.date.label_tag }} </th><td>{{ form.date }}</td><th></th></tr>
+
+{% if form.name.errors %}
+<tr><th>{{ form.name.label_tag }}:</th><td>{{ form.name.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.name.label_tag }} </th><td>{{ form.name }}</td><th></th></tr>
+
+{% if form.address.errors %}
+<tr><th>{{ form.address.label_tag }}:</th><td>{{ form.address.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.address.label_tag }} </th><td>{{ form.address }} </td> <th></th> </tr>
+
+{% if form.zipcode.errors %}
+<tr><th>{{ form.zipcode.label_tag }}:</th><td>{{ form.zipcode.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.zipcode.label_tag }} </th><td>{{ form.zipcode }} </td><th></th></tr>
+
+{% if form.city.errors %}
+<tr><th>{{ form.city.label_tag }}:</th><td>{{ form.city.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.city.label_tag }} </th><td>{{ form.city }}     </td><th></th></tr>
+
+{% if form.email.errors %}
+<tr><th>{{ form.email.label_tag }}:</th><td>{{ form.email.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.email.label_tag }} </th><td>{{ form.email}}   </td><th></th></tr>
+
+{% if form.newsletter.errors %}
+<tr><th>{{ form.newsletter.label_tag }}:</th><td>{{ form.newsletter.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.newsletter.label_tag }} </th><td>{{ form.newsletter}}   </td><th></th></tr>
+
+{% if form.number.errors %}
+<tr><th>{{ form.number.label_tag }}:</th><td>{{ form.number.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.number.label_tag }} </th><td>{{ form.number }}   </td><th></th></tr>
+
+
+</table>
+</p>
+
+<p><input type="submit" value="Submit" /></p>
+
+</form>
+
+{% endif %}
+
+{% endblock contents%}
+
+

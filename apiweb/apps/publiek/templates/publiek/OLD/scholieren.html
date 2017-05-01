@@ -1,0 +1,42 @@
+{% extends "publiek/base.html" %}
+{% block title %}API - scholieren{% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:scholieren' %}">Scholieren</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+<h1>Scholieren</h1>
+
+<h2>Sterrenkunde studeren aan de UvA</h2>
+
+<p>
+Sterrenkunde studeren betekent dat je leert hoe je informatie kunt krijgen
+uit objecten die in feite onbereikbaar ver weg staan,
+en hoe je daarmee kunt leren over het ontstaan en leven van planeten,
+sterren, sterrenstelsels en het heelal.
+</p>
+
+<p>
+Aan de Universiteit van Amsterdam hoort Sterrenkunde bij de
+Faculteit der Natuurwetenschappen, Wiskunde en Informatica (FNWI).
+De propedeuse begint heel breed: je krijgt naast wis-, natuur- en sterrenkundevakken
+ook informatica en statistiek.
+Daarna specialiseer je je een beetje in natuur- en sterrenkunde.
+Al in het tweede jaar maak je kennis met echt onderzoek in
+het <a href="{% url 'education:bachelor-projects' %}#second-year">tweede jaarsproject</a>.
+In het tweede jaar kies je voor de richting sterrenkunde,
+maar pas in het derde jaar wordt je keuze definitief.
+Dit derde jaar sluit je af met
+een <a href="{% url 'education:bachelor-projects' %}#third-year">derde jaarsproject (bachelor project)</a>.
+</p>
+
+<!--
+<h2>Projecten</h2>
+
+<p>
+Lijst met projecten &amp; contact personen.
+</p>
+-->
+
+{% endblock contents %}

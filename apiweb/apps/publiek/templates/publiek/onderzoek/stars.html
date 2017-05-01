@@ -1,0 +1,60 @@
+{% extends "publiek/onderzoek/base3.html" %}
+{% block title %}API - sterren{% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:stars' %}">sterren</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1>De formatie van sterren </h1>
+
+<h2> De vorming van zware sterren </h2>
+
+<p>
+Zware sterren zijn meer dan tien keer zo zwaar als de zon.
+Het is niet precies duidelijk hoe deze sterren zich vormen;
+wanneer de zwaartekracht van een protoster materie aantrekt,
+duwt vrijgekomen straling tegelijkertijd de rest van de materie weg.
+Dit raadsel proberen astronomen aan het Anton Pannekoek Instituut
+op te lossen door zware sterren te observeren met steeds grotere
+telescopen die in verschillende soorten licht kijken.
+Hiervoor wordt ook steeds gevoeligere apparatuur ontwikkeld en gebruikt.
+</p>
+<p>
+<img src="{{ STATIC_URL }}publiek/images/MassiveStarFormation.jpg"></br>
+Deze afbeelding illustreert het vormingsproces van een zware ster.
+Aan het einde van het vormingsproces verdwijnt de accretieschijf en
+wordt de jonge ster zichtbaar. Wanneer de jonge ster een stabiel
+evenwicht bereikt en op de hoofdreeks belandt, is hij kleiner.
+(credits: Lucas Ellerbroek/Lex Kaper).
+</p>
+
+<h2> De evolutie van zware sterren </h2>
+
+<p>
+Zware sterren doorlopen in hun bestaan goed te onderscheiden fasen,
+maar de volgorde  van de fasen is nog niet onbetwist.
+Aan het Anton Pannekoek Instituut wordt onderzoek gedaan naar
+de evolutie van sterren en hun invloed op hun omgeving door sterwinden
+of supernova’s. Hierbij worden modellen die sterevolutie beschrijven
+vergeleken met waarnemingen aan zware sterren van verschillende leeftijden.
+</p>
+
+<h2> De Giant Branches </h2>
+
+<p>
+De Asymptotic Giant Branch (AGB) en de Red Giant Branch (RGB) zijn
+twee late fasen die sterren van middelmatige massa (0,8 tot 8 zonsmassa’s)
+doorlopen. Tijdens deze fasen wordt materie weggeblazen in
+een zogeheten sterwind. De relatief sterke sterwinden hebben een
+grote invloed op de chemische evolutie van sterrenstelsels,
+en de chemische evolutie van het heelal.
+Door middel van modellen worden de eigenschappen van sterwinden bestudeerd.
+De fysische kenmerken van sterren worden bestudeerd met ruimtetelescopen
+zoals CoRoT en Kepler door te kijken naar trillingen in het binnenste van sterren.
+</p>
+
+
+
+{% endblock contents %}

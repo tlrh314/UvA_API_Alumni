@@ -1,0 +1,48 @@
+{% extends "publiek/base.html" %}
+{% block title %}API - publiek{% endblock title %}
+{% block contents %}
+<h1>Publiek</h1>
+
+<p>
+Welkom op het publieksdeel van de website van het Anton Pannekoek Instituut (API).
+Hier vindt u informatie en nieuws over het onderzoek dat we uitvoeren op het API,
+en ook over onze open avonden en andere activiteiten. U vindt ons ook op twitter en facebook:
+</p>
+<p>
+<a href="https://twitter.com/uva_api" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @uva_api</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-like" data-href="https://www.facebook.com/uva.api/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+</p>
+
+
+{% if press %}
+<h2>Persberichten</h2>
+{% for object in press %}
+<h3 class="listing">{{ object.title }}</h3>
+<p class="speaker">{% if object.location %}{{ object.location }}{% if object.date %} &#8212; {% endif %}{% endif %}{% if object.date %}{{ object.date|date:"l j F Y" }}{% endif %}</p>
+<p class="teaser">{% if object.teaser_picture %}<img src="{{ MEDIA_URL }}{{ object.teaser_picture }}" class="teaser" />{% endif %}{{ object.teaser_text|linebreaksbr }}</p>
+{% if object.text %}<a href="{{ object.get_absolute_url }}">{% if object.language == "en" or not object.language %}Read more{% endif %}{% if object.language == "nl" %}Lees verder{% endif %}</a>{% endif %}
+{% endfor %}
+{% endif %}
+
+
+{% if events %}
+<h2>Evenementen op het API</h2>
+{% for object in events %}
+<h3 class="listing">{{ object.title }}</h3>
+<p class="speaker">{% if object.date %}{{ object.date|date:"l j F Y" }}{% if object.date_end %} &#8212; {{ object.date_end|date:"l j F Y" }}{% endif %}{% endif %}</p>
+<p class="teaser">{% if object.teaser_picture %}<img src="{{ MEDIA_URL }}{{ object.teaser_picture }}" />{% endif %}{{ object.teaser_text|linebreaksbr }}</p>
+{% if object.text %}<a href="{{ object.get_absolute_url }}">{% if object.language == "en" or not object.language %}Read more{% endif %}{% if object.language == "nl" %}Lees verder{% endif %}</a>{% endif %}
+{% endfor %}
+{% endif %}
+
+
+{% endblock contents %}

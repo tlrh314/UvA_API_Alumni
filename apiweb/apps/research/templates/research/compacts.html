@@ -1,0 +1,118 @@
+{% extends "research/base.html" %}
+
+
+{% block title %}API - research{% endblock title %}
+
+{% block contents %}
+<h1>{{ cattitle }}</h1>
+
+
+<p>
+When massive stars reach the end of their lives nuclear burning can no
+longer support them against gravity. The resulting collapse triggers a
+violent supernova explosion. The core of the parent star collapses down
+to a compact remnant: a neutron star or a black hole,
+and the outermost layers are blown away.
+</p>
+
+<h3>Neutron stars</h3>
+
+<p>
+Neutron stars contain up to twice the mass of our Sun in a sphere the size
+of Amsterdam (the Sun, by contrast, is 1.4 million kilometers across).
+This makes them excellent laboratories for extreme physics. Neutron stars
+are so dense that atomic nuclei dissolve into their constituent protons
+and neutrons. The nature of matter under these conditions is very poorly
+understood, and exotic nuclear physics states such as superconducting quarks,
+or a quark-gluon plasma, may form in neutron star cores. Neutron stars have
+the strongest magnetic fields in the Universe, a staggering 10 orders of
+magnitude larger than the strongest fields we can create, for fractions of
+a second, in laboratories on Earth. The gravitational field of a neutron star
+is also a hundred billion times that of the Earth, strong enough we can
+use them to test key aspects of the Theory of General Relativity.
+</p>
+
+<p>
+Researchers at API study many different aspects of neutron stars,
+using a mix of observations and theoretical calculations.
+API astronomers observe neutron stars across the electromagnetic spectrum,
+from low frequency radio waves all the way up to the highest energy gamma-rays.
+We even study them using gravitational waves,
+a completely new field of astronomy.
+</p>
+
+<p>
+<img src="{{ STATIC_URL }}research/images/neutronstarmodel.jpg" width="450"/>
+</p>
+
+<h3>Black holes</h3>
+
+<p>
+Black holes are one of the most extreme predictions of Einsteins
+General Theory of Relativity.  When a collapsing star core is more massive
+than the maximum mass a neutron star can sustain, total gravitational
+collapse occurs.  All matter is destroyed and its mass is concentrated in a
+pointlike object called the singularity that contains all the mass of the
+collapsing core.  No physical theory in existence can precisely describe
+the nature of this singularity, but Einsteins theory allows a accurate
+description of its effect on the surroundings.  The extreme gravity
+associated with the collapsed core warps spacetime in such a way that a
+black spherical surface forms called the 'event horizon'. This horizon has
+the property that physical objects and radiation can go in, but can never
+escape.  The singularity is therefore hiden behid it.  The horizon has many
+other curious properties, such as the fact that, as seen from far away, on
+the horizon time stands still, but when one approaches it this is not the
+case.  Anything that falls through the horizon into the black hole ends up
+in the singularity and is crushed.
+</p>
+
+<p>
+Extreme though these predicitions may be, black holes do appear to occur in
+Nature, not only in the form of collapsed star cores just like neutron
+stars, but also as supermassive black holes at the centers of most galaxies
+(including a 4 million Solar mass black hole right in the heart of our own
+Milke Way galaxy).  API astronomers observe black holes in all the same
+ways as neutron stars: although the holes themselves are black and
+therefore emit no radiation, matter that orbits near to them can get very
+hot and produce all kinds of radiation.
+</p>
+
+<p>
+<img src="{{ STATIC_URL }}research/images/blackhole.jpg" width="450"/>
+</p>
+
+<hr>
+
+<p>
+People at The Institute are working on the following topics: </br>
+</p>
+
+
+<table id="research">
+<tr>
+{% for research in object_list %}
+<td>
+<a href="{{ research.get_absolute_url }}">
+   {% if research.picture %}<img src="{{ research.picture.url }}"/> <br/> {% endif %} {{ research.topic }}
+</a>
+</td>
+{% if forloop.counter|divisibleby:"2" %} </tr><tr> {% endif %}
+{% endfor %}
+</tr>
+</table>
+
+<!--
+<div style="clear: both;">
+{% for research in object_list %}
+<div style="float: left; border: 0px cyan solid; margin: 2em; width: 100px; height: 200px;">
+  {% if research.picture %}<a href="{{ research.get_absolute_url }}"><img src="{{ research.picture.url }}" width="100" />
+  <p>{% else %}<p><a href="{{ research.get_absolute_url }}">{% endif %}{{ research.topic }}</a></p>
+</div>
+{% endfor %}
+</div>
+-->
+
+{% endblock contents %}
+
+
+

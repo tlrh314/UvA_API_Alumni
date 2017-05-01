@@ -1,0 +1,38 @@
+{% extends "staffmeetings/base.html" %}
+{% block title %}API - staff meetings{% endblock title %}
+{% block contents %}
+
+<h1>{{ title }}</h1>
+
+
+<a id="prev" href="{% url 'staffmeetings:index' year|add:'-1' %}">&lt;&lt; Prev year</a>
+<a id="next" href="{% url 'staffmeetings:index' year|add:'1' %}">Next year &gt;&gt;</a>
+
+
+{% if not object_list %}
+<h2>There have been no staff meetings in {{year}}.</h2>
+{% else %}
+{% for staffmeeting in object_list %}
+<p>
+<h2>{{ staffmeeting.date|date:"l j F Y" }}</h2>
+{% if staff %}
+{% if staffmeeting.agenda %} <li> <a href="{{ staffmeeting.agenda.url }}"> Agenda </a> </li> {% endif %}
+{% if staffmeeting.report %} <li> <a href="{{ staffmeeting.report.url }}"> Report </a> </li> {% endif %}
+{% if staffmeeting.appendix_1 %} <li> <a href="{{ staffmeeting.appendix_1.url }}"> Appendix 1 </a> </li> {% endif %}
+{% if staffmeeting.appendix_2 %} <li> <a href="{{ staffmeeting.appendix_2.url }}"> Appendix 2 </a> </li> {% endif %}
+{% if staffmeeting.appendix_3 %} <li> <a href="{{ staffmeeting.appendix_3.url }}"> Appendix 3 </a> </li> {% endif %}
+{% endif %}
+{% if staffmeeting.decisions %} <li> <a href="{{ staffmeeting.decisions.url }}"> Decisions </a> </li> {% endif %}
+{% if staffmeeting.appendix_A %} <li> <a href="{{ staffmeeting.appendix_A.url }}"> Appendix A </a> </li> {% endif %}
+{% if staffmeeting.appendix_B %} <li> <a href="{{ staffmeeting.appendix_B.url }}"> Appendix B </a> </li> {% endif %}
+{% endfor %}
+{% endif %}
+
+{% if perms.staffmeetings.change_staffmeeting and perms.staffmeetings.add_staffmeeting %}<div class="edit"><a href="{% url 'admin:index' %}staffmeetings/staffmeeting/add/">add</a> | <a href="{% url 'admin:index' %}staffmeetings/staffmeeting/">edit</a></div>{% endif %}
+
+
+
+{% endblock contents %}
+
+
+

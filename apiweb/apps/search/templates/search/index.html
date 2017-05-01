@@ -1,0 +1,20 @@
+{% extends "search/base.html" %}
+{% block scripts %}{{ block.super }}<script type="text/javascript" src="{{ STATIC_URL }}search/javascript/search.js"></script>{% endblock scripts %}
+{% block contents %}
+
+{% if results %}
+<ul>
+{% for result in results %}
+<li> <a href="{{ result.link }}">{{ result.title }}</a> <p>{{ result.snippet }}</p></li>
+{% endfor %}
+</ul>
+{% endif %}
+{% if results_empty %}
+<p>No results found.</p>
+{% endif %}
+<form id="search" method="post" action="{% url 'search:index' %}">{% csrf_token %}
+{{ form.search_terms }}
+<input type="submit" name="search" value="search" />
+</form>
+<p>(Search provided through {% if google_link %}<a href="{{ google_link }}">Google</a>{% else %}Google{% endif %})</p>
+{% endblock contents %}

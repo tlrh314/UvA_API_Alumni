@@ -1,0 +1,16 @@
+{% extends "apo/base.html" %}
+{% load news_filters %}
+{% block title %}APO - The solar telescope{% endblock title %}
+{% block breadcrumbs %}{{ block.super }} &#187; <a href="{% url 'apo:solar' %}">The solar telescope</a>{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1>The solar telescope</h1>
+
+<p>
+Sunny weather.
+</p>
+
+
+{% endblock contents %}

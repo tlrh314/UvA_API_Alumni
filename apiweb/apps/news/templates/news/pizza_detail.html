@@ -1,0 +1,23 @@
+{% extends "news/base.html" %}
+{% block title %}API - Lunch talks: {{ object.title }}{% endblock title %}
+
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'news:pizza' %}">Pizza lunch news</a> &#187; {{ object.title }}
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1>{{ object.title }}</h1>
+
+{{ object.text|safe }}
+
+<p>
+{{ object.speaker }}{% if object.affiliation %} &#8212; {{ object.affiliation }}{% endif %}<br />
+{% if object.date %}{{ object.date|date:"l j F Y" }}{{ object.time|time:", H:i" }}<br />{% endif %}
+{% if object.location %}Location: {{ object.location }}<br />{% endif %}
+</p>
+
+{% if perms.news.change_pizza %}<div class="edit"><a href="{% url 'admin:index' %}news/pizza/{{ object.pk }}">edit</a></div>{% endif %}
+
+{% endblock contents %}

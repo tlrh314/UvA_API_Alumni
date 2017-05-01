@@ -1,0 +1,16 @@
+{% url 'apo:index' as apo_index %}
+{% url 'apo:51cm' as apo_51cm %}
+{% url 'apo:solar' as apo_solar %}
+{% url 'apo:practicum' as apo_practicum %}
+{% url 'apo:gallery' as apo_gallery %}
+
+<ul>
+ <li><a {% ifequal request.path apo_index %}class="active" {% endifequal %}href="{{ apo_index }}">Observatory</a>
+  <ul>
+   <li><a {% ifequal request.path apo_51cm %}class="active" {% endifequal %}href="{{ apo_51cm }}">51cm telescope</a></li>
+   <!-- li><a {% ifequal request.path apo_solar %}class="active" {% endifequal %}href="{{ apo_solar }}">Solar telescope</a></li -->
+   <li><a {% ifequal request.path apo_practicum %}class="active" {% endifequal %}href="{{ apo_practicum }}">Practicum telescopes</a></li>
+   <li><a {% ifequal request.path apo_gallery %}class="active" {% endifequal %}href="{{ apo_gallery }}">Gallery</a></li>
+  </ul>
+ </li>
+</ul>

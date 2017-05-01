@@ -1,0 +1,62 @@
+{% url 'research:index' as url_research %}
+{% url 'research:category' "compacts"        as url_compacts %}
+{% url 'research:category' "cosmics"         as url_cosmics %}
+{% url 'research:category' "astroparticles"  as url_astroparticles %}
+{% url 'research:category' "planets"         as url_planets %}
+{% url 'research:category' "stars"           as url_stars %}
+{% url 'research:grbsoftware' as url_grbsoftware %}
+
+
+<ul>
+<li><a {% ifequal request.path url_research %}class="active" {% endifequal %}href="{{ url_research }}">Research</a>
+<ul>
+<li><a {% ifequal request.path url_compacts %}class="active" {% endifequal %}href="{{ url_compacts }}">Neutron stars and black holes</a>
+    {% ifequal category "compacts" %}
+    <ul>
+    {% for researchtopic in object_list %}
+    <li><a {% ifequal request.path researchtopic.get_absolute_url %}class="active" {% endifequal %}href="{{ researchtopic.get_absolute_url }}">{{ researchtopic.topic }} </a> </li>
+    {% endfor %}
+    </ul>
+    {% endifequal %}
+</li>
+<li><a {% ifequal request.path url_cosmics %}class="active" {% endifequal %}href="{{ url_cosmics }}">Cosmic explosions</a>
+    {% ifequal category "cosmics" %}
+    <ul>
+    {% for researchtopic in object_list %}
+    <li><a {% ifequal request.path researchtopic.get_absolute_url %}class="active" {% endifequal %}href="{{ researchtopic.get_absolute_url }}">{{ researchtopic.topic }} </a> </li>
+    {% endfor %}
+    </ul>
+    {% endifequal %}
+</li>
+<li><a {% ifequal request.path url_astroparticles %}class="active" {% endifequal %}href="{{ url_astroparticles }}">Astroparticle physics</a>
+    {% ifequal category "astroparticles" %}
+    <ul>
+    {% for researchtopic in object_list %}
+    <li><a {% ifequal request.path researchtopic.get_absolute_url %}class="active" {% endifequal %}href="{{ researchtopic.get_absolute_url }}">{{ researchtopic.topic }} </a> </li>
+    {% endfor %}
+    </ul>
+    {% endifequal %}
+</li>
+<li><a {% ifequal request.path url_planets %}class="active" {% endifequal %}href="{{ url_planets }}">Planet formation and exoplanets</a>
+    {% ifequal category "planets" %}
+    <ul>
+    {% for researchtopic in object_list %}
+    <li><a {% ifequal request.path researchtopic.get_absolute_url %}class="active" {% endifequal %}href="{{ researchtopic.get_absolute_url }}">{{ researchtopic.topic }} </a> </li>
+    {% endfor %}
+    </ul>
+    {% endifequal %}
+</li>
+<li><a {% ifequal request.path url_stars %}class="active" {% endifequal %}href="{{ url_stars }}">Stars, formation and evolution</a>
+    {% ifequal category "stars" %}
+    <ul>
+    {% for researchtopic in object_list %}
+    <li><a {% ifequal request.path researchtopic.get_absolute_url %}class="active" {% endifequal %}href="{{ researchtopic.get_absolute_url }}">{{ researchtopic.topic }} </a> </li>
+    {% endfor %}
+    </ul>
+    {% endifequal %}
+</li>
+</ul>
+</li>
+     <li> <a href="{{ url_research }}#reports">Annual reports</a> </li>
+</ul>
+

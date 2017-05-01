@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block banner %}<div id="banner"><h1>Education at the Institute</h1></div>{% endblock banner %}
+{% block stylesheets %}{{ block.super }}<style>div#banner { background-image: url({{ STATIC_URL }}education/images/education_banner.jpg); }</style>{% endblock stylesheets %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'education:index' %}">Education</a></a>
+{% endblock breadcrumbs %}
+
+{% block sidemenu %}
+{% include "education/sidemenu.html" %}
+{% endblock sidemenu %}

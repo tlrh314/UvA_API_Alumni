@@ -1,0 +1,195 @@
+{% extends "internal/base.html" %}
+{% block title %}API - internal pages: edit profile{% endblock title %}
+{% block scripts %}{{ block.super }}{{ form.media }}{% endblock scripts%}
+{% block contents %}
+
+<h1> User Profile for {{ user.username }}  </h1>
+
+{% if form.errors %}
+<p>
+Sorry there are corrections needed in your form below: <br />
+{{ form.errors }}
+</p>
+{% endif %}
+
+{% if form.is_multipart %}
+   <form enctype="multipart/form-data" method="post" action=".">
+{% else %}
+   <form method="post" action=".">
+{% endif %}
+{% csrf_token %}
+
+<h2> Personal Information: </h2>
+
+<p>
+<table>
+{% if form.first_name.errors %}
+<tr><th>{{ form.first_name.label_tag }}:</th><td>{{ form.first_name.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.first_name.label_tag }} </th><td>{{ form.first_name }}</td><th></th></tr>
+
+{% if form.prefix.errors %}
+<tr><th>{{ form.prefix.label_tag }}:</th><td>{{ form.prefix.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.prefix.label_tag }} </th><td>{{ form.prefix }}    </td>
+    <th>(eg: van, van den, ter)</th>
+</tr>
+
+{% if form.last_name.errors %}
+<tr><th>{{ form.last_name.label_tag }}:</th><td>{{ form.last_name.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.last_name.label_tag }} </th><td>{{ form.last_name }} </td><th></th></tr>
+
+{% if form.title.errors %}
+<tr><th>{{ form.title.label_tag }}:</th><td>{{ form.title.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.title.label_tag }} </th><td>{{ form.title }}     </td><th></th></tr>
+
+{% if form.initials.errors %}
+<tr><th>{{ form.initials.label_tag }}:</th><td>{{ form.initials.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.initials.label_tag }} </th><td>{{ form.initials}}   </td><th></th></tr>
+
+{% if form.gender.errors %}
+<tr><th>{{ form.gender.label_tag }}:</th><td>{{ form.gender.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.gender.label_tag }} </th><td>{{ form.gender}}   </td><th></th></tr>
+
+
+{% if form.birth_date.errors %}
+<tr><th>{{ form.birth_date.label_tag }}:</th><td>{{ form.birth_date.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.birth_date.label_tag }} </th><td>{{ form.birth_date }}</td>
+    <th> (YYYY-MM-DD)</th>
+</tr>
+
+{% if form.address.errors %}
+<tr><th>{{ form.address.label_tag }}:</th><td>{{ form.address.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.address.label_tag }} </th><td>{{ form.address }}   </td><th></th></tr>
+
+{% if form.zipcode.errors %}
+<tr><th>{{ form.zipcode.label_tag }}:</th><td>{{ form.zipcode.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.zipcode.label_tag }} </th><td>{{ form.zipcode }}   </td><th></th></tr>
+
+{% if form.city.errors %}
+<tr><th>{{ form.city.label_tag }}:</th><td>{{ form.city.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.city.label_tag }} </th><td>{{ form.city }}      </td><th></th></tr>
+
+{% if form.country.errors %}
+<tr><th>{{ form.country.label_tag }}:</th><td>{{ form.country.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.country.label_tag }} </th><td>{{ form.country }}   </td><th></th></tr>
+
+{% if form.home_phone.errors %}
+<tr><th>{{ form.home_phone.label_tag }}:</th><td>{{ form.home_phone.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.home_phone.label_tag }} </th><td>{{ form.home_phone }}</td><th></th></tr>
+
+{% if form.mobile.errors %}
+<tr><th>{{ form.mobile.label_tag }}:</th><td>{{ form.mobile.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.mobile.label_tag }} </th><td>{{ form.mobile }}    </td><th></th></tr>
+
+{% if form.mugshot.errors %}
+<tr><th>{{ form.mugshot.label_tag }}:</th><td>{{ form.mugshot.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.mugshot.label_tag }} </th><td>{{ form.mugshot }}   </td>
+{% if profile.mugshot %}
+<th><a href="{{profile.mugshot.url}}"> Click here to show current mugshot.</a></th>
+{% else %}
+<th></th>
+{% endif %}
+</tr>
+
+{% if form.photo.errors %}
+<tr><th>{{ form.photo.label_tag }}:</th><td>{{ form.photo.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.photo.label_tag }} </th><td>{{ form.photo }}   </td>
+{% if profile.photo %}
+<th><a href="{{profile.photo.url}}"> Click here to show current photo.</a></th>
+{% else %}
+<th></th>
+{% endif %}
+</tr>
+</table>
+</p>
+
+<h2> Scientific Information: </h2>
+
+<p>
+<table>
+{% if form.position.errors %}
+<tr><th>{{ form.position.label_tag }}:</th><td>{{ form.position.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.position.label_tag }} </th><td>{{ form.position }}</td><th></th></tr>
+
+{% if form.specification.errors %}
+<tr><th>{{ form.specification.label_tag }}:</th><td>{{ form.specification.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.specification.label_tag }} </th><td>{{ form.specification }}</td><th></th></tr>
+
+{% if form.prefix.errors %}
+<tr><th>{{ form.office.label_tag }}:</th><td>{{ form.office.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.office.label_tag }} </th><td>{{ form.office }}    </td><th></th></tr>
+
+{% if form.work_phone.errors %}
+<tr><th>{{ form.work_phone.label_tag }}:</th><td>{{ form.work_phone.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.work_phone.label_tag }} </th><td>{{ form.work_phone }} </td><th></th></tr>
+
+{% if form.ads_name.errors %}
+<tr><th>{{ form.ads_name.label_tag }}:</th><td>{{ form.ads_name.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.ads_name.label_tag }} </th><td>{{ form.ads_name }} </td><th></th></tr>
+
+{% if form.email.errors %}
+<tr><th>{{ form.email.label_tag }}:</th><td>{{ form.email.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.email.label_tag }} </th><td>{{ form.email }} </td><th></th></tr>
+
+{% if form.homepage.errors %}
+<tr><th>{{ form.homepage.label_tag }}:</th><td>{{ form.homepage.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.homepage.label_tag }} </th><td>{{ form.homepage }}   </td>
+{% if profile.homepage %}
+<th><a href="{{profile.homepage}}"> Click here to show current homepage.</a></th>
+{% else %}
+<th></th>
+{% endif %}
+</tr>
+
+{% if form.research.errors %}
+<tr><th>{{ form.research.label_tag }}:</th><td>{{ form.research.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.research.label_tag }} </th><td>{{ form.research }} </td><th> Hold down "Control", or "Command" on a Mac, to select more than one. </th></tr>
+
+{% if form.contact.errors %}
+<tr><th>{{ form.contact.label_tag }}:</th><td>{{ form.contact.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.contact.label_tag }} </th><td>{{ form.contact }} </td><th>Hold down "Control", or "Command" on a Mac, to select more than one.</th></tr>
+
+</table>
+</p>
+
+<h2> Extra Information (Personal Notes): </h2>
+
+<p>
+<table>
+{% if form.comments.errors %}
+<tr><th>{{ form.comments.label_tag }}:</th><td>{{ form.comments.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.comments.label_tag }} </th><td>{{ form.comments }} </td><th></th></tr>
+</table>
+</p>
+
+<p><input type="submit" value="Save User Information" /></p>
+
+</form>
+
+{% endblock contents%}
+
+

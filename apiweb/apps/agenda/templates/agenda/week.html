@@ -1,0 +1,33 @@
+{% extends "agenda/base.html" %}
+{% block title %}API - Internal agenda by week{% endblock title %}
+
+{% block contents %}
+
+
+<h1>API calendar for this week (click on a day to add your entry)</h1>
+
+<p>
+The <font color="green"> green items </font> you added for private use. <br />
+The <font color="red"> red items </font> you added for everybody to see. <br />
+The <font color="blue"> blue items </font> are public. <br />
+</p>
+
+
+<a id="prev" href= "{% url 'agenda:week' year month day "prev" %}">&lt;&lt; Prev</a>
+<a id="next" href= "{% url 'agenda:week' year month day "next" %}">Next &gt;&gt;</a>
+
+
+{% for week_day, this_year, this_month, this_day, entries, current in week_days %}
+   <h4>{{ week_day|date:"l, j F Y" }}</h4>
+
+   <div class="weekday {% if current %}current{% endif %}"
+ onClick="parent.location='{% url 'agenda:entry-create' this_year this_month this_day %}'" onMouseOver="this.style.backgroundColor='#eeeeee';" onMouseOut="this.style.backgroundColor={% if current %}'#eeeec8'{% else %}'white'{% endif %};" >
+      {% for entry in entries %}
+           <li><a href="{{entry.link}}" title="{{entry.tooltip}}"><font color={{entry.attr}}> {{entry.type}} </font></a></li>
+      {% endfor %}
+
+   </div>
+
+{% endfor %}
+
+{% endblock contents %}

@@ -1,0 +1,62 @@
+{% if events %}
+<h2>Agenda</h2>
+<table class="listing front"><tbody>
+{% for item in events %}
+<tr class="toprow">
+<td rowspan="2">{{ item.type }}</td>
+<td style="font-weight: bold; ">{{ item.title }}</td>
+<td rowspan="4" class="nowrap">{% if item.teaser_picture %}<a href="{{ item.get_absolute_url }}"><img src="{{ MEDIA_URL }}{{ item.teaser_picture }}" class="teaser" /></a>{% endif %}</td>
+</tr>
+<tr>
+<td class="speaker">{{ item.speaker }}{% if item.affiliation %}, {{ item.affiliation }}{% endif %}</td>
+</tr>
+<tr>
+<td rowspan="2">
+{{ item.date|date:"l" }},<br />{{ item.date|date:"j N" }}
+{% if item.time %}{{ item.time|time:"H:i" }}{% endif %}
+{% if item.date_end %}
+   &#8211; {{ item.date_end|date:"l" }},<br />{{ item.date_end|date:"j N" }}
+   {% if item.time_end %} {{ item.time_end|time:"H:i" }}{% endif %}<br />
+{% else %}
+   {% if item.time_end %} &#8211; {{ item.time_end|time:"H:i" }}{% endif %}<br />
+{% endif %}
+{% if item.location %}Location: {{ item.location }}{% endif %}
+</td>
+<td>{% if item.teaser_text %}{{ item.teaser_text }}{% endif %}</td>
+</tr>
+<tr>
+<td>{% if item.text %}<a href="{{ item.get_absolute_url }}">{% if item.language == "en" or not item.language %}Read more{% endif %}{% if item.language == "nl" %}Lees verder{% endif %}</a>{% endif %}</td>
+</tr>
+{% if item.shorttalk_speaker %}
+   <tr>
+     <td> </td>
+     <td> Short talk given by {{ item.shorttalk_speaker }}</td>
+   </tr>
+{% endif %}
+<tr class="lastrow"><td colspan="3"></td></tr>
+{% endfor %}
+</tbody></table>
+{% endif %}
+
+
+
+{% if press %}
+<h2>News</h2>
+<table class="listing"><tbody>
+{% for item in press %}
+<tr class="toprow">
+<td rowspan="3" class="nowrap">{% if item.teaser_picture %}<img src="{{ MEDIA_URL }}{{ item.teaser_picture }}" class="teaser" />{% endif %}</td>
+<td class="title">{{ item.title }}</td>
+</tr>
+<tr>
+<td>{{ item.teaser_text|urlize }}</td>
+</tr>
+<tr>
+<td>{% if item.text %}<a href="{{ item.get_absolute_url }}">{% if item.language == "en" %}Read more{% endif %}{% if item.language == "nl" %}Lees verder{% endif %}</a>{% endif %}</td>
+</tr>
+<tr class="lastrow"><td colspan="3"></td></tr>
+{% endfor %}
+</tbody></table>
+{% endif %}
+
+

@@ -1,0 +1,34 @@
+{% extends "news/base.html" %}
+{% block title %}API - Events: {{ object.title }}{% endblock title %}
+
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'news:events' %}">Events</a> &#187; {{ object.title }}
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1>{{ object.title }}</h1>
+
+{{ object.text|safe }}
+
+<div>
+{% if object.date %}
+Date: {{ object.date|date:"l j F Y" }}{% if object.time %}{{ object.time|time:", H:i" }}{% endif %}
+{% if object.date_end %}
+   &#8211; {{ object.date_end|date:"l j F Y" }}
+   {% if object.time_end %} {{ object.time_end|time:", H:i" }} {% endif %}
+{% else %}
+   {% if object.time_end %} {{ object.time_end|time:"- H:i" }} {% endif %}
+{% endif %}
+{% endif %}
+{% if object.location %}
+{% if object.date %}<br />{% endif %}
+Location: {{ object.location }}
+{% endif %}
+</div>
+
+{% if perms.news.change_event %}<div class="edit"><a href="{% url 'admin:index' %}news/event/{{ object.pk }}">edit</a></div>{% endif %}
+
+{% endblock contents %}
+

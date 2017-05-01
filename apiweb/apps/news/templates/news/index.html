@@ -1,0 +1,13 @@
+{% extends "news/base.html" %}
+{% block title %}API - News &amp; events{% endblock title %}
+{% load news_filters %}
+{% block contents %}
+<h1>News </h1>
+
+<p>
+Overview of recent news and upcoming talks or events at the API
+</p>
+
+{% include "news/listing.html" %}
+
+{% endblock contents %}

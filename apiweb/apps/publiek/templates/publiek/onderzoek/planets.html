@@ -1,0 +1,73 @@
+{% extends "publiek/onderzoek/base3.html" %}
+{% block title %}API - planeten{% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:planets' %}"> planeten </a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1> De formatie van planeten </h1>
+
+
+<h2> Stof </h2>
+
+<p>
+Stof in het interstellair medium (ISM) ontstaat in de buitenste
+lagen van ver geëvolueerde sterren, en komt terecht in moleculaire
+wolken waaruit nieuwe sterren ontstaan. Stof maakt dus deel uit van
+alle evolutiefasen die sterren doorlopen. Aan het Anton Pannekoek
+Instituut wordt voornamelijk onderzoek gedaan naar de chemische
+samenstelling van stof in het ISM, en de eigenschappen van
+de omgeving waarin stof wordt gevonden. Voor het onderzoek wordt
+onder andere gebruik gemaakt van de ruimtetelescopen Spitzer en
+Herschel, en de Very Large Telescope (VLT) in Chili.
+</p>
+<p>
+<img src="{{ STATIC_URL }}publiek/images/dust_ESO_APEX.jpg"></br>
+Op deze foto is een stofsliert te zien die deel uitmaakt van een
+moleculaire wolk in het sterrenbeeld Stier. De stofsliert herbergt
+nieuwe sterren. De stofdeeltjes zijn zo koud dat de zwakke gloed van
+de sterren alleen zichtbaar is in observaties op submullimeter golflengten.
+(credits: ESO/APEX (MPIfR/ESO/OSO)/A. Hacar et al./Digitized Sky Survey 2.
+ Acknowledgment: Davide De Martin.).
+</p>
+
+
+
+<h2> Protoplanetaire schijven </h2>
+
+<p>
+Rond protosterren en jonge sterren draaien protoplanetaire
+schijven van gas en stof. De stofdeeltjes botsen, blijven aan elkaar
+plakken en vormen uiteindelijk planeten. De protoplanetaire schijven
+rond Herbig Ae en Herbig Be sterren (jonge sterren van 2 tot 8 zonsmassa’s)
+zijn helderder waardoor ze nauwkeuriger kunnen worden onderzocht.
+Door astronomen aan het Anton Pannekoek Instituut wordt onder andere
+onderzoek gedaan naar de geometrie van protoplanetaire schijven,
+zoals de aanwezigheid van leegtes, en de groei van stofdeeltjes.
+</p>
+
+<h2> Exoplaneten </h2>
+
+<p>
+Astronomen aan het Anton Pannekoek zijn betrokken bij
+het SPHERE-project. De SPHERE-instrumenten worden gebouwd om planeten
+rond andere sterren dan de zon, zogeheten exoplaneten, te ontdekken en
+direct in beeld te brengen. De instrumenten maken het ook mogelijk om
+de karakteristieken van de atmosferen van exoplaneten te bepalen,
+zoals hun chemische samenstelling.
+</p>
+<p>
+<img src="{{ STATIC_URL }}publiek/images/Exoplanet_fomalhaut.jpg"></br>
+Op deze foto is de exoplaneet Fomalhaut b te zien die elke 872 jaar om
+de ster Fomalhaut draait. Fomalhaut ligt op een afstand van 25 lichtjaar
+van de de aarde in et sterrenbeeld Zuidervis.
+(credits: NASA, ESA, P. Kalas, J. Graham, E. Chiang, E. Kite
+(University of California, Berkeley), M. Clampin (NASA Goddard Space
+Flight Center), M. Fitzgerald (Lawrence Livermore National Laboratory),
+and K. Stapelfeldt and J. Krist (NASA Jet Propulsion Laboratory)).
+</p>
+
+
+{% endblock contents %}

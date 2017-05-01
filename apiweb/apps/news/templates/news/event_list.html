@@ -1,0 +1,33 @@
+{% extends "news/base.html" %}
+{% load news_filters %}
+{% block title %}API - Upcoming events{% endblock title %}
+
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{{ url_events }}">Events</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1>Events at the API</h1>
+
+
+{% for object in object_list %}
+{% if forloop.counter == 1 and object.upcoming %}<p class="runin">Upcoming events</p>{% endif %}
+{% if forloop.counter == 1 and object.past_due %}<p class="runin">Past events</p>{% endif %}
+{% ifchanged object.upcoming %}{% if forloop.counter > 1 %}<p class="runin"><br />Past events</p>{% endif %}{% endifchanged %}
+
+<h2 class="listing">{{ object.title }}</h2>
+<p class="speaker">{% if object.date %}{{ object.date|date:"l j F Y" }}{% if object.date_end %} &#8211; {{ object.date_end|date:"l j F Y" }}{% endif %}{% endif %}</p>
+<p class="teaser">{% if object.teaser_picture %}<img src="{{ MEDIA_URL }}{{ object.teaser_picture }}" />{% endif %}{{ object.teaser_text|linebreaksbr }}</p>
+{% if object.text %}<a href="{{ object.get_absolute_url }}">{% if object.language == "en" %}Read more{% endif %}{% if object.language == "nl" %}Lees verder{% endif %}</a>{% endif %}
+{% endfor %}
+
+
+<div class="page-navigation">
+{% if page_obj %}{{ page_obj|paginate:"2,2" }}{% endif %}
+</div>
+
+{% if perms.news.add_event and perms.news.change_event %}<div class="edit"><a href="{% url 'admin:index' %}news/event/add/">add</a> | <a href="{% url 'admin:index' %}news/event/">edit</a></div>{% endif %}
+
+{% endblock contents %}

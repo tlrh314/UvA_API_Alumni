@@ -1,0 +1,38 @@
+{% extends "agenda/base.html" %}
+{% block title %}API Agenda - {{ object.title }}{% endblock title %}
+
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'agenda:index' %}">API Agenda</a> &#187; {{ object.title }}
+{% endblock breadcrumbs %}
+
+{% block contents %}
+
+{% if object.is_public %}
+<p class="warning right">This item is visible to the public</p>
+{% endif %}
+
+<h1>{{ object.title }}</h1>
+
+<p>
+{{ object.date|date:"j F Y" }}
+{% if object.date_end %} - {{ object.date_end|date:"j F Y" }} {% endif %}
+<br />
+This agenda item has been created by {{ object.creator.get_full_name }}.
+<hr>
+</p>
+
+<p>
+{{ object.body_html|safe }}
+</p>
+
+
+{% ifequal object.creator request.user %}
+<hr>
+<p class="note right">
+<a href="{% url 'agenda:entry-update' object.pk object.slug %}">Update Entry</a> &nbsp; | &nbsp;
+<a href="{% url 'agenda:entry-delete' object.pk object.slug %}">Delete Entry</a>
+</p>
+{% endifequal %}
+
+
+{% endblock contents %}

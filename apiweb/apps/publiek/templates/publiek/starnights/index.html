@@ -1,0 +1,110 @@
+{% extends "publiek/starnights/base.html" %}
+{% block title %}API - Sterrenkijkavonden{% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:sterrenkijkavonden' %}">Sterrenkijkavonden</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+<h1>API Sterrenkijkavond</h1>
+
+<p>
+Heeft u altijd al eens de sterrenhemel van dichtbij willen bekijken?
+</p>
+
+<p>
+Vrijdag 18 maart vindt de eerstvolgende sterrenkijkavond plaats bij het Anton Pannekoek
+Instituut voor Sterrenkunde aan de Universiteit van Amsterdam.
+Dit is een avond voor volwassenen, in het Nederlands en Engels.
+Op een heldere avond worden meerdere telescopen opgesteld, waarmee de sterrenhemel
+waargenomen kan worden. Bij bewolking vinden rondleidingen door de sterrenkoepels plaats
+in plaats van waarnemen. Het programma begint om 19:00 uur met een lezing van Drs. Leon Oostrum
+over spectroscopie. Daarna is er Astro Café en waarnemen (of bij slecht weer rondleidingen).
+De avond duurt tot 22:00 uur.
+</p>
+
+<p>
+Vanaf 11 maart om 12:00 uur kunt u door middel van het aanmeldingsformulier aangeven
+of u de komende sterrenkijkavond zult bijwonen. Maximaal 80 bezoekers kunnen de sterrenkijkavond
+bijwonen. Deelname is gratis. De sterrenkijkavonden wordt georganiseerd in samenwerking met de
+<a href="http://www.volkssterrenwachtamsterdam.nl/"> Volkssterrenwacht Amsterdam</a> en de
+<a href="http://www.sterrenkunde.nl/jwg/amsterdam"> JongerenWerkgroep afdeling Amsterdam</a>.
+</p>
+
+
+<p>
+Als u via de e-mail op de hoogte wilt blijven van de sterrenkijkavonden kunt u dit
+aangeven hieronder uw e-mailadres in te vullen of door een e-mail te sturen naar
+<a href="mailto:E.Hanko@uva.nl">E.Hanko@uva.nl</a>.
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+/* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+  We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//uva.us9.list-manage.com/subscribe/post?u=fed40783a09506aac6aab0ce6&amp;id=0851815ab6" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+<label for="mce-EMAIL">Schrijf u in voor onze maandelijkse nieuwsbrief</label>
+<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="E-mailadres" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_fed40783a09506aac6aab0ce6_0851815ab6" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inschrijven" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+<!-- End mc_embed_signup -->
+</p>
+
+
+<p>
+Adres: </br>
+Anton Pannekoek Instituut voor Sterrenkunde </br>
+Science Park 904 </br>
+1098 XH Amsterdam </br>
+U wordt ontvangen in de centrale hal.
+</p>
+
+<p>
+Bereikbaarheid: </br>
+Er zijn voldoende parkeerplaatsen beschikbaar op het Science Park Amsterdam.
+In dit gebied is het betaald parkeren.
+Met het openbaar vervoer is het Science Park Amsterdam goed bereikbaar.
+Bus 40 stopt op het terrein.
+Station Amsterdam Science Park is het dichtstbijzijnde treinstation. Op de
+<a href="http://www.amsterdamsciencepark.nl/fileadmin/user_upload/documents/Contact_and_route/Amsterdam_Science_Park.pdf"> plattegrond </a>
+zijn de gebouwen op het Science Park Amsterdam,
+waaronder het UvA-gebouw nummer 904, aangegeven.
+De sterrenwacht is helaas niet bereikbaar voor rolstoelgebruikers.
+Hierdoor is deelname aan het waarnemen of de rondleidingen niet mogelijk.
+</p>
+
+
+<p>
+Contact: </br>
+Esther Hanko MA </br>
+Anton Pannekoek Instituut voor Sterrenkunde </br>
+E-mail: <a href="mailto:E.Hanko@uva.nl">E.Hanko@uva.nl</a> </br>
+Telnr: +31 (0)20-5257491
+</p>
+
+
+<p>
+<iframe src="http://www.at5.nl/video/105085"  width="480"  height="270"  frameborder="0"  scrolling="auto"></iframe>
+</p>
+
+
+<!--
+<p>
+<iframe width="553" height="480" src="http://www.at5.nl/embed/iframe?e=15946" frameborder="0" allowfullscreen></iframe>
+</p>
+-->
+
+
+<p>
+<object width="550" height="400"> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F44306922%40N07%2Fshow%2F&page_show_back_url=%2Fphotos%2F44306922%40N07%2F&user_id=44306922@N07&jump_to="></param> <param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=124984"></param> <param name="allowFullScreen" value="true"></param><embed type="application/x-shockwave-flash" src="http://www.flickr.com/apps/slideshow/show.swf?v=124984" allowFullScreen="true" flashvars="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F44306922%40N07%2Fshow%2F&page_show_back_url=%2Fphotos%2F44306922%40N07%2F&user_id=44306922@N07&jump_to=" width="550" height="400"></embed></object>
+</p>
+
+
+{% endblock contents %}

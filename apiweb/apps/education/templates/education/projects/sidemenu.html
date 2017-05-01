@@ -1,0 +1,23 @@
+{% url 'education:index' as education_index %}
+{% url 'education:bachelor' as url_bachelor %}
+{% url 'education:master' as url_master %}
+{% url 'education:projects-index' as projects_index %}
+{% url 'publiek:scholieren' as publiek_scholieren %}
+{% url 'education:bachelor-projects' as bachelor_projects %}
+{% url 'education:master-projects' as master_projects %}
+
+<ul>
+<li><a {% ifequal request.path education_index %}class="active" {% endifequal %}href="{{ education_index }}">Education</a>
+<ul>
+<li><a {% ifequal request.path url_bachelor %}class="active" {% endifequal %}href="{{ url_bachelor }}">Bachelor</a></li>
+<li><a {% ifequal request.path url_master %}class="active" {% endifequal %}href="{{ url_master }}">Master</a></li>
+<li><a {% ifequal request.path projects_index %}class="active" {% endifequal %}href="{{ projects_index }}">Projects</a>
+<ul>
+<li><a {% ifequal request.path bachelor_projects %}class="active" {% endifequal %}href="{{ bachelor_projects }}">Bachelor projects</a></li>
+<li><a {% ifequal request.path master_projects %}class="active" {% endifequal %}href="{{ master_projects }}">Master projects</a></li>
+</ul>
+</li>
+<li><a {% ifequal request.path publiek_scholieren %}class="active" {% endifequal %}href="{{ publiek_scholieren }}">Scholieren</a></li>
+</ul>
+</li>
+</ul>

@@ -1,0 +1,43 @@
+{% extends "apogee/base.html" %}
+{% block title %}API - Internal APO agenda by month{% endblock title %}
+
+{% block contents %}
+
+<h1>APO calendar for this month (click on a day to add your entry)</h1>
+
+<p>
+The <font color="purple"> purple items </font> are reservations for the Stellar telescope. <br />
+The <font color="green"> green items </font> are reservations for the Solar telescope. <br />
+The <font color="blue"> blue items </font> are reservations for the Observation platform. <br />
+</p>
+
+
+<a id="prev" href= "{% url 'apogee:month' year month "prev" %}">&lt;&lt; Prev</a>
+<a id="next" href= "{% url 'apogee:month' year month "next" %}">Next &gt;&gt;</a>
+
+
+<h4>{{ mname }} {{ year }}</h4>
+
+    <table class="month">
+    <thead>
+    <tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
+    </thead>
+    {% for week in month_days %}
+    <tr>
+       {% for day, moonimage, entries, current in week %}
+           <td class="{% if day != 0 %}{% if current %}current{% endif %}{% else %}empty{% endif %}"
+           {% if day != 0 %} onClick="parent.location='{% url 'apogee:entry-create' year month day %}'" onMouseOver="this.bgColor='#eee';" onMouseOut="this.bgColor='white';"{% endif %}>
+           {% if day != 0 %}
+              {{ day }} <img src="{{ STATIC_URL }}apogee/images/{{moonimage}}" style="height: 20px; float: right;" />
+              {% for entry in entries %}
+                <li><a href="{{entry.link}}" title="{{entry.tooltip}}"><font color={{entry.attr}}> {{entry.type|truncatewords:2}} </font></a></li>
+              {% endfor %}
+           {% endif %}
+           </td>
+       {% endfor %}
+    </tr>
+    {% endfor %}
+
+    </table>
+
+{% endblock contents %}

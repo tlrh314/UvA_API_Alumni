@@ -1,0 +1,39 @@
+{% extends "apogee/base.html" %}
+{% block title %}API - Internal APO agenda by week{% endblock title %}
+
+{% block contents %}
+
+
+<h1>APO calendar for this week (click on a day to add your entry)</h1>
+
+<p>
+The <font color="purple"> purple items </font> are reservations for the Stellar telescope. <br />
+The <font color="green"> green items </font> are reservations for the Solar telescope. <br />
+The <font color="blue"> blue items </font> are reservations for the Observation platform. <br />
+</p>
+
+
+<a id="prev" href= "{% url 'apogee:week' year month day "prev" %}">&lt;&lt; Prev</a>
+<a id="next" href= "{% url 'apogee:week' year month day "next" %}">Next &gt;&gt;</a>
+
+
+{% for week_day, sunset, moonimage, this_year, this_month, this_day, entries, current in week_days %}
+   <h4>{{ week_day|date:"l, j F Y" }}</h4>
+
+   <div class="weekday {% if current %}current{% endif %}"
+ onClick="parent.location='{% url 'apogee:entry-create' this_year this_month this_day %}'" onMouseOver="this.style.backgroundColor='#eeeeee';" onMouseOut="this.style.backgroundColor={% if current %}'#eeeec8'{% else %}'white'{% endif %};" >
+   <table>
+      <tr>
+      <td width=80% align="left">
+      {% for entry in entries %}
+           <li><a href="{{entry.link}}" title="{{entry.tooltip}}"><font color={{entry.attr}}> {{entry.type}} </font></a></li>
+      {% endfor %}
+      </td>
+      <td width=20% align="center"> Sunset = {{sunset|time:"H:i"}}  <img src="{{ STATIC_URL }}apogee/images/{{moonimage}}" height="100" /> </td>
+      </tr>
+   </table>
+   </div>
+
+{% endfor %}
+
+{% endblock contents %}

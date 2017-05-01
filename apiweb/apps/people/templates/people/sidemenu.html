@@ -1,0 +1,37 @@
+{% url 'institute:index' as url_institute %}
+{% url 'institute:contact' as url_contact %}
+{% url 'people:person-list' as url_people %}
+{% url 'people:staff-list' as url_staff %}
+{% url 'people:student-list' as url_students %}
+{% url 'people:position-list' "adjunct faculty" as url_adjunct %}
+{% url 'people:position-list' "senior research associate" as url_senior %}
+{% url 'people:position-list' "postdoc" as url_postdoc %}
+{% url 'people:position-list' "phd student" as url_phd %}
+{% url 'people:position-list' "emeritus" as url_emeritus %}
+{% url 'people:position-list' "guest" as url_guest %}
+{% url 'people:position-list' "software developer" as url_developer %}
+
+{% with request.path|urlencode as path %}
+<ul>
+ <li> <a {% ifequal path url_institute %}class="active" {% endifequal %} href="{{ url_institute }}">Institute</a> </li>
+ <li> <a {% ifequal path url_people %}class="active"{% endifequal %} href="{{ url_people }}">People</a>
+  <ul>
+    <li> <a {% ifequal path url_staff %}class="active"{% endifequal %} href="{{ url_staff }}">Faculty Staff</a> </li>
+    <li> <a {% ifequal path url_adjunct %}class="active"{% endifequal %} href="{{ url_adjunct }}">Adjunct Faculty</a> </li>
+    <li> <a {% ifequal path url_developer %}class="active"{% endifequal %} href="{{ url_developer }}">Software Developers</a> </li>
+    <li> <a {% ifequal path url_emeritus %}class="active"{% endifequal %} href="{{ url_emeritus }}">Emeriti</a> </li>
+    <li> <a {% ifequal path url_guest %}class="active"{% endifequal %} href="{{ url_guest }}">Guests</a> </li>
+    <li> <a {% ifequal path url_senior %}class="active"{% endifequal %} href="{{ url_senior }}">Senior Research Associates</a> </li>
+    <li> <a {% ifequal path url_postdoc %}class="active"{% endifequal %} href="{{ url_postdoc }}">Postdocs</a> </li>
+    <li> <a {% ifequal path url_phd %}class="active"{% endifequal %} href="{{ url_phd }}">PhD students</a> </li>
+    <li> <a {% ifequal path url_students %}class="active"{% endifequal %} href="{{ url_students }}">Master students</a> </li>
+  </ul>
+ </li>
+ <li> <a {% ifequal path url_contact %}class="active" {% endifequal %} href="{{ url_contact }}">Contact</a>
+  <ul>
+   <li> <a href="{{ url_contact }}#address"> Address </a></li>
+   <li> <a href="{{ url_contact }}#how"> How to find us </a></li>
+  </ul>
+ </li>
+</ul>
+{% endwith %}

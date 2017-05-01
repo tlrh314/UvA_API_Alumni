@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block langattr %}lang="nl"{% endblock langattr %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:index' %}">Publiek</a>
+{% endblock breadcrumbs %}
+
+{% block sidemenu %}
+{% include "publiek/sidemenu.html" %}
+{% endblock sidemenu %}

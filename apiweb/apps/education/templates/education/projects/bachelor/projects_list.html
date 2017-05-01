@@ -1,0 +1,89 @@
+{% extends "education/projects/bachelor/base.html" %}
+{% block title %}API - education: bachelor projects{% endblock title %}
+{% block contents %}
+<h1>Bachelor projects</h1>
+
+
+<p>
+For general questions about Bachelor Projects in astronomy or
+astrophysics please contact the API Bachelor Project Coordinator
+Dr. Anna Watts (<a href="mailto:A.L.Watts@uva.nl">A.L.Watts@uva.nl</a>).
+Projects usually take place in May-June (2nd year projects) or
+Feb-August (3rd year projects).
+A list of available projects will be maintained on this website.
+</p>
+
+<!--
+<p>
+For general questions about Bachelor Projects in astronomy or astrophysics
+please contact the API Bachelor Project Coordinator
+Dr. Anna Watts (<a href="mailto:api-projects@list.uva.nl">api-projects@list.uva.nl</a>).
+Projects usually take place in May-June (2nd year projects) or
+May-August (3rd year projects), although some topics are usually available
+at other times of the year as well.
+A list of available projects will be maintained on this website.
+New projects for the summer sessions will be added on February 1st each year.
+</p>
+-->
+
+<hr>
+
+
+{% if not object_list %}
+<p>There are no projects at the moment.</p>
+{% else %}
+Below is a list of second and third year projects
+{% if second_year_count %}
+<a name="second-year"></a><h2>Second year projects</h2>
+
+<p>
+In June of the second year students can do a reading or short research project
+of 3 ECTS at the astronomy department. Sign up for these projects is done
+centrally, but you are welcome to contact the project supervisor if you have
+any questions about the topic.
+</p>
+<p>
+Currently (year 2015-2016) you can participate in the following projects:
+</p>
+
+<ul>
+{% for object in object_list %}
+{% ifequal object.year 2 %}
+<li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
+{% endifequal %}
+{% endfor %}
+{% else %}
+<p>There are no second year projects at the moment.</p>
+{% endif %}
+
+{% if third_year_count %}
+<a name="third-year"></a><h2>Third year projects</h2>
+
+<p>
+In the second semester of the third year students can do a research
+project of 15 ECTS at the astronomy department.
+Please contact the project supervisor directly for more details if you are
+interested in a project. Projects that contain significant mathematical/theoretical
+content, which would be suitable for students following the Double Bachelors in
+Maths and Astronomy (as well as those following the normal Physics/Astronomy Bachelors),
+are marked with a double asterisk.
+</p>
+<p>
+Currently (year 2015-2016) you can participate in the following projects:
+</p>
+
+
+<ul>
+{% for object in object_list %}
+{% ifequal object.year 3 %}
+<li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
+{% endifequal %}
+{% endfor %}
+{% else %}
+<p>There are no third year projects at the moment.</p>
+{% endif %}
+{% endif %}
+
+{% if perms.education.change_bachelorproject and perms.education.add_bachelorproject %}<div class="edit"><a href="{% url 'admin:index' %}education/bachelorproject/add/">add</a> | <a href="{% url 'admin:index' %}education/bachelorproject/">edit</a></div>{% endif %}
+
+{% endblock contents %}

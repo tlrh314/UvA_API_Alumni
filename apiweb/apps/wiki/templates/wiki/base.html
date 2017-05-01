@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block stylesheets %}<base href="http://{{ location.site }}/internal/wiki/view/" />{{ block.super }}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wiki/css/wiki.css" />{% endblock stylesheets %}
+{% block banner %}<div id="banner"><h1>API Wiki</h1></div>{% endblock banner %}
+{% block breadcrumbs %}{{ block.super }} &#187; <a href="{% url 'wiki:index' %}">Wiki</a>{% endblock breadcrumbs %}
+{% block sidemenu %}
+{% include "wiki/sidemenu.html" %}
+{% endblock sidemenu %}

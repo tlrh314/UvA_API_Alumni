@@ -1,0 +1,94 @@
+{% extends "publiek/onderzoek/base2.html" %}
+{% block title %}API - Explosies {% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:explosions' %}">explosies</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1> Het veranderlijke heelal (explosies) </h1>
+
+<h2> Gammaflitsen </h2>
+
+<p>
+Gammaflitsen zijn de helderste explosies die we kennen,
+en ontstaan wanneer een snel roterende, zware ster instort of
+twee compacte objecten samensmelten. Door gammaflitsen te bestuderen
+komen we meer te weten over sterevolutie in het heelal van verschillende
+leeftijden. Daarbij maken gammaflitsen het mogelijk lichtzwakke
+sterrenstelsels te bestuderen die zich toevallig tussen
+de ontstaansplek van een heldere gammaflits en de aarde bevinden.
+In het onderzoek aan het Anton Pannekoek Intituut worden modellen
+en waarnemingen van de nagloeiers van gammaflitsen op een scala
+aan golflengten gecombineerd.
+</p>
+<p>
+<img src="{{ STATIC_URL }}publiek/images/GRB.jpg"></br>
+In deze artistieke impressie zijn een gammaflits en twee sterrenstelsels
+in het vroege heelal te zien. De heldere explosie links is de gammaflits.
+Het licht passeert de sterrenstelsels onderweg naar de aarde
+(rechts buiten beeld).
+(credits: ESO/L.Calcada).
+</p>
+
+<h2> Magnetische uitbarstingen </h2>
+
+<p>
+Magnetars zijn neutronensterren met een extreem sterk magnetisch veld
+dat na verloop van tijd in de knoop raakt. Op gegeven moment herschikt
+het magnetisch veld zich waarbij gammastraling wordt uitgezonden.
+Het is nog niet duidelijk wanneer en waar dit gebeurt. Aan het Anton
+Pannekoek Instituut wordt onderzoek gedaan naar het gedrag van magnetische
+velden onder extreme omstandigheden. Hierbij wordt gebruik gemaakt van
+bijvoorbeeld de Fermi Gamma-Ray Space Telescope.
+</p>
+
+<h2> Radioflitsen </h2>
+
+<p>
+Met de LOw-Frequency ARray (LOFAR) wordt gezocht naar radioflitsen.
+Dit zijn heldere uitbarstingen van radiostraling die enkele milliseconden duren.
+De oorzaak van deze radioflitsen is nog onduidelijk,
+maar het wordt aangenomen dat ze buiten ons melkwegstelsel ontstaan.
+Astronomen aan het Anton Pannekoek instituut hopen meer en verschillende
+soorten radioflitsen te ontdekken door met LOFAR de hemel dagelijks
+gedurende 24 uur in de gaten te houden.
+</p>
+
+<h2> Supernova’s </h2>
+
+<p>
+Zware sterren exploderen aan het einde van hun leven als hun brandstof is opgeraakt.
+Supernova-explosies ontstaan ook wanneer een witte dwergster zwaarder wordt
+dan ongeveer 1,4 zonsmassa’s (de Chandrasekhar-limiet) doordat hij materie van
+zijn begeleidende ster aantrekt of samensmelt met de andere ster.
+Aan het Anton Pannekoek Instituut wordt de uitgezonden röntgenstraling
+bestudeerd om meer te weten te komen over de samenstelling van supernova-materie.
+Ook wordt onderzoek gedaan naar de precieze oorsprong van deeltjes en fotonen
+met hoge energie, zogeheten kosmische straling.
+</p>
+<p>
+<img src="{{ STATIC_URL }}publiek/images/krabnevel.jpg"></br>
+Op deze foto staat de Krabnevel. Dit is het overblijfsel van een
+supernova-explosie op een afstand van 6000 lichtjaar, die in het
+jaar 1054 is waargenomen. In het centrum is een neutronenster
+te vinden die meer dan 30 keer per seconde om zijn as roteert.
+(credits: ESO).
+</p>
+
+<h2> Röntgenexplosies </h2>
+
+<p>
+Op het oppervlak van neutronensterren vinden regelmatig röntgenexplosies
+plaats die worden veroorzaakt doordat een opeenhoping van aangetrokken materie
+plotseling ontbrandt. De neutronenster wordt gedurende enkele seconden tot een dag,
+10 tot 100 keer helderder. Astronomen aan het Anton Pannekoek Instituut
+zijn betrokken bij waarnemingen van röntgenexplosies en onderzoek naar
+hun theoretische verklaring. Zo wijst de waarneming van een röntgenexplosie
+op de aard van een röntgenbron. Röntgenexplosies komen alleen voor
+bij neutronensterren, niet bij zwarte gaten.
+</p>
+
+
+{% endblock contents %}

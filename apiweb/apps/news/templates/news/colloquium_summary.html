@@ -1,0 +1,41 @@
+{% extends "news/base.html" %}
+{% load news_filters %}
+{% block title %}API - Wednesday afternoon colloquia{% endblock title %}
+{% block stylesheets %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}news/css/news.css" />{% endblock stylesheets %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'news:colloquium' %}">Colloquia overview</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1>Wednesday morning colloquia</h1>
+
+
+{% if not object_list %}
+<p>There are currently no colloquia scheduled</p>
+{% endif %}
+
+<hr/>
+
+<table class="colloquium-summary"><thead><tr><th class="date">Date</th><th class="speaker">Speaker</th><th class="title">Title</th></tr></thead><tbody>
+{% for object in object_list %}
+{% if forloop.counter == 1 and object.upcoming %}<p class="runin">Upcoming colloquia</p>{% endif %}
+{% if forloop.counter == 1 and object.past_due %}<p class="runin">Past colloquia</p>{% endif %}
+{% ifchanged object.upcoming %}{% if forloop.counter > 1 %}</table><p class="runin"><br />Past colloquia</p><table class="colloquium-summary"><thead><tr><th class="date">Date</th><th class="speaker">Speaker</th><th class="title">Title</th></tr></thead><tbody>{% endif %}{% endifchanged %}
+<tr>
+<td>{{ object.date|date:"d M Y" }}</td>
+<td>{{ object.speaker }}</td>
+<td>{{ object.title }}</td>
+</tr>
+{% endfor %}
+</tbody></table>
+
+<div class="page-navigation">
+{% if page_obj %}{{ page_obj|paginate:"2,2" }}{% endif %}
+</div>
+
+{% if perms.news.add_colloquium and perms.news.change_colloquium %}<div class="edit"><a href="{% url 'admin:index' %}news/colloquium/add/">add</a> | <a href="{% url 'admin:index' %}news/colloquium/">edit</a></div>{% endif %}
+
+{% endblock contents %}
+

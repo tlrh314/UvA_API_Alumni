@@ -1,0 +1,17 @@
+{% extends "publiek/starnights/base.html" %}
+{% block title %}API - Sterrenkijkavonden{% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:thanks' %}">Thanks</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+<h1>API sterrenkijkavonden</h1>
+
+
+<p>
+Bedankt voor uw aanmelding voor de komende sterrenkijkavond.
+</p>
+
+
+{% endblock contents %}

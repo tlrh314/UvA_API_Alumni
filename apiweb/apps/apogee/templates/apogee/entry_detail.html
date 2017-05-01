@@ -1,0 +1,34 @@
+{% extends "apogee/base.html" %}
+{% block title %}APO Agenda - {{ object.title }}{% endblock title %}
+
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'apogee:index' %}">APO Agenda</a> &#187; {{ object.title }}
+{% endblock breadcrumbs %}
+
+{% block contents %}
+
+<h1>{{ object.title }}</h1>
+
+<p>
+{{ object.date|date:"j F Y" }}
+{% if object.date_end %} - {{ object.date_end|date:"j F Y" }} {% endif %}
+<br />
+This agenda item has been created by {{ object.creator.get_full_name }}.
+<hr>
+</p>
+
+<p>
+{{ object.body_html|safe }}
+</p>
+
+
+{% ifequal object.creator request.user %}
+<hr>
+<p class="note right">
+<a href="{% url 'apogee:entry-update' object.pk object.slug %}">Update Entry</a> &nbsp; | &nbsp;
+<a href="{% url 'apogee:entry-delete' object.pk object.slug %}">Delete Entry</a>
+</p>
+{% endifequal %}
+
+
+{% endblock contents %}
