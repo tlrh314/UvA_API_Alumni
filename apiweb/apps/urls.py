@@ -21,6 +21,7 @@ urlpatterns = [
 
     url(r'^admin/filebrowser/',
         include(filebrowser.sites.site.urls)),
+    url(r'^tinymce/', include('tinymce.urls')),
 
     #url(r'^admin/filebrowser/',
     #    include('filebrowser.urls', namespace='filebrowser')),

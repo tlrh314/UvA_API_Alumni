@@ -8,8 +8,6 @@ STAFF_MEDIA_ROOT = os.path.join(MEDIA_ROOT, '/uploads/staff_meetings/')
 
 ADMIN_MEDIA_JS = (
     STATIC_URL + 'javascript/jquery.js',
-    STATIC_URL + 'javascript/tinymce/tinymce.min.js',
-    STATIC_URL + 'javascript/admin/tinymce_setup.js',
 )
 
 FILEBROWSER_SHOW_IN_DASHBOARD = True
@@ -36,9 +34,6 @@ TINYMCE_DEFAULT_CONFIG = {
     { 'title': 'Test template 2', 'content': 'Test 2' }
   ],
   'content_css': [
-    '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-    '//www.tinymce.com/css/codepen.min.css',
-    '/static/css/main.css',
   ],
 }
 TINYMCE_MINIMAL_CONFIG = {
