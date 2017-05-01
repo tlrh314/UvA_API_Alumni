@@ -75,6 +75,8 @@ urlpatterns = [
         view=TwentyFourSevenView.as_view(), name='247'),
     url(r'^old/',
         include('apiweb.apps.old.urls', namespace='old')),
+    url(r'^alumni/',
+        include('apiweb.apps.alumni.urls', namespace='alumni')),
 
     # redirects
     url(r'^scatter/(?P<arguments>.*)$',

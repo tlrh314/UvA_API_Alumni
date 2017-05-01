@@ -104,6 +104,7 @@ TEMPLATES = [
 
 INSTALLED_APPS = (
     #Filebrowser should be listed before django.contrib.admin
+    'tinymce',
     'filebrowser',
 
     'django.contrib.contenttypes',
@@ -133,6 +134,10 @@ INSTALLED_APPS = (
     'apiweb.apps.library',
     'apiweb.apps.search',
     'apiweb.apps.old',
+    'nested_inline',
+    'apiweb.apps.alumni',
+
+    # 'bootstrap3',
 )
 
 # login URL for auth app

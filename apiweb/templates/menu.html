@@ -21,6 +21,7 @@
 {% url 'publiek:studie' as url_studie %}
 {% url 'publiek:sterrenkijkavonden' as url_sterrenkijkavonden %}
 {% url 'jobs:index' as url_jobs %}
+{% url 'alumni:index' as alumni_jobs %}
 {% url 'internal:index' as url_internal %}
 {% url 'wiki:index' as url_wiki %}
 {% url 'wiki2:index2' as url_wiki2 %}
@@ -74,5 +75,7 @@
     </ul>
   </li>
   <li> <a href="{{ url_jobs }}">Jobs</a>
+  </li>
+  <li> <a href="{{ alumni_jobs }}">Alumni</a>
   </li>
 </ul>
