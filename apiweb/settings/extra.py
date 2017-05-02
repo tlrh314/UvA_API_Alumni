@@ -7,7 +7,7 @@ STAFF_MEDIA_URL = MEDIA_URL + 'uploads/staff_meetings'
 STAFF_MEDIA_ROOT = os.path.join(MEDIA_ROOT, '/uploads/staff_meetings/')
 
 ADMIN_MEDIA_JS = (
-    STATIC_URL + 'javascript/jquery.js',
+     STATIC_URL + 'javascript/jquery.js',
 )
 
 FILEBROWSER_SHOW_IN_DASHBOARD = True

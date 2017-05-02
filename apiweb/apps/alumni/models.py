@@ -5,6 +5,9 @@ import os.path
 from datetime import date
 
 from django.db import models
+from django.db import IntegrityError
+from django.db.models import signals
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
@@ -12,7 +15,7 @@ from django.db.models import permalink
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import python_2_unicode_compatible
 
-# from tinymce.models import HTMLField
+from tinymce.models import HTMLField
 
 from ..research.models import ResearchTopic
 
@@ -28,6 +31,20 @@ def get_photo_location(instance, filename):
 def get_thesis_location(instance, filename):
     return os.path.join("uploads","documents","people","thesis",
             instance.user.username,filename)
+
+@python_2_unicode_compatible
+class Position(models.Model):
+    name = models.CharField(max_length=80, help_text=_(
+        "Name of position (e.g., director, faculty staff, postdoc, "
+        "PhD student, ...)"))
+    plural = models.CharField(max_length=80, blank=True, help_text=_(
+        "Full plural name, if this is not a simple appended 's'"))
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('people:position-list', kwargs={'position': self.name})
 
 
 @python_2_unicode_compatible
@@ -68,7 +85,7 @@ class Alumnus(models.Model):
     )
 
     # Account information
-    user            = models.OneToOneField(User, unique=True, related_name='alumnus')
+    user            = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name='alumnus')
     show_person     = models.BooleanField(_('alumnus visible on website'), default=True)
 
     # Personal information
@@ -83,13 +100,13 @@ class Alumnus(models.Model):
     place_of_birth  = models.CharField(_('place of birth'), blank=True, max_length=40)
     mugshot         = models.ImageField(_('mugshot'), upload_to=get_mugshot_location, blank=True, null=True)
     photo           = models.ImageField(_('photo'), upload_to=get_photo_location, blank=True, null=True)
-    # biography       = HTMLField(_('biography'), blank=True)
-    biography       = models.TextField(_('biography'), blank=True)
+    biography       = HTMLField(_('biography'), blank=True, null=True)
     slug            = models.SlugField(_('slug'), unique=True)
 
     # Contact information
     linkedin        = models.URLField(_('linkedin'), blank=True, null=True)
     facebook        = models.URLField(_('facebook'), blank=True, null=True)
+    twitter         = models.URLField(_('twitter'), blank=True, null=True)
     email           = models.EmailField(_('email'), blank=True, null=True)
     home_phone      = models.CharField(_('home telephone'), blank=True, max_length=40)
     mobile          = models.CharField(_('mobile'), blank=True, max_length=40)
@@ -104,7 +121,10 @@ class Alumnus(models.Model):
     country         = models.CharField(_('country'), blank=True, max_length=40)
 
     # Science information
-    position        = models.PositiveSmallIntegerField(_('position'), choices=POSITION_OPTIONS, default=5)
+    # position        = models.PositiveSmallIntegerField(_('position'), choices=POSITION_OPTIONS, default=5)
+    position = models.ManyToManyField(Position)
+    specification = models.CharField(max_length=255, blank=True, help_text=_(
+        "Type of grant, or other indicator of funding"))
     office          = models.CharField(_('office'), blank=True, max_length=40)
     work_phone      = models.CharField(_('work telephone'), blank=True, max_length=40)
     ads_name        = models.CharField(_('ads name'), blank=True, max_length=40)
@@ -115,11 +135,11 @@ class Alumnus(models.Model):
     comments        = models.TextField(_('comments'), blank=True)
 
     class Meta:
-        verbose_name = _('alumnus')
-        verbose_name_plural = _('alumni')
+        verbose_name = _("Alumnus")
+        verbose_name_plural = _("Alumni")
         ordering = ('last_name', 'first_name')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.full_name
 
     def save(self, *args, **kwargs):
@@ -157,6 +177,20 @@ class Alumnus(models.Model):
         return '{}'.format(int((TODAY-self.birth_date).days/365.0))
 
 
+@receiver(signals.post_delete, sender=Alumnus)
+def delete_user(sender, instance=None, **kwargs):
+    """ When Alumnus instance is deleted, the post_delete signal is sent.
+        Here we receive the post_delete signal to also remove the related
+        User instance. Note that this does not ask for confirmation in
+        the Admin upon deleting the Alumnus instance. """
+    try:
+        instance.user
+    except User.DoesNotExist:
+        pass
+    else:
+        instance.user.delete()
+
+
 @python_2_unicode_compatible
 class Job(models.Model):
     """ Represents a job after leaving API """
@@ -180,7 +214,7 @@ class Job(models.Model):
     )
 
     alumnus             = models.ForeignKey(Alumnus, related_name="jobs")
-    position_name       = models.CharField(_('position name'), blank=True,max_length=40)
+    position_name       = models.CharField(_('position name'), blank=True, max_length=40)
     current_job         = models.PositiveSmallIntegerField(_('current occupation'), choices=currently_occupating_job_choices, default=2)
     company_name        = models.CharField(_('company name'), blank=True, max_length=40)
     start_date          = models.DateField(_('date start job'), blank=True, null=True)
@@ -188,11 +222,18 @@ class Job(models.Model):
     inside_academia     = models.PositiveSmallIntegerField(_('inside academia'), choices=outside_inside_choices, default=1)
     location_job        = models.PositiveSmallIntegerField(_('location job'), choices=location_job_choices, default=1)
 
+    class Meta:
+        verbose_name = _('job')
+        verbose_name_plural = _('jobs')
+
+    def __str__(self):
+        return self.alumnus.last_name
+
 
 @python_2_unicode_compatible
 class MastersDegree(models.Model):
     #Masters information @api
-    alumnus             = models.ForeignKey(Alumnus, related_name="masters")
+    alumnus             = models.OneToOneField(Alumnus, related_name="masters")
     date_start_master   = models.DateField(_('date start master'), blank=True, null=True)
     date_stop_master    = models.DateField(_('date stop master'), blank=True, null=True)
     #thesis_file =
@@ -202,10 +243,17 @@ class MastersDegree(models.Model):
     #supervisor(s)
     #privacy levels
 
+    class Meta:
+        verbose_name = _("Master's Degree")
+        verbose_name_plural = _("Master's Degrees")
+
+    def __str__(self):
+        return self.alumnus.last_name
+
 
 @python_2_unicode_compatible
 class PhdDegree(models.Model):
-    alumnus          = models.ForeignKey(Alumnus, related_name="phd")
+    alumnus          = models.OneToOneField(Alumnus, related_name="phd")
     date_start_phd   = models.DateField(_('date start phd'), blank=True, null=True)
     date_stop_phd    = models.DateField(_('date stop phd'), blank=True, null=True)
     phd_defence_date = models.DateField(_('phd defence date'), blank=True, null=True)
@@ -216,6 +264,13 @@ class PhdDegree(models.Model):
     #supervisors
     #students supervised --> class? anders kan je er maar een paar invullen
     #privacy levels
+
+    class Meta:
+        verbose_name = _("PhD Degree")
+        verbose_name_plural = _("PhD Degrees")
+
+    def __str__(self):
+        return self.alumnus.last_name
 
 
 @python_2_unicode_compatible
@@ -229,6 +284,13 @@ class PostdocPosition(models.Model):
 
     #privacy levels
 
+    class Meta:
+        verbose_name = _("PostDoc Position")
+        verbose_name_plural = _("PostDoc Positions")
+
+    def __str__(self):
+        return self.alumnus.last_name
+
 
 @python_2_unicode_compatible
 class Thesis(models.Model):
@@ -241,18 +303,17 @@ class Thesis(models.Model):
     # )
 
     #author = models.ForeignKey(Alumnus, related_name="thesis")
-    title  = models.CharField(max_length=160, default=_("Title Unknown"))
-    date   = models.DateField(help_text=_("Date of the thesis or defense"))
-    url    = models.URLField(blank=True, help_text=_("UvA DARE URL or other URL to thesis"))
-    slug   = models.SlugField(max_length=100, blank=False, unique=True)
-    supervisor = models.ManyToManyField(Alumnus, related_name='supervisor')
-
-    #Degree = models.ForeignKey(MastersDegree if self.type == 'msc' else PhdDegree,)
-    #phd =
+    title      = models.CharField(blank=True, null=True, max_length=160)
+    date       = models.DateField(blank=True, null=True, help_text=_("Date of the thesis or defense"))
+    url        = models.URLField(blank=True, null=True, help_text=_("UvA DARE URL or other URL to thesis"))
+    slug       = models.SlugField(blank=True, null=True, max_length=100, unique=True)
+    supervisor = models.ManyToManyField(Alumnus, blank=True, related_name='supervisor')
+    in_library = models.BooleanField(blank=True, default=False)
+    comments   = models.TextField(_('comments'), blank=True, null=True)
 
     class Meta:
-        verbose_name = _("thesis")
-        verbose_name_plural = _("theses")
+        verbose_name = _("Thesis")
+        verbose_name_plural = _("Theses")
 
     @models.permalink
     def get_absolute_url(self):
@@ -261,25 +322,32 @@ class Thesis(models.Model):
     def __unicode__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        MAXCOUNT = 100
-        count = 0
-        base_slug = slugify(self.topic)
-        self.slug = base_slug
-        # The following loop should prevent a DB exception when
-        # two people enter the same title at the same time
-        while count < MAXCOUNT:
-            try:
-                super(ResearchTopic, self).save(*args, **kwargs)
-            except IntegrityError:
-                count += 1
-                self.slug = base_slug + "_%d" % count
-            else:
-                break
+    # def save(self, *args, **kwargs):
+    #     MAXCOUNT = 100
+    #     count = 0
+    #     base_slug = slugify(self.title)
+    #     self.slug = base_slug
+    #     # The following loop should prevent a DB exception when
+    #     # two people enter the same title at the same time
+    #     while count < MAXCOUNT:
+    #         try:
+    #             super(Thesis, self).save(*args, **kwargs)
+    #         except IntegrityError:
+    #             count += 1
+    #             self.slug = base_slug + "_%d" % count
+    #         else:
+    #             break
 
 
 class MasterThesis(Thesis):
-    degree = models.OneToOneField(MastersDegree)
+    degree = models.OneToOneField(MastersDegree, related_name="msc_thesis")
+
+    class Meta:
+        verbose_name = _("Master's Thesis")
+        verbose_name_plural = _("Master's Theses")
+
+    def __str__(self):
+        return self.degree.alumnus.last_name
 
     @property
     def type():
@@ -291,7 +359,14 @@ class MasterThesis(Thesis):
 
 
 class PhdThesis(Thesis):
-    degree = models.OneToOneField(PhdDegree)
+    degree = models.OneToOneField(PhdDegree, related_name="phd_thesis")
+
+    class Meta:
+        verbose_name = _("PhD Thesis")
+        verbose_name_plural = _("PhD Theses")
+
+    def __str__(self):
+        return self.degree.alumnus.last_name
 
     @property
     def type():

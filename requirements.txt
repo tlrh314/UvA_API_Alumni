@@ -31,3 +31,5 @@ simplegeneric==0.8.1
 six==1.10.0
 traitlets==4.3.2
 wcwidth==0.1.7
+xlrd==1.0.0
+xlwt==1.2.0
