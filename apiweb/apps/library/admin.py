@@ -39,7 +39,7 @@ class PhDThesisAdmin(admin.ModelAdmin):
     fields = ('author', 'title', 'year', 'university', 'status')
 
 
-admin.site.register(Book, BookAdmin)
-admin.site.register(PhDThesis, PhDThesisAdmin)
-admin.site.register(Proceeding, ProceedingAdmin)
-admin.site.register(BookCategory, BookCategoryAdmin)
+# admin.site.register(Book, BookAdmin)
+# admin.site.register(PhDThesis, PhDThesisAdmin)
+# admin.site.register(Proceeding, ProceedingAdmin)
+# admin.site.register(BookCategory, BookCategoryAdmin)

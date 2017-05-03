@@ -40,6 +40,6 @@ class CourseTopicAdmin(admin.ModelAdmin):
     ordering = ('semester', 'name')
 
 
-admin.site.register(BachelorProject, BachelorProjectAdmin)
-admin.site.register(MasterProject, MasterProjectAdmin)
-admin.site.register(CourseTopic, CourseTopicAdmin)
+# admin.site.register(BachelorProject, BachelorProjectAdmin)
+# admin.site.register(MasterProject, MasterProjectAdmin)
+# admin.site.register(CourseTopic, CourseTopicAdmin)

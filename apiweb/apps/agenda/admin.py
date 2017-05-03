@@ -14,7 +14,7 @@ class EntryAdmin(admin.ModelAdmin):
     ordering = ["-date", "creator",]
     fields = ["creator", "title", "is_public", "body", "date", "date_end"]
 
-admin.site.register(Entry, EntryAdmin)
+# admin.site.register(Entry, EntryAdmin)
 
 
 

@@ -11,4 +11,4 @@ class StickyAdmin(admin.ModelAdmin):
         js = ADMIN_MEDIA_JS + ('javascript/admin/news.js',)
 
 
-admin.site.register(Sticky, StickyAdmin)
+# admin.site.register(Sticky, StickyAdmin)

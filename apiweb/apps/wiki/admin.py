@@ -12,4 +12,4 @@ class WikiPageAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
-admin.site.register(WikiPage, WikiPageAdmin)
+# admin.site.register(WikiPage, WikiPageAdmin)

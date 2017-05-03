@@ -64,6 +64,7 @@ class PhdDegreeAdminInline(NestedStackedInline):
 # AttributeError: 'MastersDegreeAdmin' object has no attribute 'urls'
 # TODO: check why this is, and see how we can avoid defining two
 # separate classes to inline MasterThesis in Alumnus and in MasterDegre
+@admin.register(MastersDegree)
 class MastersDegreeAdmin(admin.ModelAdmin):
     model = MastersDegree
     max_num = 1
@@ -80,6 +81,7 @@ class MastersDegreeAdmin(admin.ModelAdmin):
     get_title.short_description = "Master's Thesis Title"
 
 
+@admin.register(PhdDegree)
 class PhdDegreeAdmin(admin.ModelAdmin):
     model = PhdDegree
     max_num = 1
@@ -96,6 +98,7 @@ class PhdDegreeAdmin(admin.ModelAdmin):
     get_title.short_description = 'PhD Thesis Title'
 
 
+@admin.register(PhdThesis)
 class PhdThesisAdmin(admin.ModelAdmin):
     model = PhdThesis
 
@@ -110,6 +113,8 @@ class PhdThesisAdmin(admin.ModelAdmin):
         return obj.phd_thesis.title
     get_title.short_description = 'PhD Thesis Title'
 
+
+@admin.register(MasterThesis)
 class MasterThesisAdmin(admin.ModelAdmin):
     model = MastersDegree
 
@@ -169,6 +174,7 @@ class AlumnusAdminForm(forms.ModelForm):
         model = Alumnus
 
 
+@admin.register(Alumnus)
 class AlumnusAdmin(NestedModelAdmin):
     list_filter = ('show_person', 'position')
     list_display = ('user','email','show_person', 'first_name', 'prefix', 'last_name')
@@ -220,10 +226,5 @@ class AlumnusAdmin(NestedModelAdmin):
         js = ADMIN_MEDIA_JS
 
 
-admin.site.register(Alumnus, AlumnusAdmin)
 admin.site.register(Job)
-admin.site.register(MastersDegree, MastersDegreeAdmin)
-admin.site.register(PhdDegree, PhdDegreeAdmin)
 admin.site.register(PostdocPosition)
-admin.site.register(MasterThesis, MasterThesisAdmin)
-admin.site.register(PhdThesis, PhdThesisAdmin)

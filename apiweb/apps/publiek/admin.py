@@ -9,7 +9,7 @@ class StarnightAdmin(admin.ModelAdmin):
     ordering = ('-date', )
     fields = ('date', 'is_registrable', 'max_people')
 
-admin.site.register(Starnight, StarnightAdmin)
+# admin.site.register(Starnight, StarnightAdmin)
 
 
 class ActivityAdmin(admin.ModelAdmin):
@@ -20,7 +20,7 @@ class ActivityAdmin(admin.ModelAdmin):
     fields = ('nr', 'is_in_block1', 'is_in_block2', 'is_in_block3', 'name',
               'max_people')
 
-admin.site.register(Activity, ActivityAdmin)
+# admin.site.register(Activity, ActivityAdmin)
 
 
 class StarnightApplicantAdmin(admin.ModelAdmin):
@@ -33,4 +33,4 @@ class StarnightApplicantAdmin(admin.ModelAdmin):
     fields = ('date', 'name', 'address', 'zipcode', 'city', 'email',
               'newsletter', 'number', 'slot1', 'slot2', 'slot3')
 
-admin.site.register(StarnightApplicant, StarnightApplicantAdmin)
+# admin.site.register(StarnightApplicant, StarnightApplicantAdmin)

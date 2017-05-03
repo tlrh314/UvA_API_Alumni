@@ -19,4 +19,4 @@ class StaffmeetingAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Staffmeeting, StaffmeetingAdmin)
+# admin.site.register(Staffmeeting, StaffmeetingAdmin)

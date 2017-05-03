@@ -86,7 +86,7 @@ class PizzaAdmin(admin.ModelAdmin):
         js = ADMIN_MEDIA_JS + ('javascript/admin/news.js',)
 
 
-admin.site.register(Press, PressAdmin)
-admin.site.register(Event, EventAdmin)
-admin.site.register(Colloquium, ColloquiumAdmin)
-admin.site.register(Pizza, PizzaAdmin)
+# admin.site.register(Press, PressAdmin)
+# admin.site.register(Event, EventAdmin)
+# admin.site.register(Colloquium, ColloquiumAdmin)
+# admin.site.register(Pizza, PizzaAdmin)

@@ -121,6 +121,7 @@ body {
 .main-row {
     padding-top: 20px;
     background-color: white;
+    width: 100%;
 }
 
 .show-grid > div {
@@ -129,6 +130,8 @@ body {
 
 .main-content {
     min-height: 100vh;
+    width: 90%;
+    margin: 0 auto;
 }
 
 .btn-default, .btn-default:hover, .btn:active:focus, .btn-default:focus {

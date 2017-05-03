@@ -90,7 +90,8 @@ ENV/
 # Migrations
 migrations/
 
-settings/local.py
+apiweb/settings/local.py
+
 databases/
 static/
 media/

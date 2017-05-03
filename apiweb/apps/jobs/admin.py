@@ -25,4 +25,4 @@ class JobAdmin(admin.ModelAdmin):
         js = ADMIN_MEDIA_JS + ('javascript/admin/jobs.js',)
 
 
-admin.site.register(Job, JobAdmin)
+# admin.site.register(Job, JobAdmin)

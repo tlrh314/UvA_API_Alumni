@@ -6,13 +6,14 @@
 
 
 {% block content %}
-<h1 class="text-center">Anton Pannekoek Institute Alumni Network</h1>
+<h1 class="text-center">Anton Pannekoek Institute | Alumni </h1>
 
-<div class="col-xs-9 main-content" role="main">
+<div class="main-content" role="main"">
+    <div class="jumbotron">
     {% if press or events %}
     {% include "main/news_listing.html" %}
     {% else %}
-    <p style="margin-left: 2em; margin-right: 5em; margin-top: 3em; line-height: 1.4;" >
+    <p class="text-justify">
     The Anton Pannekoek Institute houses the astrophysics group of the University of Amsterdam.
     Research at the institute concentrates on stellar evolution,
     both at high energies (neutron stars, gamma-ray bursts) and
@@ -20,6 +21,7 @@
     the institute is also heavily involved in LOFAR.
     </p>
     {% endif %}
+    </div>
 </div>
 
 {% endblock %}

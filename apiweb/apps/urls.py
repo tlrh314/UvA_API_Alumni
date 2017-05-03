@@ -2,6 +2,7 @@ from __future__ import unicode_literals, absolute_import, division
 
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 import django.contrib.sitemaps.views
 from .main.sitemap import sitemaps
 from .main.views import MainView, HomeView, ScatterView, LowercaseView
@@ -30,6 +31,28 @@ urlpatterns = [
     # to use new setup in templates, use {% url admin:index %}
     url(r'^admin/',
         include(admin.site.urls)),
+    url(
+        r'^admin/password_reset/$',
+        auth_views.PasswordResetView.as_view(),
+        name='admin_password_reset',
+    ),
+    url(
+        r'^admin/password_reset/done/$',
+        auth_views.PasswordResetDoneView.as_view(),
+        name='password_reset_done',
+    ),
+    url(
+        r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
+        auth_views.PasswordResetConfirmView.as_view(),
+        name='password_reset_confirm',
+    ),
+    url(
+        r'^reset/done/$',
+        auth_views.PasswordResetCompleteView.as_view(),
+        name='password_reset_complete',
+    ),
+
+
 
     url(r'^news/',
         include('apiweb.apps.news.urls', namespace='news')),
