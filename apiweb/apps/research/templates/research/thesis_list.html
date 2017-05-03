@@ -1,45 +1,39 @@
 {% extends "base.html" %}
-{% block banner %}<div id="banner"><h1>Research at the Institute</h1></div>{% endblock banner %}
-{% block breadcrumbs %}
-{{ block.super }} &#187; <a href="{% url 'research:index' %}">Research</a>  &#187; <a href="{% url 'research:thesis' "phd" %}">PhD theses</a>
-{% endblock breadcrumbs %}
 
-{% block sidemenu %}
-{% url 'research:thesis' "phd" as thesis_list %}
-<ul>
-{# <li><a {% ifequal request.path thesis_list %}class="active" {% endifequal %}href="{{ thesis_list }}">Theses ({{ thesis_type }})</a></li> #}
-<li><a {% ifequal request.path thesis_list %}class="active" {% endifequal %}href="{{ thesis_list }}">PhD theses</a></li>
-</ul>
-{% endblock sidemenu %}
+{% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
 
 {% block title %}API - Research - Theses{% endblock title %}
 
-{% block contents %}
+{% block content %}
 
-<h1>{{ thesis_title }}</h1>
+<h1 class="text-center">{{ thesis_title }}</h1>
 
+
+{# TODO: Create filter, search, and add MSc and BSc theses? #} 
+{# TODO: make Alumus clickable to show Alumnus page ? #} 
 {% if not object_list %}
-<p>There are no {{ thesis_type }} theses at the moment.</p>
+    <p>There are no {{ thesis_type }} theses at the moment.</p>
 {% else %}
-<table class="theses">
-<thead>
-<tr>
-<th>Name<br/>Defense date</th>
-<th>Title</th>
-</tr>
-</thead>
-<tbody>
-{% for thesis in object_list %}
-<tr class="{% cycle 'odd' 'even' %}">
-<td>{{ thesis.author }}<br />{{ thesis.date|date:"j M Y" }}</td>
-<td> <a href="{{ thesis.url }}"> {{ thesis.title }} </a>
-    (<a href="{{ STATIC_URL }}research/theses/{{ thesis_type }}/{{ thesis.slug }}.pdf">PDF</a>)
-    [{{ forloop.revcounter }}]
-</td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Alumnus</th>
+                <th>Title</th>
+                <th>Defence Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for thesis in object_list %}
+        <tr class="{% cycle '' 'info' %}">
+                <td>{{ thesis.author }}</td>
+                <td> <a href="{{ thesis.url }}"> {{ thesis.title }} </a>(<a href="{{ STATIC_URL }}research/theses/{{ thesis_type }}/{{ thesis.slug }}.pdf">PDF</a>)
+        [{{ forloop.revcounter }}]</td>
+                <td>{{ thesis.date|date:"j M Y" }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endif %}
 
-{% endblock contents %}
+
+{% endblock content %}

@@ -40,21 +40,23 @@
     <link rel="stylesheet" type="text/css" media="print" href="{% static 'css/print.css' %}" />
     {% endblock stylesheets %}
 </head>
-<body style="background-image: url('{% static "img/api-background.png" %}');">
-    <div id="header">
-        {% include "header.html" %}
-    </div>
+<body style="background-image: url('{% static "img/library.jpg" %}');">
+    {% include "header.html" %}
 
     {# Begin of content #} 
     <div class="container-container">
         <div class="container" id="container">
             <div class="row main-row">
-                {% block content %}
-                <div id="contents">{% block contents %}{% endblock contents %}</div> 
-                {% endblock %}
+                {% block content %}{% endblock %}
             </div>
         </div> 
     </div>
+
+    <a id="backtotop" href="#" class="btn btn-primary btn-lg back-to-top" 
+        role="button" title="Back to top" data-toggle="tooltip" 
+        data-placement="left">
+        <span class="fa fa-chevron-up"></span>
+    </a>
     
     {% include "footer.html" %}
     

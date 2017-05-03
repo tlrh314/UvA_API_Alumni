@@ -1,23 +1,25 @@
-{% extends "main/base.html" %}
+{% extends "base.html" %}
 {% load static %}
-{% block title %} API - Index {% endblock title %}
+{% block title %} API - Alumni {% endblock title %}
 {# TODO: remove css/frontpage.css, but it is left to show how to load additional per-page css #} 
 {% block stylesheets %} {{ block.super }} <link rel="stylesheet" type="text/css" href="{#% static 'css/frontpage.css' %#}" />{% endblock stylesheets %}
 
 
-{% block contents %}
-<h1>Welcome to the Anton Pannekoek Institute for Astronomy</h1>
+{% block content %}
+<h1 class="text-center">Anton Pannekoek Institute Alumni Network</h1>
 
-{% if press or events %}
-{% include "main/news_listing.html" %}
-{% else %}
-<p style="margin-left: 2em; margin-right: 5em; margin-top: 3em; line-height: 1.4;" >
-The Anton Pannekoek Institute houses the astrophysics group of the University of Amsterdam.
-Research at the institute concentrates on stellar evolution,
-both at high energies (neutron stars, gamma-ray bursts) and
-low energies (star &amp; planet formation);
-the institute is also heavily involved in LOFAR.
-</p>
-{% endif %}
+<div class="col-xs-9 main-content" role="main">
+    {% if press or events %}
+    {% include "main/news_listing.html" %}
+    {% else %}
+    <p style="margin-left: 2em; margin-right: 5em; margin-top: 3em; line-height: 1.4;" >
+    The Anton Pannekoek Institute houses the astrophysics group of the University of Amsterdam.
+    Research at the institute concentrates on stellar evolution,
+    both at high energies (neutron stars, gamma-ray bursts) and
+    low energies (star &amp; planet formation);
+    the institute is also heavily involved in LOFAR.
+    </p>
+    {% endif %}
+</div>
 
 {% endblock %}
