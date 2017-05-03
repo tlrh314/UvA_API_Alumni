@@ -1,6 +1,9 @@
 {% extends "main/base.html" %}
-{% block title %}Welcome to the Anton Pannekoek Institute for Astronomy{% endblock title %}
-{% block stylesheets %} {{ block.super }} <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/frontpage.css" />{% endblock stylesheets %}
+{% load static %}
+{% block title %} API - Index {% endblock title %}
+{# TODO: remove css/frontpage.css, but it is left to show how to load additional per-page css #} 
+{% block stylesheets %} {{ block.super }} <link rel="stylesheet" type="text/css" href="{#% static 'css/frontpage.css' %#}" />{% endblock stylesheets %}
+
 
 {% block contents %}
 <h1>Welcome to the Anton Pannekoek Institute for Astronomy</h1>

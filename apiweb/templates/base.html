@@ -1,49 +1,68 @@
 {% load filters %}
-<!DOCTYPE html>
-<html {% block langattr %}lang="en"{% endblock langattr %}>
+{% load static %}
+
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" {% block langattr %}lang="en"{% endblock langattr %}> <!--<![endif]-->
+
 <head>
- <meta charset="utf-8" />
- <title>{% block title %}{{ title }}{% endblock title %}</title>
- <link rel="icon" type="image/vnd.microsoft.icon" href="{{ STATIC_URL}}images/api-color.png" />
- <meta name="author" content="Evert Rol, Martin Heemskerk" />
- <meta name="copyright" content="Anton Pannekoek Instituut voor Sterrenkunde, Universiteit van Amsterdam" />
-{% block stylesheets %}
- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/yui-reset-fonts.css" />
- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
- <link media="only screen and (max-device-width: 480px)" href="{{ STATIC_URL }}css/iphone.css" type="text/css" rel="stylesheet" />
- <!--[if lte IE 6]>
- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ie.css" />
- <![endif] -->
- <link rel="stylesheet" type="text/css" media="print" href="{{ STATIC_URL }}css/print.css" />
-{% endblock stylesheets %}
-{% block scripts %}
- <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery.js"></script>
- <!--[if lte IE 6]>
- <script type="text/javascript" src="{{ STATIC_URL }}javascript/menu.js"></script>
- <![endif]-->
-{% endblock scripts%}
+    <meta charset="utf-8" />
+    <title>{% block title %}{{ title }}{% endblock title %}</title>
+
+    <meta name="author" content="Evert Rol, Martin Heemskerk, David Hendriks, Timo Halbesma, Marcella Wijngaarden" />
+    <meta name="copyright" content="Anton Pannekoek Instituut voor Sterrenkunde, Universiteit van Amsterdam" />
+    <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="{% static 'img/favicon.png' %}" />
+    <link rel="icon" type="image/gif/png" href="{% static 'img/favicon.png' %}">
+
+    {# TODO: add correct Twitter and Facebook tags #} 
+    <meta name="twitter:site" content="@uva_api">
+    <meta name="twitter:title" content="Anton Pannekoek Institute | Alumni Website">
+    <meta name="Referrer" content="origin">
+
+    {% block stylesheets %}
+    {# TODO: review Project CECE theft #}
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-social.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sidemenu.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+
+    {# TODO: review former API website css #}
+    <link media="only screen and (max-device-width: 480px)" href="{% static 'css/iphone.css' %}" type="text/css" rel="stylesheet" />
+    <!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="{% static 'css/ie.css' %}" /><![endif] -->
+    <link rel="stylesheet" type="text/css" media="print" href="{% static 'css/print.css' %}" />
+    {% endblock stylesheets %}
 </head>
-<body>
-<div id="base">
-<div id="header">
-{% block banner %}<div id="banner">
-<h1>Anton Pannekoek Institute for Astronomy</h1></div>{% endblock banner %}
-<!-- banner -->
-<div id="menu">{% block menu %}{% include "menu.html" %}{% endblock menu %}</div> <!-- menu -->
-<div id="bottommenu">{% include "bottommenu.html" %}</div>
-</div> <!-- header -->
+<body style="background-image: url('{% static "img/api-background.png" %}');">
+    <div id="header">
+        {% include "header.html" %}
+    </div>
 
-<div id="main">{% block main %}
-<div id="sidemenu">{% block sidemenu %}{# Empty side menu here. Filled in by the separate apps. #}{% endblock sidemenu %}</div> <!-- sidemenu -->
-
-<div id="contents">{% block contents %}{% endblock contents %}</div> <!-- contents -->
-
-{% endblock main %}</div> <!-- main -->
-
-<div id="push-footer"></div>
-
-</div> <!-- base -->
-
-<div id="footer">{% include "footer.html" %}</div>
+    {# Begin of content #} 
+    <div class="container-container">
+        <div class="container" id="container">
+            <div class="row main-row">
+                {% block content %}
+                <div id="contents">{% block contents %}{% endblock contents %}</div> 
+                {% endblock %}
+            </div>
+        </div> 
+    </div>
+    
+    {% include "footer.html" %}
+    
+    {% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+     <!--[if lte IE 6]><script type="text/javascript" src="{% static 'js/menu.js' %}"></script><![endif]-->
+    {% endblock scripts%}
 </body>
 </html>

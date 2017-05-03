@@ -1,0 +1,58 @@
+{% load static %}
+
+<header>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+
+        {# API Logo #}
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+
+            </button>
+            <a class="navbar-brand apiLogo" href="/"><img
+                    src="{% static 'img/api_logo_wide_black.png' %}" style="height:60px;"/></a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            {# Navigation bar links #}
+            <ul class="nav navbar-nav">
+
+                <li><a href="{% url 'home-page' %}"><span><strong>HOME</strong></span></a></li>
+                <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
+                <li><a href="{% url 'people:person-list' %}"><span>PEOPLE</span></a></li>
+                <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
+                <li><a href="{% url 'research:thesis' "phd" %}"><span>THESES</span></a></li>
+                <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
+                <li><a href="{% url 'news:index' %}"><span>NEWS</span></a></li>
+                <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
+                <li class="hover-btn"><a href="{% url 'about' %}"><span>ABOUT</span></a>
+                {% comment %}
+                {# TODO: decide whether or not to use dropdowns in menu #}
+                <span class="dropdown-content">
+                    <ul class="dropdown-item"><a href="#{{ current_item.item_id }}" style="float: left;">Onze Missie</a></ul>
+                    <ul class="dropdown-item"><a href="#">Hoe werkt het?</a></ul>
+                    <ul class="dropdown-item"><a href="#">Wie zijn wij?</a></ul>
+                </span>
+                {% endcomment %}
+                </li>
+            </ul>
+
+            {# Search Box #}
+            <div class="col-xs-3 pull-right">
+                <form class="navbar-form" role="search" action="/search/" method="get" accept-charset="utf-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search..." name="terms" id="terms">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
