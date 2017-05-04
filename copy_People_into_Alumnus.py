@@ -14,10 +14,10 @@ django.setup()
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext_lazy as _
 from apiweb.apps.people.models import Person
-from apiweb.apps.alumni.models import Alumnus
-from apiweb.apps.alumni.models import MastersDegree, MasterThesis
-from apiweb.apps.alumni.models import PhdDegree, PhdThesis
+from apiweb.apps.alumni.models import Alumnus, CurrentPosition
+from apiweb.apps.alumni.models import Degree
 from apiweb.apps.research.models import ResearchTopic, Thesis
 
 
@@ -44,7 +44,7 @@ def copy_People_to_Alumnus():
         alumnus.prefix          =     person.prefix
         alumnus.last_name       =     person.last_name
         alumnus.title           =     person.title
-        alumnus.initials        =     person.initials
+        alumnus.initials        =     person.initials.replace(".", "")
         alumnus.gender          =     person.gender
         alumnus.birth_date      =     person.birth_date
         # TODO: if not person.show_person then probably photo (very) old / outdated
@@ -53,30 +53,20 @@ def copy_People_to_Alumnus():
         alumnus.slug            =     person.slug
         # TODO: if not person.show_person then probably UvANetID@UvA.nl and no longer valid.
         alumnus.email           =     person.email
-        # TODO: Enforce that phone numbers are digits only, without hypens or any other formatting
         alumnus.home_phone      =     person.home_phone
         alumnus.mobile          =     person.mobile
         # TODO: curl homepage to check if this exists?
         alumnus.homepage        =     person.homepage
         # TODO: if not person.show_person then probably alumnus, thus, address likely no longer valid.
         alumnus.address         =     person.address
-        # TODO: split address up into streetname and streetnumber ?
-        # alumnus.streetname      =
-        # alumnus.streetnumber    =
         alumnus.zipcode         =     person.zipcode
-        # TODO: Ensure city and country name is all same format, not mixture of ([Tt]he) [Nn]etherlands, Holland
         alumnus.city            =     person.city
         alumnus.country         =     person.country
-        for position in person.position.all():
-            alumnus.position.add(position)
         alumnus.specification   =     person.specification
         alumnus.office          =     person.office
         alumnus.work_phone      =     person.work_phone
         # TODO: should ads_name really be a separate field? This could be class method if name and initials known
         alumnus.ads_name        =     person.ads_name
-
-        # TODO: biography lives in Milena's pdf and can be copy-pasted lol.
-        # alumnus.biography       =     person.biography
 
         # TODO: Stalk alumni on the social media.
         # alumnus.linkedin        =
@@ -87,9 +77,7 @@ def copy_People_to_Alumnus():
         # alumnus.nationality     =     person.nationality
         # alumnus.place_of_birth  =     person.place_of_birth
 
-        # TODO: we have a list of all master's thesis. We could create instances, then add to correct person
-        # TODO: at the API website we already have list of ResearchThesis. Query and link to Alumnus.
-
+        alumnus.save()
         for research_interest in person.research.all():
             alumnus.research.add(research_interest)
         for research_contactperson in person.contact.all():
@@ -99,6 +87,63 @@ def copy_People_to_Alumnus():
         alumnus.save()
         print("Done")
         # break
+
+
+POSITION = {
+    'DIRECTOR': 1,
+    'STAFF': 2,
+    'NOVA': 3,
+    'ADJUNCT': 4,
+    'POSTDOC': 5,
+    'PHD': 6,
+    'EMERITUS': 7,
+    'GUEST': 8,
+    'MASTER': 9,
+    'BACHELOR': 10,
+    'DEVELOPER': 11}
+POSITION_OPTIONS = (
+    (POSITION['DIRECTOR'], _("Director")),
+    (POSITION['STAFF'], _("Faculty Staff")),
+    (POSITION['NOVA'], _("Nova")),
+    (POSITION['ADJUNCT'], _("Adjunct Staff")),
+    (POSITION['POSTDOC'], _("Postdoc")),
+    (POSITION['PHD'], _("PhD Student")),
+    (POSITION['EMERITUS'], _("Emeritus")),
+    (POSITION['GUEST'], _("Guest")),
+    (POSITION['MASTER'], _("Master Student")),
+    (POSITION['BACHELOR'], _("Bachelor Student")),
+    (POSITION['DEVELOPER'], _("Software Developer")),
+)
+
+
+def create_position_instances():
+    for p in POSITION_OPTIONS:
+        position_name = p[1]
+        print(position_name)
+
+        position, created = CurrentPosition.objects.get_or_create(
+            name=position_name,
+            plural=position_name+"s" if position_name != "Emeritus" else "Emeriti" )
+        position.save()
+
+
+def convert_old_position(position_integer):
+    position_name = dict(POSITION_OPTIONS)[position_integer]
+    position = CurrentPosition.objects.filter(name=position_name)
+    print(position)
+    return position
+
+
+def add_info_from_latest_production_dump():
+    # new_position_instance = convert_old_position(integerrrr)
+    # prefix, position, title, first_name, initials, last_name, gender, email, address, country, home_phone, mobile, homepage, mugshot, office, photo, show_person, slug
+
+    #    for position in person.position.all():
+    #        alumnus.position.add(position)
+
+    pass
+
+
 
 
 # Helper functions to generate column names (A-Z, AA-ZZ, etc) for Excel
@@ -144,62 +189,44 @@ def clean_year(year):
         return datetime.datetime(year=cleanyear, month=cleanmonth, day=cleanday)
 
 
-def create_alumnus(first_name, initials, last_name, email,
-        middle_names=None, nickname=None, student_id=None):
+def create_alumnus(first_name, nickname, middle_names, initials, prefix, last_name,
+                   email, student_id):
+    print("Alumnus does not yet exist, creating: ", last_name)
     alumnus = Alumnus.objects.create(
         user = User.objects.create_user(
             username=(first_name+initials+last_name).replace(" ", ""),
             password=User.objects.make_random_password(),
             first_name=first_name, last_name=last_name, email=email
         ),
-        first_name=first_name,
-        last_name=last_name,
         initials=initials,
-        email=email
-        # TODO: add middle_names to Alumnus model? Also add nickname?
-        # alumnus.middle_names = middle_names
-        # TODO: split infix from last name, add infix to Alumnus model?
-        # infix=infix,
-        # TODO: add student_id to MastersDegree model  ??
-        # student_id=student_id,
+        first_name=first_name,
+        nickname=nickname,
+        middle_names=middle_names,
+        prefix=prefix,
+        last_name=last_name,
+        email=email,
+        student_id=student_id,
     )
     alumnus.save()
     return alumnus
 
 
 def add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
-                          comments, supervisor=None):
-            degree, created = MastersDegree.objects.get_or_create(
-                alumnus=alumnus,
-                date_start_master=clean_year(year_start),
-                date_stop_master=clean_year(year)
-            )
-            print("MSc Degree created:", created)
-            if not created:
-                degree.date_start_master=clean_year(year_start)
-                degree.date_stop_master=clean_year(year)
-            degree.save()
-            alumnus.save()
-
-            msc_thesis, created = MasterThesis.objects.get_or_create(
-                degree=degree,
-                title=thesis_title,
-                date=clean_year(year),
-                in_library=in_library,
-                comments=comments,
-                # TODO: obtain supervisor last name from supervisor (can be any format)
-                # caution: line of code is not tested and can have multiple matches!
-                # supervisor=Alumnus.objects.filter(last_name=supervisor)
-            )
-            print("MSc Thesis created:", created)
-            if not created:
-                msc_thesis.title = thesis_title
-                msc_thesis.date = clean_year(year)
-                msc_thesis.in_library = in_library
-                msc_thesis.comments = comments
-            msc_thesis.save()
-            degree.save()
-            alumnus.save()
+                              comments, supervisor=None):
+    print("Adding MSc Thesis to Alumnus: {0}\nTitle = {1}".format(alumnus, thesis_title))
+    degree = Degree.objects.create(
+        alumnus=alumnus,
+        type="msc",
+        date_start=clean_year(year_start),
+        date_stop=clean_year(year),
+        thesis_title=thesis_title,
+        date_of_defence=clean_year(year),
+        thesis_in_library=in_library,
+        comments=comments,
+    )
+    degree.save()
+    alumnus.save()
+    print("Done\n")
 
 
 def add_list_of_masterstudents_with_thesistitle():
@@ -218,6 +245,7 @@ def add_list_of_masterstudents_with_thesistitle():
     # Header lives on row 0. Columns are:
     # Type, First Name, Roepnaam, Middle Names, Initials, Infix, Last Name, Email,
     # Student ID, Thesis Title, Year Start, Year, Supervisor, In library?, Comments
+    # Note that infix=prefix
     for row_nr in range(1, sheet.nrows):
         # for col_nr in range(sheet.ncols):
         #     print(sheet.cell_value(row_nr, col_nr), end=', ')
@@ -231,7 +259,7 @@ def add_list_of_masterstudents_with_thesistitle():
         nickname     = sheet.cell_value(row_nr, 2)
         middle_names = sheet.cell_value(row_nr, 3)
         initials     = sheet.cell_value(row_nr, 4)
-        infix        = sheet.cell_value(row_nr, 5)
+        prefix       = sheet.cell_value(row_nr, 5)
         last_name    = sheet.cell_value(row_nr, 6)
         email        = sheet.cell_value(row_nr, 7)
         student_id   = sheet.cell_value(row_nr, 8)
@@ -243,172 +271,98 @@ def add_list_of_masterstudents_with_thesistitle():
         comments     = sheet.cell_value(row_nr, 14)
 
         print("  type_string  = {0}\n  first_name   = {1}\n  nickname     = {2}\n  "
-              "middle_names = {3}\n  initials     = {4}\n  infix        = {5}\n  "
+              "middle_names = {3}\n  initials     = {4}\n  prefix       = {5}\n  "
               "last_name    = {6}\n  email        = {7}\n  student_id   = {8}\n  "
               "thesis_title = {9}\n  year_start   = {10}\n  year         = {11}\n  "
                "supervisor   = {12}\n  in_library   = {13}\n  comments     = {14}"
                     .format(type_string, first_name,
-            nickname, middle_names, initials, infix, last_name, email,
+            nickname, middle_names, initials, prefix, last_name, email,
             student_id, thesis_title, year_start, year, supervisor,
             in_library, comments)
         )
 
         alumnus_set = Alumnus.objects.filter(last_name=last_name)
-        # Easy case: empty QuerySet means Alumnus does not exist yet, so created it.
         if not alumnus_set:
-            print("Alumnus does not exist yet. Create instance.")
-            alumnus = create_alumnus(first_name, initials, last_name, email,
-                middle_names=None, nickname=None, student_id=None)
+            # Alumnus does not exist, so create and add thesis.
+            alumnus = create_alumnus(first_name, nickname, middle_names, initials, prefix,
+                last_name, email, student_id)
             add_msc_thesis_to_alumnus(alumnus, year_start, year,
                 thesis_title, in_library, comments, supervisor=None)
-            print("New Alumnus created, thesis added. Done\n")
             continue
-        elif len(alumnus_set) == 1:
-            alumnus = alumnus_set[0]
-            print("Alumnus does exist")
-            print("  initials   =", alumnus.initials.replace(".", ""))
-            print("  first_name =", alumnus.first_name)
-            print("  last_name  =", alumnus.last_name)
 
-            try:
-                if(alumnus.masters.msc_thesis.title == thesis_title):
-                    print("We already added the thesis to existing Alumnus. Done\n")
-                    continue
-                else:
-                    thesisdate = alumnus.masters.msc_thesis.date.strftime("%Y-%m-%d")
-                    print("Alumnus does have a MastersThesis, but title does not match.")
-                    print(  "msc_thesis.title =", alumnus.masters.msc_thesis.title)
-                    print(  "title            =", thesis_title)
-                    if alumnus.initials.replace(".", "") != initials:
-                        print("Initials also do not match, presumably due to a degeneracy in last_name")
-                        alumnus = create_alumnus(first_name, initials, last_name, email,
-                            middle_names=None, nickname=None, student_id=None)
-                        add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
-                            comments, supervisor=None)
-                        print("New Alumnus created, thesis added. Done\n")
-                        continue
+        print("We have {0} matching Alumnus candidates.".format(alumnus_set.count()))
+        i = 0
+        match_found = False
+        for alumnus in alumnus_set:
+            i += 1
+            print("  Alumnus {0}:".format(i))
+            print("     initials   =", alumnus.initials.replace(".", ""))
+            print("     first_name =", alumnus.first_name)
+            print("     last_name  =", alumnus.last_name)
 
-                    elif(thesisdate != clean_year(year).strftime("%Y-%m-%d")):
-                        print("Initials do not match, presumably due to a degeneracy in initials + last_name")
-                        print("Thesis year does not match")
-                        alumnus = create_alumnus(first_name, initials, last_name, email,
-                            middle_names=None, nickname=None, student_id=None)
-                        add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
-                            comments, supervisor=None)
-                        print("New Alumnus created, thesis added. Done\n")
-                        continue
+            if alumnus.initials.replace(".", "") == initials:
+                print("  Match found with Alumnus", i)
+                msc_degree = alumnus.degrees.filter(type="msc")
+                if not msc_degree:
+                    add_msc_thesis_to_alumnus(alumnus, year_start, year,
+                        thesis_title, in_library, comments, supervisor=None)
+                    match_found = True
+                    break
+                elif len(msc_degree) == 1:
+                    if msc_degree[0].thesis_title == thesis_title:
+                        print("Thesis was already added, we're good. Done\n")
+                        match_found = True
+                        break
                     else:
-                        print("Dunno why")
-                        return
-            except MastersDegree.DoesNotExist as e:
-                print("MastersDegree DoesNotExist")
-                if str(e) == "Alumnus has no masters.":
-                    add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
-                        comments, supervisor=None)
-                    print("Thesis added to existing Alumnus. Done\n")
-                    continue
+                        pass
+                        # check year, but year could be empty...
+                        # thesisdate = msc_degree[0].date_stop.strftime("%Y-%m-%d")
+                        #    thesisdate == clean_year(year).strftime("%Y-%m-%d")
                 else:
-                    raise
-        elif len(alumnus_set) > 1:
-            print("We have {0} matching Alumnus instances.".format(alumnus_set.count()))
-            i = -1
-            match_found = False
-            for alumnus in alumnus_set:
-                i += 1
-                print("  Alumnus {0}:".format(i))
-                print("     initials   =", alumnus.initials.replace(".", ""))
-                print("     first_name =", alumnus.first_name)
-                print("     last_name  =", alumnus.last_name)
-
-                if alumnus.initials.replace(".", "") == initials:
-                    print("  Match found with Alumnus", i)
-                    try:
-                        if(alumnus.masters.msc_thesis.title == thesis_title):
-                            print("We already added the thesis to existing Alumnus. Done\n")
-                            match_found = True
-                            break
-                        else:
-                            print("Alumnus does have a MastersThesis, but title does not match.")
-                            print(  "msc_thesis.title =", alumnus.masters.msc_thesis.title)
-                            print(  "title            =", thesis_title)
-                            thesisdate = alumnus.masters.msc_thesis.date.strftime("%Y-%m-%d")
-                            if alumnus.initials.replace(".", "") != initials:
-                                print("Initials also do not match, presumably due to a degeneracy in last_name")
-                                alumnus = create_alumnus(first_name, initials, last_name, email,
-                                    middle_names=None, nickname=None, student_id=None)
-                                add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
-                                    comments, supervisor=None)
-                                print("New Alumnus created, thesis added. Done\n")
-                                match_found = True
-                                break
-                            elif(thesisdate != clean_year(year).strftime("%Y-%m-%d")):
-                                print("    Alumnus has Thesis, but year does not match")
-
-                                print("      msc_thesis.date :", thesisdate)
-                                print("      clean_year(year):", clean_year(year).strftime("%Y-%m-%d"))
-                                print("  Match withdrawn, check next.")
-                                continue
-                            else:
-                                print("Dunno why")
-                                return
-                    except MastersDegree.DoesNotExist as e:
-                        print("MastersDegree DoesNotExist")
-                        if str(e) == "Alumnus has no masters.":
-                            add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
-                                comments, supervisor=None)
-                            print("Thesis added to existing Alumnus. Done\n")
-                            match_found = True
-                            break
-                        else:
-                            raise
-            if match_found:
-                continue
+                    print("Houston, we have a problem")
+                    exit(0)
             else:
-                print("Match not found")
-                alumnus = create_alumnus(first_name, initials, last_name, email,
-                    middle_names=None, nickname=None, student_id=None)
-                add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
-                    comments, supervisor=None)
-                print("New Alumnus created, thesis added. Done\n")
-                continue
-            return
+                print("Special case: mitsmatch in initials, but only one last_name match.")
+                confirm = input("Add thesis anyway? [Yy]")
+                if confirm.lower() == "y":
+                    add_msc_thesis_to_alumnus(alumnus, year_start, year,
+                        thesis_title, in_library, comments, supervisor=None)
+                    match_found = True
+                    break
+                else:
+                    print("Thesis not added")
+
+        if match_found:
+            continue
+        else:
+            print("Match not found")
+            alumnus = create_alumnus(first_name, nickname, middle_names, initials,
+                prefix, last_name, email, student_id)
+            add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
+                comments, supervisor=None)
+            continue
+        return
+
 
 
 def add_phd_thesis_to_alumnus(alumnus, thesis_title, defence_date,
-    thesis_url, thesis_slug, gender):
-            degree, created = PhdDegree.objects.get_or_create(
-                alumnus=alumnus,
-                # date_start_phd=unknown,
-                date_stop_phd=defence_date,
-                phd_defence_date=defence_date,
-            )
-            print("PhD Degree created:", created)
-            if not created:
-                pass
-                # degree.date_start_phd = unknown
-                degree.date_stop_phd = defence_date
-                degree.defence_date = defence_date
+                             thesis_url, thesis_slug, gender):
+    print("Adding PhD Thesis to Alumnus: {0}\nTitle = {1}".format(alumnus, thesis_title))
+    degree = Degree.objects.create(
+        alumnus=alumnus,
+        type="phd",
+        date_stop=defence_date,
+        date_of_defence=defence_date,
+        thesis_title=thesis_title,
+        thesis_url=thesis_url,
+        thesis_slug=thesis_slug,
+        thesis_in_library=True,
+    )
 
-            alumnus.gender = gender
-            degree.save()
-            alumnus.save()
-
-            phd_thesis, created = PhdThesis.objects.get_or_create(
-                degree=degree,
-                title=thesis_title,
-                date=defence_date,
-                url=thesis_url,
-                slug=thesis_slug,
-            )
-            print("PhD Thesis created:", created)
-            if not created:
-                phd_thesis.defence_date = defence_date
-                phd_thesis.title = thesis_title
-                phd_thesis.date = defence_date
-                phd_thesis.url = thesis_url,
-            phd_thesis.save()
-            degree.save()
-            alumnus.save()
+    alumnus.gender = gender
+    degree.save()
+    alumnus.save()
+    print("Done\n")
 
 
 def add_research_dot_models_dot_Thesis_to_Alumnus():
@@ -418,11 +372,11 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
         print("Eating: {0} / {1}".format(thesiscount, Thesis.objects.count()))
         authorsplit = thesis.author.split(" ")
         initials = authorsplit[0].replace(".", "")
-        infix = ""
+        prefix = ""
         if authorsplit[1] in ["van", "de", "den", "der"]:
-            infix += authorsplit[1]
+            prefix += authorsplit[1]
             if authorsplit[2] in ["der", "den", "de"]:
-                infix += " " + authorsplit[2]
+                prefix += " " + authorsplit[2]
                 authorsplit = authorsplit[2:]
             else:
                 authorsplit = authorsplit[1:]
@@ -430,7 +384,7 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
 
         # print("author       =", thesis.author)
         print("initials     =", initials)
-        print("infix        =", infix)
+        print("prefix       =", prefix)
         print("last_name    =", last_name)
         print("gender       =", thesis.gender)
         print("title        =", thesis.title)
@@ -443,8 +397,8 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
         # Easy case: empty QuerySet means Alumnus does not exist yet, so created it.
         if not alumnus_set:
             print("Alumnus does not exist yet. Create instance.")
-            alumnus = create_alumnus("", initials, last_name, "",
-                middle_names=None, nickname=None, student_id=None)
+            alumnus = create_alumnus("", "", "", initials,
+                prefix, last_name, "", "")
             add_phd_thesis_to_alumnus(alumnus, thesis.title, thesis.date,
                 thesis.url, thesis.slug, thesis.gender)
             print("New Alumnus created, thesis added. Done\n")
@@ -457,16 +411,16 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
             print("  last_name  =", alumnus.last_name)
 
             try:
-                if(alumnus.phd.phd_thesis.title == thesis.title):
+                if(alumnus.degree.title_of_thesis == thesis.title):
                     print("We already added the thesis to existing Alumnus. Done\n")
                     continue
                 else:
-                    print("Alumnus does have a PhdThesis, but title does not match.")
+                    print("Alumnus does have a Degree, but title does not match.")
                     print("Dunno why")
                     return
-            except PhdDegree.DoesNotExist as e:
-                print("PhdDegree DoesNotExist")
-                if str(e) == "Alumnus has no phd.":
+            except Degree.DoesNotExist as e:
+                print("Degree DoesNotExist")
+                if str(e) == "Alumnus has no degree.":
                     add_phd_thesis_to_alumnus(alumnus, thesis.title,
                         thesis.date, thesis.url, thesis.slug, thesis.gender)
                     print("Thesis added to existing Alumnus. Done\n")
@@ -492,12 +446,12 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
                         match_found = True
                         break
                     else:
-                        print("Alumnus does have a PhdThesis, but title does not match.")
+                        print("Alumnus does have a Degree, but title does not match.")
                         print("Dunno why")
                         return
-                except PhdDegree.DoesNotExist as e:
-                    print("PhdDegree DoesNotExist")
-                    if str(e) == "Alumnus has no phd.":
+                except Degree.DoesNotExist as e:
+                    print("Degree DoesNotExist")
+                    if str(e) == "Alumnus has no degree.":
                         add_phd_thesis_to_alumnus(alumnus, thesis.title,
                             thesis.date, thesis.url, thesis.slug, thesis.gender)
                         print("Thesis added to existing Alumnus. Done\n")
@@ -510,8 +464,8 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
                     continue
                 else:
                     print("Match not found")
-                    alumnus = create_alumnus(first_name, initials, last_name, email,
-                        middle_names=None, nickname=None, student_id=None)
+                    alumnus = create_alumnus("", "", "",
+                        initials, prefix, last_name, "", "")
                     add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
                         comments, supervisor=None)
                     print("New Alumnus created, thesis added. Done\n")
@@ -521,6 +475,29 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
 
 if __name__ == "__main__":
     # Gather data already present in existing API website
-    copy_People_to_Alumnus()
-    add_list_of_masterstudents_with_thesistitle()
-    add_research_dot_models_dot_Thesis_to_Alumnus()
+    # copy_People_to_Alumnus()
+    # add_list_of_masterstudents_with_thesistitle()
+    # add_research_dot_models_dot_Thesis_to_Alumnus()
+    # create_position_instances()
+    # add_info_from_latest_production_dump()
+
+    # Probably has to be done manually
+    # TODO: biography lives in Milena's pdf and can be copy-pasted lol.
+    # alumnus.biography       =     person.biography
+
+
+    exit()
+    # Clean stuff. Mobile not only has the occasional "-" or "+", but also "(0)" and sometimes more than one number with an ascii explanation
+    for a in Alumnus.objects.all():
+        # TODO: Enforce that phone numbers are digits only, without hypens or any other formatting
+        if a.mobile:
+            print(a.mobile.replace("-","").replace("+","00").strip())
+        if a.home_phone:
+            print(a.home_phone.replace("-","").replace("+","00").strip())
+
+        # TODO: split address up into streetname and streetnumber and clean up zipcode
+        # alumnus.streetname      =
+        # alumnus.streetnumber    =
+
+        # TODO: Ensure city and country name is all same format, not mixture of ([Tt]he) [Nn]etherlands, Holland
+        # This is probably going to be most tricky and perhaps must be done by hand
