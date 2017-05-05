@@ -138,7 +138,7 @@ class AlumnusAdminForm(forms.ModelForm):
     look = copy.copy(TINYMCE_MINIMAL_CONFIG)
     look["width"] = ""
     look["height"] = "200"
-    biography = forms.CharField(widget=TinyMCE(mce_attrs=look))
+    biography = forms.CharField(required=False, widget=TinyMCE(mce_attrs=look))
 
     class Meta:
         fields = "__all__"

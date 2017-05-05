@@ -15,8 +15,8 @@ handler500 = 'apiweb.apps.main.errorview.server_error'
 if 'runserver' in sys.argv:
     urlpatterns = [
         # special URLs
-        url(r'^media/uploads/staff_meetings/',
-            include('apiweb.apps.staffmeetings.media_urls')),
+        # url(r'^media/uploads/staff_meetings/',
+        #     include('apiweb.apps.staffmeetings.media_urls')),
         url(r'^media/(?P<path>.*)$',
             django.views.static.serve,
             {'document_root': settings.MEDIA_ROOT}),

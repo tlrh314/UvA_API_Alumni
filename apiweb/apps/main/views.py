@@ -5,8 +5,8 @@ from django.views.generic import TemplateView, RedirectView
 from django.http import Http404
 from .models import Sticky
 from ...settings import NEWS_LANGUAGES
-from ..news.models import Press, Event, Colloquium, Pizza
-from ..jobs.models import Job
+# from ..news.models import Press, Event, Colloquium, Pizza
+# from ..jobs.models import Job
 import datetime
 import operator
 
@@ -19,37 +19,37 @@ class MainView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MainView, self).get_context_data(**kwargs)
 
-        context['stickies'] = Sticky.objects.filter(
-            visible=True).order_by('priority')
+        # context['stickies'] = Sticky.objects.filter(
+        #     visible=True).order_by('priority')
 
-        EVENT_TYPES = dict(event='Event', colloquium='Colloquium',
-                           pizza='Lunch talk')
+        # EVENT_TYPES = dict(event='Event', colloquium='Colloquium',
+        #                    pizza='Lunch talk')
 
         # show the five most recent jobs in the side bar
-        context['jobs'] = Job.objects.current()[0:5]
+        # context['jobs'] = Job.objects.current()[0:5]
 
         # Get the three most recent news items, up to 3 months in the past
-        context['press'] = Press.objects.current(days=-180).order_by(
-            '-date').filter(language__in=NEWS_LANGUAGES)[0:3]
-        events = {}
+        # context['press'] = Press.objects.current(days=-180).order_by(
+        #     '-date').filter(language__in=NEWS_LANGUAGES)[0:3]
+        # events = {}
         # Get the first upcoming events within 6 months
 
-        events['event'] = Event.objects.current(days=180)[0:5]
+        # events['event'] = Event.objects.current(days=180)[0:5]
         # Get the first upcoming colloquia and pizza lunch talks;
 
         # don't obtain talks more than 6 months in the future
 
-        events['colloquium'] = Colloquium.objects.current(days=180)[0:5]
-        events['pizza'] = Pizza.objects.current(days=180)[0:5]
+        # events['colloquium'] = Colloquium.objects.current(days=180)[0:5]
+        # events['pizza'] = Pizza.objects.current(days=180)[0:5]
         # sort by date
 
-        context['events'] = []
-        for key in ('event', 'colloquium', 'pizza'):
-            for event in events[key]:
-                event.type = EVENT_TYPES[key]
-                context['events'].append(event)
-        context['events'].sort(key=operator.methodcaller('date_time'))
-        context['events'] = context['events'][0:3]
+        # context['events'] = []
+        # for key in ('event', 'colloquium', 'pizza'):
+        #     for event in events[key]:
+        #         event.type = EVENT_TYPES[key]
+        #         context['events'].append(event)
+        # context['events'].sort(key=operator.methodcaller('date_time'))
+        # context['events'] = context['events'][0:3]
         return context
 
 

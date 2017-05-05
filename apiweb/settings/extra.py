@@ -39,6 +39,7 @@ TINYMCE_DEFAULT_CONFIG = {
   ],
 }
 TINYMCE_MINIMAL_CONFIG = {
+    'mode': "",
     'selector': 'textarea',
     'height': 80,
     'width': 500,
