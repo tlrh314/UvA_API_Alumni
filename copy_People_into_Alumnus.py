@@ -14,6 +14,7 @@ django.setup()
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from django.utils.translation import ugettext_lazy as _
 from apiweb.apps.people.models import Person
 from apiweb.apps.alumni.models import Alumnus, CurrentPosition
@@ -87,63 +88,6 @@ def copy_People_to_Alumnus():
         alumnus.save()
         print("Done")
         # break
-
-
-POSITION = {
-    'DIRECTOR': 1,
-    'STAFF': 2,
-    'NOVA': 3,
-    'ADJUNCT': 4,
-    'POSTDOC': 5,
-    'PHD': 6,
-    'EMERITUS': 7,
-    'GUEST': 8,
-    'MASTER': 9,
-    'BACHELOR': 10,
-    'DEVELOPER': 11}
-POSITION_OPTIONS = (
-    (POSITION['DIRECTOR'], _("Director")),
-    (POSITION['STAFF'], _("Faculty Staff")),
-    (POSITION['NOVA'], _("Nova")),
-    (POSITION['ADJUNCT'], _("Adjunct Staff")),
-    (POSITION['POSTDOC'], _("Postdoc")),
-    (POSITION['PHD'], _("PhD Student")),
-    (POSITION['EMERITUS'], _("Emeritus")),
-    (POSITION['GUEST'], _("Guest")),
-    (POSITION['MASTER'], _("Master Student")),
-    (POSITION['BACHELOR'], _("Bachelor Student")),
-    (POSITION['DEVELOPER'], _("Software Developer")),
-)
-
-
-def create_position_instances():
-    for p in POSITION_OPTIONS:
-        position_name = p[1]
-        print(position_name)
-
-        position, created = CurrentPosition.objects.get_or_create(
-            name=position_name,
-            plural=position_name+"s" if position_name != "Emeritus" else "Emeriti" )
-        position.save()
-
-
-def convert_old_position(position_integer):
-    position_name = dict(POSITION_OPTIONS)[position_integer]
-    position = CurrentPosition.objects.filter(name=position_name)
-    print(position)
-    return position
-
-
-def add_info_from_latest_production_dump():
-    # new_position_instance = convert_old_position(integerrrr)
-    # prefix, position, title, first_name, initials, last_name, gender, email, address, country, home_phone, mobile, homepage, mugshot, office, photo, show_person, slug
-
-    #    for position in person.position.all():
-    #        alumnus.position.add(position)
-
-    pass
-
-
 
 
 # Helper functions to generate column names (A-Z, AA-ZZ, etc) for Excel
@@ -483,13 +427,184 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
                 continue
 
 
+POSITION = {
+    'DIRECTOR': 1,
+    'STAFF': 2,
+    'NOVA': 3,
+    'ADJUNCT': 4,
+    'POSTDOC': 5,
+    'PHD': 6,
+    'EMERITUS': 7,
+    'GUEST': 8,
+    'MASTER': 9,
+    'BACHELOR': 10,
+    'DEVELOPER': 11}
+POSITION_OPTIONS = (
+    (POSITION['DIRECTOR'], _("Director")),
+    (POSITION['STAFF'], _("Faculty Staff")),
+    (POSITION['NOVA'], _("Nova")),
+    (POSITION['ADJUNCT'], _("Adjunct Staff")),
+    (POSITION['POSTDOC'], _("Postdoc")),
+    (POSITION['PHD'], _("PhD Student")),
+    (POSITION['EMERITUS'], _("Emeritus")),
+    (POSITION['GUEST'], _("Guest")),
+    (POSITION['MASTER'], _("Master Student")),
+    (POSITION['BACHELOR'], _("Bachelor Student")),
+    (POSITION['DEVELOPER'], _("Software Developer")),
+)
+
+
+def create_position_instances():
+    for p in POSITION_OPTIONS:
+        position_name = p[1]
+        print(position_name)
+
+        position, created = CurrentPosition.objects.get_or_create(
+            name=position_name,
+            plural=position_name+"s" if position_name != "Emeritus" else "Emeriti" )
+        position.save()
+
+
+def convert_old_position(position_integer):
+    position_name = dict(POSITION_OPTIONS)[position_integer]
+    position = CurrentPosition.objects.filter(name=position_name)
+    print(position)
+    return position
+
+
+def add_currentwebsite_info_to_alumnus(alumnus, position, show_person, info):
+    # position is ManyToMany. Used to be integer.
+    position = convert_old_position(position)[0]
+    alumnus.current_position.add(position)
+
+    for k, v in info.items():
+        if k: setattr(alumnus, k, v)
+
+    comments = ""
+    if "Halbesma" not in alumnus.comments:
+        comments += "Current position automatically read-in by TLR Halbesma, May 5 2017.\n"
+    if not show_person and "Caution" not in alumnus.comments:
+        comments += "Caution: show_person = False. This is most likely an alumnus, thus, current position is outdated!\n"
+    alumnus.comments = (comments+alumnus.comments)
+    alumnus.save()
+
+
+def add_info_from_latest_production_dump():
+    path_to_apiweb_data_xlsx = "apiweb/databases/CurrentWebsite.xlsx"
+    if not os.path.exists(path_to_apiweb_data_xlsx):
+        print("ERROR: '{0}' does not exist".format(path_to_apiweb_data_xlsx))
+        return
+
+    book = xlrd.open_workbook(path_to_apiweb_data_xlsx)
+    sheet = book.sheet_by_index(0)
+    print("Opened file: ", path_to_apiweb_data_xlsx)
+
+
+    def clean(str):
+        if str[0:2] == "  ":
+            return str[2:]
+        elif str == "":
+            return str
+        else:
+            print(str)
+            raise IntegrityError("Data incorrect")
+
+    # Header lives on row 0. Columns are:
+    # prefix, position, title, first_name, initials, last_name, gender, email,
+    # address, country, home_phone, mobile, homepage, mugshot, office, photo,
+    # show_person, slug
+    for row_nr in range(1, sheet.nrows):
+        if row_nr < 175: continue
+        print("Eating: {0} / {1}".format(row_nr, sheet.nrows-1))
+
+        # Eat all columns up to slug (ignore all theses-related fields)
+        prefix, position, title, first_name, initials, last_name, gender, email, \
+        address, country, home_phone, mobile, homepage, mugshot, office, photo, \
+        show_person, slug =  [sheet.cell_value(row_nr, col_nr) for col_nr in range(18)]
+
+        print("  prefix      = '{}'\n  position    = '{}'\n  title       = '{}'\n  first_name  = '{}'\n"
+              "  initials    = '{}'\n  last_name   = '{}'\n  gender      = '{}'\n  email       = '{}'\n"
+              "  address     = '{}'\n  country     = '{}'\n  home_phone  = '{}'\n  mobile      = '{}'\n"
+              "  homepage    = '{}'\n  mugshot     = '{}'\n  office      = '{}'\n  photo       = '{}'\n"
+              "  show_person = '{}'\n  slug        = '{}'".format(prefix, position, title, first_name,
+            initials, last_name, gender, email, address, country, home_phone, mobile, homepage, mugshot,
+            office, photo, show_person, slug))
+
+        if last_name == "" or last_name == " " or last_name == "  ":
+            print("Skipping")
+            continue
+
+        # Clean
+        prefix, position, title, first_name, initials, last_name, gender, email, \
+        address, country, home_phone, mobile, homepage, mugshot, office, photo, \
+        show_person, slug = clean(prefix), int(position), clean(title), \
+            clean(first_name), clean(initials.replace(".", "")), clean(last_name), \
+            int(gender), clean(email), clean(address), clean(country), clean(home_phone), \
+            clean(mobile), clean(homepage), clean(mugshot), clean(office), clean(photo), \
+            True if clean(show_person) == "True" else False, clean(slug)
+
+
+        # Assume that the CurrentWebsite dump is newer, so if CurrentWebsite has info, add it.
+
+        d = dict(globals(), **locals())  # https://stackoverflow.com/questions/1041639
+        info = dict( (name, eval(name, d, d)) for name in [
+            "prefix", "title", "first_name", "initials", "last_name", "gender",
+            "email", "address", "country", "home_phone", "mobile", "homepage",
+            "mugshot", "office", "photo", "slug"]
+        )
+
+        alumnus_set = Alumnus.objects.filter(last_name=last_name)
+        if not alumnus_set:
+            # Alumnus does not exist, so create and add info.
+            alumnus = create_alumnus(first_name, "", "", initials, prefix,
+                last_name, email, "")
+            add_currentwebsite_info_to_alumnus(alumnus, position, show_person, info)
+            continue
+
+        print("We have {0} matching Alumnus candidates.".format(alumnus_set.count()))
+        i = 0
+        match_found = False
+        for alumnus in alumnus_set:
+            i += 1
+            print("  Alumnus {0}:".format(i))
+            print("     initials   =", alumnus.initials.replace(".", ""))
+            print("     first_name =", alumnus.first_name)
+            print("     last_name  =", alumnus.last_name)
+
+            if alumnus.initials.replace(".", "") == initials:
+                print("  Match found with Alumnus", i)
+                add_currentwebsite_info_to_alumnus(alumnus, position, show_person, info)
+                match_found = True
+                break
+            else:
+                print("Special case: mitsmatch in initials, but last_name does match.")
+                confirm = input("Correct Alumnus? [Yy]")
+                if confirm.lower() == "y":
+                    add_currentwebsite_info_to_alumnus(alumnus, position, show_person, info)
+                    match_found = True
+                    break
+                else:
+                    print("Info not added")
+
+        if match_found:
+            continue
+        else:
+            print("Match not found")
+            # Alumnus does not exist, so create and add thesis.
+            alumnus = create_alumnus(first_name, "", "", initials, prefix,
+                last_name, email, "")
+            add_currentwebsite_info_to_alumnus(alumnus, position, show_person, info)
+            continue
+
+
 if __name__ == "__main__":
     # Gather data already present in existing API website
-    copy_People_to_Alumnus()
-    add_list_of_masterstudents_with_thesistitle()
-    add_research_dot_models_dot_Thesis_to_Alumnus()
+    # copy_People_to_Alumnus()
+    # add_list_of_masterstudents_with_thesistitle()
+    # add_research_dot_models_dot_Thesis_to_Alumnus()
     # create_position_instances()
-    # add_info_from_latest_production_dump()
+    add_info_from_latest_production_dump()
+    # TODO The lastest_production_dump also contains theses. We could use these to double-check
 
     # Probably has to be done manually
     # TODO: biography lives in Milena's pdf and can be copy-pasted lol.

@@ -146,8 +146,9 @@ class Alumnus(models.Model):
 
     @property
     def full_name(self):
-        return ("{} {} {}".format(
-            self.first_name, self.prefix, self.last_name)).replace("  ", " ")
+        return ("{} {} {} {} {}".format(self.title, self.first_name,
+            self.initials if not self.first_name else "", self.prefix,
+            self.last_name)).replace("  ", " ")
 
     @property
     def age(self):
@@ -263,7 +264,7 @@ class PostdocPosition(models.Model):
 
 
 @python_2_unicode_compatible
-class Job(models.Model):
+class JobAfterLeaving(models.Model):
     """ Represents a job after leaving API """
 
     currently_occupating_job_choices = (

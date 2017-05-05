@@ -10,16 +10,16 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 from tinymce.widgets import TinyMCE
-from nested_inline.admin import NestedStackedInline, NestedModelAdmin
+# from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
-from .models import CurrentPosition, Alumnus, Degree, PostdocPosition, Job
+from .models import CurrentPosition, Alumnus, Degree, PostdocPosition, JobAfterLeaving
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 
 
 
-class JobAdminInline(NestedStackedInline):
-    model = Job
-    extra = 1
+class JobAdminInline(admin.StackedInline):
+    model = JobAfterLeaving
+    extra = 0
     fieldsets = [
         ( "Job information", {
             "fields":
@@ -30,8 +30,9 @@ class JobAdminInline(NestedStackedInline):
     ]
 
 
-class DegreeAdminInline(NestedStackedInline):
-    extra = 1
+
+class DegreeAdminInline(admin.StackedInline):
+    extra = 0
     model = Degree
     filter_horizontal = ("thesis_advisor", )
 
@@ -62,10 +63,12 @@ class DegreeAdmin(admin.ModelAdmin):
     ordering = ("alumnus__user__username", )
     filter_horizontal = ( "thesis_advisor", )
 
+    max_num = 2
+
     fieldsets = [
         ( "Degree Information", {
             "fields":
-                [ "alumnus", "type", "date_start", "date_stop" ]
+                [ "alumnus", "type", "date_start", "date_stop" ],
             }
         ), ( "Thesis Information", {
             "fields":
@@ -88,8 +91,9 @@ class DegreeAdmin(admin.ModelAdmin):
     get_alumnus.short_description = "Alumnus"
 
 
-class PostdocPositionAdminInline(NestedStackedInline):
+class PostdocPositionAdminInline(admin.StackedInline):
     model = PostdocPosition
+    extra = 0
     max_num = 1
 
     # fieldsets = [
@@ -150,23 +154,25 @@ class AlumnusListFilter(admin.SimpleListFilter):
 
 
 @admin.register(Alumnus)
-class AlumnusAdmin(NestedModelAdmin):
+class AlumnusAdmin(admin.ModelAdmin):
     ordering = ("user__username", )
     search_fields = ("first_name", "last_name", "degrees__thesis_title")
     list_display = ("get_alumnus", "email", "show_person")
     list_filter = ("show_person", "current_position", AlumnusListFilter)
-    inlines = (JobAdminInline, DegreeAdminInline, PostdocPositionAdminInline)
+    inlines = (DegreeAdminInline, PostdocPositionAdminInline, JobAdminInline)
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
+    readonly_fields = ("get_full_name", )
     # exclude = ("jobs", )
 
     fieldsets = [
         ("Account information",
                 {
-                "fields": ["user", "show_person"]
+                    "fields": ["user", "get_full_name", "last_name", "show_person"]
                 }),
 
         ("Personal information", {
+                "classes": ["collapse"],
                  "fields": ["first_name", "prefix", "last_name",
                              "title", "initials", "gender", "birth_date",
                              "place_of_birth", "nationality", "mugshot",
@@ -174,16 +180,19 @@ class AlumnusAdmin(NestedModelAdmin):
                 }),
 
         ("Contact information", {
+                "classes": ["collapse"],
                 "fields":["linkedin", "facebook", "email", "home_phone",
                           "homepage", "mobile"]
                 }),
 
         ("Adress information", {
+                "classes": ["collapse"],
                 "fields": ["address", "streetname", "streetnumber", "zipcode",
                            "city", "country"]
                 }),
 
         ("Current Position", {
+                "classes": ["collapse"],
                  "fields": ["current_position", "office", "work_phone",
                              "ads_name", "research", "contact"]
                 }),
@@ -202,10 +211,14 @@ class AlumnusAdmin(NestedModelAdmin):
         return obj.full_name
     get_alumnus.short_description = "Alumnus"
 
+    def get_full_name(self, obj):
+        return obj.full_name
+    get_full_name.short_description = "Full Name"
+
 
 admin.site.register(CurrentPosition)
 admin.site.register(PostdocPosition)
-admin.site.register(Job)
+admin.site.register(JobAfterLeaving)
 
 
 
