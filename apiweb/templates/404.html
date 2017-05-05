@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock title %}
+
+
+{% block contents %}
+<h1>Page not found / pagina niet gevonden</h1>
+
+<p>
+The webpage you were hoping to obtain could not be found. This can happen because of a bad link or an incorrectly typed web address. Our webpage administrator has automatically been notified in case of an incorrect link.
+</p>
+<p>
+Please try again via the menu or through the <a href="{% url 'search:index' %}">search page</a>. If you need the missing information promptly and it's not on our webpages, you can <a href="mailto:secr-astro-science@uva.nl">email us</a>.
+</p>
+
+<hr />
+
+<div lang="nl">
+<p>
+De pagina die U probeerde te bereiken, werd helaas niet gevonden. Dit kan komen door een verkeerde link of een verkeerd gespeld web adres. Onze web beheerder is automatisch van een mogelijk verkeerde link op de hoogte gesteld.
+</p>
+<p>
+Probeert U het nog eens via het menu of via de <a href="{% url 'search:index' %}">zoek pagina</a>. Als U de ontbrekende informatie snel nodig heeft en het staat niet op onze web pagina's, kunt U ons altijd een <a href="mailto:secr-astro-science@uva.nl">e-mail sturen</a>.
+</p>
+</div>
+{% endblock contents %}

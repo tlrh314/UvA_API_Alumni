@@ -1,0 +1,211 @@
+/* ==========================================================================
+Author's custom styles
+========================================================================== */
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
+
+.container {
+    max-width: 850px;
+}
+
+.container-container {
+    overflow: visible;
+}
+
+html {
+    font-family: 'Nunito', sans-serif;
+    min-width: 950px;
+    min-height: 100%;
+}
+
+
+body {
+    padding:0;
+    padding-top: 100px;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-family: 'Nunito', sans-serif;
+}
+
+
+.dropdown-menu>li>a {
+    white-space: initial;
+}
+
+.container {
+    position: relative;
+}
+
+.container .navbar-header,
+.container .navbar-collapse {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+/* Always float the navbar header */
+.navbar-header {
+    float: left;
+}
+
+/* Undo the collapsing navbar */
+.navbar-collapse {
+    display: block !important;
+    height: auto !important;
+    padding-bottom: 0;
+    overflow: visible !important;
+    visibility: visible !important;
+}
+
+.navbar-toggle {
+    display: none;
+}
+.navbar-collapse {
+    border-top: 0;
+}
+
+/* Always apply the floated nav */
+.navbar-nav {
+    float: left;
+    margin: 0;
+}
+.navbar-nav > li {
+    float: left;
+}
+.navbar-nav > li > a {
+    padding: 15px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.container:before, .container:after {
+    display: block;
+    position: absolute;
+    content: " ";
+    top: 0px;
+    height: 1000px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    z-index: -5;
+}
+
+.border-box {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.border-box h2 {
+    transition: color 0.2s ease;
+}
+
+.border-box:hover h2 {
+    transition: color 0.2s ease;
+    color: #64AB4D;
+}
+
+.border-box:hover {
+    transition: all 0.2s ease;
+    -moz-box-shadow: 0 0 10px #ddd;
+    -webkit-box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 10px #ddd;
+}
+
+.main-row {
+    padding-top: 20px;
+    background-color: white;
+    width: 100%;
+}
+
+.show-grid > div {
+    margin-bottom: 15px;
+}
+
+.main-content {
+    min-height: 100vh;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.btn-default, .btn-default:hover, .btn:active:focus, .btn-default:focus {
+    color: #aaa;
+    background-color: #fff;
+    border-color: #ccc;
+    background-image: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.btn:active:focus, .btn-default:focus {
+    outline: none;
+    border: 1px solid #ddd;
+    -moz-box-shadow: 0 0 10px #ddd;
+    -webkit-box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 10px #ddd;
+}
+
+.form-control {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    height: auto;
+}
+
+.form-control:focus {
+    outline: none;
+    border: 1px solid #ddd;
+    -moz-box-shadow: 0 0 10px #ddd;
+    -webkit-box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 10px #ddd;
+}
+
+.modal-content {
+    border-radius: 3px;
+    margin-right: 17px;
+}
+
+.modal-dialog {
+    width: 750px;
+    margin: 30px auto;
+}
+
+.modal {
+    overflow-x: auto !important;
+}
+
+.certificate-drop {
+    min-width: 300px;
+}
+
+
+/* Back to top button on product list pages */
+#backtotop {
+    background: white;
+    color: black;
+    cursor: pointer;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    display: none;
+}
+
+/*Don't show button for small screensizes as it will overlap*/
+@media screen and (max-width: 1024px) {
+    .back-to-top {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 1424px) {
+    #mc_embed_signup {
+        display: none !important;
+    }
+}

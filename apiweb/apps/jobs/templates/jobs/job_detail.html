@@ -1,0 +1,16 @@
+{% extends "jobs/base.html" %}
+{% block title %}APi - vacancy: {{ object.title }}{% endblock title %}
+{% block contents %}
+<h1>{{ object.title }}</h1>
+
+{{ object.text|safe }}
+
+<p class="footnote">
+Deadline: {{ object.deadline|date:"j F Y" }}<br />
+{% if object.website %}More information: <a href="{{ object.website }}">{{ object.website }}</a><br />{% endif %}
+{% if object.contact %}Contact: {{ object.contact|urlize }}{% endif %}
+</p>
+
+{% if perms.jobs.change_job %}<div class="edit"><a href="{% url 'admin:index' %}jobs/job/{{ object.pk }}">edit</a></div>{% endif %}
+
+{% endblock contents %}

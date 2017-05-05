@@ -1,0 +1,8 @@
+{% extends "publiek/base.html" %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:onderzoek' %}">Onderzoek</a>
+{% endblock breadcrumbs %}
+
+{% block sidemenu %}
+{% include "publiek/onderzoek/sidemenu2.html" %}
+{% endblock sidemenu %}

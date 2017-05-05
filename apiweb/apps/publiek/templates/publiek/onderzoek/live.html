@@ -1,0 +1,34 @@
+{% extends "publiek/onderzoek/base3.html" %}
+{% block title %}API - sterren, planeten en hun ontstaan {% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:live' %}">API - sterren en planeten</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+<h1>Op weg naar leven: sterren, planeten en hun ontstaan </h1>
+
+
+<table id="research">
+<tr>
+
+<td>
+<a href="/publiek/onderzoek/live/stars/">
+   <img src="{{ STATIC_URL }}publiek/images/edbg.jpg" width=250></br>
+    de formatie van sterren
+</a>
+</td>
+
+<td>
+<a href="/publiek/onderzoek/live/planets/">
+   <img src="{{ STATIC_URL }}publiek/images/planet.jpg" width=250></br>
+    de formatie van planeten
+</a>
+</td>
+
+</tr>
+</table>
+
+
+
+{% endblock contents %}

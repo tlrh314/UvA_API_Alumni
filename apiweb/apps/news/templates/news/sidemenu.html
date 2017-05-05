@@ -1,0 +1,26 @@
+{% url 'news:index' as news_index %}
+{% url 'news:press' as news_press %}
+{% url 'news:events' as news_events %}
+{% url 'news:colloquium' as news_colloquium %}
+{% url 'news:colloquium-summary' as news_colloquium_summary %}
+{% url 'news:pizza' as news_pizza %}
+{% url 'news:pizza-about' as news_pizza_about %}
+
+<ul>
+ <li><a {% ifequal request.path news_index %}class="active" {% endifequal %}href="{{ news_index }}">News</a>
+  <ul>
+   <li><a {% ifequal request.path news_press %}class="active" {% endifequal %}href="{{ news_press }}">Press</a></li>
+   <li><a {% ifequal request.path news_events %}class="active" {% endifequal %}href="{{ news_events }}">Events</a></li>
+   <li><a {% ifequal request.path news_colloquium %}class="active" {% endifequal %}href="{{ news_colloquium }}">Colloquia</a>
+    <ul>
+     <li><a {% ifequal request.path news_colloquium_summary %}class="active" {% endifequal %}href="{{ news_colloquium_summary }}">Summary</a></li>
+    </ul>
+   </li>
+   <li><a {% ifequal request.path news_pizza %}class="active" {% endifequal %}href="{{ news_pizza }}">Lunch talks</a>
+    <ul>
+     <li><a {% ifequal request.path news_pizza_about %}class="active" {% endifequal %}href="{{ news_pizza_about }}">About</a></li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>

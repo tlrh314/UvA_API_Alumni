@@ -1,0 +1,45 @@
+{% extends "publiek/onderzoek/base2.html" %}
+{% block title %}API - Het heelal als een laboratorium van extreme natuurkunde {% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:extreme' %}">API - extreme natuurkunde</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+<h1>Het heelal als een laboratorium van extreme natuurkunde </h1>
+
+
+<table id="research">
+<tr>
+
+<td>
+<a href="/publiek/onderzoek/extreme/explosions/">
+   <img src="{{ STATIC_URL }}publiek/images/thermonuclearexplosion.jpg" width=250></br>
+    Explosies
+</a>
+</td>
+
+<td>
+<a href="/publiek/onderzoek/extreme/compacts/">
+   <img src="{{ STATIC_URL }}publiek/images/compact.jpg" width=250></br>
+    Zwarte gaten en neutronensterren
+</a>
+</td>
+
+</tr>
+<tr>
+
+<td>
+<a href="/publiek/onderzoek/extreme/accretion/">
+   <img src="{{ STATIC_URL }}publiek/images/MassiveStars.jpg" width=250></br>
+    Accretie en accretieschijven
+</a>
+</td>
+
+
+</tr>
+</table>
+
+
+
+{% endblock contents %}

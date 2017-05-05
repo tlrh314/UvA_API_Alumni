@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block banner %}<div id="banner"><h1>Alumni at the Institute</h1></div>{% endblock banner %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'alumni:index' %}">Alumni</a>
+{% endblock breadcrumbs %}
+
+{% block sidemenu %}
+{% include "alumni/sidemenu.html" %}
+{% endblock sidemenu %}
+

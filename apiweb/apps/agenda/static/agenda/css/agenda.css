@@ -1,0 +1,77 @@
+.year
+{
+    border: 3px solid #eee; 
+    padding: 8px; 
+}
+
+.year td
+{ 
+    width: 80px; 
+    border: 1px solid #ccc; 
+    margin: 2px; 
+    padding: 3px; 
+    background: #fff;
+}
+
+.year td.current
+{
+    background: #eeeec8; 
+} 
+
+.month th
+{
+  width: 86px; 
+  margin: 2px; 
+  padding: 3px;
+  background: #fff;
+}
+
+.month td
+{
+    padding: 8px;
+    width: 86px; 
+    border: 1px solid #ccc; 
+    margin: 2px; 
+    padding: 3px;
+    height: 50px; 
+    cursor: pointer;
+}
+
+.current
+{
+    background-color: #eeeec8;
+}
+
+.month td.empty
+{
+    border: none;
+}
+
+#prev
+{
+    float: left;
+}
+
+#next
+{
+    float: right;
+}
+
+.clear 
+{ 
+    clear: both; 
+}
+
+h4
+{ 
+    margin-top: 4em;
+    text-align: center; 
+}
+
+div.weekday
+{ 
+    border: 3px solid #eee;  
+    margin: 2px; 
+    padding: 15px;
+    cursor: pointer; 
+}

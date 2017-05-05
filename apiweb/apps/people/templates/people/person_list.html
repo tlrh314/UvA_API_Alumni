@@ -1,0 +1,70 @@
+{% extends "people/base.html" %}
+{% block title %}API - People{% endblock title %}
+
+{% block breadcrumbs %}
+{% url 'people:person-list' as url_people %}
+{% url 'people:staff-list' as url_staff %}
+{% url 'people:student-list' as url_students %}
+{% url 'people:position-list' "postdoc" as url_postdoc %}
+{% url 'people:position-list' "phd" as url_phd %}
+{% url 'people:position-list' "emeritus" as url_emeritus %}
+{% url 'people:position-list' "guest" as url_guest %}
+{{ block.super }}
+{% ifequal request.path url_staff %}
+   &#187; <a href="{{url_staff}}">Staff</a>
+{% endifequal %}
+{% ifequal request.path url_emeritus %}
+   &#187; <a href="{{url_emeritus}}">Emeriti</a>
+{% endifequal %}
+{% ifequal request.path url_guest %}
+   &#187; <a href="{{url_guest}}">Guests</a>
+{% endifequal %}
+{% ifequal request.path url_postdoc %}
+   &#187; <a href="{{url_postdoc}}">Postdocs</a>
+{% endifequal %}
+{% ifequal request.path url_phd %}
+   &#187; <a href="{{url_phd}}">PhD students</a>
+{% endifequal %}
+{% ifequal request.path url_students %}
+   &#187; <a href="{{url_students}}">Master students</a>
+{% endifequal %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+<h1 class="text-center">{{ who|capfirst }}</h1>
+
+
+{% for person in object_list %}
+<div class="panel panel-default">
+  <div class="panel-body">
+ <table class="table">
+ <tbody>
+  <tr>
+    <th> Name: </th>
+    <td width="50%"> <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a></td>
+   <td rowspan="5" valign="top" align="right">{% if person.mugshot %}<a href="{{ person.get_absolute_url }}"><img src="{{ person.mugshot.url }}" height="120" /></a>{% endif %}</td>
+  </tr>
+  <tr>
+        <th> Email: </th>
+        <td> <a href="mailto:{{ person.email }}">{{ person.email }}</a> </td>
+     </tr>
+     <tr>
+        <th> Position: </th>
+        <td>{% for position in person.position.all %}{{ position.name }}{% endfor %}</td>
+     </tr>
+{% if person.specification %}<tr><th></th><td>{{ person.specification }}</td></tr>{% endif %}
+     <tr>
+        <th> Office: </th>
+        <td>  <a href="{% url 'institute:contact' %}#maps"> {{ person.office }} </a> </td>
+     </tr>
+     <tr>
+        <th> Phone: </th>
+        <td> {{ person.work_phone }} </td>
+     </tr>
+ <tbody>
+ </table>
+ </div>
+ </div>
+{% endfor %}
+
+{% endblock content %}

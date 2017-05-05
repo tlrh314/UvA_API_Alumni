@@ -1,0 +1,121 @@
+{% url 'institute:index' as url_institute %}
+{% url 'institute:contact' as url_contact %}
+{% url 'people:person-list' as url_people %}
+{% url 'people:staff-list' as url_staff %}
+{% url 'people:student-list' as url_students %}
+{% url 'people:position-list' "adjunct faculty" as url_adjunct %}
+{% url 'people:position-list' "senior research associate" as url_senior %}
+{% url 'people:position-list' "postdoc" as url_postdoc %}
+{% url 'people:position-list' "phd student" as url_phd %}
+{% url 'people:position-list' "emeritus" as url_emeritus %}
+{% url 'people:position-list' "guest" as url_guest %}
+{% url 'people:position-list' "software developer" as url_developer %}
+
+{% with request.path|urlencode as path %}
+<ul>
+ <li> <a {% ifequal path url_institute %}class="active" {% endifequal %} href="{{ url_institute }}">Institute</a> </li>
+ <li> <a {% ifequal path url_people %}class="active"{% endifequal %} href="{{ url_people }}">People</a>
+  <ul>
+    <li> <a {% ifequal path url_staff %}class="active"{% endifequal %} href="{{ url_staff }}">Faculty Staff</a> </li>
+    <li> <a {% ifequal path url_adjunct %}class="active"{% endifequal %} href="{{ url_adjunct }}">Adjunct Faculty</a> </li>
+    <li> <a {% ifequal path url_developer %}class="active"{% endifequal %} href="{{ url_developer }}">Software Developers</a> </li>
+    <li> <a {% ifequal path url_emeritus %}class="active"{% endifequal %} href="{{ url_emeritus }}">Emeriti</a> </li>
+    <li> <a {% ifequal path url_guest %}class="active"{% endifequal %} href="{{ url_guest }}">Guests</a> </li>
+    <li> <a {% ifequal path url_senior %}class="active"{% endifequal %} href="{{ url_senior }}">Senior Research Associates</a> </li>
+    <li> <a {% ifequal path url_postdoc %}class="active"{% endifequal %} href="{{ url_postdoc }}">Postdocs</a> </li>
+    <li> <a {% ifequal path url_phd %}class="active"{% endifequal %} href="{{ url_phd }}">PhD students</a> </li>
+    <li> <a {% ifequal path url_students %}class="active"{% endifequal %} href="{{ url_students }}">Master students</a> </li>
+  </ul>
+ </li>
+ <li> <a {% ifequal path url_contact %}class="active" {% endifequal %} href="{{ url_contact }}">Contact</a>
+  <ul>
+   <li> <a href="{{ url_contact }}#address"> Address </a></li>
+   <li> <a href="{{ url_contact }}#how"> How to find us </a></li>
+  </ul>
+ </li>
+</ul>
+{% endwith %}
+
+
+<!-- Begin of content -->
+<div class="container-container">
+    <div class="container" id="container">
+
+        <div class="row main-row">
+
+            <!-- Begin left sidebar -->
+            <div id="collapse-menu" class="col-xs-3" role="complementary">
+                <nav class="sidebar">
+                    <ul class="nav sidenav">
+                        <li>
+                            <i class="indicator glyphicon {% if women_status == 'true' %} glyphicon-chevron-up {% else %} glyphicon-chevron-down {% endif %}  pull-right"></i>
+                            <a data-toggle="collapse" href="#collapse1" aria-expanded="{{ women_status }}">Vrouwen</a>
+                            <ul {% if women_status == 'true' %} class="nav collapse in" {% else %} class="nav collapse" {% endif %} aria-expanded="{{ women_status }}" id="collapse1">
+                                  <!--{{ women }}-->
+                                {% for menu_item in women %}
+                                <li><a href="{% url 'product_list' catg_ID=menu_item.category_ID section='women'%}">
+                                    {{ menu_item.category_name }}</a></li>
+
+                                    {% if menu_item == current_cat and menu_item.subcategory.all %}
+                     
+                                        <ul class="nav">
+                                        {% for sub_item in menu_item.subcategory.all %}
+                                            <li style="margin-left: 20px;"><a href="{% url 'product_list' catg_ID=menu_item.category_ID section='women' sub_cat=sub_item.slug %}"><i class="fa fa-angle-right" aria-hidden="true" style="margin-right: 6px;"></i>{{ sub_item }}</a></li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                        <li>
+                            <i class="indicator glyphicon {% if men_status == 'true' %} glyphicon-chevron-up {% else %} glyphicon-chevron-down {% endif %} pull-right"></i>
+                            <a data-toggle="collapse" href="#collapse2" aria-expanded="{{ men_status }}">Mannen</a>
+                            <ul {% if men_status == 'true' %} class="nav collapse in" {% else %} class="nav collapse" {% endif %} aria-expanded="{{ men_status }}" id="collapse2">
+
+                                {% for menu_item in men %}
+                                <li><a href="{% url 'product_list' catg_ID=menu_item.category_ID section='men'%}">
+                                    {{ menu_item.category_name }}</a></li>
+
+                                    {% if menu_item == current_cat and menu_item.subcategory.all %}
+                     
+                                        <ul class="nav">
+                                        {% for sub_item in menu_item.subcategory.all %}
+                                            <li style="margin-left: 20px;"><a href="{% url 'product_list' catg_ID=menu_item.category_ID section='men' sub_cat=sub_item.slug %}"><i class="fa fa-angle-right" aria-hidden="true" style="margin-right: 6px;"></i>{{ sub_item }}</a></li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li>
+                            <i class="indicator glyphicon {% if kids_status == 'true' %} glyphicon-chevron-up {% else %} glyphicon-chevron-down {% endif %}  pull-right"></i>
+                            <a data-toggle="collapse" href="#collapse3">Kids</a>
+                            <ul {% if kids_status == 'true' %} class="nav collapse in" {% else %} class="nav collapse" {% endif %} aria-expanded="{{ kids_status }}" id="collapse3">
+                                {% for menu_item in kids %}
+                                <li><a href="{% url 'product_list' catg_ID=menu_item.category_ID section='kids'%}">
+                                    {{ menu_item.category_name }}</a></li>
+
+                                    {% if menu_item == current_cat and menu_item.subcategory.all %}
+                     
+                                        <ul class="nav">
+                                        {% for sub_item in menu_item.subcategory.all %}
+                                            <li style="margin-left: 20px;"><a href="{% url 'product_list' catg_ID=menu_item.category_ID section='kids' sub_cat=sub_item.slug %}"><i class="fa fa-angle-right" aria-hidden="true" style="margin-right: 6px;"></i>{{ sub_item }}</a></li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+            <!-- End of left sidebar -->
+
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+

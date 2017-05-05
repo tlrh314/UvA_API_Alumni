@@ -1,0 +1,287 @@
+[
+  {
+    "pk": 19, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "", 
+      "report": "", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2014-06-19/private/2014-06-19-agenda-stafvergadering.pdf", 
+      "date": "2014-06-19", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "", 
+      "report": "uploads/staff_meetings/2014-03-17/private/2014-03-17-report-staffmeeting.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2014-03-17/private/2014-03-17-agenda-stafvergadering.pdf", 
+      "date": "2014-03-17", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2014-01-30/private/2014-01-30-bijlage-nyu-call-for-proposals-visiting-guest-program.pdf", 
+      "report": "uploads/staff_meetings/2014-01-30/private/2014-01-30-report-staffmeeting.pdf", 
+      "appendix_2": "uploads/staff_meetings/2014-01-30/private/2014-01-30-bijlage-webcolleges-nieuw-formulier-en-aanvraagverzoek-blok-4.pdf", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2014-01-30/private/2014-01-30-agenda-stafvergadering.pdf", 
+      "date": "2014-01-30", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "", 
+      "report": "uploads/staff_meetings/2013-12-11/private/2013-12-11-report-staffmeeting.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2013-12-11/private/2013-12-11-agenda-stafvergadering.pdf", 
+      "date": "2013-12-11", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2014-10-29/private/2013-10-29-bijlage-ontvlechting-fnwi.pdf", 
+      "report": "uploads/staff_meetings/2014-10-29/private/2013-10-29-report-staff-meeting.pdf", 
+      "appendix_2": "uploads/staff_meetings/2014-10-29/private/2013-10-29-bijlage-valorisatie-indicatoren.pdf", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2014-10-29/private/2013-10-29-agenda-stafvergadering.pdf", 
+      "date": "2013-10-29", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "", 
+      "report": "uploads/staff_meetings/2013-06-24/private/2013-06-24-concept-verslag-stafvergadering.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2013-06-24/private/2013-06-24-agenda-stafvergadering.pdf", 
+      "date": "2013-06-24", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2013-04-04/private/2013-04-04-bijlage-ict-werkplek-api.pdf", 
+      "report": "uploads/staff_meetings/2013-04-04/private/2013-04-04-verslag-stafvergadering.pdf", 
+      "appendix_2": "uploads/staff_meetings/2013-04-04/private/2013-04-04-bijlage-draft-inquisitierapport-2012.pdf", 
+      "appendix_3": "uploads/staff_meetings/2013-04-04/private/2013-04-04-bijlage-agreements-erasmus-math-and-phys.xls", 
+      "agenda": "uploads/staff_meetings/2013-04-04/private/2013-04-04-concept-agenda-stafvergadering.pdf", 
+      "date": "2013-04-04", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2013-01-08/private/2013-01-08-actie-punten-stafvergadering.pdf", 
+      "report": "uploads/staff_meetings/2013-01-08/private/2013-01-08-concept-verslag-stafvergadering.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2013-01-08/private/2013-01-08-concept-agenda-stafvergadering.pdf", 
+      "date": "2013-01-08", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "", 
+      "report": "uploads/staff_meetings/2012-11-29/private/2012-10-29-verslag-stafvergadering_1.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2012-11-29/private/2012-11-29-agenda-stafvergadering.pdf", 
+      "date": "2012-11-29", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2012-10-29/private/2012-10-29-actiepunten.pdf", 
+      "report": "uploads/staff_meetings/2012-10-29/private/2012-10-29-verslag-stafvergadering.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2012-10-29/private/2012-10-29-agenda-staff-meeting.pdf", 
+      "date": "2012-10-29", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2012-09-04/private/2012-05-29-ink-post-uitnodiging-voor-deelname-aan-de-open-dag-science-park-amsterdam.eml", 
+      "report": "uploads/staff_meetings/2012-09-04/private/2012-09-04-verslag-stafvergadering.pdf", 
+      "appendix_2": "uploads/staff_meetings/2012-09-04/private/2-7-2012-confidential-notes-on-pd-meeting.eml", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2012-09-04/private/2012-09-04-agenda-staff-meeting.pdf", 
+      "date": "2012-09-04", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2012-07-03/private/120628-concept-bestuurlijke-agenda-api-2012-2013.pdf", 
+      "report": "uploads/staff_meetings/2012-07-03/private/2012-07-03-verslag-stafvergadering.pdf", 
+      "appendix_2": "uploads/staff_meetings/2012-07-03/private/120702_3-1-concept-besturingsmodel-fnwi-versie-23.pdf", 
+      "appendix_3": "uploads/staff_meetings/2012-07-03/private/120702_6-rapportage-esc-def_1.pdf", 
+      "agenda": "uploads/staff_meetings/2012-07-03/private/2012-07-03-agenda-stafvergadering.pdf", 
+      "date": "2012-07-03", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2012-05-29/private/2012-05-29-ink-post-nieuwe-golf-kp7-calls-biedt-volop-kansen-voor-high-tech-ict.pdf", 
+      "report": "uploads/staff_meetings/2012-05-29/private/minutes-staff-meeting-may-29-2012-eng.pdf", 
+      "appendix_2": "uploads/staff_meetings/2012-05-29/private/2012-05-29-inquisition-report-general-2011.pdf", 
+      "appendix_3": "uploads/staff_meetings/2012-05-29/private/2012-05-29-ink-post-uitnodiging-voor-deelname-aan-de-open-dag-science-park-amsterdam.eml", 
+      "agenda": "uploads/staff_meetings/2012-05-29/private/agenda-stafvergadering-29-5-2012.pdf", 
+      "date": "2012-05-29", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "", 
+      "report": "uploads/staff_meetings/2012-04-16/private/minutes-staff-meeting-16-april-2012-eng.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2012-04-16/private/2012-04-16-agenda-stafvergadering.pdf", 
+      "date": "2012-04-16", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2012-01-19/private/appendix-i-procedure-promoties-fnwi-v-2011-12-12.pdf", 
+      "report": "uploads/staff_meetings/2012-01-19/private/concept-verslag-stafvergadering-19-jan-2012.pdf", 
+      "appendix_2": "uploads/staff_meetings/2012-01-19/private/appendix-ii-instituutscoordinatorapi-kdv.pdf", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2012-01-19/private/agenda-stafvergadering-19-jan-2012.pdf", 
+      "date": "2012-01-19", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "", 
+      "report": "uploads/staff_meetings/2011-10-25/private/2011-10-25-verslag-stafvergadering.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2011-10-25/private/2011-10-25-agenda-stafvergadering-api.pdf", 
+      "date": "2011-10-25", 
+      "decisions": ""
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2011-09-12/private/bijlagen-dvm-2009-2010.pdf", 
+      "report": "uploads/staff_meetings/2011-09-12/private/2011-09-12-concept-verslag-stafvergadering.pdf", 
+      "appendix_2": "uploads/staff_meetings/2011-09-12/private/bijlagen-dvm-2010-2011.pdf", 
+      "appendix_3": "uploads/staff_meetings/2011-09-12/private/bijlagen-kosten-baten-model-21-juni-2011.pdf", 
+      "agenda": "uploads/staff_meetings/2011-09-12/private/2011-09-12-agenda-stafvergadering-api.pdf", 
+      "date": "2011-09-12", 
+      "decisions": "uploads/staff_meetings/2011-09-12/public/decisions-stafmeeting-12.pdf"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "", 
+      "report": "uploads/staff_meetings/2011-06-21/private/2011-06-21-verslag-stafvergadering_1.pdf", 
+      "appendix_2": "", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2011-06-21/private/2011-06-21-agenda-stafvergadering.pdf", 
+      "date": "2011-06-21", 
+      "decisions": "uploads/staff_meetings/2011-06-21/public/decisions-stafmeeting-21.pdf"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "staffmeetings.staffmeeting", 
+    "fields": {
+      "appendix_A": "", 
+      "appendix_B": "", 
+      "appendix_1": "uploads/staff_meetings/2011-04-26/private/fimp.txt", 
+      "report": "uploads/staff_meetings/2011-04-26/private/2011-04-26-verslag-stafvergadering.pdf", 
+      "appendix_2": "uploads/staff_meetings/2011-04-26/private/storagedifferentiatie.pdf", 
+      "appendix_3": "", 
+      "agenda": "uploads/staff_meetings/2011-04-26/private/2011-04-26-agenda.pdf", 
+      "date": "2011-04-26", 
+      "decisions": "uploads/staff_meetings/2011-04-26/public/2011-04-26-decisionlist.pdf"
+    }
+  }
+]

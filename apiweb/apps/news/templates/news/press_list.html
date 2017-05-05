@@ -1,0 +1,27 @@
+{% extends "news/base.html" %}
+{% load news_filters %}
+{% block title %}API - Press{% endblock title %}
+
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{{ url_news }}">News</a>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+{% if object_list %}
+<h1>Press</h1>
+
+{% for object in object_list %}
+<h2 class="listing">{{ object.title }}</h2>
+<p class="speaker">{% if item.location %}{{ item.location }}{% if item.date %} &#8212; {% endif %}{% endif %}{% if object.date %}{{ object.date|date:"l j F Y" }}{% endif %}</p>
+<p class="teaser">{% if object.teaser_picture %}<img src="{{ MEDIA_URL }}{{ object.teaser_picture }}" class="teaser" />{% endif %}{{ object.teaser_text|linebreaksbr }}</p>
+{% if object.text %}<a href="{{ object.get_absolute_url }}">{% if object.language == "en" %}Read more{% endif %}{% if object.language == "nl" %}Lees verder{% endif %}</a>{% endif %}
+{% endfor %}
+{% endif %}
+
+<div class="page-navigation">
+{{ page_obj|paginate:"2,2" }}
+</div>
+
+{% if perms.news.change_press and perms.news.add_press %}<div class="edit"><a href="{% url 'admin:index' %}news/press/add/">add</a> | <a href="{% url 'admin:index' %}news/press/">edit</a></div>{% endif %}
+
+{% endblock contents %}

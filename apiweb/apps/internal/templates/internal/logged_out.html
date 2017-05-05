@@ -1,0 +1,15 @@
+{% extends "internal/base.html" %}
+{% block title %}API - internal pages: logged out{% endblock title %}
+
+{% block contents %}
+<h1> You have been logged out from the API website </h1>
+
+<p>
+Thanks for visiting.  Please come back anytime.
+</p>
+
+<p>
+When you return, don't forget to <a href="{% url 'account:login' %}"> "Login" </a> again.
+</p>
+
+{% endblock contents %}

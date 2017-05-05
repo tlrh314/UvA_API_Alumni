@@ -51,7 +51,6 @@ coverage.xml
 
 # Django stuff:
 *.log
-local_settings.py
 
 # Flask stuff:
 instance/
@@ -90,6 +89,15 @@ ENV/
 
 # Migrations
 migrations/
+
+apiweb/settings/local.py
+
+databases/
+apiweb/static/
+apiweb/apps/research/static/research/documents
+apiweb/apps/research/static/research/theses
+apiweb/apps/alumni/static/alumni/theses
+media/
 
 db.sqlite3
 *.swp

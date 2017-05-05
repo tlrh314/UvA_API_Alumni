@@ -1,0 +1,70 @@
+{% extends "agenda/base.html" %}
+
+
+{% block contents %}
+<h1>API calendar -- Creating my Entry</h1>
+
+<style type="text/css">
+    .main { border: 3px solid #eee; padding: 8px; }
+    .entry { border: 3px solid #eee; padding: 10px; width: 400px; margin: 9px;}
+    .del { float: right; }
+     h4 { text-align: left; margin-left: 50px; }
+</style>
+
+
+<div class="main">
+
+
+{% if form.non_field_errors %}
+<font color="red">Sorry there are corrections needed in your form below:</font>
+   {{ form.non_field_errors }}
+{% endif %}
+
+<br />
+
+<form action="{% url 'agenda:entry-create' year month day  %}" method="POST"> {% csrf_token %}
+
+<table>
+{% if form.title.errors %}
+<tr><th>{{ form.title.label_tag }}:</th><td>{{ form.title.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.title.label_tag }} </th><td>{{ form.title }}</td><th></th></tr>
+
+{% if form.is_public.errors %}
+<tr><th>{{ form.is_public.label_tag }}:</th><td>{{ form.is_public.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.is_public.label_tag }} </th><td>{{ form.is_public }}    </td>
+    <th>(visible for other people)</th>
+</tr>
+
+{% if form.date.errors %}
+<tr><th>{{ form.date.label_tag }}:</th><td>{{ form.date.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.date.label_tag }} </th><td>{{ form.date }} </td><th>(YYYY-MM-DD)</th></tr>
+
+{% if form.date_end.errors %}
+<tr><th>{{ form.date_end.label_tag }}:</th><td>{{ form.date_end.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.date_end.label_tag }} </th><td>{{ form.date_end }} </td><th>(if different from date)
+</th></tr>
+</table>
+
+<p>
+
+</p>
+
+<table>
+{% if form.body.errors %}
+<tr><th>{{ form.body.label_tag }}:</th><td>{{ form.body.errors }}</td><th></th></tr>
+{% endif %}
+<tr><th>{{ form.body.label_tag }} </th><td>{{ form.body }} </td><th>(same as editing an api wiki page)</th></tr>
+</table>
+
+<input type="submit" name="result" value="Save" />
+<input type="button" value="Cancel" onclick="window.location.href='{% url 'agenda:month' year month %}'" />
+</form>
+
+</div>
+
+
+{% endblock contents %}

@@ -1,0 +1,61 @@
+{% load static %}
+
+<div id="footercontainer">
+    <footer class="col-xs-12" id="footer" >
+        <div class="footer-row">
+            <div class="col-xs-3 footer-column">
+                <ul style="padding-top:20px;">
+                    <a class="twitter-timeline" data-width="300" data-height="300"
+                       data-theme="light" href="https://twitter.com/UvA_API">
+                        Tweets by @UvA_API</a>
+                    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+                </ul>
+            </div>
+            <div class="col-xs-2 footer-column">
+                <h3> About API Alumni </h3>
+                <ul>
+                    {% comment %}
+                    {# TODO TODO TODO #} 
+                    <li><a href=" {% url 'page' %} "> Over ons </a></li>
+                    {% endcomment %}
+                </ul>
+            </div>
+            <div class="col-xs-2 footer-column">
+                <h3> Latest News </h3>
+                <ul>
+                    {% comment %}
+                    {# TODO TODO TODO #} 
+                    {% for news in latest_blogs %}
+                    <li><a href="/blog/{{ blog.post_ID }}/"> {{ blog.title }} <span>| {{ blog.published_date|date }}</span></a></li>
+                    {% endfor %}
+                    {% endcomment %}
+                </ul>
+            </div>
+            <div class="col-xs-3 footer-column">
+                <ul style="padding-bottom: 15px; padding-top: 6px;">
+                    <img src="{% static 'img/api_logo_default_black.png' %}" style="padding-bottom: 20px; height: 125px;" title="Anton Pannekoek Institute for Astronomy">
+                    <p style="padding-top: 10px; padding-bottom: 10px; max-width: 250px;">
+                    <i class="fa fa-home"></i> PO Box 94249, 1090 GE Amsterdam  <br>
+                    <i class="fa fa-phone"></i> <a href="tel:0031205257491">+31 (0)20 525 7491</a><br>
+                    <i class="fa fa-envelope"></i> <a href="mailto:secr-astro-science@uva.nl">secr-astro-science@uva.nl</a><br>
+                    <a href="/contact">Contact Form</a><br>
+
+                    </p>
+                </ul>
+                <ul class="social">
+                    <p></p><strong> Stay Connected: </strong> </p><br>
+                    <li><a href="https://www.facebook.com/uva.api/" target="_blank"><i
+                            class=" fa fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com/UvA_API" target="_blank"> <i class="fa fa-twitter"></i> </a></li>
+                    {# TODO TODO TODO add the API LinkedIn #}
+                    <li><a href="https://www.linkedin.com/company/uva_api " target="_blank"> <i class="fa fa-linkedin"></i> </a></li>
+
+                </ul>
+            </div>
+
+        <div class="col-xs-12" style="text-align: center; width= 100%;">
+            <p>&copy; Anton Pannekoek Intitute, 2017. All rights reserved.</p>
+        </div>
+        </div>
+    </footer>
+</div>

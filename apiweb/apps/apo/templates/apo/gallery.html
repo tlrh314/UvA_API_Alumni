@@ -1,0 +1,26 @@
+{% extends "apo/base.html" %}
+{% load filters %}
+{% block title %}The Anton Pannekoek Observatory - Gallery{% endblock title %}
+
+
+{% block contents %}
+
+<h1>The Anton Pannekoek Observatory Gallery</h1>
+
+<p>
+A gallery of astronomical pictures taken with our telescopes (or pictures of the telescopes themselves).
+</p>
+
+<table>
+{% for picture in pictures.latest %}
+{% if forloop.counter0|mod:2 %}<tr>{% endif %}
+<td>{{ picture.title }}<br /><a href="{% url 'apo:gallery-image' picture.id %}"><img src="{{ picture.url_image }}" alt="{{ picture.title }}" title="{{ picture.description|safe }}"></a></td>
+{% if forloop.counter|mod:2 %}</tr>{% endif %}
+{% endfor %}
+</table>
+
+<p>
+All our images are hosted courtesy of <a href="http://www.flickr.com/photos/44306922@N07/">Flickr</a>.
+</p>
+
+{% endblock contents %}

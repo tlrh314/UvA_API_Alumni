@@ -1,0 +1,111 @@
+{% extends "publiek/onderzoek/base.html" %}
+{% block title %}API - Röntgendubbelsterren, neutronensterren en jets{% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'publiek:onderzoek' %}">Röntgendubbelsterren, neutronensterren en jets</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+<h1>Röntgendubbelsterren, neutronensterren en jets</h1>
+
+<h2>Röntgendubbelsterren</h2>
+
+<p>
+Bijna alle sterren ontstaan als onderdeel van een dubbelster
+of meervoudig systeem. Wanneer een van de twee sterren is ontploft
+als een supernova is het mogelijk dat het dubbelstersysteem ontbonden wordt,
+maar het kan ook gebeuren dat de sterren bij elkaar blijven.
+In zulke gevallen kan zo een systeem evolueren tot
+röntgendubbelstersysteem.
+Dit zijn systemen waar een ster en een compact object om elkaar heen draaien.
+Het compacte object kan een neutronenster of een zwart gat zijn, gevormd in de supernova.
+De röntgenstraling komt vrij wanneer materie van de ene ster
+op het compacte object valt. Dit proces noemen we accretie.
+Dit accretieroces verloopt niet altijd regelmatig.
+Er zijn namelijk systemen waar de röntgenhelderheid
+tijdelijke hoger is, soms voor een paar maanden,
+maar soms ook tientallen jaren lang.
+Deze systemen hebben twee fases, in uitbarsting of in rust.
+Tijdens een uitbarsting accreteert materie op de ster
+en de neutronenster wordt verhit.
+In rust koelt de neutronenster weer af.
+Dit duurt langer naar mate de lengte van de uitbarsting langer is.
+De bron is in rust niet altijd te vinden,
+omdat de helderheid aanzienlijk lager is.
+</p>
+
+<h2>Pulsars</h2>
+
+<p>
+Veel neutronensterren zenden periodiek een signaal uit.
+Dit komt doordat de neutronenster een bundel licht uitstraalt,
+maar daarnaast ook snel rond zijn as draait.
+Di is vergelijkbaar met een vuurtoren waarvan de lichtbundel ook ronddraait.
+Dit soort neutronensterren heten pulsars.
+Door deze pulsen te meten kunnen we heel nauwkeurig bepalen hoe snel pulsars
+ronddraaien en ook of ze langzamer of harder gaan draaien na
+verloop van tijd.
+Door de variaties tussen deze pulsen te meten kan
+de baan bepaald worden van deze pulsar om de andere ster.
+Indien we de andere ster ook kunnen zien,
+dan kunnen we de massa's bepalen van beide sterren.
+Hiermee kunnen we de zwaartekrachtstheorie testen op een extreme schaal.
+Juist voor deze neutronensterren is dit heel interessant
+omdat we niet precies weten hoe zo'n neutronster inwendig in elkaar zit.
+De dichtheid in neutronensterren is een paar keer de dichtheid
+van atoomkernen en dit is veel hoger dan dat we dat
+in het laboratorium kunnen nabootsen.
+Indien we weten hoe materie zich gedraagt op zulke dichtheden,
+weten we ook hoe materie zich op lagere dichtheden gedraagt.
+Er zijn vele theoretische toestandsvergelijkingen, die dit beschrijven,
+maar er is er maar een de correcte. Die willen we graag weten.
+Hiervoor hebben we nauwkeurige metingen van de massa's en de omvang
+van neutronensterren nodig.
+Pulsars komen zowel voor in röntgen als in radio.
+Een radiopulsar heeft echter niet altijd een röntgencomponent en ook
+een röntgenpulsar heeft niet altijd een radiocomponent.
+Men denkt wel dat er een verband zit tussen deze twee types pulsars,
+maar dit valt nog niet hard te maken met de huidige waarnemingen.
+Meer informatie over onderzoek aan pulsars in Nederland is te vinden op
+deze <a href="http://www.pulsars.nl/"> website. </a>
+</p>
+<p>
+Op het instituut wordt onderzoek gedaan aan röntgendubbelstersystemen,
+waarbij het compacte object vaak een pulsar is.
+De massabepaling van deze compacte objecten kan helpen om
+de toestandsvergelijking van materie met hoge dichtheid te bepalen.
+Onderzoek aan röntgenbronnen in uitbarsting en in rust geeft
+beter inzicht in het koelingsmechanisme van neutronensterren
+en over de relatie hiervan met de lengte van de uitbarstingen.
+</p>
+
+<h2>Jets</h2>
+
+<p>
+In dubbelstersystemen met een zwart gat worden zogenaamde jets gedetecteerd.
+In deze systemen wordt materie overgedragen van de "normale" ster naar het zwarte gat
+via een zogenaamde accretieschijf, wegens behoud van impulsmoment.
+Een kleine fractie van het materiaal dat anders zou accreteren, wordt
+om nog onbekende redenen met bijna de lichtsnelheid weggeschoten
+de ruimte in. Dit is de jet.
+Deze jets hebben vaak een helderheid vergelijkbaar met de helderheid van
+de accretieschijf.
+</p>
+<p>
+<img src="{{ STATIC_URL }}publiek/images/jet_hh47.jpg"></br>
+Een jet bij de jonge ster HH47.
+De ster is verstopt in de gaswolk linksonder.
+De afstand tussen de ster en het uiteinde van de jet
+is ongeveer een half lichtjaar (credits: NASA/STScI).
+</p>
+<p>
+Op het instituut wordt onderzoek gedaan naar deze jets.
+We willen inzicht krijgen waarom dit alleen bij zwarte gaten gebeurt
+en niet bij neutronensterren. Wat zijn de onderliggende processen?
+Hoe worden deze jets precies gevormd?
+Hoe hangt de jet samen met het accretieproces?
+En is dit accretieproces vergelijkbaar met het accretieproces bij neutronensterren?
+</p>
+
+
+{% endblock contents %}

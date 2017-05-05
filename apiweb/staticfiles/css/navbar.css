@@ -1,0 +1,97 @@
+@media (min-width: 768px) {
+    .navbar .navbar-collapse {
+        text-align: center;
+    }
+}
+
+.navbar .navbar-nav {
+    display: inline-block;
+    float: none;
+    vertical-align: top;
+}
+
+@media (max-width: 767px) {
+    /* Wanneer de pagina mobile modus gaat */
+    .navbar-form {
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        border: none;
+    }
+    .navbar-form > .input-group {
+        width: 172px;
+    }
+    #navbar > .pull-right {
+        margin-top: 0px;
+        padding-left: 23px;
+        height: 100px;
+    }
+    .navbar-nav {
+        padding-left: 20px;
+    }
+}
+
+.apiLogo{
+    padding: 19px 32px;
+}
+
+.navbar-default {
+    background-image: none;
+    background-color: white;
+    margin-bottom: 0px;
+}
+
+.hover-btn {
+    cursor: pointer;
+}
+
+.dropdown-top-menu {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    position: absolute;
+    display: none;
+    bottom: -40px;
+    left: -20px;
+    text-align: left;
+    /* width: inherit; */
+    background-color: #FFFFFF;
+    min-width: 150px;
+    /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+}
+
+.dropdown-content > li > a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333333;
+    white-space: nowrap;
+}
+.dropdown-content > li > a:hover,
+.dropdown-content > li > a:focus {
+    text-decoration: none;
+    color: #262626;
+    background-color: #f5f5f5;
+}
+
+
+.dropdown-item{
+    display: block;
+    /* position: relative; */
+    left: 0px; 
+    min-height: 25px;
+    white-space: nowrap;
+}
+
+/* Show the dropdown menu on hover */
+.hover-btn:hover .dropdown-content {
+    display: inline-block;
+}
+
+.dropdown-item:hover {
+    background-color: #F0F8FF;
+}

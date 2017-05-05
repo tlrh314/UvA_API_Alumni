@@ -1,0 +1,33 @@
+{% extends "agenda/base.html" %}
+{% block title %}API - Internal agenda{% endblock title %}
+{% block contents %}
+
+
+<h1>API calendar</h1>
+
+<p>(your entries can be found in the <b>bold</b> months)</p>
+
+
+<a id="prev" href="{% url 'agenda:index' year|add:'-3' %}">&lt;&lt; Prev</a>
+<a id="next" href="{% url 'agenda:index' year|add:'3' %}">Next &gt;&gt;</a>
+
+{% for year, months in years %}
+
+  <h4>{{ year }}</h4>
+
+  <table class="year">
+  <thead />
+  <tr>
+  {% for month in months %}
+    <td class="{% if month.current %}current{% endif %}">
+          {% if month.entry %}<b>{% endif %}<a href="{% url 'agenda:month' year month.n %}">{{ month.name }}</a>{% if month.entry %}</b>{% endif %}
+    </td>
+    {% if month.n == 6 %}</tr><tr>{% endif %}
+  {% endfor %}
+  </tr>
+  </table>
+
+{% endfor %}
+
+
+{% endblock contents %}

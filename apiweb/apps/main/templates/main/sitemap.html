@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Anton Pannekoek Institute - sitemap{% endblock title %}
+
+{% block contents %}
+<h1>Sitemap</h1>
+
+<div id="sitemap">
+<ul>
+ <li> <a href="{% url 'institute:index' %}">Institute</a>
+  <ul>
+   <li> <a href="{% url 'institute:contact' %}">Contact</a> </li>
+   <li> <a href="{% url 'people:person-list' %}">People</a> </li>
+  </ul>
+ </li>
+ <li> <a href="{% url 'research:index' %}">Research</a>
+  <ul>
+   <li> <a href="{% url 'research:category' "compacts" %}">Neutron stars and black holes</a> </li>
+   <li> <a href="{% url 'research:category' "cosmics" %}">Cosmic explosions</a> </li>
+   <li> <a href="{% url 'research:category' "astroparticles" %}">Astroparticle physics</a> </li>
+   <li> <a href="{% url 'research:category' "planets" %}">Planet formation and exoplanets</a> </li>
+   <li> <a href="{% url 'research:category' "stars" %}">Stars, formation and evolution</a> </li>
+   <li> <a href="{% url 'research:links' %}">Links</a> </li>
+   <li> <a href="{% url 'research:thesis' "phd" %}">PhD theses</a> </li>
+   <li> <a href="{% url 'research:index' %}#reports">Annual reports</a> </li>
+  </ul>
+ </li>
+ <li> <a href="{% url 'news:index' %}">News</a>
+  <ul>
+   <li> <a href="{% url 'news:events' %}">Events</a> </li>
+   <li> <a href="{% url 'news:press' %}">Press</a> </li>
+   <li> <a href="{% url 'news:colloquium' %}">Colloquia</a> </li>
+   <li> <a href="{% url 'news:pizza' %}">Lunch talks</a> </li>
+  </ul>
+ </li>
+ <li> <a href="{% url 'education:index' %}">Education</a>
+  <ul>
+   <li> <a href="{% url 'publiek:studie' %}">Scholieren / aanstaande studenten</a> </li>
+   <li> <a href="{% url 'education:bachelor-projects' %}">Bachelor Students</a> </li>
+   <li> <a href="{% url 'education:master-projects' %}">Master Students</a> </li>
+  </ul>
+ </li>
+ <li> <a href="{% url 'jobs:index' %}">Jobs</a> </li>
+</ul>
+</div>
+
+{% endblock %}

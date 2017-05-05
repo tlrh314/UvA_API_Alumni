@@ -1,0 +1,16 @@
+{% extends "apo/base.html" %}
+{% load news_filters %}
+{% block title %}APO - Practicum telescopes{% endblock title %}
+{% block breadcrumbs %}{{ block.super }} &#187; <a href="{% url 'apo:practicum' %}">Practicum telescopes</a>{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1>Practicum telescopes</h1>
+
+<p>
+We have ten 10cm refractor telescopes for student work. These can be mounted on a Losmandy GM-8 mount, which goes on top of one of the ten little pillars on the roof top; the mounts are controlled by a Gemini unit with handset, which allows for even periodic error correction. Eye-pieces, CCDs or digital cameras can then be mounted behind the telescopes, thus providing the opportunity for students to get acquianted with observing in a very direct way
+</p>
+
+
+{% endblock contents %}

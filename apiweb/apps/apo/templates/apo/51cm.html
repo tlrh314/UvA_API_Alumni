@@ -1,0 +1,28 @@
+{% extends "apo/base.html" %}
+{% load news_filters %}
+{% block title %}APO - The 51 cm telescope{% endblock title %}
+{% block breadcrumbs %}{{ block.super }} &#187; <a href="{% url 'apo:51cm' %}">The 51 cm telescope</a>{% endblock breadcrumbs %}
+
+
+{% block contents %}
+
+<h1>The 51 cm telescope</h1>
+
+<p>
+The 51cm (20 inch) telescope is the pride of the Anton Pannekoek Observatory. It has been newly installed in October 2009, and will be used for a variety of purposes. In the end, the telescope control will be fully robotized, so that one can easily control the telescope from the safety and warmth of one's desk.
+</p>
+
+<p>
+The telescope is a 20 inch Ritchey-Chrétien f/8.2 telescope, using an open construction to keep the airflow cooling the surroundings. It is mounted on a German equitorial mount, which sits on top of the building, but is free from the dome (so windshakes will affect the telescope only minimally).
+</p>
+
+<p>
+Rooms for the student's practical work are located right below the domes. Optical fiber cables attached to the telescope will lead the light from stars, galaxies or nebulae directly into the instrumental setup.
+</p>
+
+<p>
+Of course, CCDs or simple (consumer) digital cameras can be mounted directly behind the telescope, for scientific or simply pretty pictures (or both). Or simply an eye-piece can be inserted to allow direct observations with the eye.
+</p>
+
+
+{% endblock contents %}

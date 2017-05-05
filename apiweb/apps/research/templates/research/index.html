@@ -1,0 +1,88 @@
+{% extends "research/base.html" %}
+{% block title %}API - research{% endblock title %}
+
+{% block contents %}
+<h1>Research at the Anton Pannekoek Institute</h1>
+
+
+<p>
+The ultimate goal of astronomical research is to understand the Universe
+and the objects within it in terms of the laws of physics.
+The structure of the Universe and its development over the course of time,
+the nature, formation, and evolution of planets, stars, galaxies, clusters
+and super clusters of galaxies, and the properties of the medium
+in which these are embedded, are all important objects for study.
+Cosmological questions concerning the nature and evolution of the Universe relate
+directly to such questions as the geometry of space-time, the nature of dark matter
+ which constitutes over 90% of the gravitating mass in the Universe
+but leaves no trace in the form of electromagnetic radiation,
+the formation of the elements,
+of planetary systems, and ultimately, the origin of the Earth and of life.
+Furthermore, the Universe provides a unique laboratory for investigating and testing
+the laws of chemistry and physics under conditions far more extreme than can be reached
+in laboratories on Earth: astrophysicists study phenomena involving enormous scales
+of length and mass (the Universe as a whole), huge densities (e.g., neutron stars, black holes),
+extreme vacua (interstellar and intergalactic media), immense energies
+(explosive phenomena such as supernovae and quasars), and intense fluxes
+of particles and radiation (neutrinos, gamma-ray bursts).
+</p>
+
+<p>
+The research of the astronomical institute of the <a href="http://www.uva.nl">
+University of Amsterdam </a> can be broadly divided into relativistic astrophysics
+of compact objects ("high-energy astrophysics") on the one hand,
+and star- and planet formation ("low-energy astrophysics") on the other.
+However, there is a large amount of overlap between the two in the area of studying
+the nature and evolution of massive stars, so the separation is not very sharp.
+Overall, the Institute's research touches on most aspects of the life cycle of stars,
+from their birth out of clouds of dust and gas, to their final explosions
+when they return much of their gas back to those clouds.
+</p>
+
+<hr>
+
+<p>
+People at The Institute are working in the following research areas: </br>
+</p>
+
+
+<table id="research">
+<tr>
+{% for key,value in categories.items %}
+<td>
+<a href="{% url 'research:category' key %}">
+   <img src="{{ STATIC_URL }}research/images/{{ key }}.jpg"> <br/> {{ value }}
+</a>
+</td>
+{% if forloop.counter|divisibleby:"2" %} </tr><tr> {% endif %}
+{% endfor %}
+</tr>
+</table>
+
+
+
+<p style="clear: both; border-top: solid 1px #000;">
+<br />
+<a name="reports"></a>
+The annual reports of the last few years: </br>
+</p>
+<p>
+<ul>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2009.pdf">  2009 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2008.pdf">  2008 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2007.pdf">  2007 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2006.pdf">  2006 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2005.pdf">  2005 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2004.pdf">  2004 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2003.pdf">  2003 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2002.pdf">  2002 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2001.pdf">  2001 </a> </li>
+<li>  <a href="{{ STATIC_URL }}research/documents/API2000.pdf">  2000 </a> </li>
+</ul>
+</p>
+
+
+{% endblock contents %}
+
+
+

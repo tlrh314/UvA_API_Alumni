@@ -1,0 +1,20 @@
+{% extends "news/base.html" %}
+{% block title %}API - Press: {{ object.title }}{% endblock title %}
+
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'news:press' %}">Press</a> &#187; {{ object.title }}
+{% endblock breadcrumbs %}
+
+{% block contents %}
+
+{% if not object.visible and user.is_authenticated %}<p class="warning right">This item is not visible to the public</p>{% endif %}
+
+<h1>{{ object.title }}</h1>
+
+{% if object.location %}{{ object.location }}{% if object.date %}, {% endif %}{% endif %}{% if object.date %}{{ object.date|date:"j F Y" }}{% endif %}
+
+{{ object.text|safe }}
+
+{% if perms.news.change_press %}<div class="edit"><a href="{% url 'admin:index' %}news/press/{{ object.pk }}">edit</a></div>{% endif %}
+
+{% endblock contents %}

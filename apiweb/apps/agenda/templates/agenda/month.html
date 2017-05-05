@@ -1,0 +1,45 @@
+{% extends "agenda/base.html" %}
+{% block title %}API - Internal agenda by month{% endblock title %}
+
+{% block contents %}
+
+<h1>API calendar for this month (click on a day to add your entry)</h1>
+
+<p>
+The <font color="green"> green items </font> you added for private use. <br />
+The <font color="red"> red items </font> you added for everybody to see. <br />
+The <font color="blue"> blue items </font> are public. <br />
+</p>
+
+
+<a id="prev" href= "{% url 'agenda:month' year month "prev" %}">&lt;&lt; Prev</a>
+<a id="next" href= "{% url 'agenda:month' year month "next" %}">Next &gt;&gt;</a>
+
+
+<h4>{{ mname }} {{ year }}</h4>
+
+    <table class="month">
+    <thead>
+    <tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
+    </thead>
+    {% for week in month_days %}
+    <tr>
+       {% for day, entries, current in week %}
+
+           <td class="{% if day != 0 %}{% if current %}current{% endif %}{% else %}empty{% endif %}"
+           {% if day != 0 %} onClick="parent.location='{% url 'agenda:entry-create' year month day %}'" onMouseOver="this.bgColor='#eee';" onMouseOut="this.bgColor='white';"{% endif %}>
+
+           {% if day != 0 %}
+              {{ day }}
+              {% for entry in entries %}
+                <li><a href="{{entry.link}}" title="{{entry.tooltip}}"><font color={{entry.attr}}> {{entry.type|truncatewords:2}} </font></a></li>
+              {% endfor %}
+           {% endif %}
+           </td>
+       {% endfor %}
+    </tr>
+    {% endfor %}
+
+    </table>
+
+{% endblock contents %}

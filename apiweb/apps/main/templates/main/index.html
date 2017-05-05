@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} API - Alumni {% endblock title %}
+{# TODO: remove css/frontpage.css, but it is left to show how to load additional per-page css #} 
+{% block stylesheets %} {{ block.super }} <link rel="stylesheet" type="text/css" href="{#% static 'css/frontpage.css' %#}" />{% endblock stylesheets %}
+
+
+{% block content %}
+<h1 class="text-center">Anton Pannekoek Institute | Alumni </h1>
+
+<div class="main-content" role="main"">
+    <div class="jumbotron">
+    {% if press or events %}
+    {% include "main/news_listing.html" %}
+    {% else %}
+    <p class="text-justify">
+    The Anton Pannekoek Institute houses the astrophysics group of the University of Amsterdam.
+    Research at the institute concentrates on stellar evolution,
+    both at high energies (neutron stars, gamma-ray bursts) and
+    low energies (star &amp; planet formation);
+    the institute is also heavily involved in LOFAR.
+    </p>
+    {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "wiki/base2.html" %}
+{% block title %}API wiki - {{ page.name }}{% endblock title %}
+
+{% block contents %}
+<div class="note right" style="position: static; top -2em;">You're reading the read-only version of the API wiki. <a href="{% url 'wiki:index' %}">Log in</a> if you'd like to edit.</div>
+{{ page.html|safe }}
+{% endblock contents %}

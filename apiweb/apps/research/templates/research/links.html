@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}API - research: links{% endblock title %}
+
+{% block sidemenu %}
+<ul>
+ <li><a class="active" href="{% url 'research:links' %}">Links</a>
+  <ul>
+   <li> <a href="#institutes">Astronomical institutes</a> </li>
+   <li> <a href="#publications">Publications</a> </li>
+   <li> <a href="#jobs">Jobs</a> </li>
+   <li> <a href="#nederlands">Nederlands / Dutch</a> </li>
+   <li> <a href="#remaining">Remaining</a> </li>
+  </ul>
+ </li>
+</ul>
+{% endblock sidemenu %}
+
+{% block contents %}
+<h1>Links</h1>
+
+<a name="institutes"></a><h2>Other astronomical institutes in the Netherlands</h2>
+
+<ul>
+ <li> <a href="http://www.aartfaac.org/">Amsterdam-ASTRON Radio Transients Facility and Analysis Centre, AARTFAAC</a> </li>
+ <li> <a href="http://www.uvaapp.nl/">Gravitation and AstroParticle Physics Amsterdam, GRAPPA</a> </li>
+ <li> <a href="http://www.rug.nl/sterrenkunde/index">Kapteyn institute, Groningen</a> </li>
+ <li> <a href="http://www.strw.leidenuniv.nl/">Sterrenwacht Leiden</a> </li>
+<!-- <li> <a href="http://www.astro.uu.nl/">Astronomical institute, University Utrecht</a> </li> -->
+ <li> <a href="http://www.astro.ru.nl/">Astronomical institute, Radboud University Nijmegen</a> </li>
+ <li> <a href="http://astron.nl/">Netherlands Institute for Radio Astronomy, ASTRON</a> </li>
+ <li> <a href="http://www.sron.nl/">Netherlands Institute for Space Research, SRON</a> </li>
+ <li> <a href="http://www.strw.leidenuniv.nl/nova/">Nederlandse Onderzoekschool voor Astronomie, NOVA</li>
+</ul>
+
+<a name="publications"></a><h2>Publications &amp; journals</h2>
+
+<ul>
+ <li> <a href="http://adsabs.harvard.edu/abstract_service.html">ADS</a> </li>
+ <li> <a href="http://arxiv.org/archive/astro-ph">ArXiV (astro-ph)</a> </li>
+ <li> <a href="http://www.iop.org/EJ/journal/apj">Astrophysical Journal</a> </li>
+ <li> <a href="http://www.aanda.org/">Astronomy &amp; Astrophysics</a> </li>
+ <li> <a href="http://www.wiley.com/bw/journal.asp?ref=0035-8711">Monthly Notices of the Royal Astronomical Society</a> </li>
+ <li> <a href="http://www.nature.com/">Nature</a> </li>
+ <li> <a href="http://www.sciencemag.org/">Science</a> </li>
+</ul>
+
+<a name="jobs"></a><h2>Jobs</h2>
+<ul>
+ <li> <a href="http://members.aas.org/JobReg/JobRegister.cfm">AAS Job register</a> </li>
+</ul>
+
+<a name="nederlands"></a><h2>Nederlandse links / Dutch links</h2>
+<ul>
+ <li> <a href="http://www.astronomenclub.nl/">Nederlandse Astronomen Club</a> </li>
+ <li> <a href="http://www.astronomie.nl">Nederlandse Onderzoekschool voor Astronomie, NOVA, publiekssite</a> </li>
+ <li> <a href="http://www.astronomie.nl/encyclopedie.php">NOVA sterrenkunde encyclopedie</a> </li>
+ <li> <a href="http://www.kennislink.nl/astronomie-en-ruimteonderzoek">Kennislink, Astronomie &amp; Ruimteonderzoek</a> </li>
+</ul>
+
+<a name="remaining"></a><h2>Remaining</h2>
+<ul>
+ <li> <a href="http://www.iaa.es/scattering/">The Amsterdam Light Scattering Database</a> </li>
+</ul>
+
+{% endblock %}

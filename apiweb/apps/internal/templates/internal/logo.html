@@ -1,0 +1,185 @@
+{% extends "internal/base.html" %}
+{% block title %}API - internal pages{% endblock title %}
+
+{% block contents %}
+
+<h1>API logo</h1>
+
+<p>
+Since November 2011, the API has its own "official" logo.
+Designed by Christian Thalmann with help from several interested colleagues,
+it can (and should!) be used on letters, posters or in email.
+<p>
+
+<p>
+Currently we have a template
+<a href="{{ STATIC_URL }}internal/logo/letterhead.key.zip">keynote</a>
+letterhead for MAC and a template for
+<a href="{{ STATIC_URL }}internal/logo/ApiUva-Letter.tar.gz">LaTeX</a>.
+Both contain the UvA and API logo.
+People are of course free to implement their own and if wanted,
+put them on this website.
+Let the current webpage maintainer(s) know if you like to do so.
+<p>
+
+<p>
+How to use the logo:
+</p>
+<ul>
+<li>
+The examples below are PDF and PNG files.
+ <b>The PDF version should be used whenever possible,</b>
+since it contains smooth vector graphics rather than pixels.
+This is particularly important for printed matter.
+</li>
+<li>
+The logo comes in two different color schemes: black and white.
+The black scheme should be used by default.
+The black version is intended for black-and-white printing, whereas the white
+version can be placed on a dark background (on a slide or poster).
+</li>
+<li>
+The logo comes in three different arrangements: default, big, and wide.
+The default arrangement should be used by default.  The other
+two versions are available for special formating needs (e.g., the
+"big" version can be used to emphasize the graphics over the text,
+and the "wide" version may fit in well with other wide-format logos
+on a poster).
+</li>
+<li>
+The logo mark (the dome graphic) may be used without the text part if
+necessary, since it already includes the "API" letters.  However, please
+do not add "Anton Pannekoek Institute for Astronomy" in another font.
+</li>
+</ul>
+
+<p>
+Some technical details:
+</p>
+<ul>
+<li>The font used is the small-caps form of
+<a href="http://www.fontsquirrel.com/fonts/eb-garamond">EB Garamond</a> (free). </li>
+<li>The colors are black, white and crimson,
+with RGB codes <tt>000000</tt>, <tt>ffffff</tt> and <tt>fe0012</tt>. </li>
+<li>If you need something like a JPEG, EPS, or TIFF,
+use a tool like PhotoShop or Gimp to convert the file.
+In the future, more formats may be put here as well.</li>
+</ul>
+
+<h2>Files</h2>
+
+<p>
+The PNGs shown are scaled down; clicking on them will bring up the actual size.
+The PDF logos have a transparent background (if your default background is white,
+you may therefore not see the logo or parts of it for some files).
+</p>
+
+<table>
+<thead><tr><th>PDF</th><th>PNG</th></tr></thead>
+<tbody>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_default_black.pdf">api_logo_default_black</a></td>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_default_black.png"><img src="{{ STATIC_URL }}internal/logo/api_logo_default_black.png" style="width: 250px;"></a></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_default_white.pdf">api_logo_default_white</a></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_big_black.pdf">api_logo_big_black</a></td>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_big_black.png"><img src="{{ STATIC_URL }}internal/logo/api_logo_big_black.png" style="width: 250px;"></a></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_big_white.pdf">api_logo_big_white</a></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_wide_black.pdf">api_logo_wide_black</a></td>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_wide_black.png"><img src="{{ STATIC_URL }}internal/logo/api_logo_wide_black.png" style="width: 250px;"></a></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_wide_white.pdf">api_logo_wide_white</a></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_default_black.pdf">api_logo_NL_default_black</a></td>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_default_black.png"><img src="{{ STATIC_URL }}internal/logo/api_logo_NL_default_black.png" style="width: 250px;"></a></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_default_white.pdf">api_logo_NL_default_white</a></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_big_black.pdf">api_logo_NL_big_black</a></td>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_big_black.png"><img src="{{ STATIC_URL }}internal/logo/api_logo_NL_big_black.png" style="width: 250px;"></a></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_big_white.pdf">api_logo_NL_big_white</a></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_wide_black.pdf">api_logo_NL_wide_black</a></td>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_wide_black.png"><img src="{{ STATIC_URL }}internal/logo/api_logo_NL_wide_black.png" style="width: 250px;"></a></td>
+</tr>
+<tr>
+<td><a href="{{ STATIC_URL }}internal/logo/api_logo_NL_wide_white.pdf">api_logo_NL_wide_white</a></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</tbody>
+</table>
+{% endblock contents %}

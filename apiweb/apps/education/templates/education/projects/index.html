@@ -1,0 +1,15 @@
+{% extends "education/projects/base.html" %}
+{% block title %}API education: student projects{% endblock title %}
+
+{% block contents %}
+
+<h1>Bachelor and master projects</h1>
+
+The projects are listed on their separate websites:
+
+<ul>
+  <li><a href="{% url 'education:bachelor-projects' %}">Bachelor projects</a></li>
+  <li><a href="{% url 'education:master-projects' %}">Master projects</a></li>
+</ul>
+
+{% endblock contents %}

@@ -1,0 +1,20 @@
+{% extends "wiki/base.html" %}
+{% block title %}{{ page.name }}{% endblock title %}
+
+{% block contents %}
+
+<h1>Editing page <em>{{ page.name }}</em></h1>
+
+<div class="preview">
+{{ page.html|safe }}
+</div>
+
+<div class="edit">
+<form method="post" action=""> {% csrf_token %}
+<input type="submit" value="Save" /> <a href="{% url 'wiki:view' name=page.name %}">To normal page view </a>
+{{ form.text }}
+<input type="submit" value="Save" /> <a href="{% url 'wiki:view' name=page.name %}">To normal page view</a>
+</form>
+</div>
+
+{% endblock contents %}

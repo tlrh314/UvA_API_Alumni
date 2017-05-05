@@ -1,0 +1,6 @@
+{% url 'alumni:index' as url_alumni %}
+
+
+<ul>
+<li><a {% ifequal request.path url_alumni %}class="active" {% endifequal %}href="{{ url_alumni }}">Alumni</a>
+<ul>

@@ -1,0 +1,11 @@
+{% extends "apo/base.html" %}
+{% load filters %}
+{% block title %}The Anton Pannekoek Observatory - Gallery{% endblock title %}
+
+{% block contents %}
+<h1>{{ picture.title }}</h1>
+
+<a href="{{ picture.image_url }}"><img src="{{ picture.image_url }}" width="600" alt="{{ picture.title }}" /></a>
+<p>{{ picture.description|safe }}</p>
+<p><a href="{{ picture.url }}">(View on Flickr)</a></p>
+{% endblock contents %}

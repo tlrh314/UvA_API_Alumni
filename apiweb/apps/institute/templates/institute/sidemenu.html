@@ -1,0 +1,28 @@
+{% block sidemenu %}
+{% url 'institute:index' as url_institute %}
+{% url 'institute:contact' as url_contact %}
+{% url 'institute:90years' as url_api90years %}
+{% url 'people:person-list' as url_people %}
+{% url 'library:index' as url_library %}
+<ul>
+ <li> <a {% ifequal request.path url_institute %}class="active" {% endifequal %} href="{{ url_institute }}">Institute</a>
+  <ul>
+   <li> <a {% ifequal request.path url_api90years %}class="active"{% endifequal %} href="{{ url_api90years }}">90 years</a> </li>
+  </ul>
+ </li>
+ <li> <a {% ifequal request.path url_library %}class="active"{% endifequal %} href="{{ url_library }}">Library</a> </li>
+ <li> <a {% ifequal request.path url_people %}class="active"{% endifequal %} href="{{ url_people }}">People</a> </li>
+ <li> <a {% ifequal request.path url_contact %}class="active" {% endifequal %} href="{{ url_contact }}">Contact</a>
+  <ul>
+   <li> <a href="{{ url_contact }}#address">Address</a> </li>
+   <li> <a href="{{ url_contact }}#how">How to find us</a>
+    <ul>
+     <li> <a href="{{ url_contact }}#public-transport">Public transport</a> </li>
+     <li> <a href="{{ url_contact }}#car">By car</a> </li>
+     <li> <a href="{{ url_contact }}#maps">Maps</a> </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+{% endblock sidemenu %}

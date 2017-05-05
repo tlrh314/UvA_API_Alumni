@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block stylesheets %}{{ block.super }}<style>div#banner { background-image: url({{ STATIC_URL }}jobs/images/jobs_banner.jpg); } div#banner h1 { padding-top: 2.8ex; padding-left: 3ex; color: #ddd; }</style>{% endblock stylesheets %}
+{% block banner %}<div id="banner"><h1>Jobs at the Institute</h1></div>{% endblock banner %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url 'jobs:index' %}">Jobs</a>
+{% endblock breadcrumbs %}
+
+{% block sidemenu %}
+{% include "jobs/sidemenu.html" %}
+{% endblock sidemenu %}

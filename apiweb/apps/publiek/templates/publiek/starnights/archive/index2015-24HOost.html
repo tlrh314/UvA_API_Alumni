@@ -1,0 +1,86 @@
+{% extends "publiek/starnights/base.html" %}
+{% block title %}API - Sterrenkijkavonden{% endblock title %}
+{% block breadcrumbs %}
+{{ block.super }} &#187; <a href="{% url publiek:sterrenkijkavonden %}">Sterrenkijkavonden</a>
+{% endblock breadcrumbs %}
+
+
+{% block contents %}
+<h1>API Sterrenkijkavond</h1>
+
+<p>
+Heb je altijd al sterren van dichtbij willen bekijken?
+Grijp je kans tijdens 24H Oost (zaterdag 14 februari)!
+Op een heldere avond worden bij het Anton Pannekoek Instituut
+voor Sterrenkunde meerdere telescopen opgesteld, waarmee je de
+sterrenhemel kunt bestuderen. Bij bewolking zijn er
+rondleidingen door de sterrenkoepels.
+</p>
+
+<p>
+Het Sterren kijken tijdens 24H Oost begint om 19.00 en eindigt om 23.00 uur.
+Elk uur begint een nieuwe ronde. Deelname is gratis, maar aanmelden verplicht.
+U kunt zich vanaf 6 februari 11.00 uur aanmelden via door middel van het
+<a href="{% url publiek:aanmeldingsformulier %}"> aanmeldingsformulier </a>
+en aangeven of u via e-mail op de hoogte wilt blijven
+van andere activiteiten.
+Het laatste kunt u ook aangeven door een e-mail te sturen naar
+<a href="mailto:F.Buurmeijer@uva.nl">F.Buurmeijer@uva.nl</a>.
+<p>
+
+<p>
+Adres: </br>
+Science Park 904 </br>
+1098 XH Amsterdam
+</p>
+
+<p>
+U wordt ontvangen in de centrale hal.
+</p>
+
+<p>
+Bereikbaarheid: </br>
+Er zijn voldoende parkeerplaatsen beschikbaar op het Science Park Amsterdam.
+In dit gebied is het betaald parkeren.
+Met het openbaar vervoer is het Science Park Amsterdam goed bereikbaar.
+Bus 40 stopt op het terrein.
+Station Amsterdam Science Park is het dichtstbijzijnde treinstation. Op de
+<a href="http://www.scienceparkamsterdam.nl/fileadmin/site/dokumenten/Science_Park/Plat
+tegronden/A5_plattegrond_SPA_web.pdf"> plattegrond </a>
+zijn de gebouwen op het Science Park Amsterdam,
+waaronder het UvA-gebouw nummer 904, aangegeven.
+De sterrenwacht is helaas niet bereikbaar voor rolstoelgebruikers.
+Hierdoor is deelname aan het waarnemen of de rondleidingen niet mogelijk.
+</p>
+
+<p>
+De sterrenkijkavond wordt georganiseerd in samenwerking met de
+<a href="http://www.volkssterrenwachtamsterdam.nl/"> Volkssterrenwacht Amsterdam.</a>
+</p>
+
+<p>
+Contact: </br>
+Franka Buurmeijer MSc </br>
+Anton Pannekoek Instituut voor Sterrenkunde </br>
+E-mail: <a href="mailto:F.Buurmeijer@uva.nl">F.Buurmeijer@uva.nl</a> </br>
+Telnr: +31 (0)20-5258316
+</p>
+
+
+<p>
+<iframe src="http://www.at5.nl/video/105085"  width="480"  height="270"  frameborder="0"  scrolling="auto"></iframe>
+</p>
+
+<!--
+<p>
+<iframe width="553" height="480" src="http://www.at5.nl/embed/iframe?e=15946" frameborder="0" allowfullscreen></iframe>
+</p>
+-->
+
+
+<p>
+<object width="550" height="400"> <param name="flashvars" value="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F44306922%40N07%2Fshow%2F&page_show_back_url=%2Fphotos%2F44306922%40N07%2F&user_id=44306922@N07&jump_to="></param> <param name="movie" value="http://www.flickr.com/apps/slideshow/show.swf?v=124984"></param> <param name="allowFullScreen" value="true"></param><embed type="application/x-shockwave-flash" src="http://www.flickr.com/apps/slideshow/show.swf?v=124984" allowFullScreen="true" flashvars="offsite=true&lang=en-us&page_show_url=%2Fphotos%2F44306922%40N07%2Fshow%2F&page_show_back_url=%2Fphotos%2F44306922%40N07%2F&user_id=44306922@N07&jump_to=" width="550" height="400"></embed></object>
+</p>
+
+
+{% endblock contents %}

@@ -1,0 +1,37 @@
+{% url 'publiek:index' as publiek_index %}
+{% url 'publiek:sterrenkijkavonden' as publiek_sterrenkijkavonden %}
+{% url 'publiek:aanmeldingsformulier' as publiek_aanmeldingsformulier %}
+{% url 'publiek:onderzoek' as publiek_onderzoek %}
+{% url 'publiek:educatie' as publiek_educatie %}
+{% url 'publiek:links' as publiek_links %}
+{% url 'publiek:studie' as publiek_studie %}
+
+
+<ul>
+ <li><a {% ifequal request.path publiek_index %}class="active" {% endifequal %}href="{{ publiek_index }}">Publiek</a>
+  <ul>
+   <li> <a {% ifequal request.path publiek_sterrenkijkavonden %}class="active" {% endifequal %} href="{{ publiek_sterrenkijkavonden }}">Sterrenkijkavonden</a>
+
+    <ul>
+     <li> <a {% ifequal request.path publiek_aanmeldingsformulier %}class="active" {% endifequal %} href="{{ publiek_aanmeldingsformulier }}">Aanmeldingsformulier</a> </li>
+    </ul>
+
+   </li>
+  </ul>
+  <ul>
+   <li> <a {% ifequal request.path publiek_onderzoek %}class="active" {% endifequal %} href="{{ publiek_onderzoek }}">Onderzoek</a> </li>
+   <li> <a {% ifequal request.path publiek_educatie %}class="active" {% endifequal %} href="{{ publiek_educatie }}">Educatie</a> </li>
+   <li> <a {% ifequal request.path publiek_links %}class="active" {% endifequal %} href="{{ publiek_links }}">Links</a> </li>
+   <li> <a {% ifequal request.path publiek_studie %}class="active" {% endifequal %}href="{{ publiek_studie }}">Studie</a>
+{% ifequal request.path publiek_studie %}
+<!--
+    <ul>
+     <li>Studeren</li>
+     <li>Projecten</li>
+    </ul>
+-->
+{% endifequal %}
+   </li>
+  </ul>
+ </li>
+</ul>
