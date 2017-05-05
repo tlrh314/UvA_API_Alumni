@@ -14,6 +14,17 @@
   - Setup local_settings: `mv api/api/local_settings.py.example api/api/local_settings.py`
   - Edit local_settings to tailor to your machine.
 
+- **Create directories for Filebrowser**
+  - `mkdir -p apiweb/media/uploads`
+  - `mkdir -p apiweb/media/_versions`
+  - **On production only, also set permissions for Apache2**
+    - `setfacl -d -m u::rwx,u:www-data:rwx,g::rwx,o:rx apiweb/media/uploads`
+    - `setfacl -m    u::rwx,u:www-data:rwx,g::rwx,o:rx apiweb/media/uploads`
+    - `setfacl -d -m u::rwx,u:www-data:rwx,g::rwx,o:rx apiweb/media/_versions`
+    - `setfacl -m    u::rwx,u:www-data:rwx,g::rwx,o:rx apiweb/media/_versions`
+
+- **Copy 2.6GB file with PhD theses**
+    - `cp -r path/to/files apiweb/apps/alumni/static/alumni/theses/phd`
 
 
 # [TODO:] Deployment 
