@@ -57,9 +57,10 @@ class DegreeListFilter(admin.SimpleListFilter):
 
 @admin.register(Degree)
 class DegreeAdmin(admin.ModelAdmin):
-    list_display = ("get_alumnus", "type", "thesis_title" )
+    list_display = ("thesis_title", "get_author", "show_year", "type")
     list_filter = ("type", DegreeListFilter)
-    search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name")
+    search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name",
+        "date_start", "date_stop", "date_of_defence")
     ordering = ("alumnus__user__username", )
     filter_horizontal = ( "thesis_advisor", )
 
@@ -85,10 +86,18 @@ class DegreeAdmin(admin.ModelAdmin):
         ),
     ]
 
-    def get_alumnus(self, obj):
+    def get_author(self, obj):
         """ We could use author instead of get_alumnus in list_display """
         return obj.alumnus.full_name
-    get_alumnus.short_description = "Alumnus"
+    get_author.short_description = "Author"
+
+    def show_year(self, obj):
+        if obj.date_of_defence:
+            return obj.date_of_defence.strftime("%Y")
+        elif obj.date_stop:
+            return obj.date_stop.strftime("%Y")
+        return None
+    show_year.short_description = "Year"
 
 
 class PostdocPositionAdminInline(admin.StackedInline):
@@ -156,8 +165,9 @@ class AlumnusListFilter(admin.SimpleListFilter):
 @admin.register(Alumnus)
 class AlumnusAdmin(admin.ModelAdmin):
     ordering = ("user__username", )
-    search_fields = ("first_name", "last_name", "degrees__thesis_title")
-    list_display = ("get_alumnus", "email", "show_person")
+    search_fields = ("first_name", "last_name", "degrees__thesis_title",
+        "degrees__date_start", "degrees__date_stop", "degrees__date_of_defence")
+    list_display = ("get_alumnus", "email", "show_msc_year", "show_phd_year")
     list_filter = ("show_person", "current_position", AlumnusListFilter)
     inlines = (DegreeAdminInline, PostdocPositionAdminInline, JobAdminInline)
     form = AlumnusAdminForm
@@ -214,6 +224,26 @@ class AlumnusAdmin(admin.ModelAdmin):
     def get_full_name(self, obj):
         return obj.full_name
     get_full_name.short_description = "Full Name"
+
+    def show_phd_year(self, obj):
+        degrees = obj.degrees.filter(type="phd")
+        if len(degrees) is not 0:
+            if degrees[0].date_of_defence:
+                return degrees[0].date_of_defence.strftime("%Y")
+            elif degrees[0].date_stop:
+                return degrees[0].date_stop.strftime("%Y")
+        return None
+    show_phd_year.short_description = "PhD"
+
+    def show_msc_year(self, obj):
+        degrees = obj.degrees.filter(type="msc")
+        if len(degrees) is not 0:
+            if degrees[0].date_of_defence:
+                return degrees[0].date_of_defence.strftime("%Y")
+            elif degrees[0].date_stop:
+                return degrees[0].date_stop.strftime("%Y")
+        return None
+    show_msc_year.short_description = "MSc"
 
 
 admin.site.register(CurrentPosition)
