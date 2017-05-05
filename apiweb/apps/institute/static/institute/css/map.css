@@ -1,0 +1,59 @@
+@media screen {
+  #svgmap {
+    width: 600px;
+    height: 260px;
+    color: inherit;
+    background: #fff;
+    z-index: 50; }
+
+  #resize {
+    float: right;
+    margin-top: -1ex; }
+
+  table.map
+  div#map {
+    display: none; }
+
+  div#nomap {
+    display: none; }
+
+  p#map {
+    display: none; }
+
+  div#mapcolumns {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    -o-column-count: 2;
+    column-count: 2;
+    -webkit-column-gap: 2em;
+    -moz-column-gap: 2em;
+    -o-column-gap: 2em;
+    column-gap: 2em; }
+    div#mapcolumns div {
+      border-spacing: 0em 0.2ex;
+      margin: .5em;
+      padding: 0em;
+      cursor: default; }
+    div#mapcolumns div:hover {
+      background-color: #ccf; }
+
+  #tooltip {
+    position: absolute;
+    z-index: 3000;
+    border: 1px solid #111;
+    background-color: #eee;
+    padding: 5px;
+    opacity: 0.85; }
+
+  #tooltip h3 h3, #tooltip h3 div, #tooltip div h3, #tooltip div div {
+    margin: 0; }
+  #tooltip h3 .hovertip, #tooltip div .hovertip {
+    display: block;
+    text-align: left; }
+    #tooltip h3 .hovertip ul, #tooltip h3 .hovertip li, #tooltip div .hovertip ul, #tooltip div .hovertip li {
+      list-style: none inside;
+      padding: 0;
+      margin: 0; }
+
+  .hovertip {
+    display: none; } }

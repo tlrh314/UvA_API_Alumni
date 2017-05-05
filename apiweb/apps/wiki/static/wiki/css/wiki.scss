@@ -1,0 +1,51 @@
+blockquote
+{
+    padding-left: 0.5em;
+    border-left: 1px dotted black;
+    font-family: monospace;
+}
+
+code
+{
+    font-family: monospace;
+}
+
+div.preview
+{
+    border: 1px dotted black;
+    padding: 1em 1ex;
+}
+
+div.preview:before
+{
+    position: relative;
+    top: -4ex;
+    left: -0.5em;
+    content: "preview";
+}
+
+table
+{
+    border-collapse: collapse;
+}
+
+td, th
+{
+    border: 1px solid black;
+}
+
+div.edit textarea
+{
+    font-family: monospace;
+}
+
+h1
+{
+    clear: right;
+}
+
+ol li
+{
+    list-style-type: decimal;
+}
+
