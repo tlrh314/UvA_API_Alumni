@@ -208,8 +208,8 @@ class Degree(models.Model):
     # privacy levels
 
     class Meta:
-        verbose_name = _("Degree")
-        verbose_name_plural = _("Degrees")
+        verbose_name = _("Thesis")
+        verbose_name_plural = _("Theses")
 
     def __str__(self):
         return self.thesis_title

@@ -366,7 +366,7 @@ def add_phd_thesis_to_alumnus(alumnus, thesis_title, defence_date,
 
 
 def add_research_dot_models_dot_Thesis_to_Alumnus():
-    thesiscount = -1
+    thesiscount = 0
     for thesis in Thesis.objects.all():
         thesiscount += 1
         print("Eating: {0} / {1}".format(thesiscount, Thesis.objects.count()))
@@ -394,14 +394,12 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
         print("slug         =", thesis.slug)
 
         alumnus_set = Alumnus.objects.filter(last_name=last_name)
-        # Easy case: empty QuerySet means Alumnus does not exist yet, so created it.
         if not alumnus_set:
-            print("Alumnus does not exist yet. Create instance.")
+            # Alumnus does not exist, so create and add thesis.
             alumnus = create_alumnus("", "", "", initials,
                 prefix, last_name, "", "")
             add_phd_thesis_to_alumnus(alumnus, thesis.title, thesis.date,
                 thesis.url, thesis.slug, thesis.gender)
-            print("New Alumnus created, thesis added. Done\n")
             continue
         elif len(alumnus_set) == 1:
             alumnus = alumnus_set[0]
@@ -411,22 +409,35 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
             print("  last_name  =", alumnus.last_name)
 
             try:
-                if(alumnus.degree.title_of_thesis == thesis.title):
+                phd_degree = alumnus.degrees.filter(type="phd")[0]
+                if(phd_degree.thesis_title == thesis.title):
                     print("We already added the thesis to existing Alumnus. Done\n")
                     continue
                 else:
                     print("Alumnus does have a Degree, but title does not match.")
                     print("Dunno why")
                     return
-            except Degree.DoesNotExist as e:
+            except AttributeError as e:
                 print("Degree DoesNotExist")
-                if str(e) == "Alumnus has no degree.":
+                if str(e) == "'Alumnus' object has no attribute 'degree'":
                     add_phd_thesis_to_alumnus(alumnus, thesis.title,
                         thesis.date, thesis.url, thesis.slug, thesis.gender)
                     print("Thesis added to existing Alumnus. Done\n")
                     continue
                 else:
                     raise
+            except IndexError as e:
+                print("Alumnus has no Degree")
+                if str(e) == "list index out of range":
+                    add_phd_thesis_to_alumnus(alumnus, thesis.title,
+                        thesis.date, thesis.url, thesis.slug, thesis.gender)
+                    print("Thesis added to existing Alumnus. Done\n")
+                    continue
+                else:
+                    raise
+            else:
+                raise
+
         elif len(alumnus_set) > 1:
             print("We have {0} matching Alumnus instances.".format(alumnus_set.count()))
             i = -1
@@ -440,44 +451,43 @@ def add_research_dot_models_dot_Thesis_to_Alumnus():
 
                 if alumnus.initials.replace(".", "") == initials:
                     print("  Match found with Alumnus", i)
-                try:
-                    if(alumnus.phd.phd_thesis.title == thesis.title):
-                        print("We already added the thesis to existing Alumnus. Done\n")
-                        match_found = True
-                        break
-                    else:
-                        print("Alumnus does have a Degree, but title does not match.")
-                        print("Dunno why")
-                        return
-                except Degree.DoesNotExist as e:
-                    print("Degree DoesNotExist")
-                    if str(e) == "Alumnus has no degree.":
-                        add_phd_thesis_to_alumnus(alumnus, thesis.title,
-                            thesis.date, thesis.url, thesis.slug, thesis.gender)
-                        print("Thesis added to existing Alumnus. Done\n")
-                        match_found = True
-                        break
-                    else:
-                        raise
-
-                if match_found:
-                    continue
-                else:
-                    print("Match not found")
-                    alumnus = create_alumnus("", "", "",
-                        initials, prefix, last_name, "", "")
-                    add_msc_thesis_to_alumnus(alumnus, year_start, year, thesis_title, in_library,
-                        comments, supervisor=None)
-                    print("New Alumnus created, thesis added. Done\n")
-                    continue
-                return
+                    try:
+                        phd_degree = alumnus.degrees.filter(type="phd")[0]
+                        if(phd_degree.thesis_title == thesis.title):
+                            print("We already added the thesis to existing Alumnus. Done\n")
+                            match_found = True
+                            break
+                        else:
+                            print("Alumnus does have a Degree, but title does not match.")
+                            print("Dunno why")
+                            return
+                    except IndexError as e:
+                        print("Alumnus has no Degree")
+                        if str(e) == "list index out of range":
+                            add_phd_thesis_to_alumnus(alumnus, thesis.title,
+                                thesis.date, thesis.url, thesis.slug, thesis.gender)
+                            print("Thesis added to existing Alumnus. Done\n")
+                            match_found = True
+                            break
+                        else:
+                            raise
+            if match_found:
+                continue
+            else:
+                print("Match not found")
+                alumnus = create_alumnus("", "", "",
+                    initials, prefix, last_name, "", "")
+                add_phd_thesis_to_alumnus(alumnus, thesis.title, thesis.date, thesis.url,
+                    thesis.slug, thesis.gender)
+                print("New Alumnus created, thesis added. Done\n")
+                continue
 
 
 if __name__ == "__main__":
     # Gather data already present in existing API website
-    # copy_People_to_Alumnus()
-    # add_list_of_masterstudents_with_thesistitle()
-    # add_research_dot_models_dot_Thesis_to_Alumnus()
+    copy_People_to_Alumnus()
+    add_list_of_masterstudents_with_thesistitle()
+    add_research_dot_models_dot_Thesis_to_Alumnus()
     # create_position_instances()
     # add_info_from_latest_production_dump()
 
