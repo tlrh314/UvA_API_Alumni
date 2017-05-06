@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
+
+{% block title %}API - Research - Theses{% endblock title %}
+
+{% block content %}
+
+<h1 class="text-center">{{ thesis_title }}</h1>
+
+
+<div class="main-content" role="main"">
+
+    {{ alumnus.full_name }}
+</div>
+
+
+{% endblock content %}

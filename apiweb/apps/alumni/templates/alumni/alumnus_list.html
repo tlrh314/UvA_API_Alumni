@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
+
+{% block title %}API - Research - Theses{% endblock title %}
+
+{% block content %}
+
+<h1 class="text-center">{{ thesis_title }}</h1>
+
+
+<div class="main-content" role="main"">
+    {# TODO: Create filter, search, and add MSc and BSc theses? #} 
+    {# TODO: make Alumus clickable to show Alumnus page ? #} 
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Alumnus</th>
+                <th>TODO </th>
+                <th>TODO </th>
+            </tr>
+        </thead>
+        <tbody>
+        <h2 class="text-center">Total number of alumni: {{ alumni.count }}</h2>
+        {% for alumnus in alumni %}
+        <tr class="{% cycle '' 'info' %}">
+            <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name }}</a></td>
+                <td> </td>
+                <td> </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}

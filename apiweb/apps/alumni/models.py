@@ -215,21 +215,24 @@ class Degree(models.Model):
     def __str__(self):
         return self.thesis_title
 
-    def save(self, *args, **kwargs):
-        MAXCOUNT = 100
-        count = 0
-        base_slug = slugify(self.thesis_title)
-        self.thesis_slug = base_slug
-        # The following loop should prevent a DB exception when
-        # two people enter the same title at the same time
-        while count < MAXCOUNT:
-            try:
-                super(Degree, self).save(*args, **kwargs)
-            except IntegrityError:
-                count += 1
-                self.thesis_slug = base_slug + "_{0}".format(count)
-            else:
-                break
+    # Caution, now the pdf filename is slugify of the author name. This is
+    # now copied over from research.models.Thesis such that pdf url is correct
+    # So we do not slugify the thesis_title on save to avoid mismatch. TODO: fix slug on save
+    # def save(self, *args, **kwargs):
+    #     MAXCOUNT = 100
+    #     count = 0
+    #     base_slug = slugify(self.thesis_title)
+    #     self.thesis_slug = base_slug
+    #     # The following loop should prevent a DB exception when
+    #     # two people enter the same title at the same time
+    #     while count < MAXCOUNT:
+    #         try:
+    #             super(Degree, self).save(*args, **kwargs)
+    #         except IntegrityError:
+    #             count += 1
+    #             self.thesis_slug = base_slug + "_{0}".format(count)
+    #         else:
+    #             break
 
     @models.permalink
     def get_absolute_url(self):

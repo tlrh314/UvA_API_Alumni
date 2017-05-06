@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}API - Alumni{% endblock title %}
+
+{% block content %}
+
+<div class="main-content" role="main"">
+    {# TODO: Create filter, search, and add MSc and BSc theses? #} 
+    {# TODO: make Alumus clickable to show Alumnus page ? #} 
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author </th>
+                <th>Date of Defence</th>
+            </tr>
+        </thead>
+        <tbody>
+        <h2 class="text-center">Total number of degrees : {{ theses.count }}</h2>
+        {% for thesis in theses %}
+        <tr class="{% cycle '' 'info' %}">
+                <td><a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}
+                     </a>(<a href="{{ STATIC_URL }}research/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">PDF</a>)
+        [{{ forloop.revcounter }}]
+                
+                </td>
+                <td>{{ thesis.alumnus.full_name }}</td>
+                <td>{{ thesis.date_of_defence|date:"j M Y" }} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}

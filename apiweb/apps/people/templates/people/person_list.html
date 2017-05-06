@@ -31,40 +31,41 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-<h1 class="text-center">{{ who|capfirst }}</h1>
-
-
-{% for person in object_list %}
-<div class="panel panel-default">
-  <div class="panel-body">
- <table class="table">
- <tbody>
-  <tr>
-    <th> Name: </th>
-    <td width="50%"> <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a></td>
-   <td rowspan="5" valign="top" align="right">{% if person.mugshot %}<a href="{{ person.get_absolute_url }}"><img src="{{ person.mugshot.url }}" height="120" /></a>{% endif %}</td>
-  </tr>
-  <tr>
-        <th> Email: </th>
-        <td> <a href="mailto:{{ person.email }}">{{ person.email }}</a> </td>
-     </tr>
-     <tr>
-        <th> Position: </th>
-        <td>{% for position in person.position.all %}{{ position.name }}{% endfor %}</td>
-     </tr>
-{% if person.specification %}<tr><th></th><td>{{ person.specification }}</td></tr>{% endif %}
-     <tr>
-        <th> Office: </th>
-        <td>  <a href="{% url 'institute:contact' %}#maps"> {{ person.office }} </a> </td>
-     </tr>
-     <tr>
-        <th> Phone: </th>
-        <td> {{ person.work_phone }} </td>
-     </tr>
- <tbody>
- </table>
- </div>
- </div>
-{% endfor %}
-
+<div class="col-xs-9 main-content" role="main"> 
+    <h1 class="text-center">{{ who|capfirst }}</h1>
+    
+    {% for person in object_list %}
+    <div class="panel panel-default">
+      <div class="panel-body">
+     <table class="table">
+     <tbody>
+      <tr>
+        <th> Name: </th>
+        <td width="50%"> <a href="{{ person.get_absolute_url }}">{{ person.full_name }}</a></td>
+       <td rowspan="5" valign="top" align="right">{% if person.mugshot %}<a href="{{ person.get_absolute_url }}"><img src="{{ person.mugshot.url }}" height="120" /></a>{% endif %}</td>
+      </tr>
+      <tr>
+            <th> Email: </th>
+            <td> <a href="mailto:{{ person.email }}">{{ person.email }}</a> </td>
+         </tr>
+         <tr>
+            <th> Position: </th>
+            <td>{% for position in person.position.all %}{{ position.name }}{% endfor %}</td>
+         </tr>
+    {% if person.specification %}<tr><th></th><td>{{ person.specification }}</td></tr>{% endif %}
+         <tr>
+            <th> Office: </th>
+            <td>  <a href="{% url 'institute:contact' %}#maps"> {{ person.office }} </a> </td>
+         </tr>
+         <tr>
+            <th> Phone: </th>
+            <td> {{ person.work_phone }} </td>
+         </tr>
+     <tbody>
+     </table>
+     </div>
+     </div>
+    {% endfor %}
+    
 {% endblock content %}
+</div>
