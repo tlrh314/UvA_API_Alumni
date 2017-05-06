@@ -15,6 +15,7 @@ from django.db.models import permalink
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import python_2_unicode_compatible
 
+from jsonfield import JSONField
 from tinymce.models import HTMLField
 
 from ..research.models import ResearchTopic
@@ -34,18 +35,60 @@ def get_thesis_location(instance, filename):
 
 
 @python_2_unicode_compatible
-class CurrentPosition(models.Model):
+class PositionType(models.Model):
     name = models.CharField(max_length=80, help_text=_(
         "Name of position (e.g., director, faculty staff, postdoc, "
         "PhD student, ...)"))
     plural = models.CharField(max_length=80, blank=True, help_text=_(
         "Full plural name, if this is not a simple appended 's'"))
 
+    date_created = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+
+    class Meta:
+        verbose_name = _("Possible Type of Position at API")
+        verbose_name_plural = _("Possible Types of Position at API")
+
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse("people:position-list", kwargs={"position": self.name})
+
+@python_2_unicode_compatible
+class PreviousPosition(models.Model):
+    NOVA_NETWORK = (
+        ("NW1", "Nova Network 1"),
+        ("NW2", "Nova Network 2"),
+        ("NW3", "Nova Network 3"),
+        ("INS", "Instrumentation"),
+    )
+
+    FUNDING = (
+        (0, "Unknown"), (1, "ASTRON"), (2, "UvA"), (3, "SRON"), (4, "EC"),
+        (5, "NOVA"), (6, "NWO"), (7, "VU"),  (8, "KNAW"),
+        (9, "Other"),
+    )
+
+    alumnus          = models.ForeignKey("Alumnus", related_name="positions")
+    date_start       = models.DateField(_("Starting date"), blank=True, null=True)
+    date_stop        = models.DateField(_("Date finished"), blank=True, null=True)
+    type             = models.ForeignKey(PositionType, related_name="alumnus_set")
+    nova             = models.CharField(max_length=3, choices=NOVA_NETWORK, blank=True)
+    funding          = models.PositiveSmallIntegerField(_("Funding"), choices=FUNDING, default=0)
+    funding_note     = models.CharField(_("Funding Note"), blank=True, max_length=40)
+    funding_remark   = models.CharField(_("Funding Remark"), blank=True, max_length=40)
+    fte_per_year     = JSONField(blank=True, default=[], help_text="Enter mapping from year to fte in valid JSON syntax")
+    is_last          = models.BooleanField(_("This is the last known position at API"), default=False)
+
+    comments         = models.TextField(_("comments"), blank=True)
+    date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+
+    class Meta:
+        verbose_name = _("Previous Position at API")
+        verbose_name_plural = _("Previous Position at API")
+
+    def __str__(self):
+        return self.type.name
 
 
 @python_2_unicode_compatible
@@ -98,7 +141,7 @@ class Alumnus(models.Model):
     country         = models.CharField(_("country"), blank=True, max_length=40)
 
     # Current position at API
-    current_position= models.ManyToManyField(CurrentPosition, blank=True)
+    position        = models.ForeignKey(PositionType, blank=True, null=True, related_name="current_position")
     specification   = models.CharField(max_length=255, blank=True,
         help_text=_("Type of grant, or other indicator of funding"))
     office          = models.CharField(_("office"), blank=True, max_length=40)
@@ -111,6 +154,8 @@ class Alumnus(models.Model):
 
     # Extra information
     comments        = models.TextField(_("comments"), blank=True)
+    date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
     class Meta:
         verbose_name = _("Alumnus")
@@ -170,14 +215,6 @@ def delete_user(sender, instance=None, **kwargs):
         instance.user.delete()
 
 
-# class StudentSupervisorRelationship(models.Model):
-#     student = models.ForeignKey('Alumnus', related_name='student')
-#     supervisor = models.ForeignKey('Alumnus', related_name='supervisor')
-#
-#     class Meta:
-#         unique_together = ('student', 'supervisor')
-
-
 @python_2_unicode_compatible
 class Degree(models.Model):
     """ Represents a degree at API, either MSc or PhD.
@@ -200,17 +237,19 @@ class Degree(models.Model):
     date_of_defence  = models.DateField(_("Defence date"), blank=True, null=True, help_text=_("Date of the thesis or defense"))
     thesis_url       = models.URLField(blank=True, null=True, help_text=_("UvA DARE or other URL to thesis"))
     thesis_slug      = models.SlugField(blank=True, null=True, max_length=100, unique=True)
-    # thesis_advisor   = models.ManyToManyField("self", symmetrical=False, through=StudentSupervisorRelationship)
     thesis_advisor   = models.ManyToManyField(Alumnus, blank=True, related_name="students")
     thesis_in_library= models.BooleanField(blank=True, default=False)
+
     comments         = models.TextField(_("comments"), blank=True)
+    date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
     # students supervised --> class? anders kan je er maar een paar invullen
     # privacy levels
 
     class Meta:
-        verbose_name = _("Thesis")
-        verbose_name_plural = _("Theses")
+        verbose_name = _("MSc and/or PhD Thesis at API")
+        verbose_name_plural = _("MSc and/or PhD Theses at API")
 
     def __str__(self):
         return self.thesis_title
@@ -248,25 +287,6 @@ class Degree(models.Model):
 
 
 @python_2_unicode_compatible
-class PostdocPosition(models.Model):
-    #postdoc information @api
-    alumnus             = models.ForeignKey(Alumnus, related_name="postdoc")
-    date_start_postdoc  = models.DateField(_("date start postdoc"), blank=True, null=True)
-    date_stop_postdoc   = models.DateField(_("date stop postdoc"), blank=True, null=True)
-    #supervisors,
-    #field,
-
-    #privacy levels
-
-    class Meta:
-        verbose_name = _("PostDoc Position")
-        verbose_name_plural = _("PostDoc Positions")
-
-    def __str__(self):
-        return self.alumnus.last_name
-
-
-@python_2_unicode_compatible
 class JobAfterLeaving(models.Model):
     """ Represents a job after leaving API """
 
@@ -297,9 +317,13 @@ class JobAfterLeaving(models.Model):
     inside_academia     = models.PositiveSmallIntegerField(_("inside academia"), choices=outside_inside_choices, default=1)
     location_job        = models.PositiveSmallIntegerField(_("location job"), choices=location_job_choices, default=1)
 
+    comments            = models.TextField(_("comments"), blank=True)
+    date_created        = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated        = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+
     class Meta:
-        verbose_name = _("job")
-        verbose_name_plural = _("jobs")
+        verbose_name = _("Job After Leaving API")
+        verbose_name_plural = _("Jobs After Leaving API")
 
     def __str__(self):
         return self.alumnus.last_name

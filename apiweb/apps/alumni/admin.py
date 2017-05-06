@@ -12,14 +12,17 @@ from django.utils.translation import ugettext_lazy as _
 from tinymce.widgets import TinyMCE
 # from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
-from .models import CurrentPosition, Alumnus, Degree, PostdocPosition, JobAfterLeaving
+from .models import PositionType, PreviousPosition
+from .models import Alumnus, Degree, JobAfterLeaving
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 
 
 
-class JobAdminInline(admin.StackedInline):
+class JobAfterLeavingAdminInline(admin.StackedInline):
     model = JobAfterLeaving
+    readonly_fields = ("date_created", "date_updated")
     extra = 0
+
     fieldsets = [
         ( "Job information", {
             "fields":
@@ -30,11 +33,43 @@ class JobAdminInline(admin.StackedInline):
     ]
 
 
+@admin.register(JobAfterLeaving)
+class JobAfterLeavingAdmin(admin.ModelAdmin):
+    readonly_fields = ("date_created", "date_updated")
+
+
+class PreviousPositionInline(admin.StackedInline):
+    model = PreviousPosition
+    readonly_fields = ("date_created", "date_updated")
+    extra = 0
+
+
+class PreviousPositionAdminForm(forms.ModelForm):
+    nova = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.NOVA_NETWORK)
+    # Remove following line for dropdown.
+    funding = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.FUNDING)
+
+
+@admin.register(PreviousPosition)
+class PreviousPositionAdmin(admin.ModelAdmin):
+    # list_display = ("thesis_title", "get_author", "show_year", "type")
+    list_filter = ("type", )
+    # search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name",
+    #     "date_start", "date_stop", "date_of_defence")
+    # ordering = ("alumnus__user__username", )
+    # filter_horizontal = ( "thesis_advisor", )
+
+    form = PreviousPositionAdminForm
+    readonly_fields = ("date_created", "date_updated")
+    exclude = ("fte_per_year",)
+    extra = 1
+
 
 class DegreeAdminInline(admin.StackedInline):
     extra = 0
     model = Degree
     filter_horizontal = ("thesis_advisor", )
+    readonly_fields = ("date_created", "date_updated")
 
 
 class DegreeListFilter(admin.SimpleListFilter):
@@ -62,7 +97,8 @@ class DegreeAdmin(admin.ModelAdmin):
     search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name",
         "date_start", "date_stop", "date_of_defence")
     ordering = ("alumnus__user__username", )
-    filter_horizontal = ( "thesis_advisor", )
+    filter_horizontal = ("thesis_advisor", )
+    readonly_fields = ("date_created", "date_updated")
 
     max_num = 2
 
@@ -81,7 +117,7 @@ class DegreeAdmin(admin.ModelAdmin):
             }
         ), ( "Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments"]
+                "fields": ["comments",  "date_created", "date_updated"]
             }
         ),
     ]
@@ -99,17 +135,6 @@ class DegreeAdmin(admin.ModelAdmin):
         return None
     show_year.short_description = "Year"
 
-
-class PostdocPositionAdminInline(admin.StackedInline):
-    model = PostdocPosition
-    extra = 0
-    max_num = 1
-
-    # fieldsets = [
-    # ("Job information",
-    #     {"fields":["position_name", "current_job", "company_name", "start_date", "stop_date", "inside_academia", "location_job"]}
-    #     )
-    # ]
 
 class UserRawIdWidget(widgets.ForeignKeyRawIdWidget):
     """ Class to replace alumnus.user from dropdown to pk /w filter """
@@ -168,11 +193,11 @@ class AlumnusAdmin(admin.ModelAdmin):
     search_fields = ("first_name", "last_name", "degrees__thesis_title",
         "degrees__date_start", "degrees__date_stop", "degrees__date_of_defence")
     list_display = ("get_alumnus", "email", "show_msc_year", "show_phd_year")
-    list_filter = ("show_person", "current_position", AlumnusListFilter)
-    inlines = (DegreeAdminInline, PostdocPositionAdminInline, JobAdminInline)
+    list_filter = ("show_person", "position", AlumnusListFilter)
+    inlines = (DegreeAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
-    readonly_fields = ("get_full_name", )
+    readonly_fields = ("get_full_name", "date_created", "date_updated")
     # exclude = ("jobs", )
 
     fieldsets = [
@@ -203,13 +228,13 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         ("Current Position", {
                 "classes": ["collapse"],
-                 "fields": ["current_position", "office", "work_phone",
+                 "fields": ["position", "office", "work_phone",
                              "ads_name", "research", "contact"]
                 }),
 
         ("Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments"]
+                "fields": ["comments",  "date_created", "date_updated"]
                 }),
     ]
 
@@ -246,10 +271,9 @@ class AlumnusAdmin(admin.ModelAdmin):
     show_msc_year.short_description = "MSc"
 
 
-admin.site.register(CurrentPosition)
-admin.site.register(PostdocPosition)
-admin.site.register(JobAfterLeaving)
-
+@admin.register(PositionType)
+class PositionTypeAdmin(admin.ModelAdmin):
+    readonly_fields = ("date_created", "date_updated")
 
 
 
