@@ -20,7 +20,8 @@ import os.path
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-ADMINS =
+ADMINS = (('Admin Naam', 'Admin@emailaddress.com'),
+          ('Admin2 Naam', 'Admin2@emailaddress.com'),)
 
 MANAGERS = ADMINS
 
@@ -33,38 +34,40 @@ SEND_BROKEN_LINK_EMAILS = True
 # general contact about the webpage (next to secr-astro@science.uva.nl).
 # Should be replaced in due time with a proper (imap) email within the UvA
 # domain
-EMAIL_HOST_USER =
-EMAIL_HOST =
-EMAIL_HOST_PASSWORD =
-EMAIL_PORT =
-EMAIL_USE_TLS =
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+DEFAULT_FROM_EMAIL = "my-email-address@gmail.com"
+EMAIL_HOST_USER = "my-user-name@gmail.com"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_PASSWORD = "my-gmail-password"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
-GOOGLE_API_KEY =
-GOOGLE_CX_ID =
-FLICKR_APIKEY =
-FLICKR_USERID =
-FLICKR_SECRET =
-FLICKR_TOKEN_PATH =
+GOOGLE_API_KEY = 'secret'
+GOOGLE_CX_ID = 'secret'    # Custom search engine ID
+
+FLICKR_APIKEY = 'secret'
+FLICKR_USERID = 'secret'
+FLICKR_SECRET = 'secret'
+FLICKR_TOKEN_PATH = os.path.join(BASE_DIR, 'databases', 'flickr')
+
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.',
-        'NAME':
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'databases', 'apiweb.db'),
         },
     'wiki': {
-        'ENGINE': 'django.db.backends.',
-        'NAME':
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'databases', 'apiweb-wiki.db'),
         }
 }
-
-#DATABASE_ROUTERS =
+DATABASE_ROUTERS = ['apiweb.dbrouters.WikiRouter', 'apiweb.dbrouters.DefaultRouter']
 
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
-ALLOWED_IPS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_IPS = ['allowed-ups']
 
 
 # Local time zone for this installation. Choices can be found here:
@@ -78,7 +81,7 @@ DATETIME_FORMAT = 'j-n-Y H:i'
 
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY =
+SECRET_KEY = 'secret'
 
 
 # Absolute path to the directory static files should be collected to.
@@ -97,7 +100,7 @@ STATICFILES_DIRS = (
 
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION =
+WSGI_APPLICATION = 'apiweb.server.wsgi.application'
 
 
 # A sample logging configuration. The only tangible logging
@@ -128,4 +131,6 @@ LOGGING = {
         },
     }
 }
+
+
 
