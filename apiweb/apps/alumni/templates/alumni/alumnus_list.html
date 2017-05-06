@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load template_filters %}
+
 {% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
 
 {% block title %}API - Research - Theses{% endblock title %}
@@ -10,6 +12,53 @@
 
 
 <div class="main-content" role="main"">
+
+    <h2 class="text-center">Total number of alumni: {{ alumni.count }}</h2>
+
+    <!-- Filters --> 
+    <ul class="nav nav-pills selector-nav">  
+        <!-- Gender dropdown menu -->
+        <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">Gender<span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="{% filter_objects 'gender' 'None' %}"><i> Geen filter </i></a></li>
+                {% get_genders as genders %}
+                {% for choice in genders %}
+                <!-- Reset possible old filter and add store filter -->
+                <li>
+                    <a href="{% filter_objects 'gender' choice.0 %}" class="menu-link"> 
+                        <div class="menu-text"> {{ choice.1 }} </div>
+                        <img class="check-box" src="{% check_dropdown 'gender' choice.0 %}">
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <!-- Defence year dropdown menu -->
+        {% get_defence_years as years %}
+        <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">Year<span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="{% filter_objects 'year' 'None' %}"><i> Geen filter </i></a></li>
+                {% for year in years %}
+                <!-- Reset possible old filter and add store filter -->
+                <li>
+                    <a href="{% filter_objects 'year' year.1 %}" class="menu-link"> 
+                        <div class="menu-text"> {{ year.0 }} </div>
+                        <img class="check-box" src="{% check_dropdown 'year' year.1 %}">
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+
+    </ul>
+    <!-- End Filters --> 
+
     {# TODO: Create filter, search, and add MSc and BSc theses? #} 
     {# TODO: make Alumus clickable to show Alumnus page ? #} 
     <table class="table table-hover">
@@ -21,11 +70,19 @@
             </tr>
         </thead>
         <tbody>
-        <h2 class="text-center">Total number of alumni: {{ alumni.count }}</h2>
         {% for alumnus in alumni %}
         <tr class="{% cycle '' 'info' %}">
             <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name }}</a></td>
-                <td> </td>
+                <td> 
+                {% for degree in alumnus.degrees.all %}
+
+                {% if degree.type == 'msc'%}
+                    <strong>Msc:</strong> {{ degree.date_stop }} 
+                {% else %}
+                    <strong>phd:</strong>  {{ degree.date_of_defence }}
+                {% endif %}
+                {% endfor %}
+                </td>
                 <td> </td>
             </tr>
         {% endfor %}

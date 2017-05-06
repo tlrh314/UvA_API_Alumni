@@ -36,10 +36,44 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
+/* Style for dropdown filter */
+
+.menu-text {
+    float: left;
+    vertical-align: middle;
+    line-height: 25px;
+    max-width: 150px;
+    word-wrap: break-word;
+    white-space: initial;
+}
 
 .dropdown-menu>li>a {
     white-space: initial;
 }
+
+.menu-link {
+    display: inline-block !important;
+    vertical-align: middle;
+    min-width: 190px;
+    padding: 0px !important;
+    padding-left: 20px !important;
+    width: auto;
+}
+.check-box {
+    max-height: 15px;
+    float: right;
+    margin: 6px;
+    border-radius: 50%;
+    margin-right: 15px;
+    margin-left: 1px;
+    vertical-align: middle;
+}
+
+.dropdown-menu>li>a {
+    white-space: initial;
+}
+
+/* End style for dropdown filter */
 
 .container {
     position: relative;
