@@ -23,7 +23,7 @@
         [{{ forloop.revcounter }}]
                 
                 </td>
-                <td>{{ thesis.alumnus.full_name }}</td>
+                <td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td>
                 <td>{{ thesis.date_of_defence|date:"j M Y" }} </td>
             </tr>
         {% endfor %}

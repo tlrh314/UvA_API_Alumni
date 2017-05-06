@@ -42,7 +42,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        self.teaser = self.content[0:100] + "... read more"
+        self.teaser = self.content[0:200]
         self.date_created = timezone.now()
         super(Post, self).save(*args, **kwargs)
 
