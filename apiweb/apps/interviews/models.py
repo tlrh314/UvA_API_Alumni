@@ -7,6 +7,8 @@ from django.template.defaultfilters import slugify
 
 from tinymce.models import HTMLField
 
+from ..alumni.models import Alumnus
+
 # class Category(models.Model):
 #     title           = models.CharField(max_length=200, default="Category")
 #     type_id         = models.CharField(max_length=25, default="Unique ID")
@@ -48,6 +50,12 @@ class Post(models.Model):
         self.date_published = timezone.now()
         self.is_published = True
         self.save()
+
+    @property
+    def author_name(self):
+        alumnus = Alumnus.objects.get(user=self.author)
+        print(alumnus)
+        return alumnus.full_name
 
     def __str__(self):
         return self.title

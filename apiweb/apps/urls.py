@@ -49,8 +49,9 @@ urlpatterns = [
 
 
 
-    url(r'^news/',
-        include('apiweb.apps.news.urls', namespace='news')),
+    url(r'^interviews/', include('apiweb.apps.interviews.urls', namespace='interviews')),
+    # url(r'^news/',
+    #     include('apiweb.apps.news.urls', namespace='news')),
     url(r'^people/',
         include('apiweb.apps.people.urls', namespace='people')),
     # url(r'^education/',

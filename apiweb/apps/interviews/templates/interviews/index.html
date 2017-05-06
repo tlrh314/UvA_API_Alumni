@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}API - Alumni Interviews {% endblock title %}
+{% load interviewtags %}
+{% block content %}
+ <div id="fb-root"></div>
+
+ {# Begin of main content window #}
+ <div class="col-xs-9 main-content" role="main">
+    <div class="title-box">
+        <h1 class="text-center"> Alumni Interviews </h1>
+    </div>
+    {% for post in posts %}
+        {{ post.title }}
+        {{ post|author_name }}
+        {{ post.date_published }}
+    
+        {% autoescape off %}
+        {{ post.teaser }}
+        <a href="{{post.slug}}">Read more</a>
+        {% endautoescape %}
+    {% endfor %}
+</div>
+{% endblock %}
