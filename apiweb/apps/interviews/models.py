@@ -26,8 +26,8 @@ class Post(models.Model):
         help_text="Short teaser for in the bloglist")
     content         = HTMLField(default="")
     is_published    = models.BooleanField(default=False)
-    date_created    = models.DateTimeField(blank=True, null=True)
-    date_published  = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    date_created    = models.DateTimeField(auto_now_add=True)
+    date_published  = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     # category = models.ForeignKey(Category, help_text='Category', default=1)
     # featured = models.BooleanField(default=False,
@@ -43,7 +43,6 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         self.teaser = self.content[0:200]
-        self.date_created = timezone.now()
         super(Post, self).save(*args, **kwargs)
 
     def publish(self):

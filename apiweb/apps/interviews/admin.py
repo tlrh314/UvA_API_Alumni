@@ -29,6 +29,7 @@ class InterviewAdmin(admin.ModelAdmin):
     list_filter = ("is_published", )
     form = InterviewAdminForm
     actions = ("publish", "unpublish" )
+    readonly_fields = ("date_created", "date_published")
 
     fieldsets = [
         ("Alumni Interview", {

@@ -42,10 +42,12 @@ class PositionType(models.Model):
     plural = models.CharField(max_length=80, blank=True, help_text=_(
         "Full plural name, if this is not a simple appended 's'"))
 
+    date_created = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+
     class Meta:
         verbose_name = _("Possible Type of Position at API")
         verbose_name_plural = _("Possible Types of Position at API")
-
 
     def __str__(self):
         return self.name
@@ -76,6 +78,10 @@ class PreviousPosition(models.Model):
     funding_remark   = models.CharField(_("Funding Remark"), blank=True, max_length=40)
     fte_per_year     = JSONField(blank=True, default=[], help_text="Enter mapping from year to fte in valid JSON syntax")
     is_last          = models.BooleanField(_("This is the last known position at API"), default=False)
+
+    comments         = models.TextField(_("comments"), blank=True)
+    date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
     class Meta:
         verbose_name = _("Previous Position at API")
@@ -148,6 +154,8 @@ class Alumnus(models.Model):
 
     # Extra information
     comments        = models.TextField(_("comments"), blank=True)
+    date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
     class Meta:
         verbose_name = _("Alumnus")
@@ -207,14 +215,6 @@ def delete_user(sender, instance=None, **kwargs):
         instance.user.delete()
 
 
-# class StudentSupervisorRelationship(models.Model):
-#     student = models.ForeignKey('Alumnus', related_name='student')
-#     supervisor = models.ForeignKey('Alumnus', related_name='supervisor')
-#
-#     class Meta:
-#         unique_together = ('student', 'supervisor')
-
-
 @python_2_unicode_compatible
 class Degree(models.Model):
     """ Represents a degree at API, either MSc or PhD.
@@ -237,10 +237,12 @@ class Degree(models.Model):
     date_of_defence  = models.DateField(_("Defence date"), blank=True, null=True, help_text=_("Date of the thesis or defense"))
     thesis_url       = models.URLField(blank=True, null=True, help_text=_("UvA DARE or other URL to thesis"))
     thesis_slug      = models.SlugField(blank=True, null=True, max_length=100, unique=True)
-    # thesis_advisor   = models.ManyToManyField("self", symmetrical=False, through=StudentSupervisorRelationship)
     thesis_advisor   = models.ManyToManyField(Alumnus, blank=True, related_name="students")
     thesis_in_library= models.BooleanField(blank=True, default=False)
+
     comments         = models.TextField(_("comments"), blank=True)
+    date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
     # students supervised --> class? anders kan je er maar een paar invullen
     # privacy levels
@@ -314,6 +316,10 @@ class JobAfterLeaving(models.Model):
     stop_date           = models.DateField(_("date start job"), blank=True, null=True)
     inside_academia     = models.PositiveSmallIntegerField(_("inside academia"), choices=outside_inside_choices, default=1)
     location_job        = models.PositiveSmallIntegerField(_("location job"), choices=location_job_choices, default=1)
+
+    comments            = models.TextField(_("comments"), blank=True)
+    date_created        = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated        = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
     class Meta:
         verbose_name = _("Job After Leaving API")

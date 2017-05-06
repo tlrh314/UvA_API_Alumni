@@ -20,7 +20,9 @@ from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 
 class JobAfterLeavingAdminInline(admin.StackedInline):
     model = JobAfterLeaving
+    readonly_fields = ("date_created", "date_updated")
     extra = 0
+
     fieldsets = [
         ( "Job information", {
             "fields":
@@ -31,8 +33,14 @@ class JobAfterLeavingAdminInline(admin.StackedInline):
     ]
 
 
+@admin.register(JobAfterLeaving)
+class JobAfterLeavingAdmin(admin.ModelAdmin):
+    readonly_fields = ("date_created", "date_updated")
+
+
 class PreviousPositionInline(admin.StackedInline):
     model = PreviousPosition
+    readonly_fields = ("date_created", "date_updated")
     extra = 0
 
 
@@ -52,6 +60,7 @@ class PreviousPositionAdmin(admin.ModelAdmin):
     # filter_horizontal = ( "thesis_advisor", )
 
     form = PreviousPositionAdminForm
+    readonly_fields = ("date_created", "date_updated")
     exclude = ("fte_per_year",)
     extra = 1
 
@@ -60,6 +69,7 @@ class DegreeAdminInline(admin.StackedInline):
     extra = 0
     model = Degree
     filter_horizontal = ("thesis_advisor", )
+    readonly_fields = ("date_created", "date_updated")
 
 
 class DegreeListFilter(admin.SimpleListFilter):
@@ -87,7 +97,8 @@ class DegreeAdmin(admin.ModelAdmin):
     search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name",
         "date_start", "date_stop", "date_of_defence")
     ordering = ("alumnus__user__username", )
-    filter_horizontal = ( "thesis_advisor", )
+    filter_horizontal = ("thesis_advisor", )
+    readonly_fields = ("date_created", "date_updated")
 
     max_num = 2
 
@@ -106,7 +117,7 @@ class DegreeAdmin(admin.ModelAdmin):
             }
         ), ( "Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments"]
+                "fields": ["comments",  "date_created", "date_updated"]
             }
         ),
     ]
@@ -186,7 +197,7 @@ class AlumnusAdmin(admin.ModelAdmin):
     inlines = (DegreeAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
-    readonly_fields = ("get_full_name", )
+    readonly_fields = ("get_full_name", "date_created", "date_updated")
     # exclude = ("jobs", )
 
     fieldsets = [
@@ -223,7 +234,7 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         ("Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments"]
+                "fields": ["comments",  "date_created", "date_updated"]
                 }),
     ]
 
@@ -260,9 +271,9 @@ class AlumnusAdmin(admin.ModelAdmin):
     show_msc_year.short_description = "MSc"
 
 
-admin.site.register(PositionType)
-admin.site.register(JobAfterLeaving)
-
+@admin.register(PositionType)
+class PositionTypeAdmin(admin.ModelAdmin):
+    readonly_fields = ("date_created", "date_updated")
 
 
 
