@@ -233,7 +233,7 @@ class Degree(models.Model):
     date_stop        = models.DateField(_("Date finished"), blank=True, null=True)
 
     # Information about the thesis
-    thesis_title = models.CharField(_("Thesis Title"), blank=True, max_length=180)
+    thesis_title     = models.CharField(_("Thesis Title"), blank=True, max_length=180)
     date_of_defence  = models.DateField(_("Defence date"), blank=True, null=True, help_text=_("Date of the thesis or defense"))
     thesis_url       = models.URLField(blank=True, null=True, help_text=_("UvA DARE or other URL to thesis"))
     thesis_slug      = models.SlugField(blank=True, null=True, max_length=100, unique=True)
@@ -241,8 +241,8 @@ class Degree(models.Model):
     thesis_in_library= models.BooleanField(blank=True, default=False)
 
     comments         = models.TextField(_("comments"), blank=True)
-    date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
-    date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+    date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
     # students supervised --> class? anders kan je er maar een paar invullen
     # privacy levels

@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load  template_filters %}
+
 {% block title %}API - Alumni{% endblock title %}
 
 {% block content %}
@@ -6,6 +8,7 @@
 <div class="main-content" role="main"">
     {# TODO: Create filter, search, and add MSc and BSc theses? #} 
     {# TODO: make Alumus clickable to show Alumnus page ? #} 
+
     <table class="table table-hover">
         <thead>
             <tr>
@@ -15,20 +18,49 @@
             </tr>
         </thead>
         <tbody>
-        <h2 class="text-center">Total number of degrees : {{ theses.count }}</h2>
-        {% for thesis in theses %}
-        <tr class="{% cycle '' 'info' %}">
-                <td><a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}
-                     </a>(<a href="{{ STATIC_URL }}research/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">PDF</a>)
-        [{{ forloop.revcounter }}]
+
+            <div class="pagination-custom pull-right">
+                <nav class="content-pagination">
+                    <a href="#" class='older fontawesome-angle-left' title='Older'></a>
+                    
+                    {% if theses.has_previous %}
+                        <a href="{% filter_theses 'page' 1 %}"><i class="fa fa-angle-double-left fa-lg" aria-hidden="true"></i></a>
+                        <a href="{% filter_theses 'page' theses.previous_page_number %}"><i class="fa fa-angle-left fa-lg" style="max-width: 6px;"></i></a>
+                    {% endif %}
                 
-                </td>
-                <td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td>
-                <td>{{ thesis.date_of_defence|date:"j M Y" }} </td>
+                    <span class="pagination-text">
+                        Page {{ theses.number }} of {{ theses.paginator.num_pages }}
+                    </span>
+                
+                    {% if theses.has_next %}
+                        <a href="{% filter_theses 'page' theses.next_page_number %}"><i class="fa fa-angle-right fa-lg"></i></a>
+                        <a href="{% filter_theses 'page' theses.paginator.num_pages %}"><i class="fa fa-angle-double-right fa-lg" aria-hidden="true"></i></a>
+                    {% endif %}
+                </nav>
+            </div>
+
+        <h2 class="text-center">Total number of degrees : {{ theses.paginator.count }}</h2>
+        {% for thesis, has_title, has_pdf in theses_title_pdf %}
+        <tr class="{% cycle '' 'info' %}">
+            <td> {% if has_title %}
+                    <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}
+                {% else %}
+                    <a href="mailto:secr-astro-science@uva.nl>Title Unknown. Click here if you know the title!</a>
+                {% endif %}
+                {% if has_pdf %}
+                    (<a href="{{ STATIC_URL }}research/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">PDF</a>)
+                {% else %}
+                    (<a href="TODO pdf missing contact form">PDF</a>)
+                {% endif %}
+                [{{ forloop.revcounter }}]
+            </td>
+            <td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td>
+            <td>{{ thesis.date_of_defence|date:"j M Y" }} </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
 </div>
 
 

@@ -74,19 +74,36 @@ def check_dropdown(context, filter_type, value):
 @register.simple_tag(name='get_defence_years')
 def get_defence_years():
 
-	options = [('1960 - 1969', 1960, 1969),
-			   ('1970 - 1979', 1970, 1979),
-			   ('1980 - 1989', 1980, 1989),
-			   ('1990 - 1999', 1990, 1999),
-			   ('2000 - 2009', 2000, 2009),
-			   ('2010 - 2019', 2010, 2019)]
+    options = [('1960 - 1969', 1960, 1969),
+               ('1970 - 1979', 1970, 1979),
+               ('1980 - 1989', 1980, 1989),
+               ('1990 - 1999', 1990, 1999),
+               ('2000 - 2009', 2000, 2009),
+               ('2010 - 2019', 2010, 2019)]
 
-	return options
+    return options
 
 @register.simple_tag(name='get_genders')
 def get_genders():
-	return Alumnus.GENDER_CHOICES
+    return Alumnus.GENDER_CHOICES
 
 @register.simple_tag(name='get_degree_types')
 def get_degree_types():
     return Degree.DEGREE_TYPE
+
+
+@register.simple_tag(name='filter_theses', takes_context=True)
+def filter_theses(context, filter_type, value):
+    """ Takes two string parameters: filtertype is the thesis type that will be
+    filtered, value is the subselection that is wanted. """
+
+    url = URLObject(context.request.get_full_path())
+
+    filterdict = url.query.multi_dict
+
+    if filter_type == 'page':
+        new_url = url.set_query_param(filter_type, value)
+        return new_url
+
+    # If you add a new filter you start at page 1 again
+    url = url.del_query_param('page')

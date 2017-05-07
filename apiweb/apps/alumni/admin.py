@@ -279,15 +279,20 @@ class AlumnusAdmin(admin.ModelAdmin):
 
     def sent_password_reset(self, request, queryset):
         for alumnus in queryset:
+            if alumnus.user.email != alumnus.email:
+                alumnus.user.email = alumnus.email
+                alumnus.save()
             try:
                 validate_email( alumnus.email )
+                print(alumnus.full_name)
                 form = PasswordResetForm(data={'email': alumnus.email})
                 form.is_valid()
-                form.save(email_template_name='registration/password_forced_reset_email.html')
+                form.save(email_template_name='registration/password_forced_reset_email.html',
+                          extra_email_context = {'full_name': alumnus.full_name})
                 self.message_user(request, "Succesfully sent password reset email.")
             except ValidationError:
                 self.message_user(request, "Alumnus does not have a valid email address", level="error")
-    sent_password_reset.short_description = "Sent Selected Alumni Password Reset"
+    sent_password_reset.short_description = "Sent selected Alumni Password Reset"
 
     def export_to_excel(self, request, queryset):
         pass
@@ -295,7 +300,7 @@ class AlumnusAdmin(admin.ModelAdmin):
         #for obj in queryset:
         #    obj.publish()
         self.message_user(request, "This function is not yet implemented.", level="error")
-    export_to_excel.short_description = "Export Selected Alumni to Excel"
+    export_to_excel.short_description = "Export selected Alumni to Excel"
 
 
 @admin.register(PositionType)
