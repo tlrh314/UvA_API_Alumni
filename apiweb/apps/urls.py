@@ -16,11 +16,11 @@ handler404 = 'main.views.page_not_found'
 handler500 = 'main.views.page_not_found'
 
 urlpatterns = [
-    url('^', include('django.contrib.auth.urls')),
     url(r'^login/$', auth_views.LoginView.as_view(template_name='registration/login.html')),
     url(r'^admin/filebrowser/', include(filebrowser.sites.site.urls)),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include('django.contrib.auth.urls')),
 
     url(r'^alumni/', include('apiweb.apps.alumni.urls', namespace='alumni')),
     url(r'^interviews/', include('apiweb.apps.interviews.urls', namespace='interviews')),

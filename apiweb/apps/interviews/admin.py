@@ -51,9 +51,13 @@ class InterviewAdmin(admin.ModelAdmin):
         for obj in queryset:
             obj.publish()
 
+        self.message_user(request, "Interview successfully published.")
+
+
     publish.short_description = "Publish selected post"
 
     def unpublish(self, request, queryset):
         queryset.update(is_published=False)
+        self.message_user(request, "Interview successfully unpublished.")
     unpublish.short_description = "Unpublish selected post"
 

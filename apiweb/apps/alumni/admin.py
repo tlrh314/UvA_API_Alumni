@@ -7,6 +7,9 @@ from django.contrib import admin
 from django.contrib.admin import widgets
 from django.contrib.admin.sites import site
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordResetForm
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from tinymce.widgets import TinyMCE
@@ -201,6 +204,7 @@ class AlumnusAdmin(admin.ModelAdmin):
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
     readonly_fields = ("get_full_name", "date_created", "date_updated")
+    actions = ("sent_password_reset", "export_to_excel")
     # exclude = ("jobs", )
 
     fieldsets = [
@@ -272,6 +276,26 @@ class AlumnusAdmin(admin.ModelAdmin):
                 return degrees[0].date_stop.strftime("%Y")
         return None
     show_msc_year.short_description = "MSc"
+
+    def sent_password_reset(self, request, queryset):
+        for alumnus in queryset:
+            try:
+                validate_email( alumnus.email )
+                form = PasswordResetForm(data={'email': alumnus.email})
+                form.is_valid()
+                form.save(email_template_name='registration/password_forced_reset_email.html')
+                self.message_user(request, "Succesfully sent password reset email.")
+            except ValidationError:
+                self.message_user(request, "Alumnus does not have a valid email address", level="error")
+    sent_password_reset.short_description = "Sent Selected Alumni Password Reset"
+
+    def export_to_excel(self, request, queryset):
+        pass
+        # TODO: implement Excel export
+        #for obj in queryset:
+        #    obj.publish()
+        self.message_user(request, "This function is not yet implemented.", level="error")
+    export_to_excel.short_description = "Export Selected Alumni to Excel"
 
 
 @admin.register(PositionType)
