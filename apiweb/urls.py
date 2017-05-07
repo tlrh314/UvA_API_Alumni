@@ -17,6 +17,9 @@ if 'runserver' in sys.argv:
         # special URLs
         # url(r'^media/uploads/staff_meetings/',
         #     include('apiweb.apps.staffmeetings.media_urls')),
+        url(r'^static/(?P<path>.*)$',
+            django.views.static.serve,
+            {'document_root': settings.STATIC_ROOT}),
         url(r'^media/(?P<path>.*)$',
             django.views.static.serve,
             {'document_root': settings.MEDIA_ROOT}),

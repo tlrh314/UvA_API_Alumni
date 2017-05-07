@@ -131,7 +131,7 @@ INSTALLED_APPS = (
     # 'apiweb.apps.agenda',
     # 'apiweb.apps.apogee',
     # 'apiweb.apps.library',
-    # 'apiweb.apps.search',
+    'apiweb.apps.search',
     # 'apiweb.apps.old',
 
     # 'nested_inline',
@@ -143,7 +143,8 @@ INSTALLED_APPS = (
 )
 
 # login URL for auth app
-LOGIN_URL = '/internal/account/login/'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 
 NEWS_LANGUAGES = ('en', 'nl')
 #NEWS_LANGUAGES = ('en',)  # 'nl')

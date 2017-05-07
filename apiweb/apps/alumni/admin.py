@@ -17,6 +17,9 @@ from .models import Alumnus, Degree, JobAfterLeaving
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 
 
+from django.contrib.sites.models import Site
+admin.site.unregister(Site)
+
 
 class JobAfterLeavingAdminInline(admin.StackedInline):
     model = JobAfterLeaving

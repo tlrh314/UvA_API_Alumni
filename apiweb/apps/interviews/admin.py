@@ -46,6 +46,7 @@ class InterviewAdmin(admin.ModelAdmin):
         form.base_fields["author"].initial = request.user
         return form
 
+    # TODO: make publish/unpublish show up in recent actions
     def publish(self, request, queryset):
         for obj in queryset:
             obj.publish()

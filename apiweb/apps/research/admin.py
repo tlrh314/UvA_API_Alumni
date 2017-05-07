@@ -5,6 +5,7 @@ from .models import ResearchTopic, Thesis
 from ...settings import ADMIN_MEDIA_JS
 
 
+#@admin.register(ResearchTopic)
 class ResearchTopicAdmin(admin.ModelAdmin):
 
     list_filter = ('topic',)
@@ -16,6 +17,7 @@ class ResearchTopicAdmin(admin.ModelAdmin):
         js = ADMIN_MEDIA_JS
 
 
+#@admin.register(Thesis)
 class ThesisAdmin(admin.ModelAdmin):
 
     list_filter = ('author',)
@@ -23,7 +25,3 @@ class ThesisAdmin(admin.ModelAdmin):
     search_fields = ('author', 'title')
     ordering = ('-date',)
     fields = ('author', 'gender', 'title', 'date', 'type', 'url')
-
-
-admin.site.register(ResearchTopic, ResearchTopicAdmin)
-admin.site.register(Thesis, ThesisAdmin)

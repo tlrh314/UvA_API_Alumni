@@ -4,11 +4,11 @@ from django.contrib import admin
 from .models import Person, Position
 
 
-@admin.register(Position)
+#@admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
     pass
 
-
+#@admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
 
     list_filter = ('show_person', 'position')
@@ -31,6 +31,3 @@ class PersonAdmin(admin.ModelAdmin):
         ('Extra information',
          {'fields': ['comments']}),
     ]
-
-
-admin.site.register(Person, PersonAdmin)

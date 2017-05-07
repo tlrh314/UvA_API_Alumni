@@ -1,73 +1,51 @@
 from __future__ import unicode_literals, absolute_import, division
 
+import filebrowser.sites
+
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 import django.contrib.sitemaps.views
-# from .main.sitemap import sitemaps
-from .main.views import MainView, HomeView, ScatterView, LowercaseView
-from .main.views import SitemapView, AboutView, TwentyFourSevenView
-import filebrowser.sites
+
+from .main.views import index
 
 
 admin.autodiscover()
 
+handler404 = 'main.views.page_not_found'
+handler500 = 'main.views.page_not_found'
+
 urlpatterns = [
-    url(r'^.*[A-Z]+.*$',
-        view=LowercaseView.as_view(),
-        name='redirect-uppercase'),
-
-    # url(r'^media/uploads/staff_meetings/',
-    #     include('apiweb.apps.staffmeetings.media_urls')),
-
-    url(r'^admin/filebrowser/',
-        include(filebrowser.sites.site.urls)),
+    url('^', include('django.contrib.auth.urls')),
+    url(r'^login/$', auth_views.LoginView.as_view(template_name='registration/login.html')),
+    url(r'^admin/filebrowser/', include(filebrowser.sites.site.urls)),
     url(r'^tinymce/', include('tinymce.urls')),
-
-    url(r'^admin/',
-        include(admin.site.urls)),
-    url(
-        r'^admin/password_reset/$',
-        auth_views.PasswordResetView.as_view(),
-        name='admin_password_reset',
-    ),
-    url(
-        r'^admin/password_reset/done/$',
-        auth_views.PasswordResetDoneView.as_view(),
-        name='password_reset_done',
-    ),
-    url(
-        r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
-        auth_views.PasswordResetConfirmView.as_view(),
-        name='password_reset_confirm',
-    ),
-    url(
-        r'^reset/done/$',
-        auth_views.PasswordResetCompleteView.as_view(),
-        name='password_reset_complete',
-    ),
-
-
+    url(r'^admin/', include(admin.site.urls)),
 
     url(r'^alumni/', include('apiweb.apps.alumni.urls', namespace='alumni')),
     url(r'^interviews/', include('apiweb.apps.interviews.urls', namespace='interviews')),
     url(r'^search/', include('apiweb.apps.search.urls', namespace='search')),
+    url(r'^$', index, name='index'),
+
+    # TODO: clean up code below
+
+    # url(r'^.*[A-Z]+.*$',
+    #     view=LowercaseView.as_view(),
+    #     name='redirect-uppercase'),
+
+    # url(r'^media/uploads/staff_meetings/',
+    #     include('apiweb.apps.staffmeetings.media_urls')),
 
     # redirects
-    url(r'^scatter/(?P<arguments>.*)$',
-        view=ScatterView.as_view(),
-        name='scatter'),
-    url(r'^home2.html$',
-        view=HomeView.as_view(),
-        name='home2'),
-    url(r'^home.html$',
-        view=HomeView.as_view(),
-        name='home'),
-
-    # base URL
-    url(r'^$',
-        MainView.as_view(),
-        name='home-page'),
+    # url(r'^scatter/(?P<arguments>.*)$',
+    #     view=ScatterView.as_view(),
+    #     name='scatter'),
+    # url(r'^home2.html$',
+    #     view=HomeView.as_view(),
+    #     name='home2'),
+    # url(r'^home.html$',
+    #     view=HomeView.as_view(),
+    #    name='home'),
 
     # url(r'^people/',
     #     include('apiweb.apps.people.urls', namespace='people')),
