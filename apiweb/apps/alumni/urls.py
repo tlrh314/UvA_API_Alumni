@@ -13,6 +13,4 @@ urlpatterns = [
     url(r'^theses/(?P<thesis_slug>.*)/$', thesis_detail, name='thesis-detail'),
     url(r'^$', view=alumnus_list, name='alumnus-list'),
     url(r'alumnus/(?P<slug>.*)/$', alumnus_detail, name='alumnus-detail'),
-    url(r'(?P<gender>.*)/$', view=alumnus_list, name='alumnus-list'),
-    url(r'(?P<year>.*)/$', view=alumnus_list, name='alumnus-list'),
 ]

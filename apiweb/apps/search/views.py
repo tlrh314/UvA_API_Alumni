@@ -3,9 +3,12 @@ from __future__ import unicode_literals, absolute_import, division
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views.generic import FormView
+from django.shortcuts import render
+from django.db.models import Q
 from ...settings import GOOGLE_API_KEY
 from ...settings import GOOGLE_CX_ID
 from .forms import SearchForm
+from ..alumni.models import Alumnus, Degree
 try:
     from urllib import urlencode
     from urllib2 import urlopen, URLError
@@ -13,7 +16,17 @@ except ImportError:
     from urllib.parse import urlencode
     from urllib.request import urlopen, URLError
 import json
+from functools import reduce
 
+def search(request):
+    print('Search view called!')
+    terms = request.GET.getlist('terms', '')
+    # alumni = Alumnus.objects.all()
+    # Get all distinct objects with titles that contain at least 1 of the words
+    results = Alumnus.objects.filter(reduce(lambda x, y: x | y,
+                                [Q(last_name__icontains=word) | Q(degrees__thesis_title__icontains=word) for word in terms])).distinct()
+
+    return render(request, 'search/search_results.html', {"alumni": results})
 
 class SearchView(FormView):
 

@@ -16,6 +16,7 @@ def alumnus_list(request):
     # Get filters
     gender = request.GET.getlist('gender', None)
     defence_year = request.GET.getlist('year', None)
+    degree_type = request.GET.getlist('type', None)
 
     # Apply filters
     if gender:
@@ -31,17 +32,16 @@ def alumnus_list(request):
     		multifilter = multifilter | Q(degrees__date_of_defence__range=date_range)
     		multifilter = multifilter | Q(degrees__date_stop__range=date_range)
 
-    	alumni = alumni.filter(multifilter)
-    		# alumni = alumni.filter(degrees__date_of_defence__range=date_range)
+    	alumni = alumni.filter(multifilter).distinct()
 
-    # Degree.objects.all()
-    # if defence:
-    	# alumni = alumni.filter(degrees.date_of_defence=defence)
+    if degree_type:
+    	multifilter = Q()
+    	for degree in degree_type:
+    		multifilter = multifilter | Q(degrees__type=degree)
 
+    	alumni = alumni.filter(multifilter).distinct()
+    	   	
 
-    # print(alumni[0].GENDER_CHOICES)
-
-    # defence_years = alumni.
     return render(request, "alumni/alumnus_list.html", {"alumni": alumni})
 
 def alumnus_detail(request, slug):

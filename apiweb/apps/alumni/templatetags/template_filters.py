@@ -2,6 +2,7 @@ from django import template
 from urlobject import URLObject
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from ..models import Alumnus
+from ..models import Degree
 
 register = template.Library()
 
@@ -85,3 +86,7 @@ def get_defence_years():
 @register.simple_tag(name='get_genders')
 def get_genders():
 	return Alumnus.GENDER_CHOICES
+
+@register.simple_tag(name='get_degree_types')
+def get_degree_types():
+    return Degree.DEGREE_TYPE
