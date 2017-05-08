@@ -5,32 +5,39 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 
-
 from .models import ContactInfo
 
+
 def index(request):
-    return render(request, 'main/index.html')
+    return render(request, "main/index.html")
+
 
 def page_not_found(request):
-    return render(request, 'main/404.html', {'contactinfo': ContactInfo.objects.all()[0]})
+    contactinfo = ContactInfo.objects.all()
+    if contactinfo:
+        webmaster_email_address = contactinfo[0].webmaster_email_address
+    else:
+        # Hardcoded in case ContactInfo has no instances.
+        webmaster_email_address = "secr-astro-science@uva.nl"
+    return render(request, "404.html", {"webmaster_email_address": webmaster_email_address})
 
 
 # TODO: clean up code below
 class MainView(TemplateView):
-    template_name = 'main/index.html'
+    template_name = "main/index.html"
 
     def get_context_data(self, **kwargs):
         context = super(MainView, self).get_context_data(**kwargs)
         return context
 
 class SitemapView(TemplateView):
-    template_name = 'main/sitemap.html'
+    template_name = "main/sitemap.html"
 
 class AboutView(TemplateView):
-    template_name = 'main/about.html'
+    template_name = "main/about.html"
 
 class TwentyFourSevenView(TemplateView):
-    template_name = 'main/247.html'
+    template_name = "main/247.html"
 
 
 # Redirect views
@@ -39,7 +46,7 @@ class HomeView(RedirectView):
     permanent = True
 
     def get_redirect_url(self, **kwargs):
-        return reverse('home-page')
+        return reverse("home-page")
 
 
 class ScatterView(RedirectView):
@@ -69,9 +76,9 @@ class DetailRedirectView(RedirectView):
     easily be given through as_view() in the url configuration, for
     example:
 
-        url(r'^pizza/detail/(?P<slug>[-\w]+)/$',
+        url(r"^pizza/detail/(?P<slug>[-\w]+)/$",
             view=RedirectView.as_view(model=Pizza),
-            name='pizza-redirect'),
+            name="pizza-redirect"),
 
     """
 
@@ -79,10 +86,10 @@ class DetailRedirectView(RedirectView):
     permanent = True
 
     def get_redirect_url(self, *args, **kwargs):
-        item = self.model.objects.filter(slug=kwargs['slug']).first()
+        item = self.model.objects.filter(slug=kwargs["slug"]).first()
         if not item:
             try:
-                item = self.model.objects.filter(pk=kwargs['slug']).first()
+                item = self.model.objects.filter(pk=kwargs["slug"]).first()
             except ValueError as exc:
                 if str(exc).startswith("invalid literal for int()"):
                     raise Http404
