@@ -139,7 +139,7 @@ INSTALLED_APPS = (
     'apiweb.apps.alumni',
     'apiweb.apps.interviews',
 
-    # 'bootstrap3',
+    'bootstrap3',
 )
 
 # login URL for auth app

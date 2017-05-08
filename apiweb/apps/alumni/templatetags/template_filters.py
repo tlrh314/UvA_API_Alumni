@@ -6,13 +6,13 @@ from ..models import Degree
 
 register = template.Library()
 
+
 @register.simple_tag(name='filter_objects', takes_context=True)
 def filter_objects(context, filter_type, value):
-    '''
-    Takes two string parameters: filtertype is the category that will be
+    """ Takes two string parameters: filtertype is the category that will be
     filtered (e.g. "store_filter"), value is the subselection that is wanted
-    (e.g. store ID).
-    '''
+    (e.g. store ID). """
+
     url = URLObject(context.request.get_full_path())
 
     filterdict = url.query.multi_dict
@@ -52,12 +52,12 @@ def filter_objects(context, filter_type, value):
 
     return new_url
 
+
 @register.simple_tag(name='check_dropdown', takes_context=True)
 def check_dropdown(context, filter_type, value):
-    '''
-    Checks for each filter type and value if the dropdown checkbox should
-    be marked or not (whether it is on or off)
-    '''
+    """ Checks for each filter type and value if the dropdown checkbox should
+    be marked or not (whether it is on or off) """
+
     url = URLObject(context.request.get_full_path())
 
     # Get dictionary of all the filter types and values in the url
@@ -71,29 +71,36 @@ def check_dropdown(context, filter_type, value):
     # If it is not in the dictionary return the empty checkbox
     return static('img/checkbox-off.png') # "http://www.clipartbest.com/cliparts/LiK/rrX/LiKrrXy4T.png"
 
+
 @register.simple_tag(name='get_defence_years')
 def get_defence_years():
+    return [('1960 - 1969', 1960, 1969),
+            ('1970 - 1979', 1970, 1979),
+            ('1980 - 1989', 1980, 1989),
+            ('1990 - 1999', 1990, 1999),
+            ('2000 - 2009', 2000, 2009),
+            ('2010 - 2019', 2010, 2019)]
 
-    options = [('1960 - 1969', 1960, 1969),
-               ('1970 - 1979', 1970, 1979),
-               ('1980 - 1989', 1980, 1989),
-               ('1990 - 1999', 1990, 1999),
-               ('2000 - 2009', 2000, 2009),
-               ('2010 - 2019', 2010, 2019)]
-
-    return options
 
 @register.simple_tag(name='get_genders')
 def get_genders():
     return Alumnus.GENDER_CHOICES
+
 
 @register.simple_tag(name='get_degree_types')
 def get_degree_types():
     return Degree.DEGREE_TYPE
 
 
-@register.simple_tag(name='filter_theses', takes_context=True)
-def filter_theses(context, filter_type, value):
+@register.simple_tag(name='set_query', takes_context=True)
+def set_query(context, type, value):
+    url = URLObject(context.request.get_full_path())
+
+    return url.set_query_param(type, value)
+
+
+@register.simple_tag(name='filter_content', takes_context=True)
+def filter_content(context, filter_type, value):
     """ Takes two string parameters: filtertype is the thesis type that will be
     filtered, value is the subselection that is wanted. """
 
