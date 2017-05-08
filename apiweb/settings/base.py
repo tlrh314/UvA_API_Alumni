@@ -105,6 +105,7 @@ TEMPLATES = [
 INSTALLED_APPS = (
     #Filebrowser should be listed before django.contrib.admin
     'tinymce',
+    'ajax_select',
     'filebrowser',
 
     'django.contrib.contenttypes',

@@ -5,6 +5,7 @@ import filebrowser.sites
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from ajax_select import urls as ajax_select_urls
 import django.contrib.sitemaps.views
 
 from .main.views import index
@@ -19,6 +20,7 @@ urlpatterns = [
     url(r'^login/$', auth_views.LoginView.as_view(template_name='registration/login.html')),
     url(r'^admin/filebrowser/', include(filebrowser.sites.site.urls)),
     url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^ajax_select/', include(ajax_select_urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/', include('django.contrib.auth.urls')),
 
