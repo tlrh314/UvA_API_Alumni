@@ -4,15 +4,30 @@
 {% block content %}
 
 <div class="main-content" role="main">
+    <br>
     <a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a> <br>
 
+    <br>
     {{ thesis.date_of_defence|date:"j M Y" }}
 
 
+    <br>
     {{ thesis.thesis_title }} <br>
-   <a href="{{ STATIC_URL }}research/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">PDF</a>
-   
-    
+
+    {# TODO: check if has pdf #} 
+    <br>
+    <a href="{{ STATIC_URL }}alumni/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">PDF</a>
+
+    <br>
+    <a href="{{ thesis.thesis_url }}">UvA DARE</a>
+
+    <br>
+    {% for advisor in thesis.thesis_advisor.all %}
+    advisor = {{ advisor }} <br>
+    {% endfor %}
+
+
+
 </div>
 
 {% endblock content %}

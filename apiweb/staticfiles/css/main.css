@@ -38,6 +38,10 @@ body {
 
 /* Style for dropdown filter */
 
+.center-pills {
+    display: inline-block; 
+}
+
 .menu-text {
     float: left;
     vertical-align: middle;

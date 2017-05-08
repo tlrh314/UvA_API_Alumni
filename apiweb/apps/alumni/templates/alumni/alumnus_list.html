@@ -8,16 +8,84 @@
 
 {% block content %}
 
-<h1 class="text-center">{{ thesis_title }}</h1>
-
-
 <div class="main-content" role="main">
     {% bootstrap_messages %}
 
     <h2 class="text-center">Total number of alumni: {{ alumni.paginator.count }}</h2>
+    {# Filters #}
+    {# TODO: margin auto 0 to center #}
+    <div class="col-md-12 text-center">
+        <ul class="nav nav-pills selector-nav center-pills">  
+            {# Gender dropdown menu #}
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">Gender<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% filter_objects 'gender' 'None' %}"><i> No filter </i></a></li>
+                    {% get_genders as genders %}
+                    {% for choice in genders %}
+                    {# Reset possible old filter and add store filter #}
+                    <li>
+                        <a href="{% filter_objects 'gender' choice.0 %}" class="menu-link"> 
+                            <div class="menu-text"> {{ choice.1 }} </div>
+                            <img class="check-box" src="{% check_dropdown 'gender' choice.0 %}">
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
 
-    {# TODO: Create filter, search, and add MSc and BSc theses? #} 
-    {# TODO: make Alumus clickable to show Alumnus page ? #} 
+            {# Defence year dropdown menu #}
+            {% get_defence_years as years %}
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">Year<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% filter_objects 'year' 'None' %}"><i> No filter </i></a></li>
+                    {% for year in years %}
+                    {# Reset possible old filter and add store filter #}
+                    <li>
+                        <a href="{% filter_objects 'year' year.1 %}" class="menu-link"> 
+                            <div class="menu-text"> {{ year.0 }} </div>
+                            <img class="check-box" src="{% check_dropdown 'year' year.1 %}">
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+            {# Degree type dropdown menu #}
+            {% get_degree_types as degrees %}
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">Type<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
+                    {% for type in degrees %}
+                    {# Reset possible old filter and add store filter #}
+                    <li>
+                        <a href="{% filter_objects 'type' type.0 %}" class="menu-link"> 
+                            <div class="menu-text"> {{ type.1 }} </div>
+                            <img class="check-box" src="{% check_dropdown 'type' type.0 %}">
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+            {# Reset all filters #}
+            <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="{% filter_objects 'all' 'None' %}" role="button" aria-haspopup="true"
+                   aria-expanded="false">Reset all Filters
+                </a>
+            </li>
+        </ul>
+    </div>
+    {# End Filters #}
+
     <table class="table table-hover">
         <thead>
             <tr>
@@ -66,76 +134,9 @@
                 </nav>
             </div>
 
-            {# Filters #}
-            {# TODO: margin auto 0 to center #}
-            <div class="pages-parent" style="display: inline; float: left;">
-            <ul class="nav nav-pills selector-nav">  
-                {# Gender dropdown menu #}
-                <li role="presentation" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                       aria-expanded="false">Gender<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% filter_objects 'gender' 'None' %}"><i> No filter </i></a></li>
-                        {% get_genders as genders %}
-                        {% for choice in genders %}
-                        <!-- Reset possible old filter and add store filter -->
-                        <li>
-                            <a href="{% filter_objects 'gender' choice.0 %}" class="menu-link"> 
-                                <div class="menu-text"> {{ choice.1 }} </div>
-                                <img class="check-box" src="{% check_dropdown 'gender' choice.0 %}">
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-
-                {# Defence year dropdown menu #}
-                {% get_defence_years as years %}
-                <li role="presentation" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                       aria-expanded="false">Year<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% filter_objects 'year' 'None' %}"><i> No filter </i></a></li>
-                        {% for year in years %}
-                        <!-- Reset possible old filter and add store filter -->
-                        <li>
-                            <a href="{% filter_objects 'year' year.1 %}" class="menu-link"> 
-                                <div class="menu-text"> {{ year.0 }} </div>
-                                <img class="check-box" src="{% check_dropdown 'year' year.1 %}">
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-
-                {# Degree type dropdown menu #}
-                {% get_degree_types as degrees %}
-                <li role="presentation" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                       aria-expanded="false">Type<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
-                        {% for type in degrees %}
-                        <!-- Reset possible old filter and add store filter -->
-                        <li>
-                            <a href="{% filter_objects 'type' type.0 %}" class="menu-link"> 
-                                <div class="menu-text"> {{ type.1 }} </div>
-                                <img class="check-box" src="{% check_dropdown 'type' type.0 %}">
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            </ul>
-            </div>
-            {# End Filters #}
 
 
             {# Add the content #}
-            
             {% for alumnus in alumni %}
             <tr class="{% cycle '' 'info' %}">
                 <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name }}</a></td>
