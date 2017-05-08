@@ -16,17 +16,80 @@ except ImportError:
     from urllib.parse import urlencode
     from urllib.request import urlopen, URLError
 import json
+import re
 from functools import reduce
 
 def search(request):
-    print('Search view called!')
-    terms = request.GET.getlist('terms', '')
-    # alumni = Alumnus.objects.all()
-    # Get all distinct objects with titles that contain at least 1 of the words
-    results = Alumnus.objects.filter(reduce(lambda x, y: x | y,
-                                [Q(last_name__icontains=word) | Q(degrees__thesis_title__icontains=word) for word in terms])).distinct()
+    '''
+    Searches through following fields:
+    - Alumni first name
+    - Alumni last name
+    - Thesis title
+    - Alumni date of defence
+    - Alumni start date
+    - Alumni stop date
 
-    return render(request, 'search/search_results.html', {"alumni": results})
+    - Exact matches if input is given between quotes ' or "
+
+    Return list of alumni with all thesis links
+    '''
+
+    words = request.GET.get('terms', '')
+    terms = []
+
+    # If no keywords, return nothing
+    if not words:
+        return render(request, 'search/search_results.html', {"alumni": [],
+                                                              "key_words": []})
+
+    # Check if must be exact match (i.e. if between quotation marks)
+    words = words.replace("'", '"')
+    if '"' in words:
+        exact_match = re.findall('"([^"]*)"', words)
+
+        for exact in exact_match:
+            words.replace(exact, '')
+            terms.append(exact)
+
+    # Create final lists of search terms
+    terms = terms + words.split()
+
+    # Set maximum number of words
+    if len(terms) > 42:
+        return render(request, 'search/search_results.html', {"alumni": [],
+                                                              "key_words": []})
+    #  Remove single characters
+    terms = [term for term in terms if len(term) > 1]
+
+    # Compute filters
+    search_filter = Q()
+    time_filter = Q()
+    alumni = Alumnus.objects.all()
+
+    for term in terms:
+
+        # Check if year, if set time filters
+        if (term.isdigit() and len(term) == 4):
+            end_year = str(int(term) + 1)
+            date_range=[term+"-01-01",end_year+"-01-01"]
+            time_filter = (time_filter | Q(degrees__date_of_defence__range=date_range)
+                                       | Q(degrees__date_stop__range=date_range)
+                                       | Q(degrees__date_start__range=date_range))
+
+        else:
+            search_filter = (search_filter | Q(last_name__icontains=term)| 
+                                             Q(first_name__icontains=term) | 
+                                             Q(degrees__thesis_title__icontains=term))
+
+    # Compute combined filter
+    total_filter = time_filter & search_filter
+
+    # Apply all filters
+    results = alumni.filter(total_filter).distinct()         
+
+    return render(request, 'search/search_results.html', {"alumni": results,
+                                                          "key_words": terms})
+
 
 class SearchView(FormView):
 
