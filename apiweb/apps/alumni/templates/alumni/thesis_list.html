@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div class="main-content" role="main"">
+<div class="main-content" role="main">
     {# TODO: Create filter, search, and add MSc and BSc theses? #} 
     {# TODO: make Alumus clickable to show Alumnus page ? #} 
 
@@ -71,7 +71,7 @@
                         <a href="mailto:secr-astro-science@uva.nl>Title Unknown. Click here if you know the title!</a>
                     {% endif %}
                     {% if has_pdf %}
-                        (<a href="{{ STATIC_URL }}research/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">PDF</a>)
+                    (<a href="{% url 'alumni:thesis-has-no-pdf' %}">PDF</a>)
                     {% else %}
                         (<a href="TODO pdf missing contact form">PDF</a>)
                     {% endif %}

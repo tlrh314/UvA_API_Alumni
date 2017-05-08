@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div class="main-content" role="main"">
+<div class="main-content" role="main">
     <a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a> <br>
 
     {{ thesis.date_of_defence|date:"j M Y" }}

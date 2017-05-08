@@ -187,3 +187,7 @@ def thesis_detail(request, thesis_slug):
     thesis = get_object_or_404(Degree, thesis_slug=thesis_slug)
 
     return render(request, "alumni/thesis_detail.html", {"thesis": thesis})
+
+
+def thesis_has_no_pdf(request):
+    return render(request, "alumni/thesis_not_found.html")
