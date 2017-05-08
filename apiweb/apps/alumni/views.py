@@ -56,10 +56,19 @@ def alumnus_list(request):
     except ValueError as ScriptKiddyHackings :
         if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
             msg = "Error: '{0}' is not a valid limit, please use a number.".format(alumni_per_page)
-            alumni_per_page = 15
             messages.error(request, msg)
+            alumni_per_page = 15
         else:
             raise Http404
+
+    if alumni_per_page < 15:
+        msg = "Error: '{0}' is not a valid limit, please use a number above 15.".format(alumni_per_page)
+        alumni_per_page = 15
+        messages.error(request, msg)
+    if alumni_per_page > 200:
+        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(alumni_per_page)
+        messages.error(request, msg)
+        alumni_per_page = 200
 
     paginator = Paginator(alumni, alumni_per_page)
     page = request.GET.get('page', 1)
@@ -69,17 +78,20 @@ def alumnus_list(request):
     except ValueError as ScriptKiddyHackings :
         if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
             msg = "Error: '{0}' is not a valid pagenumber, please use a number.".format(page)
-            page = 1
             messages.error(request, msg)
+            page = 1
         else:
             raise Http404
 
-    # TODO: double-check the below errors are handled above with user notification
     try:
         alumni = paginator.page(page)
     except PageNotAnInteger:
+        msg = "Error: '{0}' is not a valid pagenumber.".format(page)
+        messages.error(request, msg)
         alumni = paginator.page(1)
     except EmptyPage:
+        msg = "Error: '{0}' is not a valid pagenumber.".format(page)
+        messages.error(request, msg)
         alumni = paginator.page(paginator.num_pages)
 
 
@@ -105,10 +117,19 @@ def thesis_list(request):
     except ValueError as ScriptKiddyHackings :
         if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
             msg = "Error: '{0}' is not a valid limit, please use a number.".format(theses_per_page)
-            theses_per_page = 15
             messages.error(request, msg)
+            theses_per_page = 15
         else:
             raise Http404
+
+    if theses_per_page < 15:
+        msg = "Error: '{0}' is not a valid limit, please use a number above 15.".format(theses_per_page)
+        messages.error(request, msg)
+        theses_per_page = 15
+    if theses_per_page > 200:
+        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(theses_per_page)
+        messages.error(request, msg)
+        theses_per_page = 200
 
     paginator = Paginator(theses, theses_per_page)
     page = request.GET.get('page', 1)
@@ -118,21 +139,24 @@ def thesis_list(request):
     except ValueError as ScriptKiddyHackings :
         if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
             msg = "Error: '{0}' is not a valid pagenumber, please use a number.".format(page)
-            page = 1
             messages.error(request, msg)
+            page = 1
         else:
             raise Http404
 
-    # TODO: double-check the below errors are handled above with user notification
     try:
         phd_theses = paginator.page(page)
     except PageNotAnInteger:
-        raise
+        msg = "Error: '{0}' is not a valid pagenumber.".format(page)
+        messages.error(request, msg)
         page = 1
         phd_theses = paginator.page(page)
     except EmptyPage:
+        msg = "Error: '{0}' is not a valid pagenumber.".format(page)
+        messages.error(request, msg)
         page = paginator.num_pages
         phd_theses = paginator.page(page)
+
 
     has_title = dict()
     has_pdf = dict()
@@ -147,6 +171,7 @@ def thesis_list(request):
         else:
             has_pdf[thesis.thesis_slug] = False
 
+    # TODO: de 404 werkt niet bij missende pdf
     theses_list_start = (page-1)*theses_per_page
     theses_list_stop = page*theses_per_page
     theses_counter = theses_counter[theses_list_start: theses_list_stop]
