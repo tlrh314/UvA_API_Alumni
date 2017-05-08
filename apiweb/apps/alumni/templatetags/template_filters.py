@@ -17,6 +17,13 @@ def filter_objects(context, filter_type, value):
 
     filterdict = url.query.multi_dict
 
+    # Check if all filters must be removed
+    if filter_type == 'all':
+        # TODO: this does not yet work. Implement this feature
+        toremove = ["gender", "year", "type"]
+        new_url = url
+        return new_url
+
     # Check if filter must be removed (if value = 'None')
     if value == 'None':
         new_url = url.del_query_param(filter_type)
