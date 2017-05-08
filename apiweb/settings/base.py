@@ -94,6 +94,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'apiweb.context_processors.ipaddress',
                 'apiweb.context_processors.location',
+                'apiweb.context_processors.contactinfo',
             ],
             # Leave out 'loaders' to use the default template loaders
             # Leave out 'debug' to use the same as DEBUG

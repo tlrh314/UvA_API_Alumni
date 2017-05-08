@@ -16,8 +16,8 @@ class ContactInfo(models.Model):
     webmaster_email_address = models.EmailField(_("API Webmaster e-mail address"), default="secr-astro-science@uva.nl")
 
     class Meta:
-        verbose_name = "API contact info"
-        verbose_name_plural = "API contact info"
+        verbose_name = "API Contact Info"
+        verbose_name_plural = "API Contact Info"
 
     def clean(self):
         validate_only_one_instance(self)

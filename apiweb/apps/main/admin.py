@@ -6,10 +6,5 @@ from .models import ContactInfo
 
 @admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
-    list_display = ("secretary_email_address", "address_api", )
-
-    ##TODO make sure there is only 1
-    #def save_model(self, request, obj, form, change):
-    #    contact = ContactInfo.objects.all()
-    #    if contact:
-    #        raise IETS WAARMEE JE MAAR 1 ding kan doen
+    list_display = ("secretary_email_address", "webmaster_email_address",
+                    "postbox_address_api", "address_api", "telephone_api" )

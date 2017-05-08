@@ -35,9 +35,9 @@
                 <ul style="padding-bottom: 15px; padding-top: 6px;">
                     <img src="{% static 'img/api_logo_default_black.png' %}" style="padding-bottom: 20px; height: 125px;" title="Anton Pannekoek Institute for Astronomy">
                     <p style="padding-top: 10px; padding-bottom: 10px; max-width: 250px;">
-                    <i class="fa fa-home"></i> PO Box 94249, 1090 GE Amsterdam  <br>
-                    <i class="fa fa-phone"></i> <a href="tel:0031205257491">+31 (0)20 525 7491</a><br>
-                    <i class="fa fa-envelope"></i> <a href="mailto:secr-astro-science@uva.nl">secr-astro-science@uva.nl</a><br>
+                    <i class="fa fa-home"></i> {{ contactinfo.postbox_address_api }}<br>
+                    <i class="fa fa-phone"></i> <a href="tel:{{ contactinfo.telephone_api }}">{{ api_phonenumber_formatted }}</a><br>
+                    <i class="fa fa-envelope"></i> <a href="mailto:{{ contactinfo.secretary_email_address}}">{{ contactinfo.secretary_email_address}}</a><br>
                     <a href="/contact">Contact Form</a><br>
 
                     </p>
