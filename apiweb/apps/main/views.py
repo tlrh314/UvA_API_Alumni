@@ -6,11 +6,13 @@ from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 
 
+from .models import ContactInfo
+
 def index(request):
     return render(request, 'main/index.html')
 
 def page_not_found(request):
-    return render(request, '404.html')
+    return render(request, 'main/404.html', {'contactinfo': ContactInfo.objects.all()[0]})
 
 
 # TODO: clean up code below

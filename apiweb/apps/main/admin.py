@@ -1,14 +1,15 @@
 from django.contrib import admin
-from .models import Sticky
-from ...settings import ADMIN_MEDIA_JS
+from django.core.exceptions import ValidationError
 
+#from .models import Sticky
+from .models import ContactInfo
 
-class StickyAdmin(admin.ModelAdmin):
-
-    list_display = ('title', 'visible')
-
-    class Media:
-        js = ADMIN_MEDIA_JS + ('javascript/admin/news.js',)
-
-
-# admin.site.register(Sticky, StickyAdmin)
+@admin.register(ContactInfo)
+class ContactInfoAdmin(admin.ModelAdmin):
+	list_display = ('secretary_email_adres', 'adres_api', )
+	
+	##TODO make sure there is only 1 
+	#def save_model(self, request, obj, form, change):
+	#	contact = ContactInfo.objects.all()
+	#	if contact:
+	#		raise IETS WAARMEE JE MAAR 1 ding kan doen

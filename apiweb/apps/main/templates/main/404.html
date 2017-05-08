@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
+
+{% block title %}API - Page Not Found{% endblock title %}
+
+{% block content %}
+<div class="main-content" role="main">
+    <h1 class="text-center">This page does not exist!</h1>
+	{{ contactinfo }}
+	The page you are trying to reach does not exist. Possibly you've used an outdated or 
+wrong url.<br><br>
+	If you have been redirected to this page by a link on this website, you might've 
+stumbled upon a bug. Please contact the <a href mailto:"{{ contactinfo.webmaster_email_adres }}">webmaster</a>
+
+</div>
+{% endblock content %}
+
