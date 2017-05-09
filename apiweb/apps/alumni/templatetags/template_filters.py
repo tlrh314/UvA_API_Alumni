@@ -17,13 +17,6 @@ def filter_objects(context, filter_type, value):
 
     filterdict = url.query.multi_dict
 
-    # Check if all filters must be removed
-    if filter_type == 'all':
-        # TODO: this does not yet work. Implement this feature
-        toremove = ["gender", "year", "type"]
-        new_url = url
-        return new_url
-
     # Check if filter must be removed (if value = 'None')
     if value == 'None':
         new_url = url.del_query_param(filter_type)
@@ -81,7 +74,8 @@ def check_dropdown(context, filter_type, value):
 
 @register.simple_tag(name='get_defence_years')
 def get_defence_years():
-    return [('1960 - 1969', 1960, 1969),
+    return [('1900 - 1959', 1900, 1959),
+            ('1960 - 1969', 1960, 1969),
             ('1970 - 1979', 1970, 1979),
             ('1980 - 1989', 1980, 1989),
             ('1990 - 1999', 1990, 1999),

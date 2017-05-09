@@ -78,9 +78,10 @@
 
             {# Reset all filters #}
             <li role="presentation" class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="{% filter_objects 'all' 'None' %}" role="button" aria-haspopup="true"
-                   aria-expanded="false">Reset all Filters
+            <a class="dropdown-toggle" href="{% url 'alumni:alumnus-list' %}" aria-haspopup="true"
+                   aria-expanded="false"> Reset All Filters
                 </a>
+                    
             </li>
         </ul>
     </div>
