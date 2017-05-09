@@ -12,23 +12,19 @@
                 </ul>
             </div>
             <div class="col-xs-2 footer-column">
-                <h3> About API Alumni </h3>
+                <h3> Latest Interviews </h3>
                 <ul>
-                    {% comment %}
-                    {# TODO TODO TODO #} 
-                    <li><a href=" {% url 'page' %} "> Over ons </a></li>
-                    {% endcomment %}
+                    {% for interview in latest_interviews %}
+                    <li><a href="{% url 'interviews:detail' interview.slug %}"> {{ interview.alumnus.full_name }} <span>| {{ interview.date_published|date }}</span></a></li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-xs-2 footer-column">
-                <h3> Latest News </h3>
+                <h3> Latest Theses </h3>
                 <ul>
-                    {% comment %}
-                    {# TODO TODO TODO #} 
-                    {% for news in latest_blogs %}
-                    <li><a href="/blog/{{ blog.post_ID }}/"> {{ blog.title }} <span>| {{ blog.published_date|date }}</span></a></li>
+                    {% for thesis in latest_theses %}
+                    <li><a href=" {% url 'alumni:thesis-detail' thesis.slug %} "> {{ thesis.alumnus.full_name }}  <span>| {{ thesis.date_of_defence|date }}</span> </a></li>
                     {% endfor %}
-                    {% endcomment %}
                 </ul>
             </div>
             <div class="col-xs-3 footer-column">

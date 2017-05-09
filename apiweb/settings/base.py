@@ -95,6 +95,7 @@ TEMPLATES = [
                 'apiweb.context_processors.ipaddress',
                 'apiweb.context_processors.location',
                 'apiweb.context_processors.contactinfo',
+                'apiweb.context_processors.get_latest_theses',
             ],
             # Leave out 'loaders' to use the default template loaders
             # Leave out 'debug' to use the same as DEBUG
