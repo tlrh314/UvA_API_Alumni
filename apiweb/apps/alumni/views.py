@@ -35,6 +35,8 @@ def alumnus_list(request):
         for year in defence_year:
 
             end_year = str(int(year) + 10)
+            if year == "1900":
+                end_year = str(int(year) + 50)
             date_range=[year+"-01-01",end_year+"-01-01"]
             multifilter = multifilter | Q(degrees__date_of_defence__range=date_range)
             multifilter = multifilter | Q(degrees__date_stop__range=date_range)
