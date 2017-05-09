@@ -33,6 +33,13 @@
 - **Copy 2.6GB file with PhD theses**
     - `cp -r path/to/files apiweb/apps/alumni/static/alumni/theses/phd`
 
+- Set unicode things for Python3 to avoid Excel export to break. Not sure which one worked though.
+    - Added the following two lines to the bashrc
+    - `export LANG='en_US.UTF-8'`
+    - `export LC_ALL='en_US.UTF-8'`
+    - Added the following line to the apach2 server config `/etc/apache2/apache2.conf`
+    - `AddDefaultCharset utf-8`
+
 
 # [TODO:] Deployment 
 ** Copied from Waterman /home/martin/Websites/Configurations/Howto-apiweb3.txt ** 

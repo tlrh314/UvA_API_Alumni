@@ -1,3 +1,5 @@
+from __future__ import unicode_literals, absolute_import, division
+
 import xlwt
 from datetime import datetime
 
@@ -44,7 +46,10 @@ def save_all_alumni_to_xls(request, queryset=None):
 
     for row, alumnus in enumerate(alumni):
         for col, attr in enumerate(attributes):
-            value = str(getattr(alumnus, attr, ""))
+            try:
+                value = str(getattr(alumnus, attr, "")).encode('ascii', 'ignore')
+            except UnicodeEncodeError:
+                value = "UnicodeEncodeError"
             # Do some cleanups
             if value == "None": value = ""
             if attr == "student_id": value = int(value.split(".")[0]) if len(value) > 3 else ""
@@ -86,14 +91,20 @@ def save_all_theses_to_xls(request, queryset=None):
 
     for row, thesis in enumerate(theses):
         for col, attr in enumerate(alumnus_attributes):
-            value = str(getattr(thesis.alumnus, attr, ""))
+            try:
+                print(getattr(thesis.alumnus, attr))
+                value = str(getattr(thesis.alumnus, attr, u"")).encode('ascii', 'ignore')
+            except UnicodeEncodeError:
+                value = "UnicodeEncodeError"
             # Do some cleanups
             if value == "None": value = ""
             sheet.write(row+1, col, value, style=borders)
 
         for col, attr in enumerate(attributes):
-            len(alumnus_attributes)
-            value = str(getattr(thesis, attr, ""))
+            try:
+                value = str(getattr(thesis, attr, u"")).encode('ascii', 'ignore')
+            except UnicodeEncodeError:
+                value = "UnicodeEncodeError"
             # Do some cleanups
             if value == "None": value = ""
             if attr == "thesis_advisor" and "None" in value: value = ""
