@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
 
@@ -8,10 +9,88 @@
 
 <h1 class="text-center">{{ thesis_title }}</h1>
 
-
 <div class="main-content" role="main">
 
-    {{ alumnus.full_name }}
+    <h1 class="text-center">{{ alumnus.full_name }}</h1>
+
+    <div class="col-xs-12" style="height:25px;"></div>
+
+    <div class="container-fluid fill">
+        <div class="row-fluid">
+            <div class="col-xs-2"> 
+                <h3 class="text-left">Photo</h3>
+                <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img>
+            </div>
+            <div class="col-xs-6"> 
+                <h3 class="text-center">Contact Info</h3>
+                <div class="mycontent-left">
+                    <table class="table" style="margin-left: auto; margin-right: auto; max-width: 80%">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        <tr><th>Name</th><td>{{ alumnus.full_name }}</td></tr>
+                        <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
+                        <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
+                        <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
+                        <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xs-4"> 
+                <h3 class="text-right">Students Supervised</h3>
+                <div class="mycontent-right">
+                    <table class="table">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        {% for thesis_supervised in alumnus.students.all %}
+                        {# TODO: template-tag this? Also make sure to get type and such of the thing #} 
+                        <tr><td><a href="{% url 'alumni:alumnus-detail' thesis_supervised.alumnus.slug %}">{{ thesis_supervised.alumnus.full_name }} </a></td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12" style="height:25px;"></div>
+
+    <div class="row vertical-divider" style="margin-top: 30px">
+        <div class="col-md-6">
+            <div class="mycontent-left">
+                <h2 class="text-left">Theses at API</h2>
+                {% for thesis in alumnus.degrees.all %}
+                <p class="text-justify"><a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}</a></p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mycontent-right">
+                <h2 class="text-right">Positions at API</h2>
+                Current Position: {{ alumnus.position.name }}
+                Previous Positions: {# TODO: implement as no data is available as of yet #} 
+                {% for api_position in alumnus.positions.all %}
+                {{ api_position.type.name }}
+                {{ api_position.date_start }}
+                {{ api_position.date_stop }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12" style="height:75px;"></div>
+
+    <div class="row vertical-divider" style="margin-top: 30px">
+        <div class="col-md-12">
+            <h2 class="text-center"> Abstracts of the latest 5 publications imported from ads </h2>
+        </div>
+    </div>
+
+
+
+
 
 </div>
 

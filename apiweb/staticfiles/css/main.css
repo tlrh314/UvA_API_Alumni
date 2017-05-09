@@ -249,3 +249,10 @@ body {
         display: none !important;
     }
 }
+
+
+
+/* Style for Alumnus detail page */
+.mycontent-left {
+  /* border-right: 0.5px solid #333; */
+}

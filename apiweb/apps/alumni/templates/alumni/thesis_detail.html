@@ -4,28 +4,42 @@
 {% block content %}
 
 <div class="main-content" role="main">
-    <br>
-    <a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a> <br>
 
-    <br>
-    {{ thesis.date_of_defence|date:"j M Y" }}
+    <div style="max-width: 75%; margin-left: auto; margin-right: auto;">
+        <h1 class="text-center">{{ thesis.thesis_title }}</h1>
+    </div>
 
+    <div class="col-xs-12" style="height:25px;"></div>
 
-    <br>
-    {{ thesis.thesis_title }} <br>
-
-    {# TODO: check if has pdf #} 
-    <br>
-    <a href="{{ STATIC_URL }}alumni/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">PDF</a>
-
-    <br>
-    <a href="{{ thesis.thesis_url }}">UvA DARE</a>
-
-    <br>
-    {% for advisor in thesis.thesis_advisor.all %}
-    advisor = {{ advisor }} <br>
-    {% endfor %}
-
+    <div class="row">
+        <div class="col-xs-6"> 
+            <h3 class="text-left">Thesis Info</h3>
+            <table class="table" style="max-width: 80%">
+                <thead>
+                </thead>
+                <tbody>
+                <tr><th>Author</th><td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td></tr>
+                <tr><th>Email</th><td><a href="mailto:{{ thesis.alumnus.email }}">{{ thesis.alumnus.email }}</a></td></tr>
+                <tr><th>Published</th><td>{{ thesis.date_of_defence|date:"j M Y" }}</td></tr>
+                <tr><th>URL</th><td><a href="{{ thesis.thesis_url }}">UvA DARE</a></td></tr>
+                {# TODO: check if has pdf #} 
+                <tr><th>PDF</th><td><a href="{{ STATIC_URL }}alumni/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">Full Text</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-6"> 
+            <h3 class="text-left">Advisors</h3>
+            <table class="table" style="max-width: 80%">
+                <thead>
+                </thead>
+                <tbody>
+                    {% for advisor in thesis.thesis_advisor.all %}
+                        <tr><th><a href="{% url 'alumni:alumnus-detail' advisor.slug %}">{{ advisor.full_name }}</a></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
 </div>
