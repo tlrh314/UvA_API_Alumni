@@ -7,9 +7,7 @@ STAFF_MEDIA_URL = MEDIA_URL + 'uploads/staff_meetings'
 STAFF_MEDIA_ROOT = os.path.join(MEDIA_ROOT, '/uploads/staff_meetings/')
 
 ADMIN_MEDIA_JS = (
-    # jQuery is now pulled from GoogleAPI in base.html. Should we update admin? Probably not...
-    # STATIC_URL + 'js/jquery.js',
-    # TODO load tinymce here??
+    (STATIC_URL + 'js/action_buttons.js', )
 )
 
 FILEBROWSER_SHOW_IN_DASHBOARD = True

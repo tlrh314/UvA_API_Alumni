@@ -18,6 +18,7 @@ from tinymce.widgets import TinyMCE
 from .models import PositionType, PreviousPosition
 from .models import Alumnus, Degree, JobAfterLeaving
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
+from .actions import save_all_alumni_to_xls, save_all_theses_to_xls
 
 
 from django.contrib.sites.models import Site
@@ -105,6 +106,7 @@ class DegreeAdmin(admin.ModelAdmin):
     ordering = ("alumnus__user__username", )
     filter_horizontal = ("thesis_advisor", )
     readonly_fields = ("date_created", "date_updated")
+    actions = ("export_selected_degrees_to_excel", "export_all_degrees_to_excel", )
 
     max_num = 2
 
@@ -128,6 +130,20 @@ class DegreeAdmin(admin.ModelAdmin):
         ),
     ]
 
+    class Media:
+        js = ADMIN_MEDIA_JS
+
+    def changelist_view(self, request, extra_context=None):
+        """ Hack the default changelist_view to allow action 'export_all_degrees_to_excel'
+            to run without selecting any objects """
+        if 'action' in request.POST and request.POST['action'] == 'export_all_degrees_to_excel':
+            if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
+                post = request.POST.copy()
+                for u in Degree.objects.all():
+                    post.update({admin.ACTION_CHECKBOX_NAME: str(u.id)})
+                request._set_post(post)
+        return super(DegreeAdmin, self).changelist_view(request, extra_context)
+
     def get_author(self, obj):
         """ We could use author instead of get_alumnus in list_display """
         return obj.alumnus.full_name
@@ -140,6 +156,15 @@ class DegreeAdmin(admin.ModelAdmin):
             return obj.date_stop.strftime("%Y")
         return None
     show_year.short_description = "Year"
+
+    def export_selected_degrees_to_excel(self, request, queryset):
+        return save_all_theses_to_xls(request, queryset)
+    export_selected_degrees_to_excel.short_description = "Export selected Theses to Excel"
+
+    def export_all_degrees_to_excel(self, request, queryset):
+        return save_all_theses_to_xls(request, None)
+        # self.message_user(request, "This function is not yet implemented.", level="error")
+    export_all_degrees_to_excel.short_description = "Export all Theses to Excel"
 
 
 class UserRawIdWidget(widgets.ForeignKeyRawIdWidget):
@@ -204,7 +229,7 @@ class AlumnusAdmin(admin.ModelAdmin):
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
     readonly_fields = ("get_full_name", "date_created", "date_updated")
-    actions = ("sent_password_reset", "export_to_excel")
+    actions = ("sent_password_reset", "export_selected_alumni_to_excel", "export_all_alumni_to_excel")
     # exclude = ("jobs", )
 
     fieldsets = [
@@ -247,6 +272,17 @@ class AlumnusAdmin(admin.ModelAdmin):
 
     class Media:
         js = ADMIN_MEDIA_JS
+
+    def changelist_view(self, request, extra_context=None):
+        """ Hack the default changelist_view to allow action 'export_all_alumni_to_excel'
+            to run without selecting any objects """
+        if 'action' in request.POST and request.POST['action'] == 'export_all_alumni_to_excel':
+            if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
+                post = request.POST.copy()
+                for u in Alumnus.objects.all():
+                    post.update({admin.ACTION_CHECKBOX_NAME: str(u.id)})
+                request._set_post(post)
+        return super(AlumnusAdmin, self).changelist_view(request, extra_context)
 
     def get_alumnus(self, obj):
         """ We could use author instead of get_alumnus in list_display """
@@ -294,13 +330,15 @@ class AlumnusAdmin(admin.ModelAdmin):
                 self.message_user(request, "Alumnus does not have a valid email address", level="error")
     sent_password_reset.short_description = "Sent selected Alumni Password Reset"
 
-    def export_to_excel(self, request, queryset):
-        pass
-        # TODO: implement Excel export
-        #for obj in queryset:
-        #    obj.publish()
+    def export_selected_alumni_to_excel(self, request, queryset):
+        return save_all_alumni_to_xls(request, queryset)
         self.message_user(request, "This function is not yet implemented.", level="error")
-    export_to_excel.short_description = "Export selected Alumni to Excel"
+    export_selected_alumni_to_excel.short_description = "Export selected Alumni to Excel"
+
+    def export_all_alumni_to_excel(self, request, queryset):
+        return save_all_alumni_to_xls(request, None)
+        # self.message_user(request, "This function is not yet implemented.", level="error")
+    export_all_alumni_to_excel.short_description = "Export all Alumni to Excel"
 
 
 @admin.register(PositionType)
