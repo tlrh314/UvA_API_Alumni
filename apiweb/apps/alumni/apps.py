@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class AlumniConfig(AppConfig):
-    name = 'apiweb.apps.alumni'
+    name = "apiweb.apps.alumni"
 
     # https://docs.djangoproject.com/en/1.11/topics/signals/#connecting-receiver-functions
     def ready(self):

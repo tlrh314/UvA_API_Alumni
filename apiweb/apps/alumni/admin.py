@@ -7,7 +7,9 @@ from django.contrib import admin
 from django.contrib.admin import widgets
 from django.contrib.admin.sites import site
 from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.sites.models import Site
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -21,8 +23,24 @@ from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 from .actions import save_all_alumni_to_xls, save_all_theses_to_xls
 
 
-from django.contrib.sites.models import Site
+# Do not show the Site Admin
 admin.site.unregister(Site)
+
+# Do not allow the Admin to change the User first_name, last_name or email.
+# The Alumnus has these fields, and when these fields are updated a signal is
+# sent from the Alumnus to the User to update the email, first_name and last_name
+# If the Admin could change these fields in the User there would be a mismatch.
+UserAdmin.readonly_fields = ("email", "first_name", "last_name")
+UserAdmin.fieldsets = (
+    (None, {"fields": ("username", "password")}),
+    (_("Personal info"), {"fields": ("first_name", "last_name", "email"),
+        "description": "Please change the personal info in the Alumnus Admin."}),
+    (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser",
+                                   "groups", "user_permissions")}),
+    (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 
 
 class JobAfterLeavingAdminInline(admin.StackedInline):
@@ -91,10 +109,10 @@ class DegreeListFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "no":
-            return queryset.filter(thesis_title__isnull=False).exclude(thesis_title='')
+            return queryset.filter(thesis_title__isnull=False).exclude(thesis_title="")
 
         if self.value() == "yes":
-            return queryset.filter(Q(thesis_title__isnull=True) | Q(thesis_title__exact=''))
+            return queryset.filter(Q(thesis_title__isnull=True) | Q(thesis_title__exact=""))
 
 
 @admin.register(Degree)
@@ -134,9 +152,9 @@ class DegreeAdmin(admin.ModelAdmin):
         js = ADMIN_MEDIA_JS
 
     def changelist_view(self, request, extra_context=None):
-        """ Hack the default changelist_view to allow action 'export_all_degrees_to_excel'
+        """ Hack the default changelist_view to allow action "export_all_degrees_to_excel"
             to run without selecting any objects """
-        if 'action' in request.POST and request.POST['action'] == 'export_all_degrees_to_excel':
+        if "action" in request.POST and request.POST["action"] == "export_all_degrees_to_excel":
             if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
                 post = request.POST.copy()
                 for u in Degree.objects.all():
@@ -212,10 +230,10 @@ class AlumnusListFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "no":
-            return queryset.filter(email__isnull=False).exclude(email='')
+            return queryset.filter(email__isnull=False).exclude(email="")
 
         if self.value() == "yes":
-            return queryset.filter(Q(email__isnull=True) | Q(email__exact=''))
+            return queryset.filter(Q(email__isnull=True) | Q(email__exact=""))
 
 
 @admin.register(Alumnus)
@@ -274,9 +292,9 @@ class AlumnusAdmin(admin.ModelAdmin):
         js = ADMIN_MEDIA_JS
 
     def changelist_view(self, request, extra_context=None):
-        """ Hack the default changelist_view to allow action 'export_all_alumni_to_excel'
+        """ Hack the default changelist_view to allow action "export_all_alumni_to_excel"
             to run without selecting any objects """
-        if 'action' in request.POST and request.POST['action'] == 'export_all_alumni_to_excel':
+        if "action" in request.POST and request.POST["action"] == "export_all_alumni_to_excel":
             if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
                 post = request.POST.copy()
                 for u in Alumnus.objects.all():
@@ -321,10 +339,10 @@ class AlumnusAdmin(admin.ModelAdmin):
             try:
                 validate_email( alumnus.email )
                 print(alumnus.full_name)
-                form = PasswordResetForm(data={'email': alumnus.email})
+                form = PasswordResetForm(data={"email": alumnus.email})
                 form.is_valid()
-                form.save(email_template_name='registration/password_forced_reset_email.html',
-                          extra_email_context = {'full_name': alumnus.full_name})
+                form.save(email_template_name="registration/password_forced_reset_email.html",
+                          extra_email_context = {"full_name": alumnus.full_name})
                 self.message_user(request, "Succesfully sent password reset email.")
             except ValidationError:
                 self.message_user(request, "Alumnus does not have a valid email address", level="error")

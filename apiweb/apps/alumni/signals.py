@@ -33,11 +33,14 @@ def update_user_email_when_alumnus_email_changes(sender, instance=None, **kwargs
     # in infinite recursion. Alternatively, the first_name, last_name and email
     # could be removed from the Alumnus class, and the fields from the User could be
     # used instead
+
     instance.user.first_name = instance.first_name
     instance.user.last_name = instance.last_name
 
     # User.email may not be NULL, but Alumnus.user may be NULL. Only update if the Alumnus has non-NULL email.
     if instance.email:
         instance.user.email = instance.email
+    else:
+        instance.user.email = ""
 
     instance.user.save()
