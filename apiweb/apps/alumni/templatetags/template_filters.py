@@ -10,8 +10,8 @@ register = template.Library()
 @register.simple_tag(name='filter_objects', takes_context=True)
 def filter_objects(context, filter_type, value):
     """ Takes two string parameters: filtertype is the category that will be
-    filtered (e.g. "store_filter"), value is the subselection that is wanted
-    (e.g. store ID). """
+    filtered (e.g. "year"), value is the subselection that is wanted
+    (e.g. 2010-2019). """
 
     url = URLObject(context.request.get_full_path())
 

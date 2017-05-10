@@ -22,13 +22,18 @@ def alumnus_list(request):
     alumni = Alumnus.objects.all()
 
     # Get filters
-    gender = request.GET.getlist('gender', None)
     defence_year = request.GET.getlist('year', None)
     degree_type = request.GET.getlist('type', None)
+    position = request.GET.getlist('position', None)
 
-    # Apply filters
-    if gender:
-        alumni = alumni.filter(gender=gender[0])
+    if position:
+        multifilter = Q()
+        for position in position:
+            pass
+            # TODO: implement filter for position, e.g. postdoc, staff, nova, etc
+            # multifilter = multifilter | Q(degrees__type=degree)
+
+        # alumni = alumni.filter(multifilter).distinct()
 
     if defence_year:
         multifilter = Q()
