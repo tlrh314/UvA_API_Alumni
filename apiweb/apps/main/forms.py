@@ -10,6 +10,6 @@ class ContactForm(forms.Form):
                "placeholder": "What would you like to tell us?"}))
     sender = forms.EmailField(required=False, widget=forms.EmailInput(
         attrs={"class": "form-control email",
-               "placeholder": "email@adres.nl - so we can reach you"}))
+               "placeholder": "email@adres.nl - so we know how to reach you"}))
     cc_myself = forms.BooleanField(required=False, widget=forms.CheckboxInput(
         attrs={"class": "checkchoice"}))

@@ -12,7 +12,7 @@
             <div style="text-align: left; padding-top: 15px; padding-bottom: 15px;">
                 Do you have a question, suggestion, complaint, or feedback? We value your input! <br>
                 <br>
-                For convenience you can use this contact form, of you could sent an email to <a href="mailto:{{ contactinfo.secr}}">email</a>.
+                For convenience you can use this contact form, or you could sent an email to <a href="mailto:{{ contactinfo.secretary_email_address}}">{{ contactinfo.secretary_email_address }}</a>.
             </div>
 
             <form class="form-horizontal col-sm-12" role="form" action="." method="post"> {% csrf_token %}
