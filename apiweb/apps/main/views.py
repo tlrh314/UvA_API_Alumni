@@ -1,11 +1,14 @@
 from __future__ import unicode_literals, absolute_import, division
 
 from django.http import Http404
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 
 from .models import ContactInfo
+from .forms import ContactForm
 
 
 def index(request):
@@ -13,6 +16,8 @@ def index(request):
 
 
 def page_not_found(request):
+    # TODO: passing contactinfo is given to all templates in context_processors.py.
+    # The page_not_found method does not need to give contactinfo to template?
     contactinfo = ContactInfo.objects.all()
     if contactinfo:
         webmaster_email_address = contactinfo[0].webmaster_email_address
@@ -20,6 +25,46 @@ def page_not_found(request):
         # Hardcoded in case ContactInfo has no instances.
         webmaster_email_address = "secr-astro-science@uva.nl"
     return render(request, "404.html", {"webmaster_email_address": webmaster_email_address})
+
+def contact(request):
+    form_class = ContactForm
+
+    contactinfo = ContactInfo.objects.all()
+    if contactinfo:
+        sent_to = contactinfo[0].secretary_email_address
+    else:
+        # Hardcoded in case ContactInfo has no instances.
+        sent_to = "secr-astro-science@uva.nl"
+
+    if request.method == "POST":
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            message = form.cleaned_data["message"]
+            sender = form.cleaned_data["sender"]
+            cc_myself = form.cleaned_data["cc_myself"]
+
+            recipients = ["timohalbesma@gmail.com"]  #  TODO: use sent_to
+            if cc_myself:
+                recipients.append(sender)
+
+            msg = "This message sent trough API Alumnus Website\n\n"
+            msg += "From: {0}\n".format(name)
+            msg += "Email Address: {0}\n".format(sender)
+            msg += "-------------------------------------------------\n\n"
+            msg += "{0}\n\n".format(message)
+
+            send_mail("Message sent trough API Alumnus Website", msg, sent_to, recipients)
+            return HttpResponseRedirect("/thanks/")
+    else:
+        form = ContactForm()
+
+    return render(request, "main/contact.html", {"form": form})
+
+
+def contact_success(request):
+    return render(request, "main/thanks.html")
 
 
 # TODO: clean up code below
