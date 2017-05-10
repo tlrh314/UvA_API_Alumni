@@ -9,6 +9,7 @@ from django.contrib.admin.sites import site
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import PasswordResetForm
+from django.http.response import HttpResponseRedirect
 from django.contrib.sites.models import Site
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -181,7 +182,6 @@ class DegreeAdmin(admin.ModelAdmin):
 
     def export_all_degrees_to_excel(self, request, queryset):
         return save_all_theses_to_xls(request, None)
-        # self.message_user(request, "This function is not yet implemented.", level="error")
     export_all_degrees_to_excel.short_description = "Export all Theses to Excel"
 
 
@@ -247,7 +247,8 @@ class AlumnusAdmin(admin.ModelAdmin):
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
     readonly_fields = ("get_full_name", "date_created", "date_updated")
-    actions = ("sent_password_reset", "export_selected_alumni_to_excel", "export_all_alumni_to_excel")
+    actions = ("sent_password_reset", "reset_password_yourself",
+               "export_selected_alumni_to_excel", "export_all_alumni_to_excel")
     # exclude = ("jobs", )
 
     fieldsets = [
@@ -347,6 +348,14 @@ class AlumnusAdmin(admin.ModelAdmin):
             except ValidationError:
                 self.message_user(request, "Alumnus does not have a valid email address", level="error")
     sent_password_reset.short_description = "Sent selected Alumni Password Reset"
+
+    def reset_password_yourself(self, request, queryset):
+        if len(queryset) != 1:
+            self.message_user(request, "Please select only one Alumnus!", level="error")
+        else:
+            userpk = queryset[0].user_id
+            return HttpResponseRedirect("/admin/auth/user/{0}/password/".format(userpk))
+    reset_password_yourself.short_description = "Reset password of Alumnus yourself"
 
     def export_selected_alumni_to_excel(self, request, queryset):
         return save_all_alumni_to_xls(request, queryset)
