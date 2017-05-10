@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'apiweb.apps.main',
     'apiweb.apps.alumni',
     'apiweb.apps.interviews',
+    'apiweb.apps.visualization',
 
     'bootstrap3',
 )
