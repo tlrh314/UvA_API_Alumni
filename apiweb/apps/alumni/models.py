@@ -6,8 +6,6 @@ from datetime import date
 
 from django.db import models
 from django.db import IntegrityError
-from django.db.models import signals
-from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
@@ -199,20 +197,6 @@ class Alumnus(models.Model):
     def age(self):
         TODAY = date.today()
         return "{}".format(int((TODAY-self.birth_date).days/365.0))
-
-
-@receiver(signals.post_delete, sender=Alumnus)
-def delete_user(sender, instance=None, **kwargs):
-    """ When Alumnus instance is deleted, the post_delete signal is sent.
-        Here we receive the post_delete signal to also remove the related
-        User instance. Note that this does not ask for confirmation in
-        the Admin upon deleting the Alumnus instance. """
-    try:
-        instance.user
-    except User.DoesNotExist:
-        pass
-    else:
-        instance.user.delete()
 
 
 @python_2_unicode_compatible
