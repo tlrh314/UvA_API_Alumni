@@ -22,11 +22,6 @@ def filter_objects(context, filter_type, value):
         new_url = url.del_query_param(filter_type)
         return new_url
 
-    # Allow only one choice each time for gender
-    if filter_type == 'gender':
-        new_url = url.set_query_param(filter_type, value)
-        return new_url
-
     value = str(value)
     # If you add a new filter you start at page 1 again
     # url = url.del_query_param('page')
@@ -81,11 +76,6 @@ def get_defence_years():
             ('1990 - 1999', 1990, 1999),
             ('2000 - 2009', 2000, 2009),
             ('2010 - 2019', 2010, 2019)]
-
-
-@register.simple_tag(name='get_genders')
-def get_genders():
-    return Alumnus.GENDER_CHOICES
 
 
 @register.simple_tag(name='get_degree_types')

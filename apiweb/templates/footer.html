@@ -12,7 +12,7 @@
                 </ul>
             </div>
             <div class="col-xs-2 footer-column">
-                <h3> Latest Interviews </h3>
+                <h3> News &amp; Interviews </h3>
                 <ul>
                     {% for interview in latest_interviews %}
                     <li><a href="{% url 'interviews:detail' interview.slug %}"> {{ interview.alumnus.full_name }} <span>| {{ interview.date_published|date }}</span></a></li>
@@ -20,7 +20,7 @@
                 </ul>
             </div>
             <div class="col-xs-2 footer-column">
-                <h3> Latest Theses </h3>
+                <h3> Recent Theses </h3>
                 <ul>
                     {% for thesis in latest_theses %}
                     <li><a href=" {% url 'alumni:thesis-detail' thesis.thesis_slug %} "> {{ thesis.alumnus.full_name }}  <span>| {{ thesis.date_of_defence|date }}</span> </a></li>
@@ -44,7 +44,7 @@
                             class=" fa fa-facebook"></i></a></li>
                     <li><a href="https://twitter.com/UvA_API" target="_blank"> <i class="fa fa-twitter"></i> </a></li>
                     {# TODO TODO TODO add the API LinkedIn #}
-                    <li><a href="https://www.linkedin.com/company/uva_api " target="_blank"> <i class="fa fa-linkedin"></i> </a></li>
+                    <li><a href="https://www.linkedin.com/groups/12005398" target="_blank"> <i class="fa fa-linkedin"></i> </a></li>
 
                 </ul>
             </div>

@@ -8,7 +8,7 @@ from django.contrib.auth import views as auth_views
 from ajax_select import urls as ajax_select_urls
 import django.contrib.sitemaps.views
 
-from .main.views import index
+from .main.views import index, contact, contact_success
 
 
 admin.autodiscover()
@@ -26,6 +26,8 @@ urlpatterns = [
 
     url(r'^alumni/', include('apiweb.apps.alumni.urls', namespace='alumni')),
     url(r'^interviews/', include('apiweb.apps.interviews.urls', namespace='interviews')),
+    url(r'^contact/$', contact, name='contact'),
+    url(r'^thanks/$', contact_success, name='contact_success'),
     url(r'^search/', include('apiweb.apps.search.urls', namespace='search')),
     url(r'^vis/', include('apiweb.apps.visualization.urls', namespace='vizualisation')),
     url(r'^$', index, name='index'),

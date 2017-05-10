@@ -16,20 +16,20 @@
     {# TODO: margin auto 0 to center #}
     <div class="col-md-12 text-center">
         <ul class="nav nav-pills selector-nav center-pills">  
-            {# Gender dropdown menu #}
+            {# Degree type dropdown menu #}
+            {% get_degree_types as degrees %}
             <li role="presentation" class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">Gender<span class="caret"></span>
+                   aria-expanded="false">Degree Type<span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="{% filter_objects 'gender' 'None' %}"><i> No filter </i></a></li>
-                    {% get_genders as genders %}
-                    {% for choice in genders %}
+                    <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
+                    {% for type in degrees %}
                     {# Reset possible old filter and add store filter #}
                     <li>
-                        <a href="{% filter_objects 'gender' choice.0 %}" class="menu-link"> 
-                            <div class="menu-text"> {{ choice.1 }} </div>
-                            <img class="check-box" src="{% check_dropdown 'gender' choice.0 %}">
+                        <a href="{% filter_objects 'type' type.0 %}" class="menu-link"> 
+                            <div class="menu-text"> {{ type.1 }} </div>
+                            <img class="check-box" src="{% check_dropdown 'type' type.0 %}">
                         </a>
                     </li>
                     {% endfor %}
@@ -50,26 +50,6 @@
                         <a href="{% filter_objects 'year' year.1 %}" class="menu-link"> 
                             <div class="menu-text"> {{ year.0 }} </div>
                             <img class="check-box" src="{% check_dropdown 'year' year.1 %}">
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </li>
-
-            {# Degree type dropdown menu #}
-            {% get_degree_types as degrees %}
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">Type<span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
-                    {% for type in degrees %}
-                    {# Reset possible old filter and add store filter #}
-                    <li>
-                        <a href="{% filter_objects 'type' type.0 %}" class="menu-link"> 
-                            <div class="menu-text"> {{ type.1 }} </div>
-                            <img class="check-box" src="{% check_dropdown 'type' type.0 %}">
                         </a>
                     </li>
                     {% endfor %}
