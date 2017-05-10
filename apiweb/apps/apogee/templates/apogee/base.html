@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% block stylesheets %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}apogee/css/apogee.css" />{% endblock stylesheets %}
-{% block banner %}<div id="banner"><h1>APO booking calendar</h1></div>{% endblock banner %}
-{% block breadcrumbs %}
-{{ block.super }} &#187; <a href="{% url 'apogee:index' %}">Calendar</a>
-{% endblock breadcrumbs %}
-{% block sidemenu %}
-{% include "apogee/sidemenu.html" %}
-{% endblock sidemenu %}

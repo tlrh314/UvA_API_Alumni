@@ -1,7 +1,0 @@
-{% extends "base.html" %}
-{% block stylesheets %}{{ block.super }}<style>div#banner { background-image: url({{ STATIC_URL }}institute/images/skyline2_banner.jpg); }</style>{% endblock stylesheets %}
-{% block scripts %}{{ block.super }}<script type="text/javascript" src="{{ STATIC_URL }}institute/javascript/jquery-color.js"></script><script type="text/javascript" src="{{ STATIC_URL }}institute/javascript/highlight.js"></script>{% endblock scripts %}
-
-{% block sidemenu %}
-{% include "institute/sidemenu.html" %}
-{% endblock sidemenu %}

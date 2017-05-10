@@ -1,8 +1,0 @@
-{% extends "education/base.html" %}
-{% block breadcrumbs %}
-{{ block.super }} &#187; <a href="{% url 'education:projects-index' %}">Projects</a></a>
-{% endblock breadcrumbs %}
-
-{% block sidemenu %}
-{% include "education/projects/sidemenu.html" %}
-{% endblock sidemenu %}

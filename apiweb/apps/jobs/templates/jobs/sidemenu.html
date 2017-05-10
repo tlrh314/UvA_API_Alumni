@@ -1,5 +1,0 @@
-{% url 'jobs:index' as jobs_index %}
-
-<ul>
-<li><a {% ifequal request.path jobs_index %}class="active" {% endifequal %}href="{{ jobs_index }}">Jobs</a></li>
-</ul>

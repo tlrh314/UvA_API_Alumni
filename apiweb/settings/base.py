@@ -59,10 +59,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.common.BrokenLinkEmailsMiddleware',
-    #This used to be in the 1.3 settings file
-    #'django.middleware.locale.LocaleMiddleware',
-    #Uncomment the next line for simple clickjacking protection:
-    #'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 # CommonMiddleware settings
@@ -120,22 +116,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
 
-    # 'apiweb.apps.institute',
-    'apiweb.apps.news',
-    # 'apiweb.apps.education',
     'apiweb.apps.people',
     'apiweb.apps.research',
-    # 'apiweb.apps.jobs',
-    # 'apiweb.apps.publiek',
-    # 'apiweb.apps.apo',
-    # 'apiweb.apps.internal',
-    # 'apiweb.apps.wiki',
-    # 'apiweb.apps.staffmeetings',
-    # 'apiweb.apps.agenda',
-    # 'apiweb.apps.apogee',
-    # 'apiweb.apps.library',
     'apiweb.apps.search',
-    # 'apiweb.apps.old',
 
     # 'nested_inline',
     'apiweb.apps.main',

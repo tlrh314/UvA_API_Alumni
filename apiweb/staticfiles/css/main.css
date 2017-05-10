@@ -79,6 +79,56 @@ body {
     white-space: initial;
 }
 
+.sidebar .nav > li > a {
+    display: block;
+    padding: 4px 0px;  /* 20 */
+    font-size: 18px;
+    font-weight: 500;
+    color: #767676
+}
+
+.sidebar .nav > li > i {
+    margin-top: 9px;
+    opacity: 0.6;
+}
+
+.sidebar .nav > li > a:focus, .sidebar .nav > li > a:hover {
+    padding-left: 0px; /* 19 */
+    /*color: #563d7c;*/
+    text-decoration: none;
+    background-color: transparent;
+    border-left: 0px solid #563d7c; /* 1 */
+    color: #5BBAF4;
+}
+
+.sidebar .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 8px; /* 30 */
+    font-size: 15px;
+    font-weight: 400
+}
+
+.sidebar .nav .nav > li > a:focus, .sidebar .nav .nav > li > a:hover {
+    padding-left: 8px; /* 29 */
+    color: #5BBAF4;
+}
+
+.sidebar .nav .nav > .active:focus > a, .sidebar .nav .nav > .active:hover > a,
+.sidebar .nav .nav > .active > a {
+    padding-left: 8px; /* 28 */
+    font-weight: 500
+}
+
+.sidenav {
+    margin-bottom: 20px
+}
+
+.dropdown-toggle, .dropdown-toggle:hover {
+  color: inherit;
+}
+
+
 /* End style for dropdown filter */
 
 .container {

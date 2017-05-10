@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% block stylesheets %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}agenda/css/agenda.css" />{% endblock stylesheets %}
-{% block banner %}<div id="banner"><h1>Institute calendar</h1></div>{% endblock banner %}
-{% block breadcrumbs %}
-{{ block.super }} &#187; <a href="{% url 'agenda:index' %}">API Calendar</a>
-{% endblock breadcrumbs %}
-{% block sidemenu %}
-{% include "agenda/sidemenu.html" %}
-{% endblock sidemenu %}

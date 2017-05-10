@@ -1,8 +1,0 @@
-{% extends "wiki/base.html" %}
-{% block title %}API wiki - create a new page{% endblock title %}
-
-{% block contents %}
-<form method="POST" action="{% url 'wiki:create' %}"> {% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Create" />
-{% endblock contents %}
