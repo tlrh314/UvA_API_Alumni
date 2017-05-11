@@ -12,7 +12,12 @@ from .forms import ContactForm
 
 
 def index(request):
-    return render(request, "main/index.html")
+    contactinfo = ContactInfo.objects.all()
+    if contactinfo:
+        frontpage_text = contactinfo[0].frontpage_text
+    else:
+        frontpage_text = 'Lorum Ipsum'
+    return render(request, "main/index.html", {'frontpage_text': frontpage_text})
 
 
 def page_not_found(request):

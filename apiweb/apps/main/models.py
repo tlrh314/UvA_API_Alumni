@@ -3,6 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from django.core.exceptions import ValidationError
 
+from tinymce.models import HTMLField
+
+
 def validate_only_one_instance(obj):
     model = obj.__class__
     if (model.objects.count() > 0 and obj.id != model.objects.get().id):
@@ -14,6 +17,7 @@ class ContactInfo(models.Model):
     postbox_address_api = models.CharField(_("API PO Box Address"), max_length=256, default="PO Box 94249, 1090 GE Amsterdam")
     telephone_api = models.CharField(_("API Phone Number"), default="0031205257491", max_length=20)
     webmaster_email_address = models.EmailField(_("API Webmaster e-mail address"), default="secr-astro-science@uva.nl")
+    frontpage_text = HTMLField(_("Frontpage text"), blank=True, default="Lorum Ipsum")
 
     class Meta:
         verbose_name = "API Contact Info"
