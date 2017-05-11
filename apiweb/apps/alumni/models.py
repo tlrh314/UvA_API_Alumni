@@ -10,7 +10,6 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
-from django.db.models import permalink
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -261,7 +260,7 @@ class Degree(models.Model):
     #             break
 
     def get_absolute_url(self):
-        return reverse("alumnus:thesis-detail", args=[self.thesis_slug])
+        return reverse("alumni:thesis-detail", args=[self.thesis_slug])
 
     @property
     def author(self):
