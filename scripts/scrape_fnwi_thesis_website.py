@@ -3,6 +3,7 @@ import logging
 import os
 import wget
 import datetime
+import pickle
 
 from bs4 import BeautifulSoup
 # TODO: check formatting, resolve initials problem for people with written out first name
@@ -11,12 +12,12 @@ def strip_title(full_name):
     possible_titles = ['prof', 'dr', 'ir']
     full_name = full_name.replace('.','').lower()
     supervisor_titles = ''
-    
+
     for el in possible_titles:
         if el in full_name.lower():
             supervisor_titles += el+'. '
             full_name = full_name.replace(el,'')
-    
+
     while full_name[0] == ' ':
         full_name = full_name[1:]
 
@@ -32,7 +33,7 @@ def make_datetime_object(date):
     return datetime_obj
 
 def split_name(name):
-    namesplit = name.split(' ')            
+    namesplit = name.split(' ')
     initials = namesplit[0].replace('.','')
     prefix = ""
     if namesplit[1] in ["van", "de", "den", "der"]:
@@ -60,7 +61,7 @@ def get_persons(base_url, page, degree_type,  use_headers, file_target_location)
     download_fullPdf    =   True
     download_profilePicture = True
     download_thesisPicture = True
-    
+
     url = base_url%(10*page+1, degree_type)
 
 
@@ -89,7 +90,7 @@ def get_persons(base_url, page, degree_type,  use_headers, file_target_location)
         has_results = True
     else:
         has_results = False
-    
+
 
     result_list = []
     if has_results:
@@ -115,12 +116,12 @@ def get_persons(base_url, page, degree_type,  use_headers, file_target_location)
         #Per record in api_record set we have 3 sub entries:
         # in the first the information about the name, institute, date etc etc is stored
         # in the second the information about the thesis itself is stored
-        # in the third the information aobut the location of the thesis is stored. 
+        # in the third the information aobut the location of the thesis is stored.
 
 
 
         for j in range(len(api_record_set)):
-            #Retrieve the individual tables again. 
+            #Retrieve the individual tables again.
             first_contents = api_record_set[j][0].findAll('td')
             second_contents = api_record_set[j][1].findAll('td')
             third_contents = api_record_set[j][2].findAll('td')
@@ -244,10 +245,10 @@ def get_persons(base_url, page, degree_type,  use_headers, file_target_location)
                         local_thesispicture_location = target_filename_full
 
             sub_dict = {}
-            
+
             print('name = %s'%name)
             sub_dict['name'] = name
-            
+
             #TODO if full first name is used, then think of a way to get that, instead of thinking those are initials
             author_initials, author_prefix, author_last_name = split_name(name)
 
@@ -312,7 +313,7 @@ def get_persons(base_url, page, degree_type,  use_headers, file_target_location)
             print('\n')
 
             result_list.append(sub_dict)
-            print sub_dict
+            print(sub_dict)
 
     return has_results, result_list
 
@@ -325,7 +326,7 @@ def loop_over(file_target_location):
     #Create the location where the downloaded files are stored, if necessary
     if not os.path.isdir(file_target_location):
         print('directory not present yet, making now')
-        os.mkdir( file_target_location, 0755 )
+        os.mkdir( file_target_location, "0755" )
         if os.path.isdir(file_target_location):
             print('Succesfully created target directory')
 
@@ -341,10 +342,16 @@ def loop_over(file_target_location):
             grand_result_list.append(entry)
 
         i += 1
-        print str(grand_result_list)
+    pickle.dump(grand_result_list, open(file_target_location+"grand_result_list.dump", "wb"))
+    # print(str(grand_result_list))
 
-loop_over('/home/david/Desktop/project_api/site/scrapers_uva/results/')
-#get_persons('https://esc.fnwi.uva.nl/thesis/apart/phys/thesis.php?page=phys&start=%d&level=%s',0,'master', True, '../results/')
-#get_persons('https://esc.fnwi.uva.nl/thesis/apart/phys/thesis.php?page=phys&start=%d&level=%s',1,'master', True, '/home/david/Desktop/project_api/site/scrapers_uva/results/')
-#get_persons('https://esc.fnwi.uva.nl/thesis/apart/phys/thesis.php?page=phys&start=%d&level=%s',2,'master', True, '/home/david/Desktop/project_api/site/scrapers_uva/results/')
-#get_persons('https://esc.fnwi.uva.nl/thesis/apart/phys/thesis.php?page=phys&start=%d&level=%s',3,'master', True, '/home/david/Desktop/project_api/site/scrapers_uva/results/')
+
+if __name__ == "__main__":
+    output_dir = "./scraped_theses/"
+    loop_over(output_dir)
+
+    # base_url = "https://esc.fnwi.uva.nl/thesis/apart/phys/thesis.php?page=phys&start="
+    # get_persons(base_url+'%d&level=%s', 0, 'master', True, '../results/')
+    # get_persons(base_url+'%d&level=%s', 1, 'master', True, output_dir)
+    # get_persons(base_url+'%d&level=%s', 2, 'master', True, output_dir)
+    # get_persons(base_url+'%d&level=%s', 3, 'master', True, output_dir)
