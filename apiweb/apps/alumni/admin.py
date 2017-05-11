@@ -2,6 +2,7 @@ from __future__ import unicode_literals, absolute_import, division
 import copy
 
 from django import forms
+from django.db import models
 from django.db.models import Q
 from django.contrib import admin
 from django.contrib.admin import widgets
@@ -67,6 +68,7 @@ class JobAfterLeavingAdmin(admin.ModelAdmin):
 class PreviousPositionInline(admin.StackedInline):
     model = PreviousPosition
     readonly_fields = ("date_created", "date_updated")
+    exclude = ("fte_per_year",)
     extra = 0
 
 
@@ -78,17 +80,37 @@ class PreviousPositionAdminForm(forms.ModelForm):
 
 @admin.register(PreviousPosition)
 class PreviousPositionAdmin(admin.ModelAdmin):
-    # list_display = ("thesis_title", "get_author", "show_year", "type")
-    list_filter = ("type", )
-    # search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name",
-    #     "date_start", "date_stop", "date_of_defence")
-    # ordering = ("alumnus__user__username", )
-    # filter_horizontal = ( "thesis_advisor", )
+    list_display = ("get_alumnus", "type", "date_start", "date_stop", "funding", "is_last")
+    list_filter = ("type", "is_last")
+    search_fields = ("date_start", "date_stop", "alumnus__last_name", "alumnus__first_name")
+    # "alumnus__first_name", "alumnus__last_name",
+    ordering = ("alumnus__last_name", )
 
     form = PreviousPositionAdminForm
     readonly_fields = ("date_created", "date_updated")
     exclude = ("fte_per_year",)
     extra = 1
+
+    # def get_search_results(self, request, queryset, search_term):
+    #     queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+    #     try:
+    #         search_term_as_int = int(search_term)
+    #     except ValueError:
+    #         pass
+    #     else:
+    #         queryset |= self.model.objects.filter(age=search_term_as_int)
+    #     return queryset, use_distinct
+
+    def get_queryset(self, request):
+        """ This function defines how to sort on alumnus column in the list_display """
+        qs = super(PreviousPositionAdmin, self).get_queryset(request)
+        qs = qs.annotate(models.Count("alumnus"))
+        return qs
+
+    def get_alumnus(self, obj):
+        return obj.alumnus.full_name
+    get_alumnus.short_description = "Alumnus"
+    get_alumnus.admin_order_field = "alumnus__last_name"
 
 
 class DegreeAdminInline(admin.StackedInline):
@@ -163,10 +185,22 @@ class DegreeAdmin(admin.ModelAdmin):
                 request._set_post(post)
         return super(DegreeAdmin, self).changelist_view(request, extra_context)
 
+    def get_queryset(self, request):
+        """ This function defines how to sort on alumnus column in the list_display
+            http://stackoverflow.com/a/29083623 """
+        qs = super(DegreeAdmin, self).get_queryset(request)
+        qs = qs.annotate()
+        # TODO: this does not take into account the type of the Degree. Also, when
+        # filtering on type = "PhD" ordering of the Degrees could be done on the MSc degree
+        qs = qs.annotate(sort_author = models.Count("alumnus__last_name", distinct=True)).annotate(sort_year =
+                models.Count("alumnus__degrees__date_of_defence", distinct=True))
+        return qs
+
     def get_author(self, obj):
         """ We could use author instead of get_alumnus in list_display """
         return obj.alumnus.full_name
     get_author.short_description = "Author"
+    get_author.admin_order_field = "sort_author"
 
     def show_year(self, obj):
         if obj.date_of_defence:
@@ -175,6 +209,7 @@ class DegreeAdmin(admin.ModelAdmin):
             return obj.date_stop.strftime("%Y")
         return None
     show_year.short_description = "Year"
+    show_year.admin_order_field = "sort_year"
 
     def export_selected_degrees_to_excel(self, request, queryset):
         return save_all_theses_to_xls(request, queryset)
@@ -241,8 +276,8 @@ class AlumnusAdmin(admin.ModelAdmin):
     ordering = ("user__username", )
     search_fields = ("first_name", "last_name", "degrees__thesis_title",
         "degrees__date_start", "degrees__date_stop", "degrees__date_of_defence")
-    list_display = ("get_alumnus", "email", "show_msc_year", "show_phd_year")
-    list_filter = ("show_person", "position", AlumnusListFilter)
+    list_display = ("get_alumnus", "email", "show_msc_year", "show_phd_year", "show_postdoc_year", "show_staff_year")
+    list_filter = ("show_person", AlumnusListFilter)  # position and positions (== related name of PreviousPosition)
     inlines = (DegreeAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
@@ -311,6 +346,51 @@ class AlumnusAdmin(admin.ModelAdmin):
     def get_full_name(self, obj):
         return obj.full_name
     get_full_name.short_description = "Full Name"
+
+    def show_staff_year(self, obj):
+        if not obj.positions:
+            return None
+
+        staff_set = obj.positions.filter(type__name__in=["Full Professor", "Research Staff",
+            "Adjunct Staff", "Faculty Staff"])
+
+        if not staff_set:
+            return None
+
+        date_stop = staff_set[0].date_stop
+        for pos in staff_set:
+            if not pos.date_stop:
+                continue
+            if pos.date_stop > date_stop:
+                date_stop = pos.date_stop
+
+        if not date_stop:
+            return "Current"
+        else:
+            return date_stop.strftime("%Y")
+    show_staff_year.short_description = "STAFF"
+
+    def show_postdoc_year(self, obj):
+        postdoc = PositionType.objects.filter(name="Postdoc")[0]
+
+        # CAUTION, position is the current position while the related name of PreviousPosition is positions !!
+        if obj.position == postdoc:
+            return "Current"
+
+        postdoc_set = obj.positions.filter(type=postdoc)
+        if len(postdoc_set) is 0:
+            return None
+        print(postdoc_set)
+
+
+        # Could have multiple date_stop
+        postdoc = postdoc_set[0]
+        for pd in postdoc_set:
+            if pd.date_stop > postdoc.date_stop:
+                postdoc = pd
+        if postdoc.date_stop:
+            return postdoc.date_stop.strftime("%Y")
+    show_postdoc_year.short_description = "PD"
 
     def show_phd_year(self, obj):
         degrees = obj.degrees.filter(type="phd")
