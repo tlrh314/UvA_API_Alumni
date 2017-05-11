@@ -69,13 +69,14 @@ class PreviousPosition(models.Model):
     alumnus          = models.ForeignKey("Alumnus", related_name="positions")
     date_start       = models.DateField(_("Starting date"), blank=True, null=True)
     date_stop        = models.DateField(_("Date finished"), blank=True, null=True)
-    type             = models.ForeignKey(PositionType, related_name="alumnus_set")
+    type             = models.ForeignKey(PositionType, related_name="alumnus_set",
+        blank=True, null=True, on_delete=models.SET_NULL)
     nova             = models.CharField(max_length=3, choices=NOVA_NETWORK, blank=True)
     funding          = models.PositiveSmallIntegerField(_("Funding"), choices=FUNDING, default=0)
     funding_note     = models.CharField(_("Funding Note"), blank=True, max_length=40)
     funding_remark   = models.CharField(_("Funding Remark"), blank=True, max_length=40)
     fte_per_year     = JSONField(blank=True, default=[], help_text="Enter mapping from year to fte in valid JSON syntax")
-    is_last          = models.BooleanField(_("This is the last known position at API"), default=False)
+    is_last          = models.BooleanField(_("Last Position at API"), default=False)
 
     comments         = models.TextField(_("comments"), blank=True)
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
@@ -139,7 +140,8 @@ class Alumnus(models.Model):
     country         = models.CharField(_("country"), blank=True, max_length=40)
 
     # Current position at API
-    position        = models.ForeignKey(PositionType, blank=True, null=True, related_name="current_position")
+    position        = models.ForeignKey(PositionType, blank=True, null=True,
+        related_name="current_position", on_delete=models.SET_NULL)
     specification   = models.CharField(max_length=255, blank=True,
         help_text=_("Type of grant, or other indicator of funding"))
     office          = models.CharField(_("office"), blank=True, max_length=40)
@@ -189,9 +191,10 @@ class Alumnus(models.Model):
 
     @property
     def full_name(self):
-        return ("{} {} {} {} {}".format(self.title, self.first_name,
-            self.initials if not self.first_name else "", self.prefix,
-            self.last_name)).replace("  ", " ")
+        title_last = self.title in ["MA", "MSc", "BSc"]
+        return ("{} {} {} {} {} {}".format(self.title if not title_last else "",
+            self.first_name, self.initials if not self.first_name else "",
+            self.prefix, self.last_name, self.title if title_last else "")).replace("  ", " ")
 
     @property
     def age(self):
