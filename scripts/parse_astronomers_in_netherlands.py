@@ -86,7 +86,7 @@ def add_info_from_astronomers_in_the_netherlands():
     # Further colums contain number of fte per year from 1995 to 2021
     for row_nr in range(1, sheet.nrows):
         if row_nr > 421: break
-        if row_nr < 412: continue
+        # if row_nr < 412: continue
         print("Eating: {0} / {1}".format(row_nr, sheet.nrows-1))
 
         # Eat all columns up to list of fte per year
@@ -163,7 +163,6 @@ def add_info_from_astronomers_in_the_netherlands():
                 return {1: "NW1", 2: "NW2", 3: "NW3", 4: "INS" }.get(nova[0], 9)
 
         def getfunding(fund):
-            print(fund)
             # print(PreviousPosition.FUNDING)
             d = dict(PreviousPosition.FUNDING)
             ivd = {v: k for k, v in d.items()}
@@ -209,14 +208,16 @@ def add_info_from_astronomers_in_the_netherlands():
                   instituut, funding, note, remark, date_start, date_stop, cleannova, cleanfunding, cleanposition))
         print(fte_per_year)
 
-        break
-        continue
-
         # print(json.dumps(fte_per_year))
 
         alumnus_set = Alumnus.objects.filter(last_name=last_name)
+        degeneracy_fix = { "Wijers": 251, "Berg": 19, "Russell": 205,
+                "Bouwman": 357, "Groot": 355, "Homan": 482, "Vries": 244}
 
-        # if row_nr > 2: break
+        if len(alumnus_set) == 2:
+            pk = degeneracy_fix.get(last_name, None)
+            if pk :
+                alumnus_set = Alumnus.objects.filter(pk=pk)
 
         if not alumnus_set:
             title, initials, prefix, last_name = cleanfullname(full_name)
