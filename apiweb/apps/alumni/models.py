@@ -6,6 +6,7 @@ from datetime import date
 
 from django.db import models
 from django.db import IntegrityError
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
@@ -181,9 +182,8 @@ class Alumnus(models.Model):
                          # have correct permissions
         super(Alumnus, self).save(*args, **kwargs)
 
-    @permalink
     def get_absolute_url(self):
-        return ("alumnus:alumnus-detail", None, {"slug": self.slug})
+        return reverse("alumni:alumnus-detail", args=[self.slug])
 
     @property
     def username(self):
@@ -260,9 +260,8 @@ class Degree(models.Model):
     #         else:
     #             break
 
-    @models.permalink
     def get_absolute_url(self):
-        return ("alumnus:thesis-detail", [self.thesis_slug], {})
+        return reverse("alumnus:thesis-detail", args=[self.thesis_slug])
 
     @property
     def author(self):

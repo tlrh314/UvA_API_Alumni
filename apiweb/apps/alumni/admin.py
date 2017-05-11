@@ -26,7 +26,7 @@ from .actions import save_all_alumni_to_xls, save_all_theses_to_xls
 
 
 # Do not show the Site Admin
-admin.site.unregister(Site)
+# admin.site.unregister(Site)
 
 # Do not allow the Admin to change the User first_name, last_name or email.
 # The Alumnus has these fields, and when these fields are updated a signal is

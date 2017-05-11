@@ -51,7 +51,7 @@ def add_position_to_alumnus(alumnus, date_start, date_stop, cleanposition, clean
             type=cleanposition, nova=cleannova, funding=cleanfunding, funding_note=funding_note,
             funding_remark=funding_remark,fte_per_year=fte_per_year)
 
-    prevpos.comments = "Current position automatically read-in by TLR Halbesma, May 11 2017.\n"
+    prevpos.comments = "PreviousPosition automatically read-in by TLR Halbesma, May 11 2017.\n"
     prevpos.save()
     alumnus.save()
 
@@ -163,10 +163,11 @@ def add_info_from_astronomers_in_the_netherlands():
                 return {1: "NW1", 2: "NW2", 3: "NW3", 4: "INS" }.get(nova[0], 9)
 
         def getfunding(fund):
+            print(fund)
             # print(PreviousPosition.FUNDING)
             d = dict(PreviousPosition.FUNDING)
             ivd = {v: k for k, v in d.items()}
-            return (ivd.get("UvA", "ERROR"))
+            return (ivd.get(fund, "ERROR"))
 
         def getposition(pos):
             # TODO: ask Annemarie which positions there are, and what the abbreviations mean in the column 'functie'
@@ -177,9 +178,9 @@ def add_info_from_astronomers_in_the_netherlands():
                        "em": "Emeritus",
                        "OBP": "OBP",
                        "Proj.Man.": "Nova",
-                       "Comm.Adv.": "Outreach",
-                       "Comm. Adv.": "Outreach",
-                       "comm. Adv.": "Outreach",
+                       "Comm.Adv.": "Nova",
+                       "Comm. Adv.": "Nova",
+                       "comm. Adv.": "Nova",
                        "inst. Coordinator": "Institute Manager",
                        "Inst.Coordinator": "Institute Manager",
                        "Comm. Medew.": "Outreach",
@@ -207,6 +208,9 @@ def add_info_from_astronomers_in_the_netherlands():
                   last_name, birth_year, functie, gender, nova1, nova2, nova3, instrumentation, fte,
                   instituut, funding, note, remark, date_start, date_stop, cleannova, cleanfunding, cleanposition))
         print(fte_per_year)
+
+        break
+        continue
 
         # print(json.dumps(fte_per_year))
 
