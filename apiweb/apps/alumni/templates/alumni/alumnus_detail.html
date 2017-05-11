@@ -19,7 +19,11 @@
         <div class="row-fluid">
             <div class="col-xs-2"> 
                 <h3 class="text-left">Photo</h3>
-                <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img>
+                {% if alumnus.photo %}
+                    <img src="{{ alumnus.photo.url }}" width="150px"></img>
+                {% else %}
+                    <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img>
+                {% endif %}
             </div>
             <div class="col-xs-6"> 
                 <h3 class="text-center">Contact Info</h3>
