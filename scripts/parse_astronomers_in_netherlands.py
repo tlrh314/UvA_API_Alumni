@@ -86,7 +86,7 @@ def add_info_from_astronomers_in_the_netherlands():
     # Further colums contain number of fte per year from 1995 to 2021
     for row_nr in range(1, sheet.nrows):
         if row_nr > 421: break
-        # if row_nr < 412: continue
+        if row_nr < 371: continue
         print("Eating: {0} / {1}".format(row_nr, sheet.nrows-1))
 
         # Eat all columns up to list of fte per year
@@ -166,28 +166,28 @@ def add_info_from_astronomers_in_the_netherlands():
             # print(PreviousPosition.FUNDING)
             d = dict(PreviousPosition.FUNDING)
             ivd = {v: k for k, v in d.items()}
-            return (ivd.get(fund, "ERROR"))
+            return (ivd.get(fund, 9))  # 9 is Other
 
         def getposition(pos):
             # TODO: ask Annemarie which positions there are, and what the abbreviations mean in the column 'functie'
             posdict = {"staff": "Faculty Staff",
-                       "HL": "Full Professor",
+                       "HL": "Faculty Staff",
                        "co-work": "Adjunct Staff",
-                       "research": "Research Staff",
+                       "research": "Faculty Staff",
                        "em": "Emeritus",
                        "OBP": "OBP",
                        "Proj.Man.": "Nova",
                        "Comm.Adv.": "Nova",
                        "Comm. Adv.": "Nova",
                        "comm. Adv.": "Nova",
-                       "inst. Coordinator": "Institute Manager",
-                       "Inst.Coordinator": "Institute Manager",
+                       "inst. Coordinator": "OBP",
+                       "Inst.Coordinator": "OBP",
                        "Comm. Medew.": "Outreach",
                        "comp": "Software Developer",
-                       "secr.": "Secretary",
+                       "secr.": "OBP",
                        "docent": "Teacher",
-                       "bedrijfsvoerder": "Institute Manager",
-                       "Bedrijfsvoerder": "Institute Manager",
+                       "bedrijfsvoerder": "OBP",
+                       "Bedrijfsvoerder": "OBP",
                        "Instr": "Instrumentation",
                        "pd": "Postdoc",
                        "aio": "PhD Student" }
