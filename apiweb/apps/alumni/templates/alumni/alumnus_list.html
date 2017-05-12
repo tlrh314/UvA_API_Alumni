@@ -4,7 +4,7 @@
 
 {% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
 
-{% block title %}API - Research - Theses{% endblock title %}
+{% block title %} API - Alumni - People {% endblock title %}
 
 {% block content %}
 
@@ -79,7 +79,7 @@
                 {% get_yearrange filter_value as yearrange %}
                     {{ filter_type|capitalize_filter_type }}: {{ yearrange }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% elif filter_type == "type" %}
-                    {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_thesis_type }}<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_thesis_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% else %}
                     {{ filter_type }}: {{ filter_value }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 

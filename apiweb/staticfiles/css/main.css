@@ -241,7 +241,7 @@ body {
     min-height: 100vh;
     width: 90%;
     margin: 0 auto;
-    margin-bottom: 50px;
+    padding-bottom: 50px;
 }
 
 .btn-default, .btn-default:hover, .btn:active:focus, .btn-default:focus {
