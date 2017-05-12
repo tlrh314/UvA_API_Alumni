@@ -7,7 +7,6 @@
 
 {% block content %}
 <div class="main-content" role="main">
-
     <div class="col-xs-4 pull-left text-justify">
         <h2 class="text-left">Latest Interview</h2>
         <h5 class="text-left">{{ latest_post.date_published|date:"M d, Y"}} • <a href="{% url 'alumni:alumnus-detail' latest_post.alumnus.slug %}">{{ latest_post.alumnus.full_name }}</a></h5>
@@ -32,12 +31,5 @@
     <div class="col-xs-12" style="margin-top: 50px; margin-bottom: 50px;">
         <img src="media/uploads/API_Alumni_Groupphoto.png" class="img-responsive"></img>
     </div>
-
-
-
-
-
-
 </div>
-
 {% endblock %}

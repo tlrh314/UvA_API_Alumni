@@ -21,9 +21,9 @@
                 <tr><th>Author</th><td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td></tr>
                 <tr><th>Email</th><td><a href="mailto:{{ thesis.alumnus.email }}">{{ thesis.alumnus.email }}</a></td></tr>
                 <tr><th>Published</th><td>{{ thesis.date_of_defence|date:"j M Y" }}</td></tr>
-                <tr><th>URL</th><td><a href="{{ thesis.thesis_url }}">UvA DARE</a></td></tr>
+                <tr><th>URL</th><td><a href="{{ thesis.thesis_url }}" target="_blank">UvA DARE</a></td></tr>
                 {# TODO: check if has pdf #} 
-                <tr><th>PDF</th><td><a href="{{ STATIC_URL }}alumni/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf">Full Text</a></td></tr>
+                <tr><th>PDF</th><td><a href="{{ STATIC_URL }}alumni/theses/{{ thesis.type }}/{{ thesis.thesis_slug }}.pdf" target="_blank">Full Text</a></td></tr>
                 </tbody>
             </table>
         </div>
