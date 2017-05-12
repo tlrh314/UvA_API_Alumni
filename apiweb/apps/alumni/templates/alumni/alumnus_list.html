@@ -11,7 +11,6 @@
 <div class="main-content" role="main">
     {% bootstrap_messages %}
 
-    <h2 class="text-center">Total number of alumni: {{ alumni.paginator.count }}</h2>
     {# Filters #}
     {# TODO: margin auto 0 to center #}
     <div class="col-md-12 text-center">
@@ -20,7 +19,7 @@
             {% get_degree_types as degrees %}
             <li role="presentation" class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">Degree Type<span class="caret"></span>
+                    aria-expanded="false">Degree Type <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
@@ -40,7 +39,7 @@
             {% get_defence_years as years %}
             <li role="presentation" class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">Year<span class="caret"></span>
+                    aria-expanded="false">Year <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% filter_objects 'year' 'None' %}"><i> No filter </i></a></li>
@@ -56,16 +55,36 @@
                 </ul>
             </li>
 
-            {# Reset all filters #}
-            <li role="presentation" class="dropdown">
-            <a class="dropdown-toggle" href="{% url 'alumni:alumnus-list' %}" aria-haspopup="true"
-                   aria-expanded="false"> Reset All Filters
-                </a>
-                    
-            </li>
         </ul>
     </div>
     {# End Filters #}
+
+    <div class="col-xs-12 filter-col">
+        {% get_active_filters as active_filters %}
+
+        {# Reset all filters button #}
+        {% if active_filters %}
+            <a class="dropdown-toggle" href="{% url 'alumni:alumnus-list' %}" aria-haspopup="true" aria-expanded="false"> 
+                <button type="button" class="btn btn-danger">
+                    Reset All Filters <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+            </a>
+        {% endif %}
+
+        {# Display button for active filters #}
+        {% for filter_type, filter_value in active_filters %}
+        <a href="{% filter_objects filter_type filter_value %}">
+            <button type="button" class="btn btn-danger filter-btn" href="#">
+                {% if filter_type == "year" %}
+                {% get_yearrange filter_value as yearrange %}
+                    {{ filter_type }}s: {{ yearrange }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                {% else %}
+                    {{ filter_type }}: {{ filter_value }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                {% endif %}
+            </button>
+        </a>
+        {% endfor %}
+    </div>
 
     <table class="table table-hover">
         <thead>
@@ -76,48 +95,9 @@
             </tr>
         </thead>
         <tbody>
-            {# Page limit selector #}
-            <div class="pages-parent" style="display: inline; float: left;">
-             <li class="dropdown no-bullets" style="display: inline;">
-              <a type="button" class="dropdown-toggle" data-toggle="dropdown" href="#">
-                {{ alumni_per_page }}  <span class="caret"></span>
-              </a>
-              <ul class="nr-pages dropdown-menu no-bullets " style='min-width: 30px;' role="menu">
-                <li><a {% if alumni_per_page == 15 %} class='active' {% endif %} href="{% set_query 'limit' 15 %}">15 </a></li>
-                <li><a {% if alumni_per_page == 30 %} class='active' {% endif %} href="{% set_query 'limit' 30 %}">30 </a></li>
-                <li><a {% if alumni_per_page == 45 %} class='active' {% endif %} href="{% set_query 'limit' 45 %}">45</a></li>
-                <li><a {% if alumni_per_page == 60 %} class='active' {% endif %} href="{% set_query 'limit' 60 %}">60</a></li>
-                <!--<li class="divider" style="min-width: 30px; padding: 0px; margin: : 0px;"></li>-->
-                <li><a {% if alumni_per_page == 100 %} class='active' {% endif %} href="{% set_query 'limit' 100 %}">100</a></li>
-                <li><a {% if alumni_per_page == 200 %} class='active' {% endif %} href="{% set_query 'limit' 200 %}">200</a></li>
-                </ul>
-                </li> alumni per page 
-            </div>
-
-            {# Add the paginator #}
-            <div class="pagination-custom pull-right">
-                <nav class="content-pagination">
-                    <a href="#" class='older fontawesome-angle-left' title='Older'></a>
-                    
-                    {% if alumni.has_previous %}
-                        <a href="{% filter_content 'page' 1 %}"><i class="fa fa-angle-double-left fa-lg" aria-hidden="true"></i></a>
-                        <a href="{% filter_content 'page' alumni.previous_page_number %}"><i class="fa fa-angle-left fa-lg" style="max-width: 6px;"></i></a>
-                    {% endif %}
-                
-                    <span class="pagination-text">
-                        Page {{ alumni.number }} of {{ alumni.paginator.num_pages }}
-                    </span>
-                
-                    {% if alumni.has_next %}
-                        <a href="{% filter_content 'page' alumni.next_page_number %}"><i class="fa fa-angle-right fa-lg"></i></a>
-                        <a href="{% filter_content 'page' alumni.paginator.num_pages %}"><i class="fa fa-angle-double-right fa-lg" aria-hidden="true"></i></a>
-                    {% endif %}
-                </nav>
-            </div>
-
-
-
+            {% include "alumni/alumnus_paginator.html" %}
             {# Add the content #}
+            <h2 class="text-center">Total number of alumni: {{ alumni.paginator.count }}</h2>
             {% for alumnus in alumni %}
             <tr class="{% cycle '' 'info' %}">
                 <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name }}</a></td>
@@ -140,6 +120,8 @@
             {% endfor %}
         </tbody>
     </table>
+    {% include "alumni/alumnus_paginator.html" %}
+    <div class="col-xs-12" style="height:150px;"></div>
 </div>
 
 

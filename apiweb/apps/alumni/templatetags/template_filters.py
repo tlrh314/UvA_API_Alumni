@@ -69,6 +69,16 @@ def check_dropdown(context, filter_type, value):
     return static('img/checkbox-off.png') # "http://www.clipartbest.com/cliparts/LiK/rrX/LiKrrXy4T.png"
 
 
+@register.simple_tag(name='get_active_filters', takes_context=True)
+def get_active_filters(context):
+    filterzip = []
+    active_filters_dict = URLObject(context.request.get_full_path()).query.multi_dict
+    for filter_type, filter_values in active_filters_dict.items():
+        for filter_value in filter_values:
+            filterzip.append((filter_type, filter_value))
+    return filterzip
+
+
 @register.simple_tag(name='get_defence_years')
 def get_defence_years():
     return [('1900 - 1959', 1900, 1959),
@@ -80,23 +90,16 @@ def get_defence_years():
             ('2010 - 2019', 2010, 2019)]
 
 
+@register.simple_tag(name='get_yearrange')
+def get_yearrange(year):
+    return { '1900': '1900 - 1959', '1960': '1960 - 1969', '1970': '1970 - 1979',
+             '1980': '1980 - 1989', '1990': '1990 - 1999', '2000': '2000 - 2009',
+             '2010': '2010 - 2019'}.get(year, "none")
+
+
 @register.simple_tag(name='get_degree_types')
 def get_degree_types():
     return Degree.DEGREE_TYPE
-
-#@register.simple_tag(name='display_thesis_type')
-@register.filter(name='display_thesis_type')
-def display_thesis_type(thesis_type):
-    if thesis_type == "phd":
-        return "PhD"
-    elif thesis_type == "msc":
-        return "MSc"
-    elif thesis_type == "bsc":
-        return "BSc"
-    else:
-        return 'Unknown'
-
-
 
 @register.simple_tag(name='set_query', takes_context=True)
 def set_query(context, type, value):
