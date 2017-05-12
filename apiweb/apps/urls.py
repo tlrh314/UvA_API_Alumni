@@ -25,6 +25,11 @@ urlpatterns = [
     url(r'^ajax_select/', include(ajax_select_urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/password_reset/$', auth_views.PasswordResetView.as_view(
+            template_name='registration/password_reset_form.html',
+            extra_context = {
+                "api_phonenumber_formatted": contactinfo(None)["api_phonenumber_formatted"],
+                "secretary_email_address": contactinfo(None)["contactinfo"].secretary_email_address,
+            },
             email_template_name='registration/password_reset_email.html',
             extra_email_context = {
                 "api_phonenumber_formatted": contactinfo(None)["api_phonenumber_formatted"],
