@@ -10,6 +10,8 @@ from django.views.generic import TemplateView, RedirectView
 from .models import ContactInfo
 from .models import WelcomeMessage
 from .forms import ContactForm
+from ..interviews.models import Post
+from ..alumni.models import Degree
 
 
 def index(request):
@@ -18,7 +20,12 @@ def index(request):
         welcome = welcome[0].text
     else:
         welcome = "Welcome at the API Alumnus Website!"
-    return render(request, "main/index.html", {"welcome_text": welcome})
+
+    #Filtering all posts on whether they are published, and picking the latest
+    latest_post = Post.objects.filter(is_published=True).latest("date_created")
+    latest_thesis = Degree.objects.filter(type="phd").latest("date_of_defence")
+
+    return render(request, "main/index.html", {"welcome_text": welcome, "latest_post": latest_post, "latest_thesis": latest_thesis})
 
 
 def page_not_found(request):

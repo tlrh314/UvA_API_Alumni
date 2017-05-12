@@ -19,9 +19,34 @@
         {{ welcome_text }}
     {% endautoescape %}
 
+
     </p>
     {% endif %}
     </div>
+
+    <div class="col-xs-12" style="margin-top:30px; margin-bottom:30px;">
+        <h2 class="text-center">Latest Interview:</h2>
+           <div class="mycontent-left">
+            {% autoescape off %}
+            {{ latest_post.teaser }}
+            <a href="{% url 'interviews:detail' latest_post.slug %}">Read More</a>
+            {% endautoescape %}
+        </div>
+    </div>
+
+    {# TODO: make the link work and make sure it is the latest #}
+    <div class="col-xs-12" style="margin-top:30px; margin-bottom:30px;">
+        <h2 class="text-center">Latest Thesis:</h2>
+           <div class="mycontent-left">
+                {{ latest_thesis.type }}: <a href=" {% url 'alumni:thesis-detail' latest_thesis.thesis_slug %} ">{{ latest_thesis.author }}
+                {{ latest_thesis.thesis_title }}</a>
+        </div>
+    </div>
+
+
+
+
+
 </div>
 
 {% endblock %}

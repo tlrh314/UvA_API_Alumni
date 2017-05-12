@@ -1,6 +1,8 @@
 from django import template
 from urlobject import URLObject
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.template.defaultfilters import stringfilter
+
 from ..models import Alumnus
 from ..models import Degree
 
@@ -81,6 +83,19 @@ def get_defence_years():
 @register.simple_tag(name='get_degree_types')
 def get_degree_types():
     return Degree.DEGREE_TYPE
+
+#@register.simple_tag(name='display_thesis_type')
+@register.filter(name='display_thesis_type')
+def display_thesis_type(thesis_type):
+    if thesis_type == "phd":
+        return "PhD"
+    elif thesis_type == "msc":
+        return "MSc"
+    elif thesis_type == "bsc":
+        return "BSc"
+    else:
+        return 'Unknown'
+
 
 
 @register.simple_tag(name='set_query', takes_context=True)

@@ -196,5 +196,6 @@ def thesis_detail(request, thesis_slug):
     return render(request, "alumni/thesis_detail.html", {"thesis": thesis})
 
 
+
 def thesis_has_no_pdf(request):
     return render(request, "alumni/thesis_not_found.html")

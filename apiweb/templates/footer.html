@@ -15,7 +15,7 @@
                 <h3> News &amp; Interviews </h3>
                 <ul>
                     {% for interview in latest_interviews %}
-                    <li><a href="{% url 'interviews:detail' interview.slug %}"> {{ interview.alumnus.full_name }} <span>| {{ interview.date_published|date }}</span></a></li>
+                    <li><a href="{% url 'interviews:detail' interview.slug %}"> {{ interview.alumnus.full_name }} {{ interview.title }} <span>| {{ interview.date_published|date }}</span></a></li>
                     {% endfor %}
                 </ul>
             </div>
