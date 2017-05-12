@@ -67,7 +67,7 @@
             <div class="mycontent-left">
                 <h2 class="text-left">Theses at API</h2>
                 {% for thesis in alumnus.degrees.all %}
-                <p class="text-justify"><a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}</a></p>
+                <p class="text-justify">{{ thesis.thesis_type|display_thesis_type }}: <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}</a></p>
                 {% endfor %}
             </div>
         </div>

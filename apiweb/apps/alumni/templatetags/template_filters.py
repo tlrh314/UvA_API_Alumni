@@ -74,8 +74,11 @@ def get_active_filters(context):
     filterzip = []
     active_filters_dict = URLObject(context.request.get_full_path()).query.multi_dict
     for filter_type, filter_values in active_filters_dict.items():
-        for filter_value in filter_values:
-            filterzip.append((filter_type, filter_value))
+        if filter_type not in ['type','year']:
+            continue
+        else:
+            for filter_value in filter_values:
+                filterzip.append((filter_type, filter_value))
     return filterzip
 
 
@@ -106,6 +109,15 @@ def set_query(context, type, value):
     url = URLObject(context.request.get_full_path())
 
     return url.set_query_param(type, value)
+
+@register.filter(name='capitalize_filter_type')
+def capitalize_filter_type(filter_type):
+    return filter_type[0].upper()+filter_type[1:]
+
+
+@register.filter(name='display_thesis_type')
+def display_thesis_type(thesis_type):
+    return ({"phd":"PhD","msc":"MSc","bsc":"BSc"}.get(thesis_type,""))
 
 
 @register.simple_tag(name='filter_content', takes_context=True)
