@@ -19,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 from tinymce.widgets import TinyMCE
 # from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
+from apiweb import context_processors
 from .models import PositionType, PreviousPosition
 from .models import Alumnus, Degree, JobAfterLeaving
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
@@ -419,11 +420,19 @@ class AlumnusAdmin(admin.ModelAdmin):
                 alumnus.save()
             try:
                 validate_email( alumnus.email )
-                print(alumnus.full_name)
                 form = PasswordResetForm(data={"email": alumnus.email})
                 form.is_valid()
+
+                # Get ContactInfo from context_processors such that the forced
+                # reset email footer has the email address and phone number of API
+                contactdict = context_processors.contactinfo(request)
+
                 form.save(email_template_name="registration/password_forced_reset_email.html",
-                          extra_email_context = {"full_name": alumnus.full_name})
+                          extra_email_context = {
+                                "full_name": alumnus.full_name,
+                                "secretary_email_address": contactdict["contactinfo"].secretary_email_address,
+                                "api_phonenumber_formatted": contactdict["api_phonenumber_formatted"]
+                              })
                 self.message_user(request, "Succesfully sent password reset email.")
             except ValidationError:
                 self.message_user(request, "Alumnus does not have a valid email address", level="error")

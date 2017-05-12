@@ -8,6 +8,7 @@ from django.contrib.auth import views as auth_views
 from ajax_select import urls as ajax_select_urls
 import django.contrib.sitemaps.views
 
+from apiweb.context_processors import contactinfo
 from .main.views import index, contact, contact_success
 
 
@@ -16,14 +17,21 @@ admin.autodiscover()
 handler404 = 'main.views.page_not_found'
 handler500 = 'main.views.page_not_found'
 
+
 urlpatterns = [
-    url(r'^login/$', auth_views.LoginView.as_view(template_name='registration/login.html')),
+    url(r'^login/$', auth_views.LoginView.as_view(template_name='admin/login.html')),
     url(r'^admin/filebrowser/', include(filebrowser.sites.site.urls)),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^ajax_select/', include(ajax_select_urls)),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/password_reset/$', auth_views.PasswordResetView.as_view(
+            email_template_name='registration/password_reset_email.html',
+            extra_email_context = {
+                "api_phonenumber_formatted": contactinfo(None)["api_phonenumber_formatted"],
+                "secretary_email_address": contactinfo(None)["contactinfo"].secretary_email_address,
+            }
+        ), name='password_reset'),
     url(r'^admin/', include('django.contrib.auth.urls')),
-
     url(r'^alumni/', include('apiweb.apps.alumni.urls', namespace='alumni')),
     url(r'^interviews/', include('apiweb.apps.interviews.urls', namespace='interviews')),
     url(r'^contact/$', contact, name='contact'),
