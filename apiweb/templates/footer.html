@@ -34,7 +34,7 @@
                     <i class="fa fa-home"></i> {{ contactinfo.postbox_address_api }}<br>
                     <i class="fa fa-phone"></i> <a href="tel:{{ contactinfo.telephone_api }}">{{ api_phonenumber_formatted }}</a><br>
                     <i class="fa fa-envelope"></i> <a href="mailto:{{ contactinfo.secretary_email_address}}">{{ contactinfo.secretary_email_address}}</a><br>
-                    <a href="/contact">Contact Form</a><br>
+                    <a href="{% url 'contact' %}">Contact Form</a><br>
 
                     </p>
                 </ul>
