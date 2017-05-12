@@ -8,16 +8,17 @@ from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 
 from .models import ContactInfo
+from .models import WelcomeMessage
 from .forms import ContactForm
 
 
 def index(request):
-    contactinfo = ContactInfo.objects.all()
-    if contactinfo:
-        frontpage_text = contactinfo[0].frontpage_text
+    welcome = WelcomeMessage.objects.all()
+    if welcome:
+        welcome = welcome[0].text
     else:
-        frontpage_text = 'Lorum Ipsum'
-    return render(request, "main/index.html", {'frontpage_text': frontpage_text})
+        welcome = "Welcome at the API Alumnus Website!"
+    return render(request, "main/index.html", {"welcome_text": welcome})
 
 
 def page_not_found(request):

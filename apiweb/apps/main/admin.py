@@ -3,6 +3,16 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 
 from .models import ContactInfo
+from .models import WelcomeMessage
+
+
+@admin.register(WelcomeMessage)
+class WelcomeMessageAdmin(admin.ModelAdmin):
+    list_display = ("rename_text",)
+
+    def rename_text(self, obj):
+       return "Click here to change the Welcome Message"
+    rename_text.short_description = "Welcome Message"
 
 
 class ContactInfoForm(forms.ModelForm):
@@ -23,6 +33,3 @@ class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ("secretary_email_address", "webmaster_email_address",
                     "postbox_address_api", "address_api", "telephone_api" )
     form = ContactInfoForm
-
-
-

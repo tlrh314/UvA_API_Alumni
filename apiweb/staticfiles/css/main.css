@@ -23,7 +23,6 @@ html {
     min-height: 100%;
 }
 
-
 body {
     padding:0;
     padding-top: 100px;
@@ -36,6 +35,16 @@ body {
     -o-background-size: cover;
     background-size: cover;
     font-family: 'Nunito', sans-serif;
+}
+@media screen and (max-width: 1000px) {
+  body {
+    padding-top: 200px;
+  }
+}
+@media screen and (max-width: 500px) {
+  body {
+    padding-top: 300px;
+  }
 }
 
 /* Style for dropdown filter */
