@@ -327,6 +327,9 @@ class AlumnusAdmin(admin.ModelAdmin):
 
     class Media:
         js = ADMIN_MEDIA_JS
+        css = {
+             'all': ('css/admin_extra.css',)
+        }
 
     def changelist_view(self, request, extra_context=None):
         """ Hack the default changelist_view to allow action "export_all_alumni_to_excel"
