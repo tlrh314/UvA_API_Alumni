@@ -20,11 +20,11 @@ from ..research.models import ResearchTopic
 
 
 def get_mugshot_location(instance, filename):
-    return os.path.join("media", "uploads", "alumni", "mugshots",
+    return os.path.join("uploads", "alumni", "mugshots",
                         instance.user.username, filename)
 
 def get_photo_location(instance, filename):
-    return os.path.join("media", "uploads", "alumni", "photos",
+    return os.path.join("uploads", "alumni", "photos",
                         instance.user.username, filename)
 
 
