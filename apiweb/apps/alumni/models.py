@@ -77,6 +77,7 @@ class PreviousPosition(models.Model):
     comments         = models.TextField(_("comments"), blank=True)
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+    last_updated_by  = models.ForeignKey('auth.User', related_name="prevpos_updated", default=270)
 
     class Meta:
         verbose_name = _("Previous Position at API")
@@ -126,6 +127,9 @@ class Alumnus(models.Model):
     facebook        = models.URLField(_("facebook"), blank=True, null=True)
     twitter         = models.URLField(_("twitter"), blank=True, null=True)
     linkedin        = models.URLField(_("linkedin"), blank=True, null=True)
+    last_checked    = models.DateTimeField(_("Date Last Checked"), blank=True, null=True,
+        help_text=_("Update this field if you know that the contact information is up-to-date."))
+
 
     # Address information
     address         = models.CharField(_("address"), blank=True, max_length=40)
@@ -150,6 +154,7 @@ class Alumnus(models.Model):
 
     # Extra information
     comments        = models.TextField(_("comments"), blank=True)
+    last_updated_by = models.ForeignKey('auth.User', related_name="alumni_updated", default=270)
     date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
@@ -223,6 +228,7 @@ class Degree(models.Model):
     thesis_in_library= models.BooleanField(blank=True, default=False)
 
     comments         = models.TextField(_("comments"), blank=True)
+    last_updated_by  = models.ForeignKey('auth.User', related_name="theses_updated", default=270)
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
@@ -299,6 +305,7 @@ class JobAfterLeaving(models.Model):
     location_job        = models.PositiveSmallIntegerField(_("location job"), choices=location_job_choices, default=1)
 
     comments            = models.TextField(_("comments"), blank=True)
+    last_updated_by     = models.ForeignKey('auth.User', related_name="jobs_updated", default=270)
     date_created        = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated        = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 

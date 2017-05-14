@@ -48,8 +48,17 @@ admin.site.register(User, UserAdmin)
 
 class JobAfterLeavingAdminInline(admin.StackedInline):
     model = JobAfterLeaving
-    readonly_fields = ("date_created", "date_updated")
+    readonly_fields = ("date_created", "date_updated", "last_updated_by")
     extra = 0
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        obj.save()
+
+
+@admin.register(JobAfterLeaving)
+class JobAfterLeavingAdmin(admin.ModelAdmin):
+    readonly_fields = ("date_created", "date_updated", "last_updated_by")
 
     fieldsets = [
         ( "Job information", {
@@ -57,18 +66,21 @@ class JobAfterLeavingAdminInline(admin.StackedInline):
                 [ "position_name", "current_job", "company_name", "start_date",
                 "stop_date", "inside_academia", "location_job" ]
             }
-        )
+        ), ( "Extra information", {
+                "classes": ["collapse"],
+                "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
+            }
+        ),
     ]
 
-
-@admin.register(JobAfterLeaving)
-class JobAfterLeavingAdmin(admin.ModelAdmin):
-    readonly_fields = ("date_created", "date_updated")
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        obj.save()
 
 
 class PreviousPositionInline(admin.StackedInline):
     model = PreviousPosition
-    readonly_fields = ("date_created", "date_updated")
+    readonly_fields = ("date_created", "date_updated", "last_updated_by")
     exclude = ("fte_per_year",)
     extra = 0
 
@@ -88,19 +100,29 @@ class PreviousPositionAdmin(admin.ModelAdmin):
     ordering = ("alumnus__last_name", )
 
     form = PreviousPositionAdminForm
-    readonly_fields = ("date_created", "date_updated")
+    readonly_fields = ("date_created", "date_updated", "last_updated_by")
     exclude = ("fte_per_year",)
     extra = 1
 
-    # def get_search_results(self, request, queryset, search_term):
-    #     queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-    #     try:
-    #         search_term_as_int = int(search_term)
-    #     except ValueError:
-    #         pass
-    #     else:
-    #         queryset |= self.model.objects.filter(age=search_term_as_int)
-    #     return queryset, use_distinct
+    fieldsets = [
+        ( "Previous Position", {
+            "fields":
+                [ "alumnus", "date_start", "date_stop", "type"]
+            }
+        ), ( "Funding", {
+            "fields":
+                [ "nova", "funding", "funding_note", "funding_remark" ]
+            }
+        ), ( "Extra information", {
+                "classes": ["collapse"],
+                "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
+            }
+        ),
+    ]
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        obj.save()
 
     def get_queryset(self, request):
         """ This function defines how to sort on alumnus column in the list_display """
@@ -118,7 +140,7 @@ class DegreeAdminInline(admin.StackedInline):
     extra = 0
     model = Degree
     filter_horizontal = ("thesis_advisor", )
-    readonly_fields = ("date_created", "date_updated")
+    readonly_fields = ("date_created", "date_updated", "last_updated_by")
 
 
 class DegreeListFilter(admin.SimpleListFilter):
@@ -141,13 +163,13 @@ class DegreeListFilter(admin.SimpleListFilter):
 
 @admin.register(Degree)
 class DegreeAdmin(admin.ModelAdmin):
-    list_display = ("thesis_title", "get_author", "show_year", "type")
+    list_display = ("get_author", "thesis_title", "show_year", "type")
     list_filter = ("type", DegreeListFilter)
     search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name",
         "date_start", "date_stop", "date_of_defence")
     ordering = ("alumnus__user__username", )
     filter_horizontal = ("thesis_advisor", )
-    readonly_fields = ("date_created", "date_updated")
+    readonly_fields = ("date_created", "date_updated", "last_updated_by")
     actions = ("export_selected_degrees_to_excel", "export_all_degrees_to_excel", )
 
     max_num = 2
@@ -167,13 +189,20 @@ class DegreeAdmin(admin.ModelAdmin):
             }
         ), ( "Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments",  "date_created", "date_updated"]
+                "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
             }
         ),
     ]
 
     class Media:
         js = ADMIN_MEDIA_JS
+        css = {
+             "all": ("css/admin_extra.css",)
+        }
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        obj.save()
 
     def changelist_view(self, request, extra_context=None):
         """ Hack the default changelist_view to allow action "export_all_degrees_to_excel"
@@ -282,7 +311,7 @@ class AlumnusAdmin(admin.ModelAdmin):
     inlines = (DegreeAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
-    readonly_fields = ("get_full_name", "date_created", "date_updated")
+    readonly_fields = ("get_full_name", "date_created", "date_updated", "last_updated_by")
     actions = ("sent_password_reset", "reset_password_yourself",
                "export_selected_alumni_to_excel", "export_all_alumni_to_excel")
     # exclude = ("jobs", )
@@ -290,21 +319,25 @@ class AlumnusAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Account information",
                 {
-                    "fields": ["user", "get_full_name", "last_name", "show_person"]
+                    "fields": ["user", "get_full_name", "show_person"]
                 }),
 
         ("Personal information", {
                 "classes": ["collapse"],
                  "fields": ["first_name", "prefix", "last_name",
                              "title", "initials", "gender", "birth_date",
-                             "place_of_birth", "nationality", "mugshot",
-                             "photo", "biography"]
+                             "place_of_birth", "nationality",]
+                             # "mugshot", "photo", "biography"]
                 }),
 
         ("Contact information", {
-                "classes": ["collapse"],
-                "fields":["linkedin", "facebook", "email", "home_phone",
-                          "homepage", "mobile"]
+                # "classes": ["collapse"],
+                "fields":["email", "linkedin", "facebook", "twitter", "homepage",
+                          "mobile", "home_phone", "last_checked"]
+                }),
+
+        ("Biography", {
+                 "fields": [ "mugshot", "photo", "biography"]
                 }),
 
         ("Adress information", {
@@ -321,15 +354,20 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         ("Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments",  "date_created", "date_updated"]
+                "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
                 }),
     ]
 
     class Media:
         js = ADMIN_MEDIA_JS
         css = {
-             'all': ('css/admin_extra.css',)
+             "all": ("css/admin_extra.css",)
         }
+
+    def save_model(self, request, obj, form, change):
+        obj.last_updated_by = request.user
+        obj.save()
+
 
     def changelist_view(self, request, extra_context=None):
         """ Hack the default changelist_view to allow action "export_all_alumni_to_excel"
@@ -384,8 +422,6 @@ class AlumnusAdmin(admin.ModelAdmin):
         postdoc_set = obj.positions.filter(type=postdoc)
         if len(postdoc_set) is 0:
             return None
-        print(postdoc_set)
-
 
         # Could have multiple date_stop
         postdoc = postdoc_set[0]
