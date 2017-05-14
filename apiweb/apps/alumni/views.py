@@ -22,9 +22,9 @@ def alumnus_list(request):
     alumni = Alumnus.objects.all()
 
     # Get filters
-    defence_year = request.GET.getlist('year', None)
-    degree_type = request.GET.getlist('type', None)
-    position = request.GET.getlist('position', None)
+    defence_year = request.GET.getlist("year", None)
+    degree_type = request.GET.getlist("type", None)
+    position = request.GET.getlist("position", None)
 
     if position:
         multifilter = Q()
@@ -56,7 +56,7 @@ def alumnus_list(request):
         alumni = alumni.filter(multifilter).distinct()
 
 
-    alumni_per_page = request.GET.get('limit', 15)
+    alumni_per_page = request.GET.get("limit", 15)
 
     try:
         alumni_per_page = int(alumni_per_page)
@@ -78,7 +78,7 @@ def alumnus_list(request):
         alumni_per_page = 200
 
     paginator = Paginator(alumni, alumni_per_page)
-    page = request.GET.get('page', 1)
+    page = request.GET.get("page", 1)
 
     try:
         page = int(page)
@@ -113,12 +113,7 @@ def alumnus_detail(request, slug):
 
 
 def thesis_list(request):
-    # TODO: implement filtering on MSc / PhD
-    theses = Degree.objects.filter(type="phd")
-    theses = theses.order_by("-date_of_defence")
-    theses_counter = range(len(theses), 0, -1)
-
-    theses_per_page = request.GET.get('limit', 15)
+    theses_per_page = request.GET.get("limit", 15)
     try:
         theses_per_page = int(theses_per_page)
     except ValueError as ScriptKiddyHackings :
@@ -138,6 +133,49 @@ def thesis_list(request):
         messages.error(request, msg)
         theses_per_page = 200
 
+
+    # Get filters
+    defence_year = request.GET.getlist("year", None)
+    degree_type = request.GET.getlist("type", None)
+    sort_on = request.GET.getlist("sort", None)
+
+    theses = Degree.objects.all()
+
+    # Apply filters
+    if degree_type:
+        multifilter = Q()
+        for degree in degree_type:
+            multifilter = multifilter | Q(type=degree)
+
+        theses = theses.filter(multifilter).distinct()
+
+    if defence_year:
+        multifilter = Q()
+        for year in defence_year:
+
+            end_year = str(int(year) + 10)
+            if year == "1900":
+                end_year = str(int(year) + 50)
+            date_range=[year+"-01-01",end_year+"-01-01"]
+            multifilter = multifilter | Q(date_of_defence__range=date_range)
+            multifilter = multifilter | Q(date_stop__range=date_range)
+
+        theses = theses.filter(multifilter).distinct()
+
+    # Sort the list
+    if sort_on:
+        if sort_on[0] == "year_hl":
+            theses = theses.order_by("-date_of_defence")
+        if sort_on[0] == "year_lh":
+            theses = theses.order_by("date_of_defence")
+        if sort_on[0] == "author_az":
+            theses = theses.order_by("alumnus__last_name")
+        if sort_on[0] == "author_za":
+            theses = theses.order_by("-alumnus__last_name")
+    else:
+        theses = theses.order_by("-date_of_defence")
+
+    # Paginate the list
     paginator = Paginator(theses, theses_per_page)
     page = request.GET.get('page', 1)
 
@@ -152,42 +190,20 @@ def thesis_list(request):
             raise Http404
 
     try:
-        phd_theses = paginator.page(page)
+        theses = paginator.page(page)
     except PageNotAnInteger:
         msg = "Error: '{0}' is not a valid pagenumber.".format(page)
         messages.error(request, msg)
         page = 1
-        phd_theses = paginator.page(page)
+        theses = paginator.page(page)
     except EmptyPage:
         msg = "Error: '{0}' is not a valid pagenumber.".format(page)
         messages.error(request, msg)
         page = paginator.num_pages
-        phd_theses = paginator.page(page)
+        theses = paginator.page(page)
 
-
-    has_title = dict()
-    has_pdf = dict()
-    for thesis in phd_theses:
-        if thesis.thesis_title:
-            has_title[thesis.thesis_slug] = True
-        else:
-            has_title[thesis.thesis_slug] = False
-
-        if os.path.exists(settings.STATIC_ROOT+"/alumni/theses/phd/"+thesis.thesis_slug):
-            has_pdf[thesis.thesis_slug] = True
-        else:
-            has_pdf[thesis.thesis_slug] = False
-
-    # TODO: de 404 werkt niet bij missende pdf
-    theses_list_start = (page-1)*theses_per_page
-    theses_list_stop = page*theses_per_page
-    theses_counter = theses_counter[theses_list_start: theses_list_stop]
-    theses_title_pdf_counter = zip(phd_theses, has_title, has_pdf, theses_counter)
-
-    # TODO: very ugly way of returning things. Fix it to avoid returning theses twice
     return render(request, "alumni/thesis_list.html", {
-        "theses": phd_theses, "theses_per_page": theses_per_page,
-        "theses_title_pdf_counter": theses_title_pdf_counter })
+        "theses": theses, "theses_per_page": theses_per_page })
 
 
 def thesis_detail(request, thesis_slug):

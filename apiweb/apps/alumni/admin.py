@@ -181,7 +181,7 @@ class DegreeAdmin(admin.ModelAdmin):
             }
         ), ( "Thesis Information", {
             "fields":
-                [ "thesis_title", "date_of_defence", "thesis_url", "thesis_slug", "thesis_in_library" ]
+                [ "thesis_title", "date_of_defence", "thesis_url", "dissertation_nr", "thesis_slug", "thesis_in_library" ]
             }
         ), ( "Thesis Adivior ", {
             "fields":

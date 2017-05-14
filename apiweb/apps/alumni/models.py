@@ -236,9 +236,9 @@ class Degree(models.Model):
     thesis_url       = models.URLField(blank=True, null=True, help_text=_("UvA DARE or other URL to thesis"))
     thesis_slug      = models.SlugField(blank=True, null=True, max_length=100, unique=True)
     thesis_advisor   = models.ManyToManyField(Alumnus, blank=True, related_name="students")
+    dissertation_nr  = models.PositiveSmallIntegerField(_("PhD Dissertation Counter"), blank=True, null=True)
+    # Slug is for url
 
-    # TODO: remove the hacky slug way of routing to the PDF, and use an ImageField instead which is linked to the FileBrowser
-    # thesis_slug and thesis_in_library are then no longer of use
     # TODO: set the maxlim for uploads to 30MB ?
     thesis_pdf       = models.FileField(_("Full Text (pdf)"),
         upload_to=get_thesis_pdf_location, blank=True, null=True)

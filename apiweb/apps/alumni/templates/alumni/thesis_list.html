@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
+{% load static %}
 {% load template_filters %}
 
 {% block title %} API - Theses {% endblock title %}
@@ -12,11 +13,111 @@
 
     {% bootstrap_messages %}
 
+    {# Filters #}
+    <div class="col-md-12 text-center">
+        <ul class="nav nav-pills selector-nav center-pills">  
+            {# Degree type dropdown menu #}
+            {% get_degree_types as degrees %}
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Degree Type <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
+                    {% for type in degrees %}
+                    {# Reset possible old filter and add store filter #}
+                    <li>
+                        <a href="{% filter_objects 'type' type.0 %}" class="menu-link"> 
+                            <div class="menu-text"> {{ type.1 }} </div>
+                            <img class="check-box" src="{% check_dropdown 'type' type.0 %}">
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+            {# Defence year dropdown menu #}
+            {% get_defence_years as years %}
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Year <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% filter_objects 'year' 'None' %}"><i> No filter </i></a></li>
+                    {% for year in years %}
+                    {# Reset possible old filter and add store filter #}
+                    <li>
+                        <a href="{% filter_objects 'year' year.1 %}" class="menu-link"> 
+                            <div class="menu-text"> {{ year.0 }} </div>
+                            <img class="check-box" src="{% check_dropdown 'year' year.1 %}">
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+            {# Allow to sort #}
+            {% get_sorting_options as sort_order_options %}
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Sort Order <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% filter_objects 'sort' 'None' %}"><i> No filter </i></a></li>
+                    {% for order in sort_order_options %}
+                    {# Reset possible old filter and add store filter #}
+                    <li>
+                        <a href="{% filter_objects 'sort' order.1 %}" class="menu-link"> 
+                            <div class="menu-text"> {{ order.0 }} </div>
+                            <img class="check-box" src="{% check_dropdown 'sort' order.1 %}">
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+    {# End Filters #}
+
+    <div class="col-xs-12 filter-col">
+        {% get_active_filters as active_filters %}
+
+        {# Reset all filters button #}
+        {% if active_filters %}
+            <a class="dropdown-toggle" href="{% url 'alumni:thesis-list' %}" aria-haspopup="true" aria-expanded="false"> 
+                <button type="button" class="btn btn-danger">
+                    Reset All Filters <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+            </a>
+        {% endif %}
+
+        {# Display button for active filters #}
+        {% for filter_type, filter_value in active_filters %}
+        <a href="{% filter_objects filter_type filter_value %}">
+            <button type="button" class="btn btn-danger filter-btn" href="#">
+                {% if filter_type == "year" %}
+                {% get_yearrange filter_value as yearrange %}
+                    {{ filter_type|capitalize_filter_type }}: {{ yearrange }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                {% elif filter_type == "type" %}
+                    {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_thesis_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                {% else %}
+                    {{ filter_type }}: {{ filter_value }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+
+
+                {% endif %}
+            </button>
+        </a>
+        {% endfor %}
+    </div>
+
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Title</th>
                 <th>Author </th>
+                <th>MSc </th>
+                <th>PhD </th>
                 <th>Date of Defence</th>
             </tr>
         </thead>
@@ -24,21 +125,34 @@
             {% include "alumni/thesis_paginator.html" %}
             {# Add the content #}
             <h2 class="text-center">Total number of degrees : {{ theses.paginator.count }}</h2>
-            {% for thesis, has_title, has_pdf, counter in theses_title_pdf_counter %}
+            {% for thesis in theses%}
             <tr class="{% cycle '' 'info' %}">
-                <td> {% if has_title %}
+                <td>{% if thesis.thesis_title %}
                         <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}
                     {% else %}
-                        <a href="mailto:secr-astro-science@uva.nl>Title Unknown. Click here if you know the title!</a>
+                        <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
                     {% endif %}
-                    {% if has_pdf %}
-                    (<a href="{% url 'alumni:thesis-has-no-pdf' %}">PDF</a>)
+                    {% if thesis.thesis_pdf.name %}
+                        (<a href="{{ thesis.thesis_pdf.url }}">PDF</a>)
                     {% else %}
-                        (<a href="TODO pdf missing contact form">PDF</a>)
+                        (<a href="{% url 'alumni:thesis-has-no-pdf' %}">PDF</a>)
                     {% endif %}
-                    [{{ counter }}]
                 </td>
                 <td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td>
+                <td>
+                    {% if thesis.type == "msc" %}
+                        <span class="glyphicon glyphicon-ok"/>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if thesis.type == "phd" %}
+                    <span class="glyphicon glyphicon-ok">
+                        {% if thesis.dissertation_nr %}
+                            {{ thesis.dissertation_nr }}
+                        {% endif %}
+                    </span>
+                    {% endif %}
+                </td>
                 <td>{{ thesis.date_of_defence|date:"j M Y" }} </td>
             </tr>
         {% endfor %}
