@@ -187,6 +187,10 @@ class DegreeAdmin(admin.ModelAdmin):
             "fields":
                 [ "thesis_advisor" ]
             }
+        ), ( "Full Text and Cover Photo", {
+            "fields":
+                [ "thesis_pdf", "thesis_photo" ]
+            }
         ), ( "Extra information", {
                 "classes": ["collapse"],
                 "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
