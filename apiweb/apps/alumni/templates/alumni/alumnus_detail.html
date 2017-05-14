@@ -12,101 +12,126 @@
 
 <div class="main-content" role="main">
 
-    <h1 class="text-center">{{ alumnus.full_name }}</h1>
 
-    <div class="col-xs-12" style="height:25px;"></div>
+    <h1 class="text-center"> {{ alumnus.full_name }} </h1>
+    <div class="col-xs-9 pull-left">
+        <div class="col-xs-3 pull-left"> 
+            {% if alumnus.photo %}
+            <img src="{{ alumnus.photo.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
+            {% else %}
+            <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img>
+            {% endif %}
+        </div>
 
-    <div class="container-fluid fill">
-        <div class="row-fluid">
-            <div class="col-xs-2"> 
-                <h3 class="text-left">Photo</h3>
-                {% if alumnus.photo %}
-                    <img src="{{ alumnus.photo.url }}" width="150px"></img>
-                {% else %}
-                    <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img>
-                {% endif %}
+        <div class="col-xs-8 pull-right"> 
+            <h3 class="text-left"> Contact Info </h3>
+            <div class="table-responsive">
+                <table class="table table-responsive">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <tr><th>Name</th><td>{{ alumnus.full_name }}</td></tr>
+                    <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
+                    <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
+                    <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
+                    <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="col-xs-6"> 
-                <h3 class="text-center">Contact Info</h3>
-                <div class="mycontent-left">
-                    <table class="table" style="margin-left: auto; margin-right: auto; max-width: 80%">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        <tr><th>Name</th><td>{{ alumnus.full_name }}</td></tr>
-                        <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
-                        <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
-                        <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
-                        <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col-xs-4"> 
-                <h3 class="text-right">Students Supervised</h3>
-                <div class="mycontent-right">
-                    <table class="table">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        {% for thesis_supervised in alumnus.students.all %}
-                        {# TODO: template-tag this? Also make sure to get type and such of the thing #} 
-                        <tr><td><a href="{% url 'alumni:alumnus-detail' thesis_supervised.alumnus.slug %}">{{ thesis_supervised.alumnus.full_name }} </a></td></tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        </div>
+
+        <div class="col-xs-12 pull-left">
+        <h3 class="text-left"> Theses at API </h3>
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody>
+            {% for thesis in alumnus.degrees.all %}
+            <tr><td>
+                {{ thesis.thesis_type|display_thesis_type }}: <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}</a>
+            </td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+
+        <div class="col-xs-12 pull-left">
+        <h3 class="text-left"> Positions at API </h3>
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody>
+            {% for api_position in alumnus.positions.all %}
+                <tr>
+                    <td>{{ api_position }} </td>
+                    <td>{{ api_position.date_start }} </td>
+                    <td>{{ api_position.date_stop }} </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
         </div>
     </div>
 
-    <div class="col-xs-12" style="height:25px;"></div>
-
-    <div class="row vertical-divider" style="margin-top: 30px">
-        <div class="col-md-6">
-            <div class="mycontent-left">
-                <h2 class="text-left">Theses at API</h2>
-                {% for thesis in alumnus.degrees.all %}
-                <p class="text-justify">{{ thesis.thesis_type|display_thesis_type }}: <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}</a></p>
+    <div class="col-xs-3 pull-right text-left">
+        {% get_supervisors alumnus as supervisors %}
+        {% if supervisors %}
+        <h3 class="text-left"> Thesis Advisor </h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                </thead>
+                <tbody>
+                {% for supervisor in supervisors %}
+                <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }} </a></td></tr>
                 {% endfor %}
-            </div>
+                </tbody>
+            </table>
         </div>
-        <div class="col-md-6">
-            <div class="mycontent-right">
-                <h2 class="text-right">Positions at API</h2>
-                Current Position: {{ alumnus.position.name }}
-		<br>
-                Previous Positions: {# TODO: implement as no data is available as of yet #} 
-                {% for api_position in alumnus.positions.all %}
-                {{ api_position.type.name }}
-                {{ api_position.date_start }}
-                {{ api_position.date_stop }}
-                {% endfor %}
-            </div>
-        </div>
+        {% endif %}
+
+        {% get_students alumnus "phd" as phd_students %}
+        {% if phd_students %}
+        <h4 class="text-left">PhD Students Supervised</h4>
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody>
+            {% for phd_students in phd_students  %}
+            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' phd_students.slug %}">{{ phd_students }} </a></td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        {% get_students alumnus "msc" as msc_students %}
+        {% if msc_students %}
+        <h4 class="text-left">MSc Students Supervised</h4>
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody>
+            {% for msc_student in msc_students  %}
+            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' msc_student.slug %}">{{ msc_student }} </a></td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     </div>
 
-    <div class="col-xs-12" style="height:75px;"></div>
-
-    <div class="col-xs-12" style="margin-top:30px;">
-        <h2 class="text-center">Biography</h2>
-	       <div class="mycontent-left">
-            {% autoescape off %}
-                {{ alumnus.biography }}
-            {% endautoescape %}
-        </div>
+    {% if alumnus.biography %}
+    <div class="col-xs-12 pull-right text-justify" style="padding-left: 15px;">
+        {% autoescape off %}
+            {{ alumnus.biography }}
+        {% endautoescape %}
     </div>
+    {% endif %}
 
-    <div class="row vertical-divider" style="margin-top:30px;">
-        <div class="col-md-12">
-            <h2 class="text-center"> Abstracts of the latest 5 publications imported from ads </h2>
-        </div>
+    <div class="col-xs-12 pull-left" style="padding-left: 15px; margin-bottom: 75px;">
+        <h3 class="text-left"> Five most recent publications </h3>
     </div>
-
-
 
 
 </div>
-
-
 {% endblock content %}

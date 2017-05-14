@@ -142,3 +142,20 @@ def filter_content(context, filter_type, value):
 
     # If you add a new filter you start at page 1 again
     url = url.del_query_param("page")
+
+
+@register.simple_tag(name="get_students")
+def get_students(alumnus, type):
+    theses_supervised = alumnus.students.all()
+    return [ thesis.alumnus for thesis in theses_supervised if thesis.thesis_type == type ]
+
+@register.simple_tag(name="get_supervisors")
+def get_supervisors(alumnus):
+    phd_theses = alumnus.degrees.filter(type="phd")
+    msc_theses = alumnus.degrees.filter(type="msc")
+    supervisors = alumnus.degrees.none()
+    if len(msc_theses) >= 1:
+        supervisors = supervisors | msc_theses[0].thesis_advisor.all()
+    if len(phd_theses) >= 1:
+        supervisors = supervisors | phd_theses[0].thesis_advisor.all()
+    return supervisors
