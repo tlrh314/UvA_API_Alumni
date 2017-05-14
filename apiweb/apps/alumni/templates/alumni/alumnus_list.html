@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 {% load template_filters %}
+{% load search_tags %}
 
 {% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
 
@@ -55,6 +56,25 @@
                 </ul>
             </li>
 
+            {# Allow to sort #}
+            {% get_sorting_options as sort_order_options %}
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Sort Order <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% filter_objects 'sort' 'None' %}"><i> No filter </i></a></li>
+                    {% for order in sort_order_options %}
+                    {# Reset possible old filter and add store filter #}
+                    <li>
+                        <a href="{% filter_objects 'sort' order.1 %}" class="menu-link"> 
+                            <div class="menu-text"> {{ order.0 }} </div>
+                            <img class="check-box" src="{% check_dropdown 'sort' order.1 %}">
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+
         </ul>
     </div>
     {# End Filters #}
@@ -93,9 +113,12 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Alumnus</th>
+                <th> Alumnus </th>
                 <th> MSc </th>
                 <th> PhD  </th>
+                <th> Postdoc </th>
+                <th> Staff  </th>
+                <th> Support Staff </th>
             </tr>
         </thead>
         <tbody>
@@ -104,7 +127,7 @@
             <h2 class="text-center">Total number of alumni: {{ alumni.paginator.count }}</h2>
             {% for alumnus in alumni %}
             <tr class="{% cycle '' 'info' %}">
-                <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name }}</a></td>
+                <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name_no_title }}</a></td>
                     <td> 
                     {% for degree in alumnus.degrees.all %}
                         {% if degree.type == 'msc'%}
@@ -119,7 +142,9 @@
                         {% endif %}
                     {% endfor %}
                     </td>
-                    <td> </td>
+                    <td> {% get_postdoc_year alumnus %} </td>
+                    <td> {% get_staff_year alumnus %} </td>
+                    <td> {% get_obp_year alumnus %} </td>
                 </tr>
             {% endfor %}
         </tbody>

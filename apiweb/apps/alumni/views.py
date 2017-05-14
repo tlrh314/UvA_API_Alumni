@@ -25,7 +25,9 @@ def alumnus_list(request):
     defence_year = request.GET.getlist("year", None)
     degree_type = request.GET.getlist("type", None)
     position = request.GET.getlist("position", None)
+    sort_on = request.GET.getlist("sort", None)
 
+    # Apply filters
     if position:
         multifilter = Q()
         for position in position:
@@ -55,7 +57,23 @@ def alumnus_list(request):
 
         alumni = alumni.filter(multifilter).distinct()
 
+    # Sort the list
+    if sort_on:
+        msg = "Ordering the Alumni on Year is not yet available, but you could use the filter to select a year range. Try again later."
+        if sort_on[0] == "year_hl":
+            messages.warning(request, msg)
+            # alumni = alumni.order_by("-degrees__date_of_defence")
+        if sort_on[0] == "year_lh":
+            messages.warning(request, msg)
+            # alumni = alumni.order_by("degrees__date_of_defence")
+        if sort_on[0] == "author_az":
+            alumni = alumni.order_by("last_name")
+        if sort_on[0] == "author_za":
+            alumni = alumni.order_by("-last_name")
+    else:
+        alumni = alumni.order_by("last_name")
 
+    # Paginate the list
     alumni_per_page = request.GET.get("limit", 15)
 
     try:
@@ -113,33 +131,12 @@ def alumnus_detail(request, slug):
 
 
 def thesis_list(request):
-    theses_per_page = request.GET.get("limit", 15)
-    try:
-        theses_per_page = int(theses_per_page)
-    except ValueError as ScriptKiddyHackings :
-        if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
-            msg = "Error: '{0}' is not a valid limit, please use a number.".format(theses_per_page)
-            messages.error(request, msg)
-            theses_per_page = 15
-        else:
-            raise Http404
-
-    if theses_per_page < 15:
-        msg = "Error: '{0}' is not a valid limit, please use a number above 15.".format(theses_per_page)
-        messages.error(request, msg)
-        theses_per_page = 15
-    if theses_per_page > 200:
-        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(theses_per_page)
-        messages.error(request, msg)
-        theses_per_page = 200
-
+    theses = Degree.objects.all()
 
     # Get filters
     defence_year = request.GET.getlist("year", None)
     degree_type = request.GET.getlist("type", None)
     sort_on = request.GET.getlist("sort", None)
-
-    theses = Degree.objects.all()
 
     # Apply filters
     if degree_type:
@@ -176,6 +173,25 @@ def thesis_list(request):
         theses = theses.order_by("-date_of_defence")
 
     # Paginate the list
+    theses_per_page = request.GET.get("limit", 15)
+    try:
+        theses_per_page = int(theses_per_page)
+    except ValueError as ScriptKiddyHackings :
+        if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
+            msg = "Error: '{0}' is not a valid limit, please use a number.".format(theses_per_page)
+            messages.error(request, msg)
+            theses_per_page = 15
+        else:
+            raise Http404
+
+    if theses_per_page < 15:
+        msg = "Error: '{0}' is not a valid limit, please use a number above 15.".format(theses_per_page)
+        messages.error(request, msg)
+        theses_per_page = 15
+    if theses_per_page > 200:
+        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(theses_per_page)
+        messages.error(request, msg)
+        theses_per_page = 200
     paginator = Paginator(theses, theses_per_page)
     page = request.GET.get('page', 1)
 

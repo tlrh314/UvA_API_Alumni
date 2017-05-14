@@ -425,7 +425,7 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         postdoc_set = obj.positions.filter(type=postdoc)
         if len(postdoc_set) is 0:
-            return None
+            return ""
 
         # Could have multiple date_stop
         postdoc = postdoc_set[0]

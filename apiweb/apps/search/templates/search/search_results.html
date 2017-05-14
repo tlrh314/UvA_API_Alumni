@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 {% load template_filters %}
+{% load search_tags %}
 {% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
 
 {% block title %} API - Alumni - Search Results {% endblock title %}
@@ -8,26 +10,34 @@
 
 <h1 class="text-center">{{ thesis_title }}</h1>
 
-<div class="main-content" role="main"">
-    <h2 class="text-center">Search returned {{ alumni.count }} results</h2>
+<div class="main-content" role="main">
+    {% bootstrap_messages %}
+    <h2 class="text-center">Search returned {% if alumni %} {{ alumni.count }} {% else %} 0 {% endif %} results</h2>
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Alumnus</th>
-                <th>Thesis title </th>
+                <th> Alumnus </th>
+                <th> Thesis Title </th>
                 <th> MSc </th>
                 <th> PhD  </th>
+                <th> Postdoc </th>
+                <th> Staff  </th>
+                <th> Support Staff </th>
             </tr>
         </thead>
         <tbody>
         {% for alumnus in alumni %}
         <tr class="{% cycle '' 'info' %}">
-            <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name }}</a></td>
+            <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name_no_title}}</a></td>
                 <td>
                 {% for degree in alumnus.degrees.all %}
-                    <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ degree.thesis_title }} </a><br>
+                    {{ degree.type|display_thesis_type }}:  
+                    {% if degree.thesis_title %}
+                        <a href="{% url 'alumni:thesis-detail' degree.thesis_slug %}">{{ degree.thesis_title }} </a><br>
+                    {% else %}
+                        <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a><br>
+                    {% endif %}
                 {% endfor %}
-
                 </td>
                 <td> 
                 {% for degree in alumnus.degrees.all %}
@@ -43,7 +53,9 @@
                     {% endif %}
                 {% endfor %}
                 </td>
-                <td> </td>
+                <td> {% get_postdoc_year alumnus %} </td>
+                <td> {% get_staff_year alumnus %} </td>
+                <td> {% get_obp_year alumnus %} </td>
             </tr>
         {% endfor %}
         </tbody>

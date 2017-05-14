@@ -208,6 +208,12 @@ class Alumnus(models.Model):
             self.prefix, self.last_name, self.title if title_last else "")).replace("  ", " ")
 
     @property
+    def full_name_no_title(self):
+        return ("{} {} {} {}".format(
+            self.first_name, self.initials if not self.first_name else "",
+            self.prefix, self.last_name).replace("  ", " "))
+
+    @property
     def age(self):
         TODAY = date.today()
         return "{}".format(int((TODAY-self.birth_date).days/365.0))
