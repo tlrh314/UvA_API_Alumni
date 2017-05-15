@@ -40,6 +40,7 @@
             </div>
         </div>
 
+        {% if alumnus.degrees %}
         <div class="col-xs-12 pull-left">
         <h3 class="text-left"> Theses at API </h3>
         <table class="table">
@@ -54,8 +55,10 @@
             </tbody>
         </table>
         </div>
+        {% endif %}
 
 
+        {% if alumnus.positions %}
         <div class="col-xs-12 pull-left">
         <h3 class="text-left"> Positions at API </h3>
         <table class="table">
@@ -72,6 +75,7 @@
             </tbody>
         </table>
         </div>
+        {% endif %}
     </div>
 
     <div class="col-xs-3 pull-right text-left">
@@ -94,7 +98,7 @@
 
         {% get_students alumnus "phd" as phd_students %}
         {% if phd_students.0 %}
-        <h3 class="text-left">PhD Students </h3>
+        <h3 class="text-left"> PhD Students </h3>
         <table class="table">
             <thead>
             </thead>
@@ -108,7 +112,7 @@
 
         {% get_students alumnus "msc" as msc_students %}
         {% if msc_students.0 %}
-        <h3 class="text-left">MSc Students </h3>
+        <h3 class="text-left"> MSc Students </h3>
         <table class="table">
             <thead>
             </thead>
@@ -124,15 +128,23 @@
 
     {% if alumnus.biography %}
     <div class="col-xs-12 pull-right text-justify" style="padding-left: 15px;">
+        <h3 class="text-left"> Biography </h3>
         {% autoescape off %}
             {{ alumnus.biography }}
         {% endautoescape %}
     </div>
     {% endif %}
 
+
+    {% if alumnus.ads_name %}
     <div class="col-xs-12 pull-left" style="padding-left: 15px; margin-bottom: 75px;">
-        <h3 class="text-left"> Five most recent publications </h3>
+        <h3 class="text-left" style="padding-left: 15px;"> Publications </h3>
+        {# if alumnus.ads_name %}<a target="_blank" href="{{ alumnus.ads_name|ads_url }}">Publications</a>{% endif #}
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="{{ alumnus.ads_name|ads_url }}" style="padding-left: 7px"></iframe>
+            </div>
     </div>
+    {% endif %}
 
 
 </div>

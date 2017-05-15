@@ -1,5 +1,10 @@
+from __future__ import unicode_literals, absolute_import, division
+
 from django import template
 from urlobject import URLObject
+from django.utils.http import urlquote
+from django.utils.safestring import mark_safe
+from django.utils.html import conditional_escape
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.template.defaultfilters import stringfilter
 
@@ -149,6 +154,7 @@ def get_students(alumnus, type):
     theses_supervised = alumnus.students.all().order_by("-date_of_defence")
     return [ (thesis.alumnus, thesis.date_of_defence) for thesis in theses_supervised if thesis.thesis_type == type ]
 
+
 @register.simple_tag(name="get_supervisors")
 def get_supervisors(alumnus):
     phd_theses = alumnus.degrees.filter(type="phd")
@@ -161,4 +167,30 @@ def get_supervisors(alumnus):
     if len(phd_theses) >= 1:
         supervisors = supervisors | phd_theses[0].thesis_advisor.all()
         date_of_defence.append(phd_theses[0].date_of_defence)
-    return zip(supervisors, date_of_defence)
+    # Zip is an iterator so it can only exhaust, but it has no len.
+    # Typecast to list such that we can check if the list is empty
+    return list(zip(supervisors, date_of_defence))
+
+
+@register.filter
+@template.defaultfilters.stringfilter
+def ads_url(value, autoescape=None):
+    """ Returns ADS link based on name or on personal library
+        See http://doc.adsabs.harvard.edu/abs_doc/help_pages/linking.html """
+
+    # see http://docs.djangoproject.com/en/dev/howto/custom-template-tags/\
+    # #filters-and-auto-escaping
+    value = conditional_escape(value) if autoescape else value
+    link = ""
+    if len(value) == 0:
+        return mark_safe(link)
+    if value.startswith("libname"):
+        link = "http://adsabs.harvard.edu/cgi-bin/nph-abs_connect?library&" + value
+        #      "http://adsabs.harvard.edu/cgi-bin/abs_connect?param1=val1&param2=val2&"
+    else:
+        link = "http://adsabs.harvard.edu/cgi-bin/nph-abs_connect?" \
+               "db_key=AST&db_key=INST&db_key=PHY&author=" + urlquote(value) + \
+               "&nr_to_return=2000&start_nr=1"
+
+    return mark_safe(link)
+ads_url.needs_autoescape = True
