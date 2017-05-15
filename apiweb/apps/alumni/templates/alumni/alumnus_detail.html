@@ -48,7 +48,7 @@
             <tbody>
             {% for thesis in alumnus.degrees.all %}
             <tr><td>
-                {{ thesis.thesis_type|display_thesis_type }}: <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}</a>
+                {{ thesis.thesis_type|display_thesis_type }}: <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }} ({{ thesis.date_of_defence|date:"Y" }}) </a>
             </td></tr>
             {% endfor %}
             </tbody>
@@ -77,14 +77,15 @@
     <div class="col-xs-3 pull-right text-left">
         {% get_supervisors alumnus as supervisors %}
         {% if supervisors %}
-        <h3 class="text-left"> Thesis Advisor </h3>
+        <h3 class="text-left"> Thesis Advisors </h3>
         <div class="table-responsive">
             <table class="table">
                 <thead>
                 </thead>
                 <tbody>
-                {% for supervisor in supervisors %}
-                <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }} </a></td></tr>
+                {% for supervisor, date_of_defence in supervisors %}
+                <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }} 
+                        ({{ date_of_defence|date:"Y" }}) </a></td></tr>
                 {% endfor %}
                 </tbody>
             </table>
@@ -93,13 +94,14 @@
 
         {% get_students alumnus "phd" as phd_students %}
         {% if phd_students %}
-        <h4 class="text-left">PhD Students Supervised</h4>
+        <h3 class="text-left">PhD Students </h3>
         <table class="table">
             <thead>
             </thead>
             <tbody>
-            {% for phd_students in phd_students  %}
-            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' phd_students.slug %}">{{ phd_students }} </a></td></tr>
+            {% for phd_student, date_of_defence in phd_students  %}
+            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' phd_students.slug %}">{{ phd_student }}
+                ({{ date_of_defence|date:"Y" }})</a></td></tr>
             {% endfor %}
             </tbody>
         </table>
@@ -107,13 +109,14 @@
 
         {% get_students alumnus "msc" as msc_students %}
         {% if msc_students %}
-        <h4 class="text-left">MSc Students Supervised</h4>
+        <h3 class="text-left">MSc Students </h3>
         <table class="table">
             <thead>
             </thead>
             <tbody>
-            {% for msc_student in msc_students  %}
-            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' msc_student.slug %}">{{ msc_student }} </a></td></tr>
+            {% for msc_student, date_of_defence in msc_students  %}
+            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' msc_student.slug %}">{{ msc_student }}
+                ({{ date_of_defence|date:"Y" }}) </a></td></tr>
             {% endfor %}
             </tbody>
         </table>
