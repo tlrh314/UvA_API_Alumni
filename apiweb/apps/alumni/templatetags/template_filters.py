@@ -160,5 +160,5 @@ def get_supervisors(alumnus):
         date_of_defence.append(msc_theses[0].date_of_defence)
     if len(phd_theses) >= 1:
         supervisors = supervisors | phd_theses[0].thesis_advisor.all()
-        date_of_defence.append(msc_theses[0].date_of_defence)
+        date_of_defence.append(phd_theses[0].date_of_defence)
     return zip(supervisors, date_of_defence)
