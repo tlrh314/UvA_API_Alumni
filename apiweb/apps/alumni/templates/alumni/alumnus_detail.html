@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        {% if alumnus.degrees %}
+        {% if alumnus.degrees.all %}
         <div class="col-xs-12 pull-left">
         <h3 class="text-left"> Theses at API </h3>
         <table class="table">
@@ -58,7 +58,7 @@
         {% endif %}
 
 
-        {% if alumnus.positions %}
+        {% if alumnus.positions.all %}
         <div class="col-xs-12 pull-left">
         <h3 class="text-left"> Positions at API </h3>
         <table class="table">
@@ -76,7 +76,30 @@
         </table>
         </div>
         {% endif %}
+
+        {% if alumnus.ads_name %}
+        <div class="col-xs-12 pull-left" ">
+            <a target="_blank" href="{{ alumnus.ads_name|ads_url }}">
+              <h3 class="text-left"> Publications </h3>
+            </a>
+            {% comment %}
+            div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="{{ alumnus.ads_name|ads_url }}" style="padding-left: 7px"></iframe>
+            </div>
+            {% endcomment %}
+        </div>
+        {% endif %}
+
+        {% if alumnus.biography %}
+        <div class="col-xs-12 pull-left text-justify">
+            <h3 class="text-left"> Biography </h3>
+            {% autoescape off %}
+                {{ alumnus.biography }}
+            {% endautoescape %}
+        </div>
+        {% endif %}
     </div>
+
 
     <div class="col-xs-3 pull-right text-left">
         {% get_supervisors alumnus as supervisors %}
@@ -125,26 +148,6 @@
         </table>
         {% endif %}
     </div>
-
-    {% if alumnus.biography %}
-    <div class="col-xs-12 pull-right text-justify" style="padding-left: 15px;">
-        <h3 class="text-left"> Biography </h3>
-        {% autoescape off %}
-            {{ alumnus.biography }}
-        {% endautoescape %}
-    </div>
-    {% endif %}
-
-
-    {% if alumnus.ads_name %}
-    <div class="col-xs-12 pull-left" style="padding-left: 15px; margin-bottom: 75px;">
-        <h3 class="text-left" style="padding-left: 15px;"> Publications </h3>
-        {# if alumnus.ads_name %}<a target="_blank" href="{{ alumnus.ads_name|ads_url }}">Publications</a>{% endif #}
-            <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{ alumnus.ads_name|ads_url }}" style="padding-left: 7px"></iframe>
-            </div>
-    </div>
-    {% endif %}
 
 
 </div>
