@@ -48,13 +48,10 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    author          = models.ForeignKey('auth.User', default=None)
+    author          = models.ForeignKey(Alumnus)
     title           = models.CharField(max_length=300)
     slug            = models.SlugField(unique=True, blank=True, null=True)
-    teaser          = models.CharField(
-        max_length=300, blank=True,
-        help_text=_("Short teaser for the list of posts.")
-    )
+    teaser          = models.TextField(blank=True, help_text=_("Short teaser for the list of posts."))
 
     # TODO: implement the teaser picture
     # teaser_picture  = models.ImageField(
@@ -79,7 +76,10 @@ class Post(models.Model):
     #         help_text="Should this post be shown on the home page?")
 
     class Meta:
+        verbose_name = _("Interview")
+        verbose_name_plural = _("Interviews")
         ordering = ['-date_published',]
+
 
     def publish(self):
         self.date_published = timezone.now()

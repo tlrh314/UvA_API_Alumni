@@ -12,8 +12,7 @@ from ..alumni.models import Alumnus
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 
 
-
-@admin.register(Category)
+# @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
 
@@ -40,30 +39,33 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class InterviewAdminForm(forms.ModelForm):
-    look = copy.copy(TINYMCE_MINIMAL_CONFIG)
-    look["width"] = ""
-    look["height"] = "200"
-    teaser = forms.CharField(required=False, widget=TinyMCE(mce_attrs=look))
-
     class Meta:
         fields = "__all__"
         model = Post
 
-    # TODO: implement this functionality also in Alumnus admin for User lookup
+    # look = copy.copy(TINYMCE_MINIMAL_CONFIG)
+    # look["width"] = ""
+    # look["height"] = "200"
+
+    # Teaser was a charfield shown as a TinyMCE field. This allowed to
+    # copy-paste text/images which preserved formatting and html syntax. This
+    # could easily break the front-end as well as the functionality when a rogue
+    # user puts crazy stuff in the field. Also, copy-paste as plain text is ignored.
+    # teaser = forms.CharField(required=False, widget=TinyMCE(mce_attrs=look))
+
+    author = AutoCompleteSelectField('author', required=True, help_text=None)
     alumnus = AutoCompleteSelectField('alumnus', required=False, show_help_text=False,
-        help_text="Select Alumnus if the Category is an Interview. Leave blank when the Category is News.",)
-
-
-    # TODO: author does not work when setting this to request.user in get_form
-    # author = AutoCompleteSelectField('author', required=True, help_text=None)
+        help_text="Select which Alumnus is interviewed.")
+        # help_text="Select Alumnus if the Category is an Interview. Leave blank when the Category is News.",)
 
 
 @admin.register(Post)
 class InterviewAdmin(admin.ModelAdmin):
     ordering = ("-date_published", )
-    search_fields = ("title", "author")
-    list_display = ("author", "title", "is_published", "date_published")
+    search_fields = ("title", "author", "title", "content")
+    list_display = ("author", "title", "get_alumnus", "is_published", "date_published")
     list_filter = ("is_published", )
+    exclude = ("category",)
     form = InterviewAdminForm
     # raw_id_fields = ("alumnus",)
     actions = ("publish", "unpublish" )
@@ -71,7 +73,7 @@ class InterviewAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ("Alumni Interview", {
-            "fields": ["author", "title", "category", "alumnus", "content", "is_published"]
+            "fields": ["author", "title", "alumnus", "content", "is_published"]
         }),
         ("Meta Info", {
             "classes": ["collapse"],
@@ -79,13 +81,21 @@ class InterviewAdmin(admin.ModelAdmin):
         }),
     ]
 
+    class Media:
+        # The admin actions dropdown is replaced by buttons with a bit of javascript.
+        js = ADMIN_MEDIA_JS
+        css = {
+             "all": ("css/admin_extra.css",)
+        }
+
     def get_form(self, request, obj=None, **kwargs):
         form = super(InterviewAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields["author"].initial = request.user
+        alumnus = Alumnus.objects.get(user=request.user)
+        form.base_fields["author"].initial = alumnus.id
 
-        interview = Category.objects.filter(name="Interview")[0]
-        if interview:
-            form.base_fields["category"].initial = interview
+        # interview = Category.objects.filter(name="Interview")[0]
+        # if interview:
+        #     form.base_fields["category"].initial = interview
 
         return form
 
@@ -97,10 +107,15 @@ class InterviewAdmin(admin.ModelAdmin):
         if form.cleaned_data["teaser"]:
             obj.teaser = form.cleaned_data["teaser"]
         else:
-            obj.teaser = form.cleaned_data["content"][0:200]
+            obj.teaser = form.cleaned_data["content"][0:500]
 
         obj.last_updated_by = request.user
         obj.save()
+
+    def get_alumnus(self, obj):
+        """ We could use author instead of get_alumnus in list_display """
+        return obj.alumnus.full_name
+    get_alumnus.short_description = "Interviewed Alumnus"
 
     # TODO: make publish/unpublish show up in recent actions
     def publish(self, request, queryset):
