@@ -1,18 +1,28 @@
+import os.path
+
 from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 
 from .models import ContactInfo
 from .models import WelcomeMessage
+from ...settings import ADMIN_MEDIA_JS
 
 
 @admin.register(WelcomeMessage)
 class WelcomeMessageAdmin(admin.ModelAdmin):
     list_display = ("rename_text",)
 
+    class Media:
+        # The admin actions dropdown is replaced by buttons with a bit of javascript.
+        js = ADMIN_MEDIA_JS
+        css = {
+             "all": ("css/admin_extra.css",)
+        }
+
     def rename_text(self, obj):
-       return "Click here to change the Welcome Message"
-    rename_text.short_description = "Welcome Message"
+       return "Click here to change the Welcome Message/Photo"
+    rename_text.short_description = "Welcome Page"
 
 
 class ContactInfoForm(forms.ModelForm):
@@ -33,3 +43,10 @@ class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ("secretary_email_address", "webmaster_email_address",
                     "postbox_address_api", "address_api", "telephone_api" )
     form = ContactInfoForm
+
+    class Media:
+        # The admin actions dropdown is replaced by buttons with a bit of javascript.
+        js = ADMIN_MEDIA_JS
+        css = {
+             "all": ("css/admin_extra.css",)
+        }

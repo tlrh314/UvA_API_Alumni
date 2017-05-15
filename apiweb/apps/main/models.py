@@ -6,19 +6,28 @@ from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 
 
-class WelcomeMessage(models.Model):
-    text = HTMLField(verbose_name=_("Welcome Text"), blank=True, default="Lorum Ipsum")
-
-    class Meta:
-        verbose_name = _("Welcome Message")
-        verbose_name_plural = _("Welcome Message")
-
+def place_welcome_photo(instance, filename):
+    return os.path.join("uploads", filename)
 
 
 def validate_only_one_instance(obj):
+    """ Allow only one instance of a model to be created, in this case WelcomeMessage and ContactInfo """
     model = obj.__class__
     if (model.objects.count() > 0 and obj.id != model.objects.get().id):
         raise ValidationError("Errror: only 1 instance of {0} is allowed and it already exists.".format(model.__name__))
+
+
+class WelcomeMessage(models.Model):
+    text  = HTMLField(verbose_name=_("Welcome Text"), blank=True, default="Lorum Ipsum")
+    photo = models.ImageField(_("Welcome Photo"), upload_to=place_welcome_photo, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _("Welcome Page")
+        verbose_name_plural = _("Welcome Page")
+
+    def clean(self):
+        validate_only_one_instance(self)
+
 
 class ContactInfo(models.Model):
     secretary_email_address = models.EmailField(_("API Secretariat e-mail address"), default="secr-astro-science@uva.nl")
