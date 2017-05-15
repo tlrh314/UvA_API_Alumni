@@ -45,13 +45,13 @@ def search(request):
 
     if len(words) <= 2:
         msg = "Please use at least 3 characters to search. "
-        msg += "Tip: you can use exact match by placing ' or \" around a word!"
+        msg += "Tip: you can use exact match by placing ' or \" around words!"
         messages.error(request, msg)
         return render(request, "search/search_results.html", {"alumni": [], "key_words": []})
 
     if len(words.split()) > 10:
         msg = "Please limit your search to <10 words. "
-        msg += "Tip: you can use exact match by placing ' or \" around a word!"
+        msg += "Tip: you can use exact match by placing ' or \" around words!"
         messages.error(request, msg)
         return render(request, "search/search_results.html", {"alumni": [], "key_words": []})
 
@@ -101,7 +101,7 @@ def search(request):
     results = alumni.filter(total_filter).distinct()
 
     if len(results) > 10:
-        msg = "Search matched {0} items. Tip: you can use exact match by placing ' or \" around a word!".format(len(results))
+        msg = "Search matched {0} items. Tip: you can use exact match by placing ' or \" around words!".format(len(results))
         messages.warning(request, msg)
 
     return render(request, "search/search_results.html", {"alumni": results, "key_words": terms})
