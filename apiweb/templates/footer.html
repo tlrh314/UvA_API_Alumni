@@ -12,7 +12,7 @@
                 </ul>
             </div>
             <div class="col-xs-2 footer-column">
-                <h3> News &amp; Interviews </h3>
+                <h3> Interviews </h3>
                 <ul>
                     {% for interview in latest_interviews %}
                     <li><a href="{% url 'interviews:detail' interview.slug %}"> {{ interview.alumnus.full_name }} {{ interview.title }} <span>| {{ interview.date_published|date }}</span></a></li>
