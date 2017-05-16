@@ -15,6 +15,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from jsonfield import JSONField
 from tinymce.models import HTMLField
+from django_countries.fields import CountryField
 
 from ..research.models import ResearchTopic
 
@@ -88,7 +89,8 @@ class PreviousPosition(models.Model):
     comments         = models.TextField(_("comments"), blank=True)
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-    last_updated_by  = models.ForeignKey('auth.User', related_name="prevpos_updated", default=270)
+    last_updated_by  = models.ForeignKey('auth.User', related_name="prevpos_updated",
+        on_delete=models.SET_DEFAULT, default=270)
 
     class Meta:
         verbose_name = _("Previous Position at API")
@@ -96,6 +98,18 @@ class PreviousPosition(models.Model):
 
     def __str__(self):
         return self.type.name
+
+
+@python_2_unicode_compatible
+class AcademicTitle(models.Model):
+    title           = models.CharField(_("title"), max_length=20)
+
+    class Meta:
+        verbose_name = _("Academic Title")
+        verbose_name_plural = _("Academic Titles")
+
+    def __str__(self):
+        return self.title
 
 
 @python_2_unicode_compatible
@@ -111,9 +125,12 @@ class Alumnus(models.Model):
     # Account information
     user            = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name="alumnus")
     show_person     = models.BooleanField(_("alumnus visible on website"), default=True)
+    passed_away     = models.BooleanField(_("Deceased"), blank=True, default=False,
+        help_text=_("If selected a cross will appear by the name of this alumnus on the website."))
 
     # Personal information
     title           = models.CharField(_("title"), blank=True, max_length=40)
+    academic_title  = models.OneToOneField(AcademicTitle, on_delete=models.SET_NULL, blank=True, null=True)
     initials        = models.CharField(_("initials"), blank=True, max_length=40)
     first_name      = models.CharField(_("first name"), blank=True, max_length=40)
     nickname        = models.CharField(_("nickname"), blank=True, max_length=40)
@@ -122,7 +139,7 @@ class Alumnus(models.Model):
     last_name       = models.CharField(_("last name"), max_length=40)
     gender          = models.PositiveSmallIntegerField(_("gender"), choices=GENDER_CHOICES, blank=True, null=True)
     birth_date      = models.DateField(_("birth date"), blank=True, null=True)
-    nationality     = models.CharField(_("nationality"), blank=True, max_length=40)
+    nationality     = CountryField(_("nationality"), blank=True)
     place_of_birth  = models.CharField(_("place of birth"), blank=True, max_length=40)
     student_id      = models.CharField(_("student_id"), blank=True, max_length=10)
     mugshot         = models.ImageField(_("mugshot"), upload_to=get_mugshot_location, blank=True, null=True)
@@ -165,7 +182,8 @@ class Alumnus(models.Model):
 
     # Extra information
     comments        = models.TextField(_("comments"), blank=True)
-    last_updated_by = models.ForeignKey('auth.User', related_name="alumni_updated", default=270)
+    last_updated_by = models.ForeignKey('auth.User', related_name="alumni_updated",
+        on_delete=models.SET_DEFAULT, default=270)
     date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
@@ -254,7 +272,8 @@ class Degree(models.Model):
     thesis_in_library= models.BooleanField(blank=True, default=False)
 
     comments         = models.TextField(_("comments"), blank=True)
-    last_updated_by  = models.ForeignKey('auth.User', related_name="theses_updated", default=270)
+    last_updated_by  = models.ForeignKey('auth.User', related_name="theses_updated",
+        on_delete=models.SET_DEFAULT, default=270)
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
@@ -331,7 +350,8 @@ class JobAfterLeaving(models.Model):
     location_job        = models.PositiveSmallIntegerField(_("location job"), choices=location_job_choices, default=1)
 
     comments            = models.TextField(_("comments"), blank=True)
-    last_updated_by     = models.ForeignKey('auth.User', related_name="jobs_updated", default=270)
+    last_updated_by     = models.ForeignKey('auth.User', related_name="jobs_updated",
+        on_delete=models.SET_DEFAULT, default=270)
     date_created        = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated        = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 

@@ -127,6 +127,8 @@ INSTALLED_APPS = (
     'apiweb.apps.visualization',
 
     'bootstrap3',
+    'django_countries',
+    # 'cities_light',
 )
 
 # login URL for auth app

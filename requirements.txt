@@ -1,10 +1,14 @@
 appdirs==1.4.3
 appnope==0.1.0
+beautifulsoup4==4.6.0
+bs4==0.0.1
 colorama==0.3.9
 decorator==4.0.11
 Django==1.11
 django-ajax-selects==1.5.2
+django-autoslug==1.9.3
 django-bootstrap3==8.2.2
+django-cities-light==3.3.0
 django-countries==4.5
 django-extensions==1.7.8
 django-filebrowser-no-grappelli==3.7.0
@@ -21,10 +25,12 @@ packaging==16.8
 pexpect==4.2.1
 pickleshare==0.7.4
 Pillow==4.1.1
+progressbar2==3.20.0
 prompt-toolkit==1.0.14
 ptyprocess==0.5.1
 Pygments==2.2.0
 pyparsing==2.2.0
+python-utils==2.1.0
 pytz==2017.2
 reportlab==3.4.0
 requests==2.13.0
@@ -33,7 +39,9 @@ requests-toolbelt==0.7.1
 simplegeneric==0.8.1
 six==1.10.0
 traitlets==4.3.2
+Unidecode==0.4.20
 URLObject==2.4.3
 wcwidth==0.1.7
+wget==3.2
 xlrd==1.0.0
 xlwt==1.2.0

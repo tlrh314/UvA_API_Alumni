@@ -38,7 +38,8 @@ class Category(models.Model):
 
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-    last_updated_by  = models.ForeignKey('auth.User', related_name="categories_updated")
+    last_updated_by  = models.ForeignKey('auth.User', related_name="categories_updated",
+        on_delete=models.SET_DEFAULT, default=270)
 
     def __str__(self):
         return self.name
@@ -65,7 +66,8 @@ class Post(models.Model):
     is_published    = models.BooleanField(default=False)
     date_created    = models.DateTimeField(auto_now_add=True)
     date_published  = models.DateTimeField(auto_now=True, blank=True, null=True)
-    last_updated_by = models.ForeignKey('auth.User', related_name="posts_updated")
+    last_updated_by = models.ForeignKey('auth.User', related_name="posts_updated",
+        on_delete=models.SET_DEFAULT, default=270)
 
     category = models.ForeignKey(Category, blank=True, null=True)
     # featured = models.BooleanField(default=False,

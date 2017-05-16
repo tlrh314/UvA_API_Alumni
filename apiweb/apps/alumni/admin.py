@@ -17,11 +17,13 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from tinymce.widgets import TinyMCE
+from django_countries.widgets import CountrySelectWidget
+from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 # from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
 from apiweb import context_processors
 from .models import PositionType, PreviousPosition
-from .models import Alumnus, Degree, JobAfterLeaving
+from .models import Alumnus, AcademicTitle, Degree, JobAfterLeaving
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 from .actions import save_all_alumni_to_xls, save_all_theses_to_xls
 
@@ -282,12 +284,13 @@ class AlumnusAdminForm(forms.ModelForm):
     look["width"] = ""
     look["height"] = "200"
     biography = forms.CharField(required=False, widget=TinyMCE(mce_attrs=look))
+    # nationality = AutoCompleteSelectField("nationality", required=True, help_text=None)
 
     class Meta:
         fields = "__all__"
         model = Alumnus
 
-class AlumnusListFilter(admin.SimpleListFilter):
+class EmptyEmailListFilter(admin.SimpleListFilter):
     title = _("empty email")
     parameter_name = "have_email"
 
@@ -300,9 +303,33 @@ class AlumnusListFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == "no":
             return queryset.filter(email__isnull=False).exclude(email="")
-
         if self.value() == "yes":
             return queryset.filter(Q(email__isnull=True) | Q(email__exact=""))
+        return queryset
+
+
+class NullListFilter(admin.SimpleListFilter):
+    def lookups(self, request, model_admin):
+        return (
+            ("1", _("Is Empty")),
+            ("0",  _("Has a Value")),
+        )
+
+    def queryset(self, request, queryset):
+        kwargs = { "{0}__isnull".format(self.parameter_name) : self.value() == "1" }
+        if self.value() in ("0", "1"):
+            return queryset.filter(**kwargs)
+        return queryset
+
+
+class EmptyLastCheckedListFilter(NullListFilter):
+    title = u'Started'
+    parameter_name = "last_checked"
+
+
+@admin.register(AcademicTitle)
+class AcademicTitleAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Alumnus)
@@ -310,8 +337,10 @@ class AlumnusAdmin(admin.ModelAdmin):
     ordering = ("user__username", )
     search_fields = ("first_name", "last_name", "degrees__thesis_title",
         "degrees__date_start", "degrees__date_stop", "degrees__date_of_defence")
-    list_display = ("get_alumnus", "email", "show_msc_year", "show_phd_year", "show_postdoc_year", "show_staff_year")
-    list_filter = ("show_person", AlumnusListFilter)  # position and positions (== related name of PreviousPosition)
+    list_display = ("get_alumnus", "email", "last_checked", "show_msc_year",
+        "show_phd_year", "show_postdoc_year", "show_staff_year")
+    # TODO: add filter for PreviousPostion -> PositionType.
+    list_filter = ("show_person", EmptyEmailListFilter, EmptyLastCheckedListFilter)
     inlines = (DegreeAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
@@ -323,13 +352,13 @@ class AlumnusAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Account information",
                 {
-                    "fields": ["user", "get_full_name", "show_person"]
+                    "fields": ["user", "get_full_name", "show_person", "passed_away"]
                 }),
 
         ("Personal information", {
-                "classes": ["collapse"],
-                 "fields": ["first_name", "prefix", "last_name",
-                             "title", "initials", "gender", "birth_date",
+                # "classes": ["collapse"],
+                 "fields": ["academic_title", "initials", "first_name", "prefix", "last_name",
+                             "title", "gender", "birth_date",
                              "place_of_birth", "nationality",]
                              # "mugshot", "photo", "biography"]
                 }),
