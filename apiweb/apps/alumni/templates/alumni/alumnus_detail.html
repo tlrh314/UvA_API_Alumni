@@ -10,7 +10,7 @@
 
 <div class="main-content" role="main">
 
-    <h1 class="text-center"> {{ alumnus.full_name }} </h1>
+  <h1 class="text-center"> {{ alumnus.full_name }} {% if alumnus.passed_away %} &dagger; {% endif %} </h1>
 
     <div class="col-xs-9 pull-left">
         <div class="col-xs-3 pull-left"> 
