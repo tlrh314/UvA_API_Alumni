@@ -118,11 +118,12 @@ INSTALLED_APPS = (
 
     'apiweb.apps.people',
     'apiweb.apps.research',
-    'apiweb.apps.search',
 
     # 'nested_inline',
     'apiweb.apps.main',
+    'apiweb.apps.search',
     'apiweb.apps.alumni',
+    'apiweb.apps.survey',
     'apiweb.apps.interviews',
     'apiweb.apps.visualization',
 

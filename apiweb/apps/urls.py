@@ -11,6 +11,8 @@ import django.contrib.sitemaps.views
 from apiweb.context_processors import contactinfo
 from .main.views import index, contact, contact_success
 
+from .survey.views import survey_success
+
 
 admin.autodiscover()
 
@@ -43,6 +45,8 @@ urlpatterns = [
     url(r'^thanks/$', contact_success, name='contact_success'),
     url(r'^search/', include('apiweb.apps.search.urls', namespace='search')),
     url(r'^vis/', include('apiweb.apps.visualization.urls', namespace='vizualisation')),
+    url(r'^survey/', include('apiweb.apps.survey.urls', namespace='survey')),
+    url(r'^survey_thanks/$', survey_success, name='survey_success'),
     url(r'^$', index, name='index'),
 
     # TODO: clean up code below

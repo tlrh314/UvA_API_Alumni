@@ -220,7 +220,6 @@ class Alumnus(models.Model):
     @property
     def full_name(self):
         title_last = self.academic_title in AcademicTitle.objects.filter(title__in=["MA", "MSc", "BSc"])
-        print(title_last)
         title = self.academic_title if self.academic_title else ""
         return ("{} {} {} {} {} {}".format(title if not title_last else "",
             self.first_name, self.initials if not self.first_name else "",
@@ -362,4 +361,7 @@ class JobAfterLeaving(models.Model):
 
     def __str__(self):
         return self.alumnus.last_name
+
+
+#class 
 
