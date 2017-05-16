@@ -323,7 +323,7 @@ class NullListFilter(admin.SimpleListFilter):
 
 
 class EmptyLastCheckedListFilter(NullListFilter):
-    title = u'Started'
+    title = u'Date Last Checked'
     parameter_name = "last_checked"
 
 
@@ -357,8 +357,8 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         ("Personal information", {
                 # "classes": ["collapse"],
-                 "fields": ["academic_title", "initials", "first_name", "prefix", "last_name",
-                             "title", "gender", "birth_date",
+                 "fields": ["academic_title", "initials", "first_name", "prefix",
+                            "last_name", "gender", "birth_date",
                              "place_of_birth", "nationality",]
                              # "mugshot", "photo", "biography"]
                 }),

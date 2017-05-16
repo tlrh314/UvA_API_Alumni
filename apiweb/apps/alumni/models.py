@@ -129,8 +129,7 @@ class Alumnus(models.Model):
         help_text=_("If selected a cross will appear by the name of this alumnus on the website."))
 
     # Personal information
-    title           = models.CharField(_("title"), blank=True, max_length=40)
-    academic_title  = models.OneToOneField(AcademicTitle, on_delete=models.SET_NULL, blank=True, null=True)
+    academic_title  = models.ForeignKey(AcademicTitle, on_delete=models.SET_NULL, blank=True, null=True)
     initials        = models.CharField(_("initials"), blank=True, max_length=40)
     first_name      = models.CharField(_("first name"), blank=True, max_length=40)
     nickname        = models.CharField(_("nickname"), blank=True, max_length=40)
@@ -220,10 +219,12 @@ class Alumnus(models.Model):
 
     @property
     def full_name(self):
-        title_last = self.title in ["MA", "MSc", "BSc"]
-        return ("{} {} {} {} {} {}".format(self.title if not title_last else "",
+        title_last = self.academic_title in AcademicTitle.objects.filter(title__in=["MA", "MSc", "BSc"])
+        print(title_last)
+        title = self.academic_title if self.academic_title else ""
+        return ("{} {} {} {} {} {}".format(title if not title_last else "",
             self.first_name, self.initials if not self.first_name else "",
-            self.prefix, self.last_name, self.title if title_last else "")).replace("  ", " ")
+            self.prefix, self.last_name, title if title_last else "")).replace("  ", " ")
 
     @property
     def full_name_no_title(self):
