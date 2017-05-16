@@ -119,7 +119,8 @@ class Alumnus(models.Model):
     GENDER_CHOICES = (
         (1, "Male"),
         (2, "Female"),
-        (3, "Prefer not to say"),
+        (3, "Other"),
+        (4, "Prefer not to say"),
     )
 
     # Account information
