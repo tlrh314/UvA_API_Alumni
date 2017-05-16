@@ -3,6 +3,8 @@ import copy
 from django import forms
 from django.contrib import admin
 from django.template.defaultfilters import slugify
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 
 from tinymce.widgets import TinyMCE
 from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
@@ -108,6 +110,9 @@ class InterviewAdmin(admin.ModelAdmin):
             obj.teaser = form.cleaned_data["teaser"]
         else:
             obj.teaser = form.cleaned_data["content"][0:500]
+        if form.cleaned_data["is_published"] is True:
+            obj.publish()
+
 
         obj.last_updated_by = request.user
         obj.save()
@@ -117,16 +122,28 @@ class InterviewAdmin(admin.ModelAdmin):
         return obj.alumnus.full_name
     get_alumnus.short_description = "Interviewed Alumnus"
 
-    # TODO: make publish/unpublish show up in recent actions
     def publish(self, request, queryset):
-        for obj in queryset:
-            obj.publish()
+        for post in queryset:
+            post.publish()
 
+            content_type_pk = ContentType.objects.get_for_model(Post).pk
+            LogEntry.objects.log_action(
+                request.user.pk, content_type_pk, post.pk, str(post), CHANGE,
+                change_message="Set status to 'Published'"
+            )
         self.message_user(request, "Interview successfully published.")
     publish.short_description = "Publish selected post"
 
     def unpublish(self, request, queryset):
-        queryset.update(is_published=False)
+        for post in queryset:
+            post.unpublish()
+
+            content_type_pk = ContentType.objects.get_for_model(Post).pk
+            LogEntry.objects.log_action(
+                request.user.pk, content_type_pk, post.pk, str(post), CHANGE,
+                change_message="Set status to 'Unpublisheded'"
+            )
         self.message_user(request, "Interview successfully unpublished.")
     unpublish.short_description = "Unpublish selected post"
+
 

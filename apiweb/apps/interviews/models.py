@@ -65,7 +65,7 @@ class Post(models.Model):
 
     is_published    = models.BooleanField(default=False)
     date_created    = models.DateTimeField(auto_now_add=True)
-    date_published  = models.DateTimeField(auto_now=True, blank=True, null=True)
+    date_published  = models.DateTimeField(blank=True, null=True)
     last_updated_by = models.ForeignKey('auth.User', related_name="posts_updated",
         on_delete=models.SET_DEFAULT, default=270)
 
@@ -82,10 +82,14 @@ class Post(models.Model):
         verbose_name_plural = _("Interviews")
         ordering = ['-date_published',]
 
-
     def publish(self):
         self.date_published = timezone.now()
         self.is_published = True
+        self.save()
+
+    def unpublish(self):
+        self.date_published = None
+        self.is_published = False
         self.save()
 
     @property
