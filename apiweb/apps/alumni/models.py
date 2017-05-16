@@ -119,7 +119,8 @@ class Alumnus(models.Model):
     GENDER_CHOICES = (
         (1, "Male"),
         (2, "Female"),
-        (3, "Prefer not to say"),
+        (3, "Other"),
+        (4, "Prefer not to say"),
     )
 
     # Account information
@@ -220,7 +221,6 @@ class Alumnus(models.Model):
     @property
     def full_name(self):
         title_last = self.academic_title in AcademicTitle.objects.filter(title__in=["MA", "MSc", "BSc"])
-        print(title_last)
         title = self.academic_title if self.academic_title else ""
         return ("{} {} {} {} {} {}".format(title if not title_last else "",
             self.first_name, self.initials if not self.first_name else "",
