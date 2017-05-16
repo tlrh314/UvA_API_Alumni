@@ -346,7 +346,7 @@ class JobAfterLeaving(models.Model):
     current_job         = models.PositiveSmallIntegerField(_("current occupation"), choices=currently_occupating_job_choices, default=2)
     company_name        = models.CharField(_("company name"), blank=True, max_length=40)
     start_date          = models.DateField(_("date start job"), blank=True, null=True)
-    stop_date           = models.DateField(_("date start job"), blank=True, null=True)
+    stop_date           = models.DateField(_("date stop job"), blank=True, null=True)
     inside_academia     = models.PositiveSmallIntegerField(_("inside academia"), choices=outside_inside_choices, default=1)
     location_job        = models.PositiveSmallIntegerField(_("location job"), choices=location_job_choices, default=1)
 
