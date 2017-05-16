@@ -47,7 +47,19 @@
             <tbody>
             {% for thesis in alumnus.degrees.all %}
             <tr><td>
-                {{ thesis.thesis_type|display_thesis_type }}: <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }} ({{ thesis.date_of_defence|date:"Y" }}) </a>
+                {{ thesis.thesis_type|display_thesis_type }}:
+                <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">
+                    {% if thesis.thesis_title %}
+                        {{ thesis.thesis_title }}
+                    {% else %}
+                        <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
+                    {% endif %}
+                </a>
+                    {% if thesis.date_of_defence %}
+                        ({{ thesis.date_of_defence|date:"Y" }})
+                    {% else %}
+                        (Year Unknown) 
+                    {% endif %}
             </td></tr>
             {% endfor %}
             </tbody>
@@ -76,7 +88,7 @@
         {% endif %}
 
         {% if alumnus.ads_name %}
-        <div class="col-xs-12 pull-left" ">
+        <div class="col-xs-12 pull-left">
             <a target="_blank" href="{{ alumnus.ads_name|ads_url }}">
               <h3 class="text-left"> Publications </h3>
             </a>

@@ -8,23 +8,41 @@
 {% block content %}
 <div class="main-content" role="main">
     <div class="col-xs-4 pull-left text-justify">
-        <h2 class="text-left">Latest Interview</h2>
-        <h5 class="text-left">{{ latest_post.date_published|date:"M d, Y"}} • <a href="{% url 'alumni:alumnus-detail' latest_post.alumnus.slug %}">{{ latest_post.alumnus.full_name }}</a></h5>
-        {% autoescape off %}
-            {{ latest_post.teaser }} <a href="{% url 'interviews:detail' latest_post.slug %}">Read More</a>
-        {% endautoescape %}
+        <table class="table table-responsive">
+            <thead><tr><th style="padding-top: 0px; padding-bottom: 0px;"><h2 class="text-left" style="margin-bottom: 0px;"> Latest Interview </h2></tr></th></thead>
+            <tbody><tr><td style="padding-top: 0px; padding-bottom: 0px;">
+                <h5 class="text-left">{{ latest_post.date_published|date:"M d, Y"}} • <a href="{% url 'alumni:alumnus-detail' latest_post.alumnus.slug %}">{{ latest_post.alumnus.full_name }}</a></h5>
+                {% autoescape off %}
+                {{ latest_post.teaser }}
+                <a href="{% url 'interviews:detail' latest_post.slug %}">
+                    <button class="btn btn-primary pull-right" type="submit">Read More</button></a>
+                {% endautoescape %}
+            </td></tr></tbody>
+        </table>
 
-        <h2 class="text-left">Recent Theses</h2>
-        <h5 class="text-left"> 
-            {{ latest_thesis.date_of_defence|date:"M d, Y" }} • <a href="{% url 'alumni:alumnus-detail' latest_thesis.alumnus.slug %}">{{ latest_thesis.author }}</a>
-        </h5>
-            <a href="{% url 'alumni:thesis-detail' latest_thesis.thesis_slug %}">{{ latest_thesis.thesis_title }}</a>
+
+        <table class="table table-responsive">
+            <thead>
+                <tr><th style="padding-top: 0px; padding-bottom: 0px;">
+                        <h2 class="text-left" style="margin-top: 0px; margin-bottom: 0px;"> Recent Theses </h2>
+                </tr></th>
+            </thead>
+            <tbody>
+            <tr><td style="padding-top: 0px; padding-bottom: 0px;">
+                    <h5 class="text-left"> 
+                        {{ latest_thesis.date_of_defence|date:"M d, Y" }} • <a href="{% url 'alumni:alumnus-detail' latest_thesis.alumnus.slug %}">{{ latest_thesis.author }}</a>
+                    </h5>
+                    <a href="{% url 'alumni:thesis-detail' latest_thesis.thesis_slug %}">{{ latest_thesis.thesis_title }}</a>
+
+            </td></tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="col-xs-8 pull-right text-justify">
         <h2 class="text-left">Anton Pannekoek Institute | Alumni </h2>
         {% autoescape off %}
-            {{ welcome_text }}
+        {{ welcome_text }}
         {% endautoescape %}
     </div>
 

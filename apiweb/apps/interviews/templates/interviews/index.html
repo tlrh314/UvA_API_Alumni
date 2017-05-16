@@ -36,17 +36,13 @@
 
     <h1 class="text-center"> Alumni Interviews </h1>
     <div class="container">
-    <div class="span9 pagination-centered text-justify">
-        {% for post in posts %}
-        <div class="table-responsive">
-            <table class="table table-responsive">
-                <thead>
-                    <tr><th>
-                    <h2 class="text-left"> {{ post.alumnus.full_name_no_title }} • {{ post.title }} </h2>
-                    </tr></th>
-                </thead>
-                <tbody>
-                <tr><td>
+        <div class="span9 pagination-centered text-justify">
+            {% for post in posts %}
+            <div class="table-responsive">
+                <table class="table table-responsive">
+                    <thead><tr><th><h2 class="text-left"> {{ post.alumnus.full_name_no_title }} • {{ post.title }} </h2></tr></th></thead>
+                    <tbody>
+                    <tr><td>
                         <div class="col-xs-3 pull-left"> 
                             {% if post.alumnus.photo %}
                             <img src="{{ post.alumnus.photo.url }}" width="150px"></img>
@@ -58,17 +54,16 @@
                             <h4 class="text-right">{{ post.author.full_name_no_title }}  •  {{ post.date_published|date:"M d, Y" }}</h4> <br>
 
                             {% autoescape off %}
-                                {{ post.teaser }} <br>
-                                <a href="{{post.slug}}"><button class="btn btn-primary pull-right" type="submit">Read More</button></a>
+                            {{ post.teaser }} <br>
+                            <a href="{{post.slug}}"><button class="btn btn-primary pull-right" type="submit">Read More</button></a>
                             {% endautoescape %}
                         </div>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 {% endblock %}
