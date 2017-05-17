@@ -28,15 +28,8 @@ def alumnus_list(request):
     sort_on = request.GET.getlist("sort", None)
 
     # Apply filters
-    if position:
-        multifilter = Q()
-        for position in position:
-            pass
-            # TODO: implement filter for position, e.g. postdoc, staff, nova, etc
-            # multifilter = multifilter | Q(degrees__type=degree)
-
-        # alumni = alumni.filter(multifilter).distinct()
-
+    # TODO: if filtered/sorted on postdoc, then the year range is not limited to postdoc
+    # so also alumni with PhD/MSc in the year range are shown
     if defence_year:
         multifilter = Q()
         for year in defence_year:
@@ -46,7 +39,7 @@ def alumnus_list(request):
                 end_year = str(int(year) + 50)
             date_range=[year+"-01-01",end_year+"-01-01"]
             multifilter = multifilter | Q(degrees__date_of_defence__range=date_range)
-            multifilter = multifilter | Q(degrees__date_stop__range=date_range)
+            multifilter = multifilter | Q(positions__date_stop__range=date_range)
 
         alumni = alumni.filter(multifilter).distinct()
 
@@ -59,44 +52,47 @@ def alumnus_list(request):
 
     # Sort the list
     if sort_on:
-        if sort_on[0] == "author_az":
+        if sort_on[0] == "alumnus_az":
             alumni = alumni.order_by("last_name")
-        if sort_on[0] == "author_za":
+        if sort_on[0] == "alumnus_za":
             alumni = alumni.order_by("-last_name")
 
         # Caution: sorting on degree/position implies filtering also
         if sort_on[0] == "msc_lh":
-            alumni = alumni.filter(degrees__type__iexact="msc").order_by("degrees__date_of_defence")
+            alumni = alumni.filter(degrees__type__iexact="msc").distinct().order_by("degrees__date_of_defence")
         if sort_on[0] == "msc_hl":
-            alumni = alumni.filter(degrees__type__iexact="msc").order_by("-degrees__date_of_defence")
+            alumni = alumni.filter(degrees__type__iexact="msc").distinct().order_by("-degrees__date_of_defence")
 
         if sort_on[0] == "phd_lh":
-            alumni = alumni.filter(degrees__type__iexact="phd").order_by("degrees__date_of_defence")
+            alumni = alumni.filter(degrees__type__iexact="phd").distinct().order_by("degrees__date_of_defence")
         if sort_on[0] == "phd_hl":
-            alumni = alumni.filter(degrees__type__iexact="phd").order_by("-degrees__date_of_defence")
+            alumni = alumni.filter(degrees__type__iexact="phd").distinct().order_by("-degrees__date_of_defence")
 
         if sort_on[0] == "pd_lh":
-            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).order_by("positions__date_stop")
+            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("positions__date_stop")
         if sort_on[0] == "pd_hl":
-            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).order_by("-positions__date_stop")
+            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("-positions__date_stop")
 
         # TODO: if an alumnus has several staff positions, then the latest date_stop must be returned.
         # Is this aggregating / grouping several tables together, then taking the max?
         if sort_on[0] == "staff_lh":
             alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
-                "Adjunct Staff", "Faculty Staff"]).order_by("positions__date_stop")
+                "Adjunct Staff", "Faculty Staff"]).distinct().order_by("positions__date_stop")
         if sort_on[0] == "staff_hl":
             alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
-                "Adjunct Staff", "Faculty Staff"]).order_by("-positions__date_stop")
+                "Adjunct Staff", "Faculty Staff"]).distinct().order_by("-positions__date_stop")
 
         if sort_on[0] == "obp_lh":
             alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
-                "Outreach", "OBP", "Software Developer", "Nova" ]).order_by("positions__date_stop")
+                "Outreach", "OBP", "Software Developer", "Nova" ]).distinct().order_by("positions__date_stop")
         if sort_on[0] == "obp_hl":
             alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
-                "Outreach", "OBP", "Software Developer", "Nova" ]).order_by("-positions__date_stop")
+                "Outreach", "OBP", "Software Developer", "Nova" ]).distinct().order_by("-positions__date_stop")
     else:
         alumni = alumni.order_by("last_name")
+
+    # TODO: only show unique results, though distinct on columns is not supported by sqlite3
+    # alumni=alumni.distinct("last_name")
 
     # Paginate the list
     alumni_per_page = request.GET.get("limit", 15)
@@ -186,14 +182,32 @@ def thesis_list(request):
 
     # Sort the list
     if sort_on:
-        if sort_on[0] == "year_hl":
-            theses = theses.order_by("-date_of_defence")
-        if sort_on[0] == "year_lh":
-            theses = theses.order_by("date_of_defence")
         if sort_on[0] == "author_az":
             theses = theses.order_by("alumnus__last_name")
         if sort_on[0] == "author_za":
             theses = theses.order_by("-alumnus__last_name")
+
+        if sort_on[0] == "title_az":
+            theses = theses.order_by("thesis_title")
+        if sort_on[0] == "title_za":
+            theses = theses.order_by("-thesis_title")
+
+        # Caution: sorting on degree/position implies filtering also
+        if sort_on[0] == "msc_lh":
+            theses = theses.filter(type__iexact="msc").distinct().order_by("-date_of_defence")
+        if sort_on[0] == "msc_hl":
+            theses = theses.filter(type__iexact="msc").distinct().order_by("date_of_defence")
+
+        if sort_on[0] == "phd_lh":
+            theses = theses.filter(type__iexact="phd").distinct().order_by("date_of_defence")
+        if sort_on[0] == "phd_hl":
+            theses = theses.filter(type__iexact="phd").distinct().order_by("-date_of_defence")
+
+        # Year filter for date of defence which includes both MSc and PhD
+        if sort_on[0] == "year_lh":
+            theses = theses.order_by("date_of_defence")
+        if sort_on[0] == "year_hl":
+            theses = theses.order_by("-date_of_defence")
     else:
         theses = theses.order_by("-date_of_defence")
 

@@ -110,20 +110,20 @@
         {% endfor %}
     </div>
 
+    {% get_active_sort as active_sort %}
     <table class="table table-hover"> 
         <thead class="table-bordered">
             <tr>
-            {% get_active_sort as active_sort %}
-            {# author sort #}
+            {# Alumnus sort #}
             <th class="table-bordered">
-                {% if active_sort == 'author_az' %}
-                <a href="{% filter_objects 'sort' 'author_za' %}" style="display: block; color: black;"> Alumnus
+                {% if active_sort == 'alumnus_az' %}
+                <a href="{% filter_objects 'sort' 'alumnus_za' %}" style="display: block; color: black;"> Alumnus
                     <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
-                {% elif active_sort == 'author_za' %}
-                <a href="{% filter_objects 'sort' 'author_az' %}" style="display: block; color: black;"> Alumnus
+                {% elif active_sort == 'alumnus_za' %}
+                <a href="{% filter_objects 'sort' 'alumnus_az' %}" style="display: block; color: black;"> Alumnus
                     <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
                 {% else %}
-                <a href="{% filter_objects 'sort' 'author_za' %}" style="display: block; color: black;"> Alumnus
+                <a href="{% filter_objects 'sort' 'alumnus_za' %}" style="display: block; color: black;"> Alumnus
                     <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
                 {% endif %}
             </th>
@@ -199,23 +199,25 @@
             {% for alumnus in alumni %}
             <tr class="{% cycle '' 'info' %}">
                 <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name_no_title }}</a></td>
-                    <td> 
+                    <td class="text-center"> 
                     {% for degree in alumnus.degrees.all %}
                         {% if degree.type == 'msc'%}
-                            {{ degree.date_stop|date:"Y" }} 
+                            {% if degree.date_of_defence %} {{ degree.date_of_defence|date:"Y" }} {% else %} 
+                            <i class="fa fa-question">{% endif %}
                         {% endif %}
                     {% endfor %}
                     </td>
-                    <td>
+                    <td class="text-center">
                     {% for degree in alumnus.degrees.all %}
                         {% if degree.type == 'phd'%}
-                            {{ degree.date_of_defence|date:"Y" }} 
+                            {% if degree.date_of_defence %} {{ degree.date_of_defence|date:"Y" }} {% else %} 
+                            <i class="fa fa-question">{% endif %}
                         {% endif %}
                     {% endfor %}
                     </td>
-                    <td> {% get_postdoc_year alumnus %} </td>
-                    <td> {% get_staff_year alumnus %} </td>
-                    <td> {% get_obp_year alumnus %} </td>
+                    <td class="text-center"> {% get_postdoc_year alumnus %} </td>
+                    <td class="text-center"> {% get_staff_year alumnus %} </td>
+                    <td class="text-center"> {% get_obp_year alumnus %} </td>
                 </tr>
             {% endfor %}
         </tbody>

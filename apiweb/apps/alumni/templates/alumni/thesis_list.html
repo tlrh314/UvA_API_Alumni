@@ -108,14 +108,78 @@
         {% endfor %}
     </div>
 
+    {% get_active_sort as active_sort %}
     <table class="table table-hover">
-        <thead>
+        <thead class="table-bordered">
             <tr>
-                <th>Title</th>
-                <th>Author </th>
-                <th>MSc </th>
-                <th>PhD </th>
-                <th>Date of Defence</th>
+                {# Thesis Title sort #}
+                <th class="table-bordered">
+                    {% if active_sort == 'title_az' %}
+                    <a href="{% filter_objects 'sort' 'title_za' %}" style="display: block; color: black;">  Thesis Title
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                    {% elif active_sort == 'title_za' %}
+                    <a href="{% filter_objects 'sort' 'title_az' %}" style="display: block; color: black;"> Thesis Title
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                    {% else %}
+                    <a href="{% filter_objects 'sort' 'title_az' %}" style="display: block; color: black;"> Thesis Title
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                    {% endif %}
+                </th>
+                {# Author sort #}
+                <th class="table-bordered">
+                    {% if active_sort == 'author_az' %}
+                    <a href="{% filter_objects 'sort' 'author_za' %}" style="display: block; color: black;"> Author 
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                    {% elif active_sort == 'author_za' %}
+                    <a href="{% filter_objects 'sort' 'author_az' %}" style="display: block; color: black;"> Author
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                    {% else %}
+                    <a href="{% filter_objects 'sort' 'author_az' %}" style="display: block; color: black;"> Author
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                    {% endif %}
+                </th>
+                {# MSc sort #}
+                <th class="table-bordered">
+                    {% if active_sort == 'msc_hl' %}
+                    <a href="{% filter_objects 'sort' 'msc_lh' %}" style="display: block; color: black;"> MSc 
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                    {% elif active_sort == 'msc_lh' %}
+                    <a href="{% filter_objects 'sort' 'msc_hl' %}" style="display: block; color: black;"> MSc
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                    {% else %}
+                    <a href="{% filter_objects 'sort' 'msc_lh' %}" style="display: block; color: black;"> MSc
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                    {% endif %}
+                </th>
+                {# PhD sort #}
+                <th class="table-bordered">
+                    {% if active_sort == 'phd_hl' %}
+                    <a href="{% filter_objects 'sort' 'phd_lh' %}" style="display: block; color: black;"> PhD 
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                    {% elif active_sort == 'phd_lh' %}
+                    <a href="{% filter_objects 'sort' 'phd_hl' %}" style="display: block; color: black;"> PhD
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                    {% else %}
+                    <a href="{% filter_objects 'sort' 'phd_lh' %}" style="display: block; color: black;"> PhD
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                    {% endif %}
+                
+                </th>
+                {# Date sort #}
+                <th class="table-bordered">
+                    {% if active_sort == 'year_hl' %}
+                    <a href="{% filter_objects 'sort' 'year_lh' %}" style="display: block; color: black;"> Defence 
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                    {% elif active_sort == 'year_lh' %}
+                    <a href="{% filter_objects 'sort' 'year_hl' %}" style="display: block; color: black;"> Defence
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                    {% else %}
+                    <a href="{% filter_objects 'sort' 'year_lh' %}" style="display: block; color: black;"> Defence
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                    {% endif %}
+                
+                
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -124,7 +188,7 @@
             <h2 class="text-center">Total number of degrees : {{ theses.paginator.count }}</h2>
             {% for thesis in theses%}
             <tr class="{% cycle '' 'info' %}">
-                <td>{% if thesis.thesis_title %}
+                <td class="col-md-6">{% if thesis.thesis_title %}
                         <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}
                     {% else %}
                         <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
@@ -135,13 +199,13 @@
                         (<a href="{% url 'alumni:thesis-has-no-pdf' %}">PDF</a>)
                     {% endif %}
                 </td>
-                <td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td>
-                <td>
+                <td class="col-md-2"><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td>
+                <td class="col-md-1 text-center">
                     {% if thesis.type == "msc" %}
                         <span class="glyphicon glyphicon-ok"/>
                     {% endif %}
                 </td>
-                <td>
+                <td class="col-md-1 text-center">
                     {% if thesis.type == "phd" %}
                     <span class="glyphicon glyphicon-ok">
                         {% if thesis.dissertation_nr %}
@@ -150,7 +214,9 @@
                     </span>
                     {% endif %}
                 </td>
-                <td>{{ thesis.date_of_defence|date:"j M Y" }} </td>
+                <td class="col-md-2 text-center">{% if thesis.date_of_defence %} {{ thesis.date_of_defence|date:"M j, Y" }} {% else %}
+                    <i class="fa fa-question"> {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
