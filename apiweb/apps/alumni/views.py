@@ -194,9 +194,9 @@ def thesis_list(request):
 
         # Caution: sorting on degree/position implies filtering also
         if sort_on[0] == "msc_lh":
-            theses = theses.filter(type__iexact="msc").distinct().order_by("-date_of_defence")
-        if sort_on[0] == "msc_hl":
             theses = theses.filter(type__iexact="msc").distinct().order_by("date_of_defence")
+        if sort_on[0] == "msc_hl":
+            theses = theses.filter(type__iexact="msc").distinct().order_by("-date_of_defence")
 
         if sort_on[0] == "phd_lh":
             theses = theses.filter(type__iexact="phd").distinct().order_by("date_of_defence")

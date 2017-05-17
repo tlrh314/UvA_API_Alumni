@@ -115,7 +115,7 @@
         <thead class="table-bordered">
             <tr>
             {# Alumnus sort #}
-            <th class="table-bordered">
+            <th class="col-xs-5 table-bordered">
                 {% if active_sort == 'alumnus_az' %}
                 <a href="{% filter_objects 'sort' 'alumnus_za' %}" style="display: block; color: black;"> Alumnus
                     <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
@@ -128,7 +128,7 @@
                 {% endif %}
             </th>
             {# msc sort #}
-            <th class="table-bordered">
+            <th class="col-xs-1 table-bordered">
                 {% if active_sort == 'msc_lh' %}
                     <a href="{% filter_objects 'sort' 'msc_hl' %}" style="display: block; color: black;"> MSc 
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
@@ -141,7 +141,7 @@
             </th>
             {% endif %}
             {# phd sort #}
-            <th class="table-bordered">
+            <th class="col-xs-1 table-bordered">
                 {% if active_sort == 'phd_lh' %}
                     <a href="{% filter_objects 'sort' 'phd_hl' %}" style="display: block; color: black;"> PhD 
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
@@ -154,7 +154,7 @@
                 {% endif %}
             </th>
             {# postdoc sort #}
-            <th class="table-bordered">
+            <th class="col-xs-1 table-bordered">
                 {% if active_sort == 'pd_lh' %}
                     <a href="{% filter_objects 'sort' 'pd_hl' %}" style="display: block; color: black;"> Postdoc
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
@@ -166,7 +166,7 @@
                         <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
                 {% endif %}
             </th>
-            <th class="table-bordered">
+            <th class="col-xs-2 table-bordered">
                 {% if active_sort == 'staff_lh' %}
                     <a href="{% filter_objects 'sort' 'staff_hl' %}" style="display: block; color: black;"> Staff 
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
@@ -178,7 +178,7 @@
                         <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
                 {% endif %}
             </th>
-            <th class="table-bordered">
+            <th class="col-xs-2 table-bordered">
                 {% if active_sort == 'obp_lh' %}
                     <a href="{% filter_objects 'sort' 'obp_hl' %}" style="display: block; color: black;"> Support Staff
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
