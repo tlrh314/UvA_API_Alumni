@@ -27,6 +27,9 @@ class SurveyText(models.Model):
     def clean(self):
         validate_only_one_instance(self)
 
+    def __str__(self):
+        return "SurveyText"
+
 
 @python_2_unicode_compatible
 class Sector(models.Model):
