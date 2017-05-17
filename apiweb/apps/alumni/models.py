@@ -20,6 +20,8 @@ from django_countries.fields import CountryField
 from ..research.models import ResearchTopic
 
 
+
+
 def get_mugshot_location(instance, filename):
     """ the media directory is already included """
     return os.path.join("uploads", "alumni", "mugshots",
@@ -319,50 +321,5 @@ class Degree(models.Model):
         return self.type
 
 
-@python_2_unicode_compatible
-class JobAfterLeaving(models.Model):
-    """ Represents a job after leaving API """
 
-    currently_occupating_job_choices = (
-        (1, "Yes"),
-        (2, "No"),
-    )
-
-    outside_inside_choices = (
-        (1, "Yes"),
-        (2, "No"),
-    )
-
-    location_job_choices = (
-        (1, "NL"),
-        (2, "Europe"),
-        (3, "Great Bitain"),
-        (4, "US"),
-        (5, "Other"),
-    )
-
-    alumnus             = models.ForeignKey(Alumnus, related_name="job")
-    position_name       = models.CharField(_("position name"), blank=True, max_length=40)
-    current_job         = models.PositiveSmallIntegerField(_("current occupation"), choices=currently_occupating_job_choices, default=2)
-    company_name        = models.CharField(_("company name"), blank=True, max_length=40)
-    start_date          = models.DateField(_("date start job"), blank=True, null=True)
-    stop_date           = models.DateField(_("date stop job"), blank=True, null=True)
-    inside_academia     = models.PositiveSmallIntegerField(_("inside academia"), choices=outside_inside_choices, default=1)
-    location_job        = models.PositiveSmallIntegerField(_("location job"), choices=location_job_choices, default=1)
-
-    comments            = models.TextField(_("comments"), blank=True)
-    last_updated_by     = models.ForeignKey('auth.User', related_name="jobs_updated",
-        on_delete=models.SET_DEFAULT, default=270)
-    date_created        = models.DateTimeField(_("Date Created"), auto_now_add=True)
-    date_updated        = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-
-    class Meta:
-        verbose_name = _("Job After Leaving API")
-        verbose_name_plural = _("Jobs After Leaving API")
-
-    def __str__(self):
-        return self.alumnus.last_name
-
-
-#class 
 

@@ -45,8 +45,9 @@ urlpatterns = [
     url(r'^thanks/$', contact_success, name='contact_success'),
     url(r'^search/', include('apiweb.apps.search.urls', namespace='search')),
     url(r'^vis/', include('apiweb.apps.visualization.urls', namespace='vizualisation')),
+
+    #TODO: make this url stuff work better for survey
     url(r'^survey/', include('apiweb.apps.survey.urls', namespace='survey')),
-    url(r'^survey_thanks/$', survey_success, name='survey_success'),
     url(r'^$', index, name='index'),
 
     # TODO: clean up code below

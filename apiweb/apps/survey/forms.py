@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django import forms
 from ..alumni.models import Alumnus
+
+from .models import Sector
 #from ..alumni.models import job_sectors
 
 
@@ -10,11 +12,9 @@ class SurveyForm(forms.Form):
     this_year = datetime.now().year
     years_choices=range(1970, this_year)
 
-    sector_choices = (
-        (1,'a'),
-        (2,'b'),
-        (3,'c'),
-      )
+
+    sector_choices = Sector.objects.all()
+    print(sector_choices)
 
     location_job_choices = (
         (1, "NL"),
@@ -63,18 +63,28 @@ class SurveyForm(forms.Form):
       required=False,
       max_length=100,
       widget=forms.TextInput(
-       attrs={"placeholder": "What was the name of the company? (not required)",
+       attrs={"placeholder": "What was the name of the company? no(t required)",
               "class": "form-control"}
        )
     )
 
-    sector_job = forms.ChoiceField(
+    sector_job = forms.ModelChoiceField(
       required=True,
-      choices=sector_choices,
+      queryset=Sector.objects.all(),
       widget=forms.Select(
         attrs={"class": "form-control required"},
         )
     )
+
+
+
+    # sector_job = forms.ChoiceField(
+    #   required=True,
+    #   choices=sector_choices,
+    #   widget=forms.Select(
+    #     attrs={"class": "form-control required"},
+    #     )
+    # )
 
     location_job = forms.ChoiceField(
       required=True,

@@ -37,13 +37,6 @@ def survey(request):
 			inside_academia = form.cleaned_data["inside_academia"]
 			comments = form.cleaned_data["comments"]
 
-
-
-			#name = form.cleaned_data["name"]
-			#message = form.cleaned_data["message"]
-			#sender = form.cleaned_data["sender"]
-			#cc_myself = form.cleaned_data["cc_myself"]
-
             # recipients = ["timohalbesma@gmail.com"]  #  TODO: use sent_to
             # if cc_myself:
             #     recipients.append(sender)

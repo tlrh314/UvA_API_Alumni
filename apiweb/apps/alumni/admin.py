@@ -23,9 +23,12 @@ from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultip
 
 from apiweb import context_processors
 from .models import PositionType, PreviousPosition
-from .models import Alumnus, AcademicTitle, Degree, JobAfterLeaving
+from .models import Alumnus, AcademicTitle, Degree
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 from .actions import save_all_alumni_to_xls, save_all_theses_to_xls
+
+from ..survey.admin import JobAfterLeavingAdminInline
+
 
 
 # Do not show the Site Admin
@@ -48,36 +51,6 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 
-class JobAfterLeavingAdminInline(admin.StackedInline):
-    model = JobAfterLeaving
-    readonly_fields = ("date_created", "date_updated", "last_updated_by")
-    extra = 0
-
-    def save_model(self, request, obj, form, change):
-        obj.last_updated_by = request.user
-        obj.save()
-
-
-@admin.register(JobAfterLeaving)
-class JobAfterLeavingAdmin(admin.ModelAdmin):
-    readonly_fields = ("date_created", "date_updated", "last_updated_by")
-
-    fieldsets = [
-        ( "Job information", {
-            "fields":
-                [ "position_name", "current_job", "company_name", "start_date",
-                "stop_date", "inside_academia", "location_job" ]
-            }
-        ), ( "Extra information", {
-                "classes": ["collapse"],
-                "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
-            }
-        ),
-    ]
-
-    def save_model(self, request, obj, form, change):
-        obj.last_updated_by = request.user
-        obj.save()
 
 
 class PreviousPositionInline(admin.StackedInline):
