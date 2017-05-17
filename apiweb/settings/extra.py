@@ -62,10 +62,11 @@ TINYMCE_MINIMAL_CONFIG = {
 
 
 # TODO: cities_light might have ajax-lookupable countries
-# AJAX_LOOKUP_CHANNELS = {
-#     'cities_light_country': ('cities_light.lookups', 'CountryLookup'),
-#     'cities_light_city': ('cities_light.lookups', 'CityLookup'),
-# }
+AJAX_LOOKUP_CHANNELS = {
+#    'cities_light_country': ('cities_light.lookups', 'CountryLookup'),
+#    'cities_light_city': ('cities_light.lookups', 'CityLookup'),
+    'user': {'model':'auth.user','search_field':'username'}
+}
 #
 # CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
 # CITIES_LIGHT_INCLUDE_COUNTRIES = ['FR']

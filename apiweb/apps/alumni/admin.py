@@ -24,10 +24,15 @@ from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultip
 from apiweb import context_processors
 from .models import PositionType, PreviousPosition
 from .models import Alumnus, AcademicTitle, Degree
+from .forms import AlumnusAdminForm, PreviousPositionAdminForm
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 from .actions import save_all_alumni_to_xls, save_all_theses_to_xls
 
 from ..survey.admin import JobAfterLeavingAdminInline
+
+
+
+
 
 
 
@@ -58,13 +63,6 @@ class PreviousPositionInline(admin.StackedInline):
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
     exclude = ("fte_per_year",)
     extra = 0
-
-
-class PreviousPositionAdminForm(forms.ModelForm):
-    nova = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.NOVA_NETWORK)
-    # Remove following line for dropdown.
-    funding = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.FUNDING)
-
 
 @admin.register(PreviousPosition)
 class PreviousPositionAdmin(admin.ModelAdmin):
@@ -239,29 +237,25 @@ class UserRawIdWidget(widgets.ForeignKeyRawIdWidget):
         return res
 
 
-class AlumnusAdminForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        """ Init is only defined to for UserRawIdWidget """
-        super(forms.ModelForm, self).__init__(*args, **kwargs)
-        obj = kwargs.get("instance", None)
-        if obj and obj.pk is not None:
-            self.fields["user"].widget = UserRawIdWidget(
-                rel=obj._meta.get_field("user").rel,
-                admin_site=admin.site,
-                # Pass the object to attrs
-                attrs={"object": obj}
-            )
 
-    # Change biography to TinyMCE field
-    look = copy.copy(TINYMCE_MINIMAL_CONFIG)
-    look["width"] = ""
-    look["height"] = "200"
-    biography = forms.CharField(required=False, widget=TinyMCE(mce_attrs=look))
-    # nationality = AutoCompleteSelectField("nationality", required=True, help_text=None)
 
-    class Meta:
-        fields = "__all__"
-        model = Alumnus
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class EmptyEmailListFilter(admin.SimpleListFilter):
     title = _("empty email")

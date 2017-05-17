@@ -167,7 +167,7 @@ class Alumnus(models.Model):
     streetnumber    = models.CharField(_("streetnumber"),blank=True, max_length=40)
     zipcode         = models.CharField(_("zipcode"), blank=True, max_length=40)
     city            = models.CharField(_("city"), blank=True, max_length=40)
-    country         = models.CharField(_("country"), blank=True, max_length=40)
+    country         = CountryField(_("country"), blank=True)
 
     # Current position at API
     position        = models.ForeignKey(PositionType, blank=True, null=True,
