@@ -86,6 +86,12 @@ def get_active_filters(context):
                 filterzip.append((filter_type, filter_value))
     return filterzip
 
+@register.simple_tag(name="get_active_sort", takes_context=True)
+def get_active_sort(context):
+    active_filters_dict = URLObject(context.request.get_full_path()).query.multi_dict
+    order = active_filters_dict.get("sort", None)
+    return order[0] if order else None
+
 
 @register.simple_tag(name="get_defence_years")
 def get_defence_years():
@@ -112,9 +118,9 @@ def get_degree_types():
 @register.simple_tag(name="get_sorting_options")
 def get_sorting_options():
     return [("Author AZ", "author_az"),
-            ("Author ZA", "author_za"),
-            ("Year High-Low", "year_hl"),
-            ("Year Low-High", "year_lh")]
+            ("Author ZA", "author_za"),]
+            # ("Year High-Low", "year_hl"),
+            # ("Year Low-High", "year_lh")]
 
 @register.simple_tag(name="set_query", takes_context=True)
 def set_query(context, type, value):

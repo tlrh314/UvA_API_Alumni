@@ -110,15 +110,86 @@
         {% endfor %}
     </div>
 
-    <table class="table table-hover">
-        <thead>
+    <table class="table table-hover"> 
+        <thead class="table-bordered">
             <tr>
-                <th> Alumnus </th>
-                <th> MSc </th>
-                <th> PhD  </th>
-                <th> Postdoc </th>
-                <th> Staff  </th>
-                <th> Support Staff </th>
+            {% get_active_sort as active_sort %}
+            {# author sort #}
+            <th class="table-bordered">
+                {% if active_sort == 'author_az' %}
+                <a href="{% filter_objects 'sort' 'author_za' %}" style="display: block; color: black;"> Alumnus
+                    <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                {% elif active_sort == 'author_za' %}
+                <a href="{% filter_objects 'sort' 'author_az' %}" style="display: block; color: black;"> Alumnus
+                    <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                {% else %}
+                <a href="{% filter_objects 'sort' 'author_za' %}" style="display: block; color: black;"> Alumnus
+                    <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                {% endif %}
+            </th>
+            {# msc sort #}
+            <th class="table-bordered">
+                {% if active_sort == 'msc_lh' %}
+                    <a href="{% filter_objects 'sort' 'msc_hl' %}" style="display: block; color: black;"> MSc 
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                {% elif active_sort == 'msc_hl' %}
+                    <a href="{% filter_objects 'sort' 'msc_lh' %}" style="display: block; color: black;"> MSc
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                {% else %}
+                    <a href="{% filter_objects 'sort' 'msc_hl' %}" style="display: block; color: black;"> MSc
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+            </th>
+            {% endif %}
+            {# phd sort #}
+            <th class="table-bordered">
+                {% if active_sort == 'phd_lh' %}
+                    <a href="{% filter_objects 'sort' 'phd_hl' %}" style="display: block; color: black;"> PhD 
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                {% elif active_sort == 'phd_hl' %}
+                    <a href="{% filter_objects 'sort' 'phd_lh' %}" style="display: block; color: black;"> PhD
+                    <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                {% else %}
+                    <a href="{% filter_objects 'sort' 'phd_hl' %}" style="display: block; color: black;"> PhD
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                {% endif %}
+            </th>
+            {# postdoc sort #}
+            <th class="table-bordered">
+                {% if active_sort == 'pd_lh' %}
+                    <a href="{% filter_objects 'sort' 'pd_hl' %}" style="display: block; color: black;"> Postdoc
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                {% elif active_sort == 'pd_hl' %}
+                    <a href="{% filter_objects 'sort' 'pd_lh' %}" style="display: block; color: black;"> Postdoc
+                    <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                {% else %}
+                    <a href="{% filter_objects 'sort' 'pd_hl' %}" style="display: block; color: black;"> Postdoc
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                {% endif %}
+            </th>
+            <th class="table-bordered">
+                {% if active_sort == 'staff_lh' %}
+                    <a href="{% filter_objects 'sort' 'staff_hl' %}" style="display: block; color: black;"> Staff 
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                {% elif active_sort == 'staff_hl' %}
+                    <a href="{% filter_objects 'sort' 'staff_lh' %}" style="display: block; color: black;"> Staff
+                    <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                {% else %}
+                    <a href="{% filter_objects 'sort' 'staff_hl' %}" style="display: block; color: black;"> Staff
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                {% endif %}
+            </th>
+            <th class="table-bordered">
+                {% if active_sort == 'obp_lh' %}
+                    <a href="{% filter_objects 'sort' 'obp_hl' %}" style="display: block; color: black;"> Support Staff
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
+                {% elif active_sort == 'obp_hl' %}
+                    <a href="{% filter_objects 'sort' 'obp_lh' %}" style="display: block; color: black;"> Support Staff
+                    <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
+                {% else %}
+                    <a href="{% filter_objects 'sort' 'obp_hl' %}" style="display: block; color: black;"> Support Staff
+                        <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
+                {% endif %}
+            </th>
             </tr>
         </thead>
         <tbody>

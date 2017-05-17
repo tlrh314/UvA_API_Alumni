@@ -59,17 +59,42 @@ def alumnus_list(request):
 
     # Sort the list
     if sort_on:
-        msg = "Ordering the Alumni on Year is not yet available, but you could use the filter to select a year range. Try again later."
-        if sort_on[0] == "year_hl":
-            messages.warning(request, msg)
-            # alumni = alumni.order_by("-degrees__date_of_defence")
-        if sort_on[0] == "year_lh":
-            messages.warning(request, msg)
-            # alumni = alumni.order_by("degrees__date_of_defence")
         if sort_on[0] == "author_az":
             alumni = alumni.order_by("last_name")
         if sort_on[0] == "author_za":
             alumni = alumni.order_by("-last_name")
+
+        # Caution: sorting on degree/position implies filtering also
+        if sort_on[0] == "msc_lh":
+            alumni = alumni.filter(degrees__type__iexact="msc").order_by("degrees__date_of_defence")
+        if sort_on[0] == "msc_hl":
+            alumni = alumni.filter(degrees__type__iexact="msc").order_by("-degrees__date_of_defence")
+
+        if sort_on[0] == "phd_lh":
+            alumni = alumni.filter(degrees__type__iexact="phd").order_by("degrees__date_of_defence")
+        if sort_on[0] == "phd_hl":
+            alumni = alumni.filter(degrees__type__iexact="phd").order_by("-degrees__date_of_defence")
+
+        if sort_on[0] == "pd_lh":
+            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).order_by("positions__date_stop")
+        if sort_on[0] == "pd_hl":
+            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).order_by("-positions__date_stop")
+
+        # TODO: if an alumnus has several staff positions, then the latest date_stop must be returned.
+        # Is this aggregating / grouping several tables together, then taking the max?
+        if sort_on[0] == "staff_lh":
+            alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
+                "Adjunct Staff", "Faculty Staff"]).order_by("positions__date_stop")
+        if sort_on[0] == "staff_hl":
+            alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
+                "Adjunct Staff", "Faculty Staff"]).order_by("-positions__date_stop")
+
+        if sort_on[0] == "obp_lh":
+            alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
+                "Outreach", "OBP", "Software Developer", "Nova" ]).order_by("positions__date_stop")
+        if sort_on[0] == "obp_hl":
+            alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
+                "Outreach", "OBP", "Software Developer", "Nova" ]).order_by("-positions__date_stop")
     else:
         alumni = alumni.order_by("last_name")
 
