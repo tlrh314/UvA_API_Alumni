@@ -1,0 +1,142 @@
+[
+{
+  "model": "alumni.positiontype",
+  "pk": 1,
+  "fields": {
+    "name": "Director",
+    "plural": "Directors",
+    "date_created": "2017-05-06T18:02:49.205",
+    "date_updated": "2017-05-06T18:02:49.222"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 2,
+  "fields": {
+    "name": "Faculty Staff",
+    "plural": "Faculty Staff",
+    "date_created": "2017-05-06T18:02:49.205",
+    "date_updated": "2017-05-11T15:04:41.431"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 3,
+  "fields": {
+    "name": "Nova",
+    "plural": "Novas",
+    "date_created": "2017-05-06T18:02:49.205",
+    "date_updated": "2017-05-06T18:02:49.222"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 4,
+  "fields": {
+    "name": "Adjunct Staff",
+    "plural": "Adjunct Staffs",
+    "date_created": "2017-05-06T18:02:49.205",
+    "date_updated": "2017-05-06T18:02:49.222"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 5,
+  "fields": {
+    "name": "Postdoc",
+    "plural": "Postdocs",
+    "date_created": "2017-05-06T18:02:49.205",
+    "date_updated": "2017-05-06T18:02:49.222"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 6,
+  "fields": {
+    "name": "PhD Student",
+    "plural": "PhD Students",
+    "date_created": "2017-05-06T18:02:49.205",
+    "date_updated": "2017-05-06T18:02:49.222"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 7,
+  "fields": {
+    "name": "Emeritus",
+    "plural": "Emeriti",
+    "date_created": "2017-05-06T18:02:49.205",
+    "date_updated": "2017-05-06T18:02:49.222"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 11,
+  "fields": {
+    "name": "Software Developer",
+    "plural": "Software Developers",
+    "date_created": "2017-05-06T18:02:49.205",
+    "date_updated": "2017-05-06T18:02:49.222"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 13,
+  "fields": {
+    "name": "OBP",
+    "plural": "OBP",
+    "date_created": "2017-05-11T09:31:04.542",
+    "date_updated": "2017-05-11T09:31:04.542"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 14,
+  "fields": {
+    "name": "Outreach",
+    "plural": "Outreach",
+    "date_created": "2017-05-11T09:31:13.934",
+    "date_updated": "2017-05-11T09:31:13.934"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 15,
+  "fields": {
+    "name": "Institute Manager",
+    "plural": "Institute Managers",
+    "date_created": "2017-05-11T09:31:20.926",
+    "date_updated": "2017-05-11T09:31:20.926"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 16,
+  "fields": {
+    "name": "Instrumentation",
+    "plural": "Instrumentation",
+    "date_created": "2017-05-11T09:31:38.201",
+    "date_updated": "2017-05-11T09:31:38.201"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 17,
+  "fields": {
+    "name": "Research Staff",
+    "plural": "Research Staff",
+    "date_created": "2017-05-11T09:31:52.964",
+    "date_updated": "2017-05-11T09:31:52.964"
+  }
+},
+{
+  "model": "alumni.positiontype",
+  "pk": 19,
+  "fields": {
+    "name": "Teacher",
+    "plural": "Teachers",
+    "date_created": "2017-05-11T09:32:10.999",
+    "date_updated": "2017-05-11T09:32:10.999"
+  }
+}
+]

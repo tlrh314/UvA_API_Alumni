@@ -1,6 +1,7 @@
 import copy
 
 from django import forms
+from django.contrib.admin import widgets
 from django.forms.utils import ErrorList
 
 from tinymce.widgets import TinyMCE
@@ -15,6 +16,17 @@ class PreviousPositionAdminForm(forms.ModelForm):
     nova = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.NOVA_NETWORK)
     # Remove following line for dropdown.
     funding = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.FUNDING)
+
+
+class UserRawIdWidget(widgets.ForeignKeyRawIdWidget):
+    """ Class to replace alumnus.user from dropdown to pk /w filter """
+    def url_parameters(self):
+        res = super(UserRawIdWidget, self).url_parameters()
+        object = self.attrs.get("object", None)
+        if object:
+            res["username__exact"] = object.user.username
+        return res
+
 
 class AlumnusAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -67,7 +79,7 @@ class AlumnusAdminForm(forms.ModelForm):
         place_of_birth = self.cleaned_data.get("place_of_birth")
         if any(str.isdigit(c) for c in place_of_birth):
             self._errors["place_of_birth"] = ErrorList()
-            self._errors["place_of_birth"].append("Places of birth cannot contain numbers")     
+            self._errors["place_of_birth"].append("Places of birth cannot contain numbers")
 
         mobile = self.cleaned_data.get("mobile")
         if mobile and not any(str.isdigit(c) for c in mobile):

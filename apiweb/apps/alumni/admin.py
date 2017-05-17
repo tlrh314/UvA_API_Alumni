@@ -5,7 +5,6 @@ from django import forms
 from django.db import models
 from django.db.models import Q
 from django.contrib import admin
-from django.contrib.admin import widgets
 from django.contrib.admin.sites import site
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
@@ -227,36 +226,6 @@ class DegreeAdmin(admin.ModelAdmin):
     export_all_degrees_to_excel.short_description = "Export all Theses to Excel"
 
 
-class UserRawIdWidget(widgets.ForeignKeyRawIdWidget):
-    """ Class to replace alumnus.user from dropdown to pk /w filter """
-    def url_parameters(self):
-        res = super(UserRawIdWidget, self).url_parameters()
-        object = self.attrs.get("object", None)
-        if object:
-            res["username__exact"] = object.user.username
-        return res
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class EmptyEmailListFilter(admin.SimpleListFilter):
     title = _("empty email")
     parameter_name = "have_email"
@@ -312,8 +281,8 @@ class AlumnusAdmin(admin.ModelAdmin):
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
     readonly_fields = ("get_full_name", "date_created", "date_updated", "last_updated_by")
-    actions = ("sent_password_reset", "reset_password_yourself",
-               "export_selected_alumni_to_excel", "export_all_alumni_to_excel")
+    actions = ("sent_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
+            "export_all_alumni_to_excel", "sent_survey_email")
     # exclude = ("jobs", )
 
     fieldsets = [
@@ -372,7 +341,7 @@ class AlumnusAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         """ Hack the default changelist_view to allow action "export_all_alumni_to_excel"
             to run without selecting any objects """
-        if "action" in request.POST and request.POST["action"] == "export_all_alumni_to_excel":
+        if "action" in request.POST and request.POST["action"] in ["export_all_alumni_to_excel", "sent_survey_email"]:
             if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
                 post = request.POST.copy()
                 for u in Alumnus.objects.all():
@@ -476,6 +445,31 @@ class AlumnusAdmin(admin.ModelAdmin):
             except ValidationError:
                 self.message_user(request, "Alumnus does not have a valid email address", level="error")
     sent_password_reset.short_description = "Sent selected Alumni Password Reset"
+
+    def sent_survey_email(self, request, queryset):
+        for alumnus in queryset:
+            if alumnus.user.email != alumnus.email:
+                alumnus.user.email = alumnus.email
+                alumnus.save()
+            try:
+                validate_email( alumnus.email )
+                form = PasswordResetForm(data={"email": alumnus.email})
+                form.is_valid()
+
+                # Get ContactInfo from context_processors such that the forced
+                # reset email footer has the email address and phone number of API
+                contactdict = context_processors.contactinfo(request)
+
+                form.save(email_template_name="survey/set_survey_email.html",
+                          extra_email_context = {
+                                "full_name": alumnus.full_name,
+                                "secretary_email_address": contactdict["contactinfo"].secretary_email_address,
+                                "api_phonenumber_formatted": contactdict["api_phonenumber_formatted"]
+                              })
+                self.message_user(request, "Succesfully sent Survey email.")
+            except ValidationError:
+                self.message_user(request, "Alumnus does not have a valid email address", level="error")
+    sent_survey_email.short_description = "Sent selected Alumni Survey Email"
 
     def reset_password_yourself(self, request, queryset):
         if len(queryset) != 1:

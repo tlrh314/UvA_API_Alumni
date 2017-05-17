@@ -1,0 +1,100 @@
+[
+{
+  "model": "alumni.academictitle",
+  "pk": 1,
+  "fields": {
+    "title": "BSc"
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 2,
+  "fields": {
+    "title": "MSc"
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 3,
+  "fields": {
+    "title": "PhD"
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 4,
+  "fields": {
+    "title": "Dr."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 5,
+  "fields": {
+    "title": "Ir."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 6,
+  "fields": {
+    "title": "Ing."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 7,
+  "fields": {
+    "title": "Drs."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 8,
+  "fields": {
+    "title": "Prof. Dr."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 9,
+  "fields": {
+    "title": "Prof. Dr. Ir."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 10,
+  "fields": {
+    "title": "Prof. Dr. Em."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 11,
+  "fields": {
+    "title": "MA"
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 12,
+  "fields": {
+    "title": "Dr. Ir."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 13,
+  "fields": {
+    "title": "Dr. Ing."
+  }
+},
+{
+  "model": "alumni.academictitle",
+  "pk": 14,
+  "fields": {
+    "title": "Drs. Ing."
+  }
+}
+]
