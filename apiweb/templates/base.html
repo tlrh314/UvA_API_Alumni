@@ -36,7 +36,7 @@
     {% endblock stylesheets %}
     {# Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent #}
     <script type="text/javascript">
-        window.cookieconsent_options = {"message":"We use temporary cookies to improve functionality of the website. By using this website you accept our Privacy Policy.","dismiss":"Accept!","learnMore":"Learn More","link":"/privacy-policy","theme":"dark-bottom"};
+window.cookieconsent_options = {"message":"We use temporary cookies to improve functionality of the website. By using this website you accept our Privacy Policy.","dismiss":"Accept!","learnMore":"Learn More","link":"{% url 'privacy_policy' %}","theme":"dark-bottom"};
     </script>
     {# End Cookie Consent plugin #}
 </head>
