@@ -3,7 +3,7 @@
 <div id="footercontainer">
     <footer class="col-xs-12" id="footer" >
         <div class="footer-row">
-            <div class="col-xs-3 footer-column">
+            <div class="col-md-3 footer-column hidden-xs hidden-sm">
                 <ul style="padding-top:20px;">
                     <a class="twitter-timeline" data-width="300" data-height="300"
                        data-theme="light" href="https://twitter.com/UvA_API">
@@ -11,7 +11,8 @@
                     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
                 </ul>
             </div>
-            <div class="col-xs-2 footer-column">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 footer-column text-centered-xs-sm">
                 <h3> Interviews </h3>
                 <ul>
                     {% for interview in latest_interviews %}
@@ -19,7 +20,8 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-xs-2 footer-column">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 footer-column text-centered-xs-sm">
                 <h3> Recent Theses </h3>
                 <ul>
                     {% for thesis in latest_theses %}
@@ -27,30 +29,43 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-xs-3 footer-column">
-                <ul style="padding-bottom: 15px; padding-top: 6px;">
-                    <img src="{% static 'img/api_logo_default_black.png' %}" style="padding-bottom: 20px; height: 125px;" title="Anton Pannekoek Institute for Astronomy">
-                    <p style="padding-top: 10px; padding-bottom: 10px; max-width: 250px;">
-                    <i class="fa fa-home"></i> {{ contactinfo.postbox_address_api }}<br>
-                    <i class="fa fa-phone"></i> <a href="tel:{{ contactinfo.telephone_api }}">{{ api_phonenumber_formatted }}</a><br>
-                    <i class="fa fa-envelope"></i> <a href="mailto:{{ contactinfo.secretary_email_address}}">{{ contactinfo.secretary_email_address}}</a><br>
-                    <a href="{% url 'contact' %}">Contact Form</a><br>
-                    <a href="{% url 'login' %}">Login</a><br>
 
-                    </p>
-                </ul>
-                <ul class="social">
-                    <p></p><strong> Stay Connected: </strong> </p><br>
-                    <li><a href="https://www.facebook.com/uva.api/" target="_blank"><i
-                            class=" fa fa-facebook"></i></a></li>
-                    <li><a href="https://twitter.com/UvA_API" target="_blank"> <i class="fa fa-twitter"></i> </a></li>
-                    {# TODO TODO TODO add the API LinkedIn #}
-                    <li><a href="https://www.linkedin.com/groups/12005398" target="_blank"> <i class="fa fa-linkedin"></i> </a></li>
+            <div class="col-xs-12 visible-xs visible-sm">
+                <hr style="border-color: #BAC1C8" />
+            </div>
 
-                </ul>
+            <div class="col-xs-12 col-md-3 footer-column">
+                <div class="row">
+                    <div class="col-xs-12" id="contact-wrapper">
+                        <img src="{% static 'img/api_logo_default_black.png' %}" style="padding-bottom: 20px; height: 125px;" title="Anton Pannekoek Institute for Astronomy">
+
+                        <p class="contactinfo">
+                            <i class="fa fa-fw fa-home"></i> {{ contactinfo.postbox_address_api }}<br>
+                            <i class="fa fa-fw fa-phone"></i> <a href="tel:{{ contactinfo.telephone_api }}">{{ api_phonenumber_formatted }}</a><br>
+                            <i class="fa fa-fw fa-envelope"></i> <a href="mailto:{{ contactinfo.secretary_email_address}}">{{ contactinfo.secretary_email_address}}</a><br><br>
+                            <a href="{% url 'contact' %}">Contact Form</a><br>
+                            <a href="{% url 'login' %}">Login</a><br>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 visible-xs visible-sm">
+                        <hr style="border-color: #BAC1C8" />
+                    </div>
+                </div>
             </div>
 
         <div class="col-xs-12" style="text-align: center; width= 100%;">
+            <ul class="social">
+                    <strong> Stay Connected: </strong><br>
+                    <li><a href="https://www.facebook.com/uva.api/" target="_blank"><i
+                            class=" fa fa-fw fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com/UvA_API" target="_blank"> <i class="fa fa-fw fa-twitter"></i> </a></li>
+                    {# TODO TODO TODO add the API LinkedIn #}
+                    <li><a href="https://www.linkedin.com/groups/12005398" target="_blank"> <i class="fa fa-fw fa-linkedin"></i> </a></li>
+
+                </ul>
             <p>&copy; Anton Pannekoek Institute, 2017. All rights reserved.</p>
         </div>
         </div>

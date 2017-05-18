@@ -10,7 +10,7 @@ Author's custom styles
 .highlighted { background:yellow }
 
 .container {
-    max-width: 75%;
+    /*max-width: 75%;*/
 }
 
 .container-container {
@@ -19,12 +19,11 @@ Author's custom styles
 
 html {
     font-family: 'Nunito', sans-serif;
-    min-width: 950px;
+    /*min-width: 950px;*/
     min-height: 100%;
 }
 
 body {
-    padding:0;
     padding-top: 100px;
     height: 100%;
     background-position: center;
@@ -36,21 +35,11 @@ body {
     background-size: cover;
     font-family: 'Nunito', sans-serif;
 }
-@media screen and (max-width: 1000px) {
-  body {
-    padding-top: 200px;
-  }
-}
-@media screen and (max-width: 500px) {
-  body {
-    padding-top: 300px;
-  }
-}
 
 /* Style for dropdown filter */
 
 .center-pills {
-    display: inline-block; 
+    display: inline-block;
 }
 
 .menu-text {
@@ -154,57 +143,7 @@ body {
     position: relative;
 }
 
-.container .navbar-header,
-.container .navbar-collapse {
-    margin-right: 0;
-    margin-left: 0;
-}
 
-/* Always float the navbar header */
-.navbar-header {
-    float: left;
-}
-
-/* Undo the collapsing navbar */
-.navbar-collapse {
-    display: block !important;
-    height: auto !important;
-    padding-bottom: 0;
-    overflow: visible !important;
-    visibility: visible !important;
-}
-
-.navbar-toggle {
-    display: none;
-}
-.navbar-collapse {
-    border-top: 0;
-}
-
-/* Always apply the floated nav */
-.navbar-nav {
-    float: left;
-    margin: 0;
-}
-.navbar-nav > li {
-    float: left;
-}
-.navbar-nav > li > a {
-    padding: 15px;
-    padding-top: 40px;
-    padding-bottom: 40px;
-}
-
-.container:before, .container:after {
-    display: block;
-    position: absolute;
-    content: " ";
-    top: 0px;
-    height: 1000px;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    z-index: -5;
-}
 
 .border-box {
     transition: all 0.2s ease;
@@ -230,7 +169,6 @@ body {
 .main-row {
     padding-top: 20px;
     background-color: white;
-    width: 100%;
 }
 
 .show-grid > div {
