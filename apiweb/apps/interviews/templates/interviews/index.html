@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}API - Alumni - Interviews {% endblock title %}
+{% block stylesheets %} {{ block.super }} <link rel="stylesheet" type="text/css" href="{% static 'css/interviews.css' %}" />{% endblock stylesheets %}
 {% block content %}
 
 <div id="fb-root"></div>
@@ -21,49 +22,49 @@
         js.id = id;
         js.src = "https://platform.twitter.com/widgets.js";
         fjs.parentNode.insertBefore(js, fjs);
- 
+
         t._e = [];
         t.ready = function(f) {
             t._e.push(f);
         };
- 
+
         return t;
     }(document, "script", "twitter-wjs"));
 </script>
 
 {# Begin of main content window #}
 <div class="main-content" role="main">
-
     <h1 class="text-center"> Alumni Interviews </h1>
-    <div class="container">
-        <div class="span9 pagination-centered text-justify">
-            {% for post in posts %}
-            <div class="table-responsive">
-                <table class="table table-responsive">
-                    <thead><tr><th><h2 class="text-left"> {{ post.alumnus.full_name_no_title }} • {{ post.title }} </h2></tr></th></thead>
-                    <tbody>
-                    <tr><td>
-                        <div class="col-xs-3 pull-left"> 
-                            {% if post.alumnus.photo %}
-                            <img src="{{ post.alumnus.photo.url }}" width="150px"></img>
-                            {% else %}
-                            <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img>
-                            {% endif %}
-                        </div>
-                        <div class="col-xs-9 pull-right"> 
-                            <h4 class="text-right">{{ post.author.full_name_no_title }}  •  {{ post.date_published|date:"M d, Y" }}</h4> <br>
 
-                            {% autoescape off %}
-                            {{ post.teaser }} <br>
-                            <a href="{{post.slug}}"><button class="btn btn-primary pull-right" type="submit">Read More</button></a>
-                            {% endautoescape %}
-                        </div>
-                    </td></tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+    <div class="span9 pagination-centered text-justify">
+        {% for post in posts %}
+            <h2 class="text-left interview-title"> {{ post.alumnus.full_name_no_title }} • {{ post.title }} </h2>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 pull-left interview-photo">
+                    {% if post.alumnus.photo %}
+                    <img src="{{ post.alumnus.photo.url }}" width="150px"></img>
+                    {% else %}
+                    <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img>
+                    {% endif %}
+                </div>
+
+                <div class="col-xs-12 col-sm-9 pull-right">
+                    <h4 class="text-right interview-metadata">
+                        {{ post.author.full_name_no_title }}  •  {{ post.date_published|date:"M d, Y" }}
+                    </h4>
+
+                    <br>
+
+                    {% autoescape off %}
+                    {{ post.teaser }} <br>
+                    <a href="{{post.slug}}"><button class="btn btn-primary pull-right" type="submit">Read More</button></a>
+                    {% endautoescape %}
+                </div>
             </div>
-        </div>
+
+            <hr>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

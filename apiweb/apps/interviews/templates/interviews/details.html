@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {# load interviewtags #}
-
+{% block stylesheets %} {{ block.super }} <link rel="stylesheet" type="text/css" href="{% static 'css/interviews.css' %}" />{% endblock stylesheets %}
 {% block title %}API - Alumni - Interview {% endblock title %}
 
 {% block content %}
@@ -23,12 +23,12 @@
           js.id = id;
           js.src = "https://platform.twitter.com/widgets.js";
           fjs.parentNode.insertBefore(js, fjs);
-         
+
           t._e = [];
           t.ready = function(f) {
             t._e.push(f);
           };
-         
+
           return t;
         }(document, "script", "twitter-wjs"));
       </script>
@@ -36,41 +36,44 @@
  <div class="main-content" role="main">
      <h1 class="text-center" style="padding-bottom: 25px;"> {{ post.title }} </h1>
 
-     <div class="container">     
-         <div class="span9 text-justify">      
-            <h4 class="text-right">{{ post.author.full_name_no_title }}  •  {{ post.date_published|date:"M d, Y" }}</h4>
-            <div style="width: inherit; right: 0; margin-top: 10px; margin-bottom: 10px; padding-top: 7px; border-top: 1px solid #e3e3e3; ">
-            {% if post.alumnus.photo %}
-            <img style="float: left; margin-top:5px; padding-right: 18px; padding-bottom: 8px;" src="{{ post.alumnus.photo.url }}" width="250px"></img>
-            {% else %}
-            <img style="float: left; margin-top:5px; padding-right: 18px; padding-bottom: 8px;" src="{% static 'alumni/img/einstein.jpg' %}" width="250px"></img>
-            {% endif %}
-             {% autoescape off %}
-                {{ post.content}}
-             {% endautoescape %}
+       <div class="span9 text-justify">
+          <h4 class="text-right">{{ post.author.full_name_no_title }}  •  {{ post.date_published|date:"M d, Y" }}</h4>
+          <div style="width: inherit; right: 0; margin-top: 10px; margin-bottom: 10px; padding-top: 7px; border-top: 1px solid #e3e3e3; ">
+          {% if post.alumnus.photo %}
+          <img style="float: left; margin-top:5px; padding-right: 18px; padding-bottom: 8px;" src="{{ post.alumnus.photo.url }}" width="250px"></img>
+          {% else %}
+          <img style="float: left; margin-top:5px; padding-right: 18px; padding-bottom: 8px;" src="{% static 'alumni/img/einstein.jpg' %}" width="250px"></img>
+          {% endif %}
+           {% autoescape off %}
+              {{ post.content}}
+           {% endautoescape %}
 
-             {% comment %}
-             TODO TODO TODO Check the function in context_processors to ensure facebook/twitter share gets the correct
-             per-page meta tags
-             {% endcomment %}
+           {% comment %}
+           TODO TODO TODO Check the function in context_processors to ensure facebook/twitter share gets the correct
+           per-page meta tags
+           {% endcomment %}
 
-             <div style="width: inherit; right: 0; margin-top: 10px; margin-bottom: 10px; padding-top: 7px; border-top: 1px solid #e3e3e3; ">
-                 <span style="float: left;">
-                     <div class="fb-share-button" data-layout="button" data-size="small" data-mobile-iframe="true" style="font-size: 0.6em; vertical-align:middle; display: inline-block;"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u&amp;src=sdkpreparse">Share</a></div>
-                     <div style="font-size: 0.6em; vertical-align:middle; display: inline-block;">
-                         <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-text="Check out the API Alumnus interview: '{{ post.title }}'"></a>
-                     </div>
+           <div style="width: inherit; right: 0; margin-top: 10px; margin-bottom: 10px; padding-top: 7px; border-top: 1px solid #e3e3e3; ">
+               <span style="float: right;">
 
-                     <div style="font-size: 0.6em; vertical-align:middle; display: inline-block;"><div class="g-plus" data-action="share" data-annotation="none"></div></div>
+                   <div class="fb-share-button" data-layout="button" data-size="large" data-mobile-iframe="true" style="font-size: 0.6em; vertical-align:middle; display: inline-block;"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u&amp;src=sdkpreparse"></a></div>
 
-                 </span>
+                   <div style="font-size: 0.6em; vertical-align:middle; display: inline-block;">
+                       <a class="twitter-share-button" data-size="large" href="https://twitter.com/intent/tweet" data-text="Check out the API Alumnus interview: '{{ post.title }}'"></a>
+                   </div>
 
-                 {# <span style="float: right;"><small class="text-muted"> Category: <a href="/interview/{{ post.category.type_id }}"> {{ post.category }} </a></small></span> #}
+                   <div class="gplus-share-button" style="font-size: 0.6em; vertical-align:middle; display: inline-block;">
+                    <div class="g-plus" data-height="30" data-action="share" data-annotation="none"></div>
+                  </div>
 
-                 <div style="clear:both;"></div>
-             </div>
-         </div>
-     </div>
+               </span>
+
+               {# <span style="float: right;"><small class="text-muted"> Category: <a href="/interview/{{ post.category.type_id }}"> {{ post.category }} </a></small></span> #}
+
+               <div style="clear:both;"></div>
+           </div>
+       </div>
+
  </div>
 
  <script src="https://apis.google.com/js/platform.js" async defer></script>

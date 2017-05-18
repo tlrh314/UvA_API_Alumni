@@ -10,6 +10,13 @@
     background: white;
 }
 
+@media (max-width: 413px) {
+    .apiLogo img {
+        max-width: 65vw;
+    }
+}
+
+
 div.collapse.in form.navbar-form {
     padding-top: 0;
     border-top: 0;

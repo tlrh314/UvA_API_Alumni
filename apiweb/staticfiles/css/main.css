@@ -9,8 +9,10 @@ Author's custom styles
 
 .highlighted { background:yellow }
 
-.container {
-    /*max-width: 75%;*/
+@media screen and (max-width: 991px) {
+    .container {
+        width: 100%;
+    }
 }
 
 .container-container {
@@ -263,4 +265,10 @@ body {
 /* Style for Alumnus detail page */
 .mycontent-left {
   /* border-right: 0.5px solid #333; */
+}
+
+#contact-form-wrapper {
+    padding: 15px;
+    border: 1px solid #ccc;
+    margin-bottom: 50px;
 }

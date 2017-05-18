@@ -1,0 +1,23 @@
+@media(max-width: 767px)
+{
+    .interview-title {
+        font-size: 24px;
+    }
+
+    .interview-photo {
+        text-align: center;
+    }
+
+    .interview-metadata {
+        text-align: center;
+    }
+}
+
+.fb-share-button {
+    margin-top: -4px;
+}
+
+.gplus-share-button {
+    margin-top: 1px;
+    max-width: 64px;
+}
