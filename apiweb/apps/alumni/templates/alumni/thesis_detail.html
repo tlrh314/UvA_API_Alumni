@@ -10,48 +10,51 @@
     </div>
 
     <div class="col-xs-12" style="padding-top: 25px;">
-        <div class="col-xs-4 pull-right"> 
-            <h3 class="text-left">Advisors</h3>
-            <table class="table" style="max-width: 80%">
-                <thead>
-                </thead>
-                <tbody>
-                {% for advisor in thesis.thesis_advisor.all %}
-                <tr><th><a href="{% url 'alumni:alumnus-detail' advisor.slug %}">{{ advisor.full_name }}</a></td></tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="col-xs-8 pull-left"> 
-            <h3 class="text-left"> 
-                {% if thesis.type == "msc" %}
-                Master's Thesis 
-                {% else %}
-                PhD Dissertation 
-                {% endif %}
-            </h3>
-            <table class="table">
-                <thead>
-                </thead>
-                <tbody>
-                <tr><th> Author </th><td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td></tr>
-                <tr><th> Email </th><td><a href="mailto:{{ thesis.alumnus.email }}">{{ thesis.alumnus.email }}</a></td></tr>
-                <tr><th> Date </th><td>{{ thesis.date_of_defence|date:"j M Y" }}</td></tr>
-                <tr><th> URL </th><td>
-                        {% if thesis.thesis_url %}
-                        <a href="{{ thesis.thesis_url }}" target="_blank"> UvA Thesis Library </a>
-                        {% endif %}
-                </td></tr>
-                <tr><th> Full Text </th><td>
-                        {% if thesis.thesis_pdf.name %}
-                        <a href="{{ thesis.thesis_pdf.url }}" target="_blank"> Available. Click here for the full text. </a>
-                        {% else %}
-                        <a href="{% url 'contact' %}"> Unavailable. Please contact us if you can provide the full text!</a>
-                        {# <a href="{% url 'alumni:thesis-has-no-pdf' %}"> PDF </a> #}
-                        {% endif %}
-                </td></tr>
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col-xs-12 col-sm-8">
+                <h3 class="text-left">
+                    {% if thesis.type == "msc" %}
+                    Master's Thesis
+                    {% else %}
+                    PhD Dissertation
+                    {% endif %}
+                </h3>
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <tr><th> Author </th><td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td></tr>
+                    <tr><th> Email </th><td><a href="mailto:{{ thesis.alumnus.email }}">{{ thesis.alumnus.email }}</a></td></tr>
+                    <tr><th> Date </th><td>{{ thesis.date_of_defence|date:"j M Y" }}</td></tr>
+                    <tr><th> URL </th><td>
+                            {% if thesis.thesis_url %}
+                            <a href="{{ thesis.thesis_url }}" target="_blank"> UvA Thesis Library </a>
+                            {% endif %}
+                    </td></tr>
+                    <tr><th> Full Text </th><td>
+                            {% if thesis.thesis_pdf.name %}
+                            <a href="{{ thesis.thesis_pdf.url }}" target="_blank"> Available. Click here for the full text. </a>
+                            {% else %}
+                            <a href="{% url 'contact' %}"> Unavailable. Please contact us if you can provide the full text!</a>
+                            {# <a href="{% url 'alumni:thesis-has-no-pdf' %}"> PDF </a> #}
+                            {% endif %}
+                    </td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <h3 class="text-left">Advisors</h3>
+                <table class="table" style="max-width: 80%">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    {% for advisor in thesis.thesis_advisor.all %}
+                    <tr><th><a href="{% url 'alumni:alumnus-detail' advisor.slug %}">{{ advisor.full_name }}</a></td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

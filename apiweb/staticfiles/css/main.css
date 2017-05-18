@@ -179,9 +179,14 @@ body {
 
 .main-content {
     min-height: 100vh;
-    width: 90%;
     margin: 0 auto;
     padding-bottom: 50px;
+}
+
+@media(min-width:992px) {
+    .main-content {
+        width: 90%;
+    }
 }
 
 .btn-default, .btn-default:hover, .btn:active:focus, .btn-default:focus {

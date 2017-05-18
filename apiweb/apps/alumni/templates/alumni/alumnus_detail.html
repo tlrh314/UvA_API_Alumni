@@ -12,9 +12,10 @@
 
   <h1 class="text-center"> {{ alumnus.full_name }} {% if alumnus.passed_away %} &dagger; {% endif %} </h1>
 
-    <div class="col-xs-9 pull-left">
+    <div class="col-xs-12 col-md-9">
+        <div class="row">
         {% if not alumnus.passed_away %}
-        <div class="col-xs-3 pull-left"> 
+        <div class="col-xs-12 col-sm-3">
             {% if alumnus.photo %}
             <img src="{{ alumnus.photo.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
             {% else %}
@@ -22,21 +23,19 @@
             {% endif %}
         </div>
 
-        <div class="col-xs-8 pull-right"> 
+        <div class="col-xs-12 col-sm-9">
             <h3 class="text-left"> Contact Info </h3>
-            <div class="table-responsive">
-                <table class="table table-responsive">
-                    <thead>
-                    </thead>
-                    <tbody>
-                    <tr><th>Name</th><td>{{ alumnus.full_name }}</td></tr>
-                    <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
-                    <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
-                    <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
-                    <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            <table class="table">
+                <thead>
+                </thead>
+                <tbody>
+                <tr><th>Name</th><td>{{ alumnus.full_name }}</td></tr>
+                <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
+                <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
+                <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
+                <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
+                </tbody>
+            </table>
         </div>
         {% endif %}
 
@@ -44,8 +43,6 @@
         <div class="col-xs-12 pull-left">
         <h3 class="text-left"> Theses at API </h3>
         <table class="table">
-            <thead>
-            </thead>
             <tbody>
             {% for thesis in alumnus.degrees.all %}
             <tr><td>
@@ -60,7 +57,7 @@
                     {% if thesis.date_of_defence %}
                         ({{ thesis.date_of_defence|date:"Y" }})
                     {% else %}
-                        (Year Unknown) 
+                        (Year Unknown)
                     {% endif %}
             </td></tr>
             {% endfor %}
@@ -110,25 +107,25 @@
             {% endautoescape %}
         </div>
         {% endif %}
+
+        </div>
     </div>
 
 
-    <div class="col-xs-3 pull-right text-left">
+    <div class="col-xs-12 col-md-3 pull-right text-left">
         {% get_supervisors alumnus as supervisors %}
         {% if supervisors.0 %}
         <h3 class="text-left"> Thesis Advisors </h3>
-        <div class="table-responsive">
             <table class="table">
                 <thead>
                 </thead>
                 <tbody>
                 {% for supervisor, date_of_defence in supervisors %}
                 <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }}
-                    {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %}</a></td></tr> 
+                    {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %}</a></td></tr>
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
         {% endif %}
 
         {% get_students alumnus "phd" as phd_students %}
