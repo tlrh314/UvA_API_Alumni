@@ -24,15 +24,10 @@ from apiweb import context_processors
 from .models import PositionType, PreviousPosition
 from .models import Alumnus, AcademicTitle, Degree
 from .forms import AlumnusAdminForm, PreviousPositionAdminForm
-from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 from .actions import save_all_alumni_to_xls, save_all_theses_to_xls
-
 from ..survey.admin import JobAfterLeavingAdminInline
-
-
-
-
-
+from ..survey.forms import SendSurveyForm
+from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 
 
 # Do not show the Site Admin
@@ -53,8 +48,6 @@ UserAdmin.fieldsets = (
 )
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
-
-
 
 
 class PreviousPositionInline(admin.StackedInline):
@@ -282,7 +275,7 @@ class AlumnusAdmin(admin.ModelAdmin):
     filter_horizontal = ("research", "contact", )
     readonly_fields = ("get_full_name", "date_created", "date_updated", "last_updated_by")
     actions = ("sent_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
-            "export_all_alumni_to_excel", "sent_survey_email")
+            "export_all_alumni_to_excel", "send_survey_email")
     # exclude = ("jobs", )
 
     fieldsets = [
@@ -337,11 +330,10 @@ class AlumnusAdmin(admin.ModelAdmin):
         obj.last_updated_by = request.user
         obj.save()
 
-
     def changelist_view(self, request, extra_context=None):
         """ Hack the default changelist_view to allow action "export_all_alumni_to_excel"
             to run without selecting any objects """
-        if "action" in request.POST and request.POST["action"] in ["export_all_alumni_to_excel", "sent_survey_email"]:
+        if "action" in request.POST and request.POST["action"] in ["export_all_alumni_to_excel"]:
             if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
                 post = request.POST.copy()
                 for u in Alumnus.objects.all():
@@ -446,30 +438,51 @@ class AlumnusAdmin(admin.ModelAdmin):
                 self.message_user(request, "Alumnus does not have a valid email address", level="error")
     sent_password_reset.short_description = "Sent selected Alumni Password Reset"
 
-    def sent_survey_email(self, request, queryset):
+    def send_survey_email(self, request, queryset):
+        print(queryset)
+        exclude_alumni = []
+        reason = []
+
+        # Get ContactInfo from context_processors such that the forced
+        # reset email footer has the email address and phone number of API
+        contactdict = context_processors.contactinfo(request)
+
         for alumnus in queryset:
+            if alumnus.passed_away:
+                exclude_alumni.append(alumnus)
+                reason.append("Passed Away")
+                continue
+            if not alumnus.user.email:
+                exclude_alumni.append(alumnus)
+                reason.append("Invalid Email")
+                # queryset = queryset.exclude(user=alumnus.user)
+                continue
             if alumnus.user.email != alumnus.email:
                 alumnus.user.email = alumnus.email
                 alumnus.save()
+
+            print("Sending email to", alumnus)
             try:
                 validate_email( alumnus.email )
-                form = PasswordResetForm(data={"email": alumnus.email})
+                form = SendSurveyForm(data={"email": alumnus.email, "alumnus": alumnus})
                 form.is_valid()
-
-                # Get ContactInfo from context_processors such that the forced
-                # reset email footer has the email address and phone number of API
-                contactdict = context_processors.contactinfo(request)
-
-                form.save(email_template_name="survey/set_survey_email.html",
-                          extra_email_context = {
-                                "full_name": alumnus.full_name,
-                                "secretary_email_address": contactdict["contactinfo"].secretary_email_address,
-                                "api_phonenumber_formatted": contactdict["api_phonenumber_formatted"]
-                              })
-                self.message_user(request, "Succesfully sent Survey email.")
+                form.save(alumnus=alumnus, extra_email_context = {
+                        "full_name_no_title": alumnus.full_name_no_title,
+                        "secretary_email_address": contactdict["contactinfo"].secretary_email_address,
+                        "api_phonenumber_formatted": contactdict["api_phonenumber_formatted"]
+                    }
+                )
             except ValidationError:
-                self.message_user(request, "Alumnus does not have a valid email address", level="error")
-    sent_survey_email.short_description = "Sent selected Alumni Survey Email"
+                exclude_alumni.append(alumnus)
+                reason.append("ValidationError")
+
+        # Probably success for most, but report if email broke.
+        self.message_user(request, "The Survey Email was Successfully Sent!")
+        for alum, why in zip(exclude_alumni, reason):
+            msg = "The following Alumnus was excluded: {0} ({1}).".format(alum, why)
+            self.message_user(request, msg, level="error")
+
+    send_survey_email.short_description = "Sent selected Alumni Survey Email"
 
     def reset_password_yourself(self, request, queryset):
         if len(queryset) != 1:

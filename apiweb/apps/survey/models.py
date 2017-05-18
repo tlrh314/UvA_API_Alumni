@@ -16,22 +16,6 @@ from ..alumni.models import Alumnus
 
 
 @python_2_unicode_compatible
-class SurveyText(models.Model):
-    intro_message  = HTMLField(verbose_name=_("Survey Description"), blank=True)
-    complete_message = HTMLField(verbose_name=_("Survey Complete Message"), blank=True)
-
-    class Meta:
-        verbose_name = _("Survey Explanation")
-        verbose_name_plural = _("Survey Explanation")
-
-    def clean(self):
-        validate_only_one_instance(self)
-
-    def __str__(self):
-        return "SurveyText"
-
-
-@python_2_unicode_compatible
 class Sector(models.Model):
     name             = models.CharField(max_length=200)
 

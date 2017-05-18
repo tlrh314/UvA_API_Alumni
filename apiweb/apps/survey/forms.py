@@ -1,192 +1,100 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import, division
+
 from datetime import datetime
 
 from django import forms
-from ..alumni.models import Alumnus
+from django.template import loader
+from django.core.urlresolvers import reverse
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.forms import PasswordResetForm
+from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+
+
+from django_countries import countries
+# from django_countries.widgets import CountrySelectWidget
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 from .models import Sector
-#from ..alumni.models import job_sectors
+from .models import JobAfterLeaving
+from ..alumni.models import Alumnus
 
 
-# TODO: put model info in the placeholder. 
-class SurveyForm(forms.Form):
-    this_year = datetime.now().year
-    years_choices=range(1970, this_year)
+class SendSurveyForm(PasswordResetForm):
+    email = forms.EmailField(label=_("Email"), max_length=254)
 
-
-    sector_choices = Sector.objects.all()
-    print(sector_choices)
-
-    location_job_choices = (
-        (1, "NL"),
-        (2, "Europe"),
-        (3, "Great Bitain"),
-        (4, "US"),
-        (5, "Other"),
-    )
-
-    outside_inside_choices = (
-        (1, "Yes"),
-        (2, "No"),
-    )
-
-    currently_occupating_job_choices = (
-        (1, "Yes"),
-        (2, "No"),
-    )
-
-    current_job = forms.ChoiceField(
-      required=True,
-      choices=currently_occupating_job_choices,
-      widget=forms.Select(
-        attrs={"class": "form-control required"},
+    # Here we overwrite the save method because the PasswordResetForm gets
+    # all users given an e-mail address, but we want to e-mail one specific
+    # alumnus only once. This avoids sending the same mail multiple times.
+    # Also, here we set the templates to use for the subject and e-mail.
+    # Based on Django 1.11, if Django is upgraded: check changes to PasswordResetForm
+    def save(self, alumnus, domain_override=None,
+             subject_template_name="survey/survey_email_subject.txt",
+             email_template_name="survey/send_survey_email.html",
+             use_https=False, token_generator=default_token_generator,
+             from_email=None, request=None, html_email_template_name=None,
+             extra_email_context=None):
+        """
+        Generate a one-use only link for resetting password and send it to the
+        user.
+        """
+        email = self.cleaned_data["email"]
+        if not domain_override:
+            current_site = get_current_site(request)
+            site_name = current_site.name
+            domain = current_site.domain
+        else:
+            site_name = domain = domain_override
+        context = {
+            "email": email,
+            "domain": domain,
+            "site_name": site_name,
+            "uid": urlsafe_base64_encode(force_bytes(alumnus.user.pk)).decode(),
+            "user": alumnus.user,
+            "token": token_generator.make_token(alumnus.user),
+            "protocol": "https" if use_https else "http",
+        }
+        if extra_email_context is not None:
+            context.update(extra_email_context)
+        self.send_mail(
+            subject_template_name, email_template_name, context, from_email,
+            email, html_email_template_name=html_email_template_name,
         )
-    )
 
-    start_date_job = forms.DateField(
-        required=True,
-        widget=forms.SelectDateWidget(
-            empty_label=("Choose Year", "Choose Month", "Choose Day"),
-            years=years_choices,
-        )
-    )
+class SurveyContactInfoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SurveyContactInfoForm, self).__init__(*args, **kwargs)
 
-    stop_date_job = forms.DateField(
-        required=True,
-        widget=forms.SelectDateWidget(
-            empty_label=("Choose Year", "Choose Month", "Choose Day"),
-            years=years_choices,
-            attrs={"class":"datePicker"}
-        )
-    )
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse("survey:contactinfo")
+        self.helper.form_class = "form-horizontal col-xs-12"
+        self.helper.layout.append(Submit("survey_careerinfo", "Next", css_class="btn btn-success pull-right"))
 
-    company_name = forms.CharField(
-      required=False,
-      max_length=100,
-      widget=forms.TextInput(
-       attrs={"placeholder": "What was the name of the company? no(t required)",
-              "class": "form-control"}
-       )
-    )
-
-    sector_job = forms.ModelChoiceField(
-      required=True,
-      queryset=Sector.objects.all(),
-      widget=forms.Select(
-        attrs={"class": "form-control required"},
-        )
-    )
+    class Meta:
+        model = Alumnus
+        # fields = ()
+        exclude = ("user", "last_name", "show_person", "passed_away", "nickname", "student_id",
+                    "mugshot", "slug" , "email", "last_checked", "position", "specification",
+                    "office", "work_phone", "ads_name", "research", "contact",
+                    "comments", "date_created", "date_updated", "last_updated_by")
 
 
+class SurveyCareerInfoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SurveyCareerInfoForm, self).__init__(*args, **kwargs)
 
-    # sector_job = forms.ChoiceField(
-    #   required=True,
-    #   choices=sector_choices,
-    #   widget=forms.Select(
-    #     attrs={"class": "form-control required"},
-    #     )
-    # )
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse("survey:careerinfo")
+        self.helper.form_class = "form-horizontal col-xs-12"
+        self.helper.layout.append(Submit("survey_contactinfo", "Submit", css_class="btn btn-success pull-right"))
 
-    location_job = forms.ChoiceField(
-      required=True,
-      choices=location_job_choices,
-      widget=forms.Select(
-        attrs={"class": "form-control required"},
-        )
-    )
-
-    inside_academia = forms.ChoiceField(
-      required=True,
-      choices=outside_inside_choices,
-      widget=forms.Select(
-        attrs={"class": "form-control required"},
-        )
-    )
-
-    comments = forms.CharField(
-      required=False,
-      max_length=100,
-      widget=forms.Textarea(
-       attrs={"placeholder": "",
-              "class": "form-control"}
-       )
-    )
-
-
-
-    #academic_job    = 
-    #location_job    = 
-    #comments        = 
-    #company_name    = 
-    #position_name   =
-    #sector_job      =
-    #type_of_job     = 
-
-    # name = forms.CharField(max_length=100, widget=forms.TextInput(
-    #    attrs={"class": "form-control required",
-    #           "placeholder": "What is your name?"}))
-    #message = forms.CharField(required=True, widget=forms.Textarea(
-    #    attrs={"class": "form-control required",
-    #           "placeholder": "What would you like to tell us?"}))
-    #sender = forms.EmailField(required=False, widget=forms.EmailInput(
-    #    attrs={"class": "form-control email",
-    #           "placeholder": "email@adres.nl - so we know how to reach you"}))
-    #cc_myself = forms.BooleanField(required=False, widget=forms.CheckboxInput(
-    #    attrs={"class": "checkchoice"}))
-
-
-
-
-
-
-    #First job info
-
-
-
-
-
-
-
-# @python_2_unicode_compatible
-# class JobAfterLeaving(models.Model):
-#     """ Represents a job after leaving API """
-
-#     currently_occupating_job_choices = (
-#         (1, "Yes"),
-#         (2, "No"),
-#     )
-
-#     outside_inside_choices = (
-#         (1, "Yes"),
-#         (2, "No"),
-#     )
-
-#     location_job_choices = (
-#         (1, "NL"),
-#         (2, "Europe"),
-#         (3, "Great Bitain"),
-#         (4, "US"),
-#         (5, "Other"),
-#     )
-
-#     alumnus             = models.ForeignKey(Alumnus, related_name="job")
-#     position_name       = models.CharField(_("position name"), blank=True, max_length=40)
-#     current_job         = models.PositiveSmallIntegerField(_("current occupation"), choices=currently_occupating_job_choices, default=2)
-#     company_name        = models.CharField(_("company name"), blank=True, max_length=40)
-#     start_date          = models.DateField(_("date start job"), blank=True, null=True)
-#     stop_date           = models.DateField(_("date stop job"), blank=True, null=True)
-#     inside_academia     = models.PositiveSmallIntegerField(_("inside academia"), choices=outside_inside_choices, default=1)
-#     location_job        = models.PositiveSmallIntegerField(_("location job"), choices=location_job_choices, default=1)
-
-#     comments            = models.TextField(_("comments"), blank=True)
-#     last_updated_by     = models.ForeignKey('auth.User', related_name="jobs_updated",
-#         on_delete=models.SET_DEFAULT, default=270)
-#     date_created        = models.DateTimeField(_("Date Created"), auto_now_add=True)
-#     date_updated        = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-
-#     class Meta:
-#         verbose_name = _("Job After Leaving API")
-#         verbose_name_plural = _("Jobs After Leaving API")
-
-#     def __str__(self):
-#         return self.alumnus.last_name
+    class Meta:
+        model = JobAfterLeaving
+        exclude = ("alumnus", "date_created", "date_updated", "last_updated_by")
 

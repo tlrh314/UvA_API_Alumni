@@ -61,6 +61,10 @@ TINYMCE_MINIMAL_CONFIG = {
 }
 
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_FAIL_SILENTLY = False
+
+
 # TODO: cities_light might have ajax-lookupable countries
 AJAX_LOOKUP_CHANNELS = {
 #    'cities_light_country': ('cities_light.lookups', 'CountryLookup'),

@@ -1,0 +1,242 @@
+[
+{
+  "model": "survey.sector",
+  "pk": 1,
+  "fields": {
+    "name": "Accountancy, Banking and Finance",
+    "date_created": "2017-05-17T14:22:42.266",
+    "date_updated": "2017-05-17T14:22:59.803",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 2,
+  "fields": {
+    "name": "Business, Consulting and Management",
+    "date_created": "2017-05-17T14:23:01.569",
+    "date_updated": "2017-05-17T14:26:01.794",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 3,
+  "fields": {
+    "name": "Charity and Voluntary Work",
+    "date_created": "2017-05-17T14:23:16.110",
+    "date_updated": "2017-05-17T14:26:09.387",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 4,
+  "fields": {
+    "name": "Creative arts and design",
+    "date_created": "2017-05-17T14:23:25.484",
+    "date_updated": "2017-05-17T14:23:25.484",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 5,
+  "fields": {
+    "name": "Energy and Utilities",
+    "date_created": "2017-05-17T14:23:38.761",
+    "date_updated": "2017-05-17T14:23:38.761",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 6,
+  "fields": {
+    "name": "Engineering and Manufacturing",
+    "date_created": "2017-05-17T14:23:47.098",
+    "date_updated": "2017-05-17T14:23:47.098",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 7,
+  "fields": {
+    "name": "Environment and agriculture",
+    "date_created": "2017-05-17T14:23:54.221",
+    "date_updated": "2017-05-17T14:23:54.222",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 8,
+  "fields": {
+    "name": "Healtcare",
+    "date_created": "2017-05-17T14:24:00.176",
+    "date_updated": "2017-05-17T14:24:00.176",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 9,
+  "fields": {
+    "name": "Hospitality and Events Management",
+    "date_created": "2017-05-17T14:24:10.593",
+    "date_updated": "2017-05-17T14:24:10.593",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 10,
+  "fields": {
+    "name": "Information Technology",
+    "date_created": "2017-05-17T14:24:19.046",
+    "date_updated": "2017-05-17T14:24:19.046",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 11,
+  "fields": {
+    "name": "Law",
+    "date_created": "2017-05-17T14:24:22.749",
+    "date_updated": "2017-05-17T14:24:22.749",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 12,
+  "fields": {
+    "name": "Law Enforcement and Security",
+    "date_created": "2017-05-17T14:24:31.208",
+    "date_updated": "2017-05-17T14:24:31.209",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 13,
+  "fields": {
+    "name": "Leisure, Sport and Tourism",
+    "date_created": "2017-05-17T14:24:41.200",
+    "date_updated": "2017-05-17T14:24:41.201",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 14,
+  "fields": {
+    "name": "Marketing, Advertising and PR",
+    "date_created": "2017-05-17T14:24:48.436",
+    "date_updated": "2017-05-17T14:24:48.436",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 15,
+  "fields": {
+    "name": "Media and Internet",
+    "date_created": "2017-05-17T14:24:56.267",
+    "date_updated": "2017-05-17T14:24:56.267",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 16,
+  "fields": {
+    "name": "Property and Construction",
+    "date_created": "2017-05-17T14:25:04.522",
+    "date_updated": "2017-05-17T14:25:04.522",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 17,
+  "fields": {
+    "name": "Public Services and Administration",
+    "date_created": "2017-05-17T14:25:13.458",
+    "date_updated": "2017-05-17T14:25:13.458",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 18,
+  "fields": {
+    "name": "Retail",
+    "date_created": "2017-05-17T14:25:16.791",
+    "date_updated": "2017-05-17T14:25:16.791",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 19,
+  "fields": {
+    "name": "Sales",
+    "date_created": "2017-05-17T14:25:18.665",
+    "date_updated": "2017-05-17T14:25:18.665",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 20,
+  "fields": {
+    "name": "Science and Pharmaceuticals",
+    "date_created": "2017-05-17T14:25:26.781",
+    "date_updated": "2017-05-17T14:25:26.781",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 21,
+  "fields": {
+    "name": "Social Care",
+    "date_created": "2017-05-17T14:25:32.154",
+    "date_updated": "2017-05-17T14:25:32.154",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 22,
+  "fields": {
+    "name": "Teacher Training and Education",
+    "date_created": "2017-05-17T14:25:41.807",
+    "date_updated": "2017-05-17T14:25:41.807",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 23,
+  "fields": {
+    "name": "Transport and Logistics",
+    "date_created": "2017-05-17T14:25:49.989",
+    "date_updated": "2017-05-17T14:25:49.989",
+    "last_updated_by": 270
+  }
+},
+{
+  "model": "survey.sector",
+  "pk": 24,
+  "fields": {
+    "name": "Academia",
+    "date_created": "2017-05-17T17:09:10.629",
+    "date_updated": "2017-05-17T17:09:10.629",
+    "last_updated_by": 270
+  }
+}
+]

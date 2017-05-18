@@ -129,12 +129,14 @@ INSTALLED_APPS = (
 
     'bootstrap3',
     'django_countries',
+    'crispy_forms',
     # 'cities_light',
 )
 
 # login URL for auth app
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+#AUTH_USER_MODEL = 'alumni.Alumnus'
 
 NEWS_LANGUAGES = ('en', 'nl')
 #NEWS_LANGUAGES = ('en',)  # 'nl')

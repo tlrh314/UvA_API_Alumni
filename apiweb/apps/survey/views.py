@@ -7,55 +7,79 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 
-from .forms import SurveyForm
+from .forms import SurveyContactInfoForm
+from .forms import SurveyCareerInfoForm
+
+
+def survey_contactinfo(request):
+    """ Step 0 of the survey is a modified password reset url/template. Once the
+        Alumnus has received a personal email with a tokened url to the modified
+        password reset template, pressing 'next' on that password reset form leads
+        here. This form surves the purpose to gather contact information, and
+        on success this form then moves on to the survey_careerinfo view/form. """
+
+    if request.method == "POST":
+        form = SurveyContactInfoForm(data=request.POST)
+        form.is_valid()  # TODO: remove
+
+        # TODO: if user is annonymous, then handle form differently then when Alumnus is know (which is when user is logged in)
+        # TODO: get alumus. Should be request.user.alumnus
+
+        if form.is_valid():
+            # TODO: check and clean, then save only the fields that are not empty into the Alumnus?
+
+            first_name                 = form.cleaned_data["first_name"]
+
+            msg = ""
+            msg += "first_name         = {0}\n".format(first_name)
+
+            print(msg)
+            return HttpResponseRedirect(reverse("survey:careerinfo"))
+    else:
+        form = SurveyContactInfoForm()
+
+    return render(request, "survey/survey_contactinfo.html", { "form": form })
+
+
+def survey_careerinfo(request):
+    """ Career info form is shown on success of the survey_contactinfo view/form. """
+
+    if request.method == "POST":
+        form = SurveyCareerInfoForm(data=request.POST)
+
+        # TODO: if user is annonymous, then handle form differently then when Alumnus is know (which is when user is logged in)
+        # TODO: get alumus. Should be request.user.alumnus
+
+        form.is_valid()  # TODO: remove
+        if form.is_valid():
+            # TODO: check and clean, then save only the fields that are not empty into the Alumnus?
+            # TODO: get alumus. Should be request.user.alumnus
+            sector                     = form.cleaned_data["sector"]
+            company_name               = form.cleaned_data["company_name"]
+            position_name              = form.cleaned_data["position_name"]
+            is_current_job             = form.cleaned_data["is_current_job"]
+            is_inside_academia         = form.cleaned_data["is_inside_academia"]
+            location_job               = form.cleaned_data["location_job"]
+            start_date                 = form.cleaned_data["start_date"]
+            stop_date                  = form.cleaned_data["stop_date"]
+
+            msg = ""
+            msg += "sector             = {0}\n".format(sector)
+            msg += "company_name       = {0}\n".format(company_name)
+            msg += "position_name      = {0}\n".format(position_name)
+            msg += "is_current_job     = {0}\n".format(is_current_job)
+            msg += "is_inside_academia = {0}\n".format(is_inside_academia)
+            msg += "location_job       = {0}\n".format(location_job)
+            msg += "start_date         = {0}\n".format(start_date)
+            msg += "stop_date          = {0}\n".format(stop_date)
+
+            print(msg)
+            return HttpResponseRedirect(reverse("survey:survey_success"))
+    else:
+        form = SurveyCareerInfoForm()
+
+    return render(request, "survey/survey_careerinfo.html", { "form": form })
+
 
 def survey_success(request):
-	return render(request, "survey/thanks.html")
-
-
-# Create your views here.
-def survey(request):
-	form_class = SurveyForm
-
-#    contactinfo = SurveyForm.objects.all()
-#    if contactinfo:
-#        sent_to = contactinfo[0].secretary_email_address
-#    else:
-#        # Hardcoded in case ContactInfo has no instances.
-#        sent_to = "secr-astro-science@uva.nl"
-
-	if request.method == "POST":
-		form = form_class(data=request.POST)
-		print(form.is_valid())
-		if form.is_valid():
-			current_job = form.cleaned_data["current_job"]
-			start_date_job = form.cleaned_data["start_date_job"]
-			stop_date_job = form.cleaned_data["stop_date_job"]
-			company_name = form.cleaned_data["company_name"]
-			sector_job = form.cleaned_data["sector_job"]
-			location_job = form.cleaned_data["location_job"]
-			inside_academia = form.cleaned_data["inside_academia"]
-			comments = form.cleaned_data["comments"]
-
-            # recipients = ["timohalbesma@gmail.com"]  #  TODO: use sent_to
-            # if cc_myself:
-            #     recipients.append(sender)
-
-			msg = "This message sent trough API Alumnus Website\n\n"
-			msg += "Current job: {0}\n".format(current_job)
-			msg += "start_date_job: {0}\n".format(start_date_job)
-			msg += "stop_date_job: {0}\n".format(stop_date_job)
-			msg += "company_name: {0}\n".format(company_name)
-			msg += "sector_job: {0}\n".format(sector_job)
-			msg += "-------------------------------------------------\n\n"
-			msg += "{0}\n\n".format(comments)
-
-			print(msg)
-			#send_mail("Message sent trough API Alumnus Website", msg, sent_to, recipients)
-			return HttpResponseRedirect("/survey/thanks/")
-		else:
-			print('notvalid')
-	else:
-		form = SurveyForm()
-
-	return render(request, "survey/survey.html", {"form": form})
+    return render(request, "survey/survey_complete.html", {} )

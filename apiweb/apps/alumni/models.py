@@ -91,7 +91,7 @@ class PreviousPosition(models.Model):
     comments         = models.TextField(_("comments"), blank=True)
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-    last_updated_by  = models.ForeignKey('auth.User', related_name="prevpos_updated",
+    last_updated_by  = models.ForeignKey("auth.User", related_name="prevpos_updated",
         on_delete=models.SET_DEFAULT, default=270)
 
     class Meta:
@@ -184,7 +184,7 @@ class Alumnus(models.Model):
 
     # Extra information
     comments        = models.TextField(_("comments"), blank=True)
-    last_updated_by = models.ForeignKey('auth.User', related_name="alumni_updated",
+    last_updated_by = models.ForeignKey("auth.User", related_name="alumni_updated",
         on_delete=models.SET_DEFAULT, default=270)
     date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
@@ -275,7 +275,7 @@ class Degree(models.Model):
     thesis_in_library= models.BooleanField(blank=True, default=False)
 
     comments         = models.TextField(_("comments"), blank=True)
-    last_updated_by  = models.ForeignKey('auth.User', related_name="theses_updated",
+    last_updated_by  = models.ForeignKey("auth.User", related_name="theses_updated",
         on_delete=models.SET_DEFAULT, default=270)
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
