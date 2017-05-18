@@ -52,7 +52,7 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("{% static 'visualization/miserables.json' %}", function(error, graph) {
+d3.json("{% static 'visualization/mis.json' %}", function(error, graph) {
     if (error) throw error;
 
     var link = svg.append("g")
@@ -84,19 +84,19 @@ d3.json("{% static 'visualization/miserables.json' %}", function(error, graph) {
     simulation.force("link")
         .links(graph.links);
 
-    svg.on("mousemove", function() {
-        fisheye.focus(d3.mouse(this));
+    // svg.on("mousemove", function() {
+    //     fisheye.focus(d3.mouse(this));
 
-        node.each(function(d) { d.fisheye = fisheye(d); })
-            .attr("cx", function(d) { return d.fisheye.x; })
-            .attr("cy", function(d) { return d.fisheye.y; })
-            .attr("r", function(d) { return d.fisheye.z * 4.5; });
+    //     node.each(function(d) { d.fisheye = fisheye(d); })
+    //         .attr("cx", function(d) { return d.fisheye.x; })
+    //         .attr("cy", function(d) { return d.fisheye.y; })
+    //         .attr("r", function(d) { return d.fisheye.z * 4.5; });
 
-        link.attr("x1", function(d) { return d.source.fisheye.x; })
-            .attr("y1", function(d) { return d.source.fisheye.y; })
-            .attr("x2", function(d) { return d.target.fisheye.x; })
-            .attr("y2", function(d) { return d.target.fisheye.y; });
-    });
+    //     link.attr("x1", function(d) { return d.source.fisheye.x; })
+    //         .attr("y1", function(d) { return d.source.fisheye.y; })
+    //         .attr("x2", function(d) { return d.target.fisheye.x; })
+    //         .attr("y2", function(d) { return d.target.fisheye.y; });
+    // });
 
     function ticked() {
         link
