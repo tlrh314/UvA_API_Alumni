@@ -14,23 +14,23 @@
     <li><a {% if theses_per_page == 100 %} class='active' {% endif %} href="{% set_query 'limit' 100 %}">100</a></li>
     <li><a {% if theses_per_page == 200 %} class='active' {% endif %} href="{% set_query 'limit' 200 %}">200</a></li>
     </ul>
-    </li> theses per page 
+    </li> theses per page
 </div>
 
 {# Add the paginator #}
 <div class="pagination-custom pull-right">
     <nav class="content-pagination">
         <a href="#" class='older fontawesome-angle-left' title='Older'></a>
-        
+
         {% if theses.has_previous %}
             <a href="{% filter_content 'page' 1 %}"><i class="fa fa-angle-double-left fa-lg" aria-hidden="true"></i></a>
             <a href="{% filter_content 'page' theses.previous_page_number %}"><i class="fa fa-angle-left fa-lg" style="max-width: 6px;"></i></a>
         {% endif %}
-    
+
         <span class="pagination-text">
             Page {{ theses.number }} of {{ theses.paginator.num_pages }}
         </span>
-    
+
         {% if theses.has_next %}
             <a href="{% filter_content 'page' theses.next_page_number %}"><i class="fa fa-angle-right fa-lg"></i></a>
             <a href="{% filter_content 'page' theses.paginator.num_pages %}"><i class="fa fa-angle-double-right fa-lg" aria-hidden="true"></i></a>

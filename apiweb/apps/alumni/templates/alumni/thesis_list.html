@@ -110,7 +110,7 @@
 
     {% get_active_sort as active_sort %}
     <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-striped">
         <thead class="table-bordered">
             <tr>
                 {# Thesis Title sort #}
@@ -188,7 +188,7 @@
             {# Add the content #}
             <h2 class="text-center">Total number of degrees : {{ theses.paginator.count }}</h2>
             {% for thesis in theses%}
-            <tr class="{% cycle '' 'info' %}">
+            <tr>
                 <td class="col-md-6">{% if thesis.thesis_title %}
                         <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}
                     {% else %}

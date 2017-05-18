@@ -6,6 +6,13 @@ Author's custom styles
     font-family: 'Nunito', sans-serif;
 }
 
+a {
+    color: #0852d0;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #ddd;
+}
 
 .highlighted { background:yellow }
 
@@ -276,4 +283,10 @@ body {
     padding: 15px;
     border: 1px solid #ccc;
     margin-bottom: 50px;
+}
+
+@media screen and (min-width: 768px) {
+    .table-responsive {
+        overflow-x: visible;
+    }
 }

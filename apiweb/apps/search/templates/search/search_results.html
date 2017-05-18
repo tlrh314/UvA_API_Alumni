@@ -13,7 +13,9 @@
 <div class="main-content" role="main">
     {% bootstrap_messages %}
     <h2 class="text-center">Search returned {% if alumni %} {{ alumni.count }} {% else %} 0 {% endif %} results</h2>
-    <table class="table table-hover">
+
+    <div class="table-responsive">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th> Alumnus </th>
@@ -27,11 +29,11 @@
         </thead>
         <tbody>
         {% for alumnus in alumni %}
-        <tr class="{% cycle '' 'info' %}">
+        <tr>
             <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name_no_title}}</a></td>
                 <td>
                 {% for degree in alumnus.degrees.all %}
-                    {{ degree.type|display_thesis_type }}:  
+                    {{ degree.type|display_thesis_type }}:
                     {% if degree.thesis_title %}
                         <a href="{% url 'alumni:thesis-detail' degree.thesis_slug %}">{{ degree.thesis_title }} </a><br>
                     {% else %}
@@ -39,17 +41,17 @@
                     {% endif %}
                 {% endfor %}
                 </td>
-                <td> 
+                <td>
                 {% for degree in alumnus.degrees.all %}
                     {% if degree.type == 'msc'%}
-                        {{ degree.date_stop|date:"Y" }} 
+                        {{ degree.date_stop|date:"Y" }}
                     {% endif %}
                 {% endfor %}
                 </td>
                 <td>
                 {% for degree in alumnus.degrees.all %}
                     {% if degree.type == 'phd'%}
-                        {{ degree.date_of_defence|date:"Y" }} 
+                        {{ degree.date_of_defence|date:"Y" }}
                     {% endif %}
                 {% endfor %}
                 </td>
@@ -60,12 +62,13 @@
         {% endfor %}
         </tbody>
     </table>
+    </div>
 </div>
 
 
-<script type="text/javascript"> 
+<script type="text/javascript">
     {% comment %}
-    The following JS code is for highlighting the search keywords. 
+    The following JS code is for highlighting the search keywords.
     It is adapted from 'http://jsfiddle.net/crgTU/7/'.
     {% endcomment %}
     {% for word in key_words %}
@@ -83,7 +86,7 @@
         while(node=walk.nextNode()) text.push(node);
         return text;
       }
-        
+
       function highlightWords(n){
         for (var i; (i=n.nodeValue.toLowerCase().indexOf(word,i)) > -1; n=after){
           var after = n.splitText(i+word.length);

@@ -112,7 +112,7 @@
 
     {% get_active_sort as active_sort %}
     <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-striped">
         <thead class="table-bordered">
             <tr>
             {# Alumnus sort #}
@@ -201,7 +201,7 @@
             {# Add the content #}
             <h2 class="text-center">Total number of alumni: {{ alumni.paginator.count }}</h2>
             {% for alumnus in alumni %}
-            <tr class="{% cycle '' 'info' %}">
+            <tr>
                 <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name_no_title }}</a></td>
                     <td class="text-center">
                     {% for degree in alumnus.degrees.all %}
