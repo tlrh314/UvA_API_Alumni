@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import, division
 
+import copy
 from datetime import datetime
-
 from django import forms
+from django.forms import extras
+from django.forms.utils import ErrorList
 from django.template import loader
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMultiAlternatives
@@ -18,12 +20,23 @@ from django.contrib.sites.shortcuts import get_current_site
 from django_countries import countries
 # from django_countries.widgets import CountrySelectWidget
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
+
+from tinymce.widgets import TinyMCE
+
 
 from .models import Sector
 from .models import JobAfterLeaving
 from ..alumni.models import Alumnus
+from ..alumni.models import AcademicTitle
+from ...settings import TINYMCE_MINIMAL_CONFIG
+
+error_messages = {
+    "names": "Names cannot contain numbers",
+    "numbers": "Phonenumbers can only contain numbers",
+    "initials": "Initials can only contain letters"
+    }
 
 
 class SendSurveyForm(PasswordResetForm):
@@ -67,34 +80,261 @@ class SendSurveyForm(PasswordResetForm):
             email, html_email_template_name=html_email_template_name,
         )
 
-class SurveyContactInfoForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(SurveyContactInfoForm, self).__init__(*args, **kwargs)
-
-        self.helper = FormHelper(self)
-        self.helper.form_action = reverse("survey:contactinfo")
-        self.helper.form_class = "form-horizontal col-xs-12"
-        self.helper.layout.append(Submit("survey_careerinfo", "Next", css_class="btn btn-success pull-right"))
-
-    class Meta:
-        model = Alumnus
-        # fields = ()
-        exclude = ("user", "last_name", "show_person", "passed_away", "nickname", "student_id",
-                    "mugshot", "slug" , "email", "last_checked", "position", "specification",
-                    "office", "work_phone", "ads_name", "research", "contact",
-                    "comments", "date_created", "date_updated", "last_updated_by")
-
-
 class SurveyCareerInfoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SurveyCareerInfoForm, self).__init__(*args, **kwargs)
 
-        self.helper = FormHelper(self)
-        self.helper.form_action = reverse("survey:careerinfo")
-        self.helper.form_class = "form-horizontal col-xs-12"
-        self.helper.layout.append(Submit("survey_contactinfo", "Submit", css_class="btn btn-success pull-right"))
+    inside_academia_choices = (
+        (1, "Yes"),
+        (2, "No"),
+    )
 
+    is_current_choices = (
+        (1, "Yes"),
+        (2, "No"),
+    )
+
+    years_choices = range(1900, datetime.now().year+10)[::-1]
     class Meta:
         model = JobAfterLeaving
         exclude = ("alumnus", "date_created", "date_updated", "last_updated_by")
 
+    sector = forms.ModelChoiceField(
+        required=False,
+        queryset=Sector.objects.all(),
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+
+    company_name = forms.CharField(
+        required=False,
+        max_length=128,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    position_name = forms.CharField(
+        required=False,
+        max_length=128,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    is_current_job = forms.ChoiceField(
+        required=False,
+        choices=is_current_choices,
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+
+    is_inside_academia = forms.ChoiceField(
+        required=False,
+        choices=inside_academia_choices,
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+
+    location_job = forms.ChoiceField(
+        required=False,
+        choices=countries,
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+    
+    start_date = forms.DateField(
+        required=False,
+        widget=extras.SelectDateWidget(
+            years=years_choices,
+            attrs={"class":""}))
+
+    stop_date = forms.DateField(
+        required=False,
+        widget=extras.SelectDateWidget(
+            years=years_choices,
+            attrs={"class":""}))
+
+    comments = forms.CharField(
+        required=False,
+        max_length=256,
+        widget=forms.Textarea(
+            attrs={"placeholder": "", "class": "form-control"}))
+
+
+
+    def clean(self):
+#        company_name = self.cleaned_data.get("company_name")
+
+
+        position_name = self.cleaned_data.get("position_name")
+        if any(str.isdigit(c) for c in position_name):
+            self._errors["position_name"] = ErrorList()
+            self._errors["position_name"].append(error_messages["names"])        
+
+
+class SurveyContactInfoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SurveyContactInfoForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Alumnus
+        exclude = ("user", "last_name", "show_person", "passed_away", "nickname", "student_id",
+                    "mugshot", "slug" , "email", "last_checked", "position", "specification",
+                    "office", "work_phone", "ads_name", "research", "contact",
+                    "comments", "date_created", "date_updated", "last_updated_by", 
+                    "zipcode", "streetname", "streetnumber", "address")
+
+    years_choices = range(1900, datetime.now().year+1)[::-1]
+    academic_title = forms.ModelChoiceField(
+        required=False,
+        queryset=AcademicTitle.objects.all(),
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+
+    initials = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    first_name = forms.CharField(
+        required=False,
+        max_length=128,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    middle_names = forms.CharField(
+        required=False,
+        max_length=128,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    prefix = forms.CharField(
+        required=False,
+        max_length=128,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    gender = forms.ChoiceField(
+        required=False,
+        choices=Alumnus.GENDER_CHOICES,
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+
+    birth_date = forms.DateField(
+        required=False,
+        widget=extras.SelectDateWidget(
+            years=years_choices,
+            attrs={"class":""}))
+
+    nationality = forms.ChoiceField(
+        required=False,
+        choices=countries,
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+
+    place_of_birth = forms.CharField(
+        required=False,
+        max_length=128,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+
+
+    photo = forms.ImageField(
+        required=False)
+
+
+    look = copy.copy(TINYMCE_MINIMAL_CONFIG)
+    look["width"] = ""
+    look["height"] = "200"
+
+    biography = forms.CharField(
+        required=False,
+        max_length=2048,
+        widget=TinyMCE(
+            mce_attrs=look))
+
+    home_phone = forms.CharField(
+        required=False,
+        max_length=24,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    mobile = forms.CharField(
+        required=False,
+        max_length=24,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    homepage = forms.URLField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    facebook = forms.URLField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    twitter = forms.URLField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    linkedin = forms.URLField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    city = forms.CharField(
+        required=False,
+        max_length=24,
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    country = forms.ChoiceField(
+        required=False,
+        choices=countries,
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+
+    def clean(self):
+        #first names cleaner
+        first_name = self.cleaned_data.get("first_name")
+        if any(str.isdigit(c) for c in first_name):
+            self._errors["first_name"] = ErrorList()
+            self._errors["first_name"].append(error_messages["names"])
+
+        #middle names cleaneer
+        middle_names = self.cleaned_data.get("middle_names")
+        if any(str.isdigit(c) for c in middle_names):
+            self._errors["middle_names"] = ErrorList()
+            self._errors["middle_names"].append(error_messages["names"])
+
+        #initials cleaner
+        initials = self.cleaned_data.get("initials")
+        if not initials.isalpha():
+            self._errors["initials"] = ErrorList()
+            self._errors["initials"].append(error_messages["initials"])
+
+        #prefix cleaner
+        prefix = self.cleaned_data.get("prefix")
+        if any(str.isdigit(c) for c in prefix):
+            self._errors["prefix"] = ErrorList()
+            self._errors["prefix"].append(error_messages["names"])
+
+        #place of birth cleaner
+        place_of_birth = self.cleaned_data.get("place_of_birth")
+        if any(str.isdigit(c) for c in place_of_birth):
+            self._errors["place_of_birth"] = ErrorList()
+            self._errors["place_of_birth"].append(error_messages["names"])
+
+        #city cleaner
+        city = self.cleaned_data.get("city")
+        if any(str.isdigit(c) for c in city):
+            self._errors["city"] = ErrorList()
+            self._errors["city"].append(error_messages["names"])
+
+        #home phone cleaner
+        home_phone = self.cleaned_data.get("home_phone")
+        if home_phone and not home_phone.isdigit():
+           self._errors["home_phone"] = ErrorList()
+           self._errors["home_phone"].append(error_messages["numbers"])
+
+        mobile = self.cleaned_data.get("mobile")
+        if mobile and not mobile.isdigit():
+           self._errors["mobile"] = ErrorList()
+           self._errors["mobile"].append(error_messages["numbers"])

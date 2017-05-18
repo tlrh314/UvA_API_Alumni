@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
+
 
 {% block stylesheets %} {{ block.super }}
 <style type="text/css">
@@ -29,11 +29,131 @@
                 {% endautoescape %}
             </div>
 
-            <div class="span12">
-                {% crispy form form.helper %}
-            </div>
+            <form class="form-horizontal col-sm-12" role="form" action="{% url 'survey:contactinfo' %}" method="post"> {% csrf_token %}
+            
+            <legend>Personal information</legend>
+                {{ form.non_field_errors }}
 
-            {# <form action="{% url 'survey:form' %}" method="post" class="uniForm"> {% csrf_token %} </form> #}
+                <div class="form-group">
+                    <label>Academic Title:</label>
+                    {{ form.academic_title }}
+                    <i>{{ form.academic_title.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Initials:</label>
+                    {{ form.initials }}
+                    <i>{{ form.initials.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>First name:</label>
+                    {{ form.first_name }}
+                    <i>{{ form.first_name.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Middle names:</label>
+                    {{ form.middle_names }}
+                    <i>{{ form.middle_names.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Prefix:</label>
+                    {{ form.prefix }}
+                    <i>{{ form.prefix.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender:</label>
+                    {{ form.gender }}
+                    <i>{{ form.gender.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Date of birth:</label>
+                    {{ form.birth_date }}
+                    <i>{{ form.birth_date.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Nationality:</label>
+                    {{ form.nationality }}
+                    <i>{{ form.nationality.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Place of birth:</label>
+                    {{ form.place_of_birth }}
+                    <i>{{ form.place_of_birth.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Photo:</label>
+                    {{ form.photo }}
+                    <i>{{ form.photo.errors }}</i>
+                </div> 
+
+                <div class="form-group">
+                    <label>Biography:</label>
+                    {{ form.biography }}
+                    <i>{{ form.biography.errors }}</i>
+                </div>         
+
+            <legend>Contact information</legend>
+                <div class="form-group">
+                    <label>Home phone:</label>
+                    {{ form.home_phone }}
+                    <i>{{ form.home_phone.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile:</label>
+                    {{ form.mobile }}
+                    <i>{{ form.mobile.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Homepage:</label>
+                    {{ form.homepage }}
+                    <i>{{ form.homepage.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Facebook:</label>
+                    {{ form.facebook }}
+                    <i>{{ form.facebook.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Twitter:</label>
+                    {{ form.twitter }}
+                    <i>{{ form.twitter.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Linkedin:</label>
+                    {{ form.linkedin }}
+                    <i>{{ form.linkedin.errors }}</i>
+                </div>
+
+            <legend>Address information</legend>
+                <div class="form-group">
+                    <label>City:</label>
+                    {{ form.city }}
+                    <i>{{ form.city.errors }}</i>
+                </div>
+
+                <div class="form-group">
+                    <label>Country:</label>
+                    {{ form.country }}
+                    <i>{{ form.country.errors }}</i>
+                </div>
+
+                <div class="form-group"><button type="submit" class="btn btn-success center-block"> Send </button> <p class="help-block pull-left text-danger hide" id="form-error">&nbsp; The form is not valid. </p></div>
+                </form>
+
+            {# <form action="{% url 'survey:careerinfo' %}" method="post" class="uniForm"> {% csrf_token %} </form> #}
         </div>
     </div>
 </div>
