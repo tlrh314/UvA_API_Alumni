@@ -14,6 +14,10 @@ from ..interviews.models import Post
 from ..alumni.models import Degree
 
 
+def privacy_policy(request):
+    return render(request, "main/privacy_policy.html", {})
+
+
 def index(request):
     welcome = WelcomeMessage.objects.all()
     if welcome:
