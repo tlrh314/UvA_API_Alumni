@@ -15,7 +15,7 @@
     {# Filters #}
     {# TODO: margin auto 0 to center #}
     <div class="col-md-12 text-center">
-        <ul class="nav nav-pills selector-nav center-pills">  
+        <ul class="nav nav-pills selector-nav center-pills">
             {# Degree type dropdown menu #}
             {% get_degree_types as degrees %}
             <li role="presentation" class="dropdown">
@@ -27,7 +27,7 @@
                     {% for type in degrees %}
                     {# Reset possible old filter and add store filter #}
                     <li>
-                        <a href="{% filter_objects 'type' type.0 %}" class="menu-link"> 
+                        <a href="{% filter_objects 'type' type.0 %}" class="menu-link">
                             <div class="menu-text"> {{ type.1 }} </div>
                             <img class="check-box" src="{% check_dropdown 'type' type.0 %}">
                         </a>
@@ -47,7 +47,7 @@
                     {% for year in years %}
                     {# Reset possible old filter and add store filter #}
                     <li>
-                        <a href="{% filter_objects 'year' year.1 %}" class="menu-link"> 
+                        <a href="{% filter_objects 'year' year.1 %}" class="menu-link">
                             <div class="menu-text"> {{ year.0 }} </div>
                             <img class="check-box" src="{% check_dropdown 'year' year.1 %}">
                         </a>
@@ -67,7 +67,7 @@
                     {% for order in sort_order_options %}
                     {# Reset possible old filter and add store filter #}
                     <li>
-                        <a href="{% filter_objects 'sort' order.1 %}" class="menu-link"> 
+                        <a href="{% filter_objects 'sort' order.1 %}" class="menu-link">
                             <div class="menu-text"> {{ order.0 }} </div>
                             <img class="check-box" src="{% check_dropdown 'sort' order.1 %}">
                         </a>
@@ -84,7 +84,7 @@
 
         {# Reset all filters button #}
         {% if active_filters %}
-            <a class="dropdown-toggle" href="{% url 'alumni:alumnus-list' %}" aria-haspopup="true" aria-expanded="false"> 
+            <a class="dropdown-toggle" href="{% url 'alumni:alumnus-list' %}" aria-haspopup="true" aria-expanded="false">
                 <button type="button" class="btn btn-danger">
                     Reset All Filters <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>
@@ -111,7 +111,8 @@
     </div>
 
     {% get_active_sort as active_sort %}
-    <table class="table table-hover"> 
+    <div class="table-responsive">
+    <table class="table table-hover">
         <thead class="table-bordered">
             <tr>
             {# Alumnus sort #}
@@ -130,7 +131,7 @@
             {# msc sort #}
             <th class="col-xs-1 table-bordered">
                 {% if active_sort == 'msc_lh' %}
-                    <a href="{% filter_objects 'sort' 'msc_hl' %}" style="display: block; color: black;"> MSc 
+                    <a href="{% filter_objects 'sort' 'msc_hl' %}" style="display: block; color: black;"> MSc
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
                 {% elif active_sort == 'msc_hl' %}
                     <a href="{% filter_objects 'sort' 'msc_lh' %}" style="display: block; color: black;"> MSc
@@ -143,7 +144,7 @@
             {# phd sort #}
             <th class="col-xs-1 table-bordered">
                 {% if active_sort == 'phd_lh' %}
-                    <a href="{% filter_objects 'sort' 'phd_hl' %}" style="display: block; color: black;"> PhD 
+                    <a href="{% filter_objects 'sort' 'phd_hl' %}" style="display: block; color: black;"> PhD
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
                 {% elif active_sort == 'phd_hl' %}
                     <a href="{% filter_objects 'sort' 'phd_lh' %}" style="display: block; color: black;"> PhD
@@ -166,9 +167,10 @@
                         <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
                 {% endif %}
             </th>
+
             <th class="col-xs-2 table-bordered">
                 {% if active_sort == 'staff_lh' %}
-                    <a href="{% filter_objects 'sort' 'staff_hl' %}" style="display: block; color: black;"> Staff 
+                    <a href="{% filter_objects 'sort' 'staff_hl' %}" style="display: block; color: black;"> Staff
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
                 {% elif active_sort == 'staff_hl' %}
                     <a href="{% filter_objects 'sort' 'staff_lh' %}" style="display: block; color: black;"> Staff
@@ -178,6 +180,7 @@
                         <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
                 {% endif %}
             </th>
+
             <th class="col-xs-2 table-bordered">
                 {% if active_sort == 'obp_lh' %}
                     <a href="{% filter_objects 'sort' 'obp_hl' %}" style="display: block; color: black;"> Support Staff
@@ -190,6 +193,7 @@
                         <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
                 {% endif %}
             </th>
+
             </tr>
         </thead>
         <tbody>
@@ -199,10 +203,10 @@
             {% for alumnus in alumni %}
             <tr class="{% cycle '' 'info' %}">
                 <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name_no_title }}</a></td>
-                    <td class="text-center"> 
+                    <td class="text-center">
                     {% for degree in alumnus.degrees.all %}
                         {% if degree.type == 'msc'%}
-                            {% if degree.date_of_defence %} {{ degree.date_of_defence|date:"Y" }} {% else %} 
+                            {% if degree.date_of_defence %} {{ degree.date_of_defence|date:"Y" }} {% else %}
                             <i class="fa fa-question">{% endif %}
                         {% endif %}
                     {% endfor %}
@@ -210,7 +214,7 @@
                     <td class="text-center">
                     {% for degree in alumnus.degrees.all %}
                         {% if degree.type == 'phd'%}
-                            {% if degree.date_of_defence %} {{ degree.date_of_defence|date:"Y" }} {% else %} 
+                            {% if degree.date_of_defence %} {{ degree.date_of_defence|date:"Y" }} {% else %}
                             <i class="fa fa-question">{% endif %}
                         {% endif %}
                     {% endfor %}
@@ -222,6 +226,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     {% include "alumni/alumnus_paginator.html" %}
 </div>
 {% endblock content %}
