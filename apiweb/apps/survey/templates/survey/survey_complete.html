@@ -8,16 +8,13 @@
 <div class="col-xs-12 main-content" role="main" style="width: 100%">
     <h1 class="text-center"> Survey Form Successfully Submitted! </h1>
 
-    <div class="col-xs-9" style="float: none; margin: 0 auto;">
-        <div class="col-xs-12" style="border: 1px solid #e5e5e5; margin-bottom: 100px; font-family: 'Source Sans Pro', sans-serif;">
-
-            <div style="text-align: left; padding-top: 15px; padding-bottom: 15px;">
-
-                Dear {{ request.user.alumnus.full_name }}, <br>
-                <br>
-                Thank you very much for taking the time to update your whereabouts and contactinformation in the API Alumnus Database.
-                <br>
-                You can now <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}">visit your personal alumnus page. </br>
+    <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
+        <div>
+            Dear {{ request.user.alumnus.full_name }}, <br>
+            <br>
+            Thank you very much for taking the time to update your whereabouts and contactinformation in the API Alumnus Database.<br>
+            <br>
+            You can now <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}">visit your personal alumnus page. </br>
             </div>
         </div>
     </div>

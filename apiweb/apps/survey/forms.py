@@ -15,16 +15,10 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
-
+from django.db.models.fields import BLANK_CHOICE_DASH
 
 from django_countries import countries
-# from django_countries.widgets import CountrySelectWidget
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
-
 from tinymce.widgets import TinyMCE
-
 
 from .models import Sector
 from .models import JobAfterLeaving
@@ -36,6 +30,21 @@ error_messages = {
     "names": "Names cannot contain numbers",
     "numbers": "Phonenumbers can only contain numbers",
     "initials": "Initials can only contain letters"
+    }
+
+TINYMCE_LOCAL_CONFIG= {
+        'selector': 'textarea',
+        'height': 200,
+        'width': 0,
+        'menubar': False,
+        'statusbar': False,
+        'elementpath': False,
+        'plugins': [
+            'paste',
+        ],
+        'toolbar1': 'undo redo | bold italic | bullist numlist outdent indent | ',
+        'toolbar2': '',
+        'paste_as_text': True,
     }
 
 
@@ -84,12 +93,7 @@ class SurveyCareerInfoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SurveyCareerInfoForm, self).__init__(*args, **kwargs)
 
-    inside_academia_choices = (
-        (1, "Yes"),
-        (2, "No"),
-    )
-
-    is_current_choices = (
+    YES_NO_CHOICE = (
         (1, "Yes"),
         (2, "No"),
     )
@@ -119,22 +123,22 @@ class SurveyCareerInfoForm(forms.ModelForm):
 
     is_current_job = forms.ChoiceField(
         required=False,
-        choices=is_current_choices,
+        choices=YES_NO_CHOICE,
         widget=forms.Select(
             attrs={"class": "form-control"}))
 
     is_inside_academia = forms.ChoiceField(
         required=False,
-        choices=inside_academia_choices,
+        choices=YES_NO_CHOICE,
         widget=forms.Select(
             attrs={"class": "form-control"}))
 
     location_job = forms.ChoiceField(
         required=False,
-        choices=countries,
+        choices=BLANK_CHOICE_DASH+list(countries),
         widget=forms.Select(
             attrs={"class": "form-control"}))
-    
+
     start_date = forms.DateField(
         required=False,
         widget=extras.SelectDateWidget(
@@ -149,11 +153,8 @@ class SurveyCareerInfoForm(forms.ModelForm):
 
     comments = forms.CharField(
         required=False,
-        max_length=256,
-        widget=forms.Textarea(
-            attrs={"placeholder": "", "class": "form-control"}))
-
-
+        widget=TinyMCE(mce_attrs=TINYMCE_LOCAL_CONFIG)
+    )
 
     def clean(self):
 #        company_name = self.cleaned_data.get("company_name")
@@ -162,7 +163,7 @@ class SurveyCareerInfoForm(forms.ModelForm):
         position_name = self.cleaned_data.get("position_name")
         if any(str.isdigit(c) for c in position_name):
             self._errors["position_name"] = ErrorList()
-            self._errors["position_name"].append(error_messages["names"])        
+            self._errors["position_name"].append(error_messages["names"])
 
 
 class SurveyContactInfoForm(forms.ModelForm):
@@ -174,7 +175,7 @@ class SurveyContactInfoForm(forms.ModelForm):
         exclude = ("user", "last_name", "show_person", "passed_away", "nickname", "student_id",
                     "mugshot", "slug" , "email", "last_checked", "position", "specification",
                     "office", "work_phone", "ads_name", "research", "contact",
-                    "comments", "date_created", "date_updated", "last_updated_by", 
+                    "comments", "date_created", "date_updated", "last_updated_by",
                     "zipcode", "streetname", "streetnumber", "address")
 
     years_choices = range(1900, datetime.now().year+1)[::-1]
@@ -186,6 +187,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
     initials = forms.CharField(
         required=False,
+        help_text="Please use letters only, no dots",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
@@ -203,6 +205,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
     prefix = forms.CharField(
         required=False,
+        help_text="Tussenvoegsel, e.g. 'van der', 'de'",
         max_length=128,
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
@@ -221,7 +224,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
     nationality = forms.ChoiceField(
         required=False,
-        choices=countries,
+        choices=BLANK_CHOICE_DASH+list(countries),
         widget=forms.Select(
             attrs={"class": "form-control"}))
 
@@ -231,51 +234,49 @@ class SurveyContactInfoForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
-
-
     photo = forms.ImageField(
         required=False)
-
-
-    look = copy.copy(TINYMCE_MINIMAL_CONFIG)
-    look["width"] = ""
-    look["height"] = "200"
 
     biography = forms.CharField(
         required=False,
         max_length=2048,
-        widget=TinyMCE(
-            mce_attrs=look))
+        widget=TinyMCE(mce_attrs=TINYMCE_LOCAL_CONFIG))
 
     home_phone = forms.CharField(
         required=False,
+        help_text="Please use digits only",
         max_length=24,
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
     mobile = forms.CharField(
         required=False,
+        help_text="Please use digits only",
         max_length=24,
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
     homepage = forms.URLField(
         required=False,
+        help_text="Please give the full URL to your homepage",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
     facebook = forms.URLField(
         required=False,
+        help_text="Please give the full URL to your Facebook",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
     twitter = forms.URLField(
         required=False,
+        help_text="Please give the full URL to your Twitter",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
     linkedin = forms.URLField(
         required=False,
+        help_text="Please give the full URL to LinkedIn",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
@@ -287,7 +288,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
     country = forms.ChoiceField(
         required=False,
-        choices=countries,
+        choices=BLANK_CHOICE_DASH+list(countries),
         widget=forms.Select(
             attrs={"class": "form-control"}))
 
@@ -315,6 +316,10 @@ class SurveyContactInfoForm(forms.ModelForm):
         if any(str.isdigit(c) for c in prefix):
             self._errors["prefix"] = ErrorList()
             self._errors["prefix"].append(error_messages["names"])
+        allowed_prefix = ["van", "van der", "der", "den", "van den", "van de", "de", "in het", "in 't", "di"]
+        if prefix and prefix not in allowed_prefix:
+            self._errors["prefix"] = ErrorList()
+            self._errors["prefix"].append("Valid options: {0}".format(allowed_prefix))
 
         #place of birth cleaner
         place_of_birth = self.cleaned_data.get("place_of_birth")

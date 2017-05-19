@@ -61,18 +61,9 @@ TINYMCE_MINIMAL_CONFIG = {
 }
 
 
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
-CRISPY_FAIL_SILENTLY = False
-
-
-# TODO: cities_light might have ajax-lookupable countries
 AJAX_LOOKUP_CHANNELS = {
-#    'cities_light_country': ('cities_light.lookups', 'CountryLookup'),
-#    'cities_light_city': ('cities_light.lookups', 'CityLookup'),
     'user': {'model':'auth.user','search_field':'username'}
 }
-#
-# CITIES_LIGHT_TRANSLATION_LANGUAGES = ['fr', 'en']
-# CITIES_LIGHT_INCLUDE_COUNTRIES = ['FR']
-# CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC',
-#     'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
+
+# COUNTRIES_FIRST_BREAK
+COUNTRIES_FIRST = ( "NL", "DE", "FR", "GB", "US")

@@ -13,7 +13,7 @@ from .forms import SurveyCareerInfoForm
 
 
 #TODO: make sure they are redirected to the correct page
-@login_required 
+@login_required
 def survey_contactinfo(request):
     """ Step 0 of the survey is a modified password reset url/template. Once the
         Alumnus has received a personal email with a tokened url to the modified
@@ -35,21 +35,21 @@ def survey_contactinfo(request):
             initials                    = form.cleaned_data["initials"]
             first_name                  = form.cleaned_data["first_name"]
             middle_names                = form.cleaned_data["middle_names"]
-            prefix                      = form.cleaned_data["prefix"] 
+            prefix                      = form.cleaned_data["prefix"]
             gender                      = form.cleaned_data["gender"]
-            birth_date                  = form.cleaned_data["birth_date"] 
+            birth_date                  = form.cleaned_data["birth_date"]
             nationality                 = form.cleaned_data["nationality"]
             place_of_birth              = form.cleaned_data["place_of_birth"]
             #photo                      = form.cleaned_data["photo"]
-            biography                   = form.cleaned_data["biography"] 
+            biography                   = form.cleaned_data["biography"]
             home_phone                  = form.cleaned_data["home_phone"]
             mobile                      = form.cleaned_data["mobile"]
-            homepage                    = form.cleaned_data["homepage"] 
+            homepage                    = form.cleaned_data["homepage"]
             facebook                    = form.cleaned_data["facebook"]
             twitter                     = form.cleaned_data["twitter"]
-            linkedin                    = form.cleaned_data["linkedin"] 
+            linkedin                    = form.cleaned_data["linkedin"]
             city                        = form.cleaned_data["city"]
-            country                     = form.cleaned_data["country"] 
+            country                     = form.cleaned_data["country"]
 
             msg = ""
             msg += "academic_title          = {0}\n".format(academic_title)
@@ -61,11 +61,11 @@ def survey_contactinfo(request):
             msg += "birth_date              = {0}\n".format(birth_date)
             msg += "nationality             = {0}\n".format(nationality)
             msg += "place_of_birth          = {0}\n".format(place_of_birth)
-            msg += "biography               = {0}\n".format(biography)            
-            msg += "home_phone              = {0}\n".format(home_phone)   
-            msg += "mobile                  = {0}\n".format(mobile) 
-            msg += "homepage                = {0}\n".format(homepage) 
-            msg += "facebook                = {0}\n".format(facebook) 
+            msg += "biography               = {0}\n".format(biography)
+            msg += "home_phone              = {0}\n".format(home_phone)
+            msg += "mobile                  = {0}\n".format(mobile)
+            msg += "homepage                = {0}\n".format(homepage)
+            msg += "facebook                = {0}\n".format(facebook)
             msg += "twitter                 = {0}\n".format(twitter)
             msg += "linkedin                = {0}\n".format(linkedin)
             msg += "city                    = {0}\n".format(city)
@@ -78,6 +78,7 @@ def survey_contactinfo(request):
         form = SurveyContactInfoForm(instance=request.user.alumnus)
 
     return render(request, "survey/survey_contactinfo.html", { "form": form,  })
+
 
 #TODO: make sure they are sent to the correct page
 @login_required
@@ -102,6 +103,7 @@ def survey_careerinfo(request):
             location_job               = form.cleaned_data["location_job"]
             start_date                 = form.cleaned_data["start_date"]
             stop_date                  = form.cleaned_data["stop_date"]
+            comments                   = form.cleaned_data["comments"]
 
             msg = ""
             msg += "sector             = {0}\n".format(sector)
@@ -112,6 +114,7 @@ def survey_careerinfo(request):
             msg += "location_job       = {0}\n".format(location_job)
             msg += "start_date         = {0}\n".format(start_date)
             msg += "stop_date          = {0}\n".format(stop_date)
+            msg += "comments           = {0}\n".format(comments)
 
             print(msg)
             return HttpResponseRedirect(reverse("survey:survey_success"))

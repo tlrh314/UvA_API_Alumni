@@ -2,11 +2,9 @@
 {% load staticfiles %}
 
 {% block stylesheets %} {{ block.super }}
-<style type="text/css">
-.asteriskField {
-    display: none;
-} 
-</style>
+<link href="/tinymce/css/" type="text/css" media="all" rel="stylesheet" />
+<script>function djangoFileBrowser(field_name, url, type, win) { return false;}</script>
+<script type="text/javascript" src="{% static 'tinymce/js/tinymce/tinymce.min.js' %}"></script>
 {% endblock stylesheets %}
 
 {% block title %} API - Alumni - Survey {% endblock title %}
@@ -16,83 +14,54 @@
 <div class="col-xs-12 main-content" role="main" style="width: 100%">
     <h1 class="text-center"> API Career Development Questionaire (3/3) </h1>
 
-    <div class="col-xs-9" style="float: none; margin: 0 auto;">
-        <div class="col-xs-12" style="border: 1px solid #e5e5e5; margin-bottom: 100px; font-family: 'Source Sans Pro', sans-serif;">
+    <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
+        <div>
+            <h3> Career Information of <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}" target="blank", style="color: black;">{{ request.user.alumnus.full_name }}</a> <br></h3>
+            <br>
+            Please provide us information regarding your current position.
+        </div>
 
-            <div class="text-justify" style="padding-top: 15px; padding-bottom: 15px;">
+        <br>
 
-                <h3>Welcome, <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}" style="color: black;">{{ request.user.alumnus.full_name }}</a> <br></h3>
-                <br>
-                {% autoescape off %}
-                    {{ intro_message }}
-                {% endautoescape %}
-            </div>
-
+        <div class="col-xs-12">
             <form class="form-horizontal col-sm-12" role="form" action="{% url 'survey:careerinfo' %}" method="post"> {% csrf_token %}
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Please check the input in the following field(s):
+                        {% for error in form.errors %}
+                            {{ error|escape }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% for field in form.visible_fields %}
 
+                    {% if forloop.counter == 1 %} 
+                    <legend> Current Position </legend>
+                    {% endif %}
 
-            <legend>Career information</legend>
-                {{ form.non_field_errors }}
+                    {% if field.errors %} 
+                    <div class="form-group has-error has-feedback">
+                    {% else %}
+                    <div class="form-group">
+                    {% endif %}
+                        {{ field.label_tag }} {{ field }}
 
-
-                <div class="form-group">
-                    <label>Sector:</label>
-                    {{ form.sector }}
-                    <i>{{ form.sector.errors }}</i>
-                </div>
-
-                <div class="form-group">
-                    <label>Company name:</label>
-                    {{ form.company_name }}
-                    <i>{{ form.company_name.errors }}</i>
-                </div>
-
-                <div class="form-group">
-                    <label>Position name:</label>
-                    {{ form.position_name }}
-                    <i>{{ form.position_name.errors }}</i>
-                </div>
-
-                <div class="form-group">
-                    <label>Current job:</label>
-                    {{ form.is_current_job }}
-                    <i>{{ form.is_current_job.errors }}</i>
-                </div>
-
-                <div class="form-group">
-                    <label>Academic job:</label>
-                    {{ form.is_inside_academia }}
-                    <i>{{ form.is_inside_academia.errors }}</i>
-                </div>
-
-                <div class="form-group">
-                    <label>Location job:</label>
-                    {{ form.location_job }}
-                    <i>{{ form.location_job.errors }}</i>
-                </div>
-
-                <div class="form-group">
-                    <label>Start date:</label>
-                    {{ form.start_date }}
-                    <i>{{ form.start_date.errors }}</i>
-                </div>
-
-                <div class="form-group">
-                    <label>Stop date:</label>
-                    {{ form.stop_date }}
-                    <i>{{ form.stop_date.errors }}</i>
-                </div>
-
-                <div class="form-group">
-                    <label>Comments:</label>
-                    {{ form.comments }}
-                    <i>{{ form.comments.errors }}</i>
-                </div>
-                
-                <div class="form-group"><button type="submit" class="btn btn-success center-block"> Send </button> <p class="help-block pull-left text-danger hide" id="form-error">&nbsp; The form is not valid. </p></div>
+                        {% if field.errors %}
+                        <i class="glyphicon glyphicon-remove form-control-feedback"></i>
+                        <div class="alert alert-danger">
+                            {% for error in field.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-success center-block pull-right"> Submit </button>
+                    
                 </form>
-
-            {# <form action="{% url 'survey:survey_success' %}" method="post" class="uniForm"> {% csrf_token %} </form> #}
         </div>
     </div>
 </div>
