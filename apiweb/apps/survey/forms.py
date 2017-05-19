@@ -159,11 +159,11 @@ class SurveyCareerInfoForm(forms.ModelForm):
 
     def clean(self):
         """
-        Clean function for input 
+        Clean function for input
         """
 
         position_name = self.cleaned_data.get("position_name")
-        if any(str.isdigit(c) for c in position_name):
+        if any(unicode.isdigit(c) for c in position_name):
             self._errors["position_name"] = ErrorList()
             self._errors["position_name"].append(error_messages["names"])
 
@@ -302,13 +302,13 @@ class SurveyContactInfoForm(forms.ModelForm):
     def clean(self):
         #first names cleaner
         first_name = self.cleaned_data.get("first_name")
-        if any(str.isdigit(c) for c in first_name):
+        if any(unicode.isdigit(c) for c in first_name):
             self._errors["first_name"] = ErrorList()
             self._errors["first_name"].append(error_messages["names"])
 
         #middle names cleaneer
         middle_names = self.cleaned_data.get("middle_names")
-        if any(str.isdigit(c) for c in middle_names):
+        if any(unicode.isdigit(c) for c in middle_names):
             self._errors["middle_names"] = ErrorList()
             self._errors["middle_names"].append(error_messages["names"])
 
@@ -320,7 +320,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
         #prefix cleaner
         prefix = self.cleaned_data.get("prefix")
-        if any(str.isdigit(c) for c in prefix):
+        if any(unicode.isdigit(c) for c in prefix):
             self._errors["prefix"] = ErrorList()
             self._errors["prefix"].append(error_messages["names"])
         allowed_prefix = ["van", "van der", "der", "den", "van den", "van de", "de", "in het", "in 't", "di"]
@@ -330,13 +330,13 @@ class SurveyContactInfoForm(forms.ModelForm):
 
         #place of birth cleaner
         place_of_birth = self.cleaned_data.get("place_of_birth")
-        if any(str.isdigit(c) for c in place_of_birth):
+        if any(unicode.isdigit(c) for c in place_of_birth):
             self._errors["place_of_birth"] = ErrorList()
             self._errors["place_of_birth"].append(error_messages["names"])
 
         #city cleaner
         city = self.cleaned_data.get("city")
-        if any(str.isdigit(c) for c in city):
+        if any(unicode.isdigit(c) for c in city):
             self._errors["city"] = ErrorList()
             self._errors["city"].append(error_messages["names"])
 
