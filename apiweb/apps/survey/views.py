@@ -23,8 +23,6 @@ def survey_contactinfo(request):
 
     if request.method == "POST":
         form = SurveyContactInfoForm(data=request.POST)
-        form.is_valid()  # TODO: remove
-
         # TODO: if user is annonymous, then handle form differently then when Alumnus is know (which is when user is logged in)
         # TODO: get alumus. Should be request.user.alumnus
 
@@ -40,8 +38,9 @@ def survey_contactinfo(request):
             birth_date                  = form.cleaned_data["birth_date"]
             nationality                 = form.cleaned_data["nationality"]
             place_of_birth              = form.cleaned_data["place_of_birth"]
-            #photo                      = form.cleaned_data["photo"]
+            photo                       = form.cleaned_data["photo"]
             biography                   = form.cleaned_data["biography"]
+            email                       = form.cleaned_data["email"]
             home_phone                  = form.cleaned_data["home_phone"]
             mobile                      = form.cleaned_data["mobile"]
             homepage                    = form.cleaned_data["homepage"]
@@ -61,7 +60,9 @@ def survey_contactinfo(request):
             msg += "birth_date              = {0}\n".format(birth_date)
             msg += "nationality             = {0}\n".format(nationality)
             msg += "place_of_birth          = {0}\n".format(place_of_birth)
+            msg += "photo                   = {0}\n".format(photo)
             msg += "biography               = {0}\n".format(biography)
+            msg += "email                   = {0}\n".format(email)
             msg += "home_phone              = {0}\n".format(home_phone)
             msg += "mobile                  = {0}\n".format(mobile)
             msg += "homepage                = {0}\n".format(homepage)
@@ -70,8 +71,17 @@ def survey_contactinfo(request):
             msg += "linkedin                = {0}\n".format(linkedin)
             msg += "city                    = {0}\n".format(city)
             msg += "country                 = {0}\n".format(country)
-            msg += "twitter                 = {0}\n".format(twitter)
             print(msg)
+
+
+            variable_list = [academic_title, initials, first_name, middle_names, 
+            prefix, gender, birth_date, nationality, place_of_birth, photo, biography, 
+            email, home_phone, mobile, homepage, facebook, twitter, linkedin, city, country]
+
+            for var in variable_list:
+                print(var)
+
+
 
             return HttpResponseRedirect(reverse("survey:careerinfo"))
     else:
@@ -84,14 +94,12 @@ def survey_contactinfo(request):
 @login_required
 def survey_careerinfo(request):
     """ Career info form is shown on success of the survey_contactinfo view/form. """
-
     if request.method == "POST":
         form = SurveyCareerInfoForm(data=request.POST)
 
         # TODO: if user is annonymous, then handle form differently then when Alumnus is know (which is when user is logged in)
         # TODO: get alumus. Should be request.user.alumnus
 
-        form.is_valid()  # TODO: remove
         if form.is_valid():
             # TODO: check and clean, then save only the fields that are not empty into the Alumnus?
             # TODO: get alumus. Should be request.user.alumnus
@@ -115,6 +123,13 @@ def survey_careerinfo(request):
             msg += "start_date         = {0}\n".format(start_date)
             msg += "stop_date          = {0}\n".format(stop_date)
             msg += "comments           = {0}\n".format(comments)
+
+            variable_list = [sector, company_name, position_name, is_current_job, is_inside_academia, location_job, start_date, stop_date, comments]
+            for var in variable_list:
+                print(len(var))
+
+
+
 
             print(msg)
             return HttpResponseRedirect(reverse("survey:survey_success"))

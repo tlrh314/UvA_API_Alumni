@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, absolute_import, division
 
 import copy
+
 from datetime import datetime
 from django import forms
 from django.forms import extras
@@ -157,8 +158,9 @@ class SurveyCareerInfoForm(forms.ModelForm):
     )
 
     def clean(self):
-#        company_name = self.cleaned_data.get("company_name")
-
+        """
+        Clean function for input 
+        """
 
         position_name = self.cleaned_data.get("position_name")
         if any(str.isdigit(c) for c in position_name):
@@ -173,7 +175,7 @@ class SurveyContactInfoForm(forms.ModelForm):
     class Meta:
         model = Alumnus
         exclude = ("user", "last_name", "show_person", "passed_away", "nickname", "student_id",
-                    "mugshot", "slug" , "email", "last_checked", "position", "specification",
+                    "mugshot", "slug", "last_checked", "position", "specification",
                     "office", "work_phone", "ads_name", "research", "contact",
                     "comments", "date_created", "date_updated", "last_updated_by",
                     "zipcode", "streetname", "streetnumber", "address")
@@ -241,6 +243,11 @@ class SurveyContactInfoForm(forms.ModelForm):
         required=False,
         max_length=2048,
         widget=TinyMCE(mce_attrs=TINYMCE_LOCAL_CONFIG))
+
+    email = forms.EmailField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={"class":"form-control"}))
 
     home_phone = forms.CharField(
         required=False,
