@@ -222,12 +222,16 @@ p.contactinfo {
 @media(min-width: 992px){
 	#contact-wrapper img {
 		margin-top: 6px;
+		height: 125px;
+		padding-bottom: 20px;
 	}
 }
 
 @media(max-width: 991px){
 	#contact-wrapper img {
 		float: right;
+		height: 125px;
+		padding-bottom: 20px;
 	}
 
 	#footercontainer .text-centered-xs-sm {
@@ -235,5 +239,11 @@ p.contactinfo {
 	}
 	#footercontainer .text-right-xs-sm {
 		text-align: right;
+	}
+}
+
+@media(max-width: 467px){
+	#contact-wrapper p{
+		clear: right
 	}
 }
