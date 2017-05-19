@@ -74,8 +74,8 @@ def survey_contactinfo(request):
             print(msg)
 
 
-            variable_list = [academic_title, initials, first_name, middle_names, 
-            prefix, gender, birth_date, nationality, place_of_birth, photo, biography, 
+            variable_list = [academic_title, initials, first_name, middle_names,
+            prefix, gender, birth_date, nationality, place_of_birth, photo, biography,
             email, home_phone, mobile, homepage, facebook, twitter, linkedin, city, country]
 
             for var in variable_list:
@@ -126,7 +126,7 @@ def survey_careerinfo(request):
 
             variable_list = [sector, company_name, position_name, is_current_job, is_inside_academia, location_job, start_date, stop_date, comments]
             for var in variable_list:
-                print(len(var))
+                if var: print(len(var))
 
 
 
