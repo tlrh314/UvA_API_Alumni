@@ -65,10 +65,16 @@ div.collapse.in form.navbar-form {
         float: none !important;
         margin-left: -15px;
         margin-right: -15px;
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
     }
 
     form.navbar-form .input-group {
         width: 100%;
+    }
+
+    form.navbar-form .input-group .input-group-btn {
+        width: 0px;
     }
 }
 
