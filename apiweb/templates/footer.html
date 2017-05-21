@@ -44,7 +44,7 @@
                             <i class="fa fa-fw fa-phone"></i> <a href="tel:{{ contactinfo.telephone_api }}">{{ api_phonenumber_formatted }}</a><br>
                             <i class="fa fa-fw fa-envelope"></i> <a href="mailto:{{ contactinfo.secretary_email_address}}">{{ contactinfo.secretary_email_address}}</a><br><br>
                             <a href="{% url 'contact' %}">Contact Form</a><br>
-                            <a href="{% url 'login' %}">Login</a><br>
+                            <a href="{% url 'site_login' %}">Login</a> | <a href="{% url 'login' %}">Admin</a><br>
                         </p>
                     </div>
                 </div>

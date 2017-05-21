@@ -2,14 +2,13 @@ from __future__ import unicode_literals, absolute_import, division
 
 import filebrowser.sites
 
-from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf.urls import include, url
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth import views as auth_views
 from ajax_select import urls as ajax_select_urls
-import django.contrib.sitemaps.views
 
 from apiweb.context_processors import contactinfo
-from .main.views import index, contact, contact_success, privacy_policy
 
 from .survey.views import survey_success
 
@@ -21,7 +20,6 @@ handler500 = 'main.views.page_not_found'
 
 
 urlpatterns = [
-    url(r'^login/$', auth_views.LoginView.as_view(template_name='admin/login.html')),
     url(r'^admin/filebrowser/', include(filebrowser.sites.site.urls)),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^ajax_select/', include(ajax_select_urls)),
@@ -40,16 +38,11 @@ urlpatterns = [
         ), name='password_reset'),
     url(r'^admin/', include('django.contrib.auth.urls')),
     url(r'^alumni/', include('apiweb.apps.alumni.urls', namespace='alumni')),
-    url(r'^privacy-policy/$', privacy_policy, name='privacy_policy'),
     url(r'^interviews/', include('apiweb.apps.interviews.urls', namespace='interviews')),
-    url(r'^contact/$', contact, name='contact'),
-    url(r'^thanks/$', contact_success, name='contact_success'),
     url(r'^search/', include('apiweb.apps.search.urls', namespace='search')),
-    url(r'^vis/', include('apiweb.apps.visualization.urls', namespace='vizualisation')),
-
-    #TODO: make this url stuff work better for survey
     url(r'^survey/', include('apiweb.apps.survey.urls', namespace='survey')),
-    url(r'^$', index, name='index'),
+    url(r'^vis/', include('apiweb.apps.visualization.urls', namespace='vizualisation')),
+    url(r'', include('apiweb.apps.main.urls')),
 
     # TODO: clean up code below
 

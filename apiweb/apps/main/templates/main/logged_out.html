@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-content" role="main" >
+
+    <h1 class="text-center"> Sucessfully Logged Out </h1>
+
+    <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
+
+        <p> Thanks for spending some quality time with the Web site today. </p>
+
+        <p><a href="{% url 'site_login' %}" >Log in again </a></p>
+
+    </div>
+</div>
+{% endblock %}

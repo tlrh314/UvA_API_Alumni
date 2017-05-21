@@ -7,6 +7,14 @@
 
 {% block content %}
 <div class="main-content" role="main">
+
+    <div class="col-xs-12 col-lg-8 pull-right text-justify">
+        <h2 class="text-left">Anton Pannekoek Institute | Alumni </h2>
+        {% autoescape off %}
+        {{ welcome_text }}
+        {% endautoescape %}
+    </div>
+
     <div class="col-xs-12 col-lg-4 pull-left text-justify">
         <table class="table">
             <thead><tr><th style="padding-top: 0px; padding-bottom: 0px;"><h2 class="text-left" style="margin-bottom: 0px;"> Latest Interview </h2></tr></th></thead>
@@ -38,14 +46,6 @@
             </tbody>
         </table>
     </div>
-
-    <div class="col-xs-12 col-lg-8 pull-right text-justify">
-        <h2 class="text-left">Anton Pannekoek Institute | Alumni </h2>
-        {% autoescape off %}
-        {{ welcome_text }}
-        {% endautoescape %}
-    </div>
-
     <div class="col-xs-12" style="margin-top: 50px; margin-bottom: 50px;">
         <img src="media/uploads/API_Alumni_Groupphoto.png" class="img-responsive"></img>
     </div>
