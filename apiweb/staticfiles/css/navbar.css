@@ -78,7 +78,7 @@ div.collapse.in form.navbar-form {
     }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1056px) {
     div#navbar-list-wrapper {
         align-items: center;
         display: flex;
@@ -89,4 +89,9 @@ div.collapse.in form.navbar-form {
         float: none !important;
         margin: 0 auto;
     }
+
+    .navbar-nav > li > .dropdown-menu {
+        width: 200px;
+    }
 }
+

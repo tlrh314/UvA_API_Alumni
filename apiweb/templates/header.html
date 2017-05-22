@@ -44,17 +44,19 @@
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
                     <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span>ACCOUNT</span></a>
-                        <ul class="dropdown-menu">
-                            {% if user.is_superuser %}
-                            <li><a href="{% url 'login' %}"><span>ADMIN</span></a></li>
-                            <li role="separator" class="divider"></li>
-                            {% endif %}
-                            <li><a href="{% url 'alumni:alumnus-detail' user.alumnus.slug %}"><span>MY PROFILE</span></a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="{% url 'site_password_change' %}"><span>CHANGE PASSWORD</span></a></li>
-                            <li><a href="{% url 'site_contactinfo' %}"><span>UPDATE CONTACTINFO</span></a></li>
-                            <li><a href="{% url 'site_privacysettings' %}"><span>PRIVACYSETTINGS</span></a></li>
-                        </ul>
+                            <ul class="dropdown-menu navbar-dropdown-wrapper col-xs-12">
+                                {% if user.is_superuser %}
+                                <li><a href="{% url 'login' %}"><span>ADMIN</span></a></li>
+                                <li role="separator" class="divider"></li>
+                                {% endif %}
+                                <li><a href="{% url 'alumni:alumnus-detail' user.alumnus.slug %}"><span>MY PROFILE</span></a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{% url 'site_password_change' %}"><span>CHANGE PASSWORD</span></a></li>
+                                <li><a href="{% url 'site_contactinfo' %}"><span>UPDATE CONTACTINFO</span></a></li>
+                                <li><a href="{% url 'site_privacysettings' %}"><span>PRIVACYSETTINGS</span></a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{% url 'site_logout' %}"><span>LOGOUT</span></a></li>
+                            </ul>
                     </li>
                     {% else %}
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
