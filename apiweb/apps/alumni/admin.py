@@ -219,23 +219,6 @@ class DegreeAdmin(admin.ModelAdmin):
     export_all_degrees_to_excel.short_description = "Export all Theses to Excel"
 
 
-class EmptyEmailListFilter(admin.SimpleListFilter):
-    title = _("empty email")
-    parameter_name = "have_email"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("yes", _("Yes")),
-            ("no",  _("No")),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == "no":
-            return queryset.filter(email__isnull=False).exclude(email="")
-        if self.value() == "yes":
-            return queryset.filter(Q(email__isnull=True) | Q(email__exact=""))
-        return queryset
-
 
 class NullListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
@@ -249,6 +232,11 @@ class NullListFilter(admin.SimpleListFilter):
         if self.value() in ("0", "1"):
             return queryset.filter(**kwargs)
         return queryset
+
+
+class EmptyEmailListFilter(NullListFilter):
+    title = u'Email Address'
+    parameter_name = "email"
 
 
 class EmptyLastCheckedListFilter(NullListFilter):
@@ -268,8 +256,8 @@ class AlumnusAdmin(admin.ModelAdmin):
         "degrees__date_start", "degrees__date_stop", "degrees__date_of_defence")
     list_display = ("get_alumnus", "email", "last_checked", "show_msc_year",
         "show_phd_year", "show_postdoc_year", "show_staff_year")
-    # TODO: add filter for PreviousPostion -> PositionType.
-    list_filter = ("show_person", EmptyEmailListFilter, EmptyLastCheckedListFilter)
+    list_filter = (
+        EmptyEmailListFilter, EmptyLastCheckedListFilter, "passed_away")
     inlines = (DegreeAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
