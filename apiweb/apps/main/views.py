@@ -91,10 +91,11 @@ def contact_success(request):
 @login_required
 def site_contactinfo(request):
     if request.method == "POST":
-        form = SurveyContactInfoForm(data=request.POST)
+        form = SurveyContactInfoForm(data=request.POST, instance=request.user.alumnus)
         if form.is_valid():
-            # TODO: storing stuff in Alumnus lives in the save method of the form
-            form.save()
+            alumnus = form.save(commit=False)
+            alumnus.user = request.user
+            alumnus.save()
             messages.success(request, "Profile succesfully updated!")
             return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
     else:
@@ -114,7 +115,7 @@ def site_privacysettings(request):
             messages.success(request, "Profile succesfully updated!")
             return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
     else:
-        # form = SurveyContactInfoForm(instance=request.user.alumnus)
+        # form = SurveyPrivacySettingsForm(instance=request.user.alumnus)
         form = None
         pass
 
