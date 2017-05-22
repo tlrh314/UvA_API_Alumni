@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^search/', include('apiweb.apps.search.urls', namespace='search')),
     url(r'^survey/', include('apiweb.apps.survey.urls', namespace='survey')),
     url(r'^vis/', include('apiweb.apps.visualization.urls', namespace='vizualisation')),
-    url(r'', include('apiweb.apps.main.urls')),
+    url(r'^', include('apiweb.apps.main.urls')),
 
     # TODO: clean up code below
 

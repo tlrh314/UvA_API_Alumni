@@ -6,12 +6,15 @@ from django.shortcuts import render
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .models import ContactInfo
 from .models import WelcomeMessage
 from .forms import ContactForm
 from ..interviews.models import Post
 from ..alumni.models import Degree
+from ..survey.forms import SurveyContactInfoForm
 
 
 def privacy_policy(request):
@@ -42,6 +45,7 @@ def page_not_found(request):
         # Hardcoded in case ContactInfo has no instances.
         webmaster_email_address = "secr-astro-science@uva.nl"
     return render(request, "404.html", {"webmaster_email_address": webmaster_email_address})
+
 
 def contact(request):
     form_class = ContactForm
@@ -82,6 +86,39 @@ def contact(request):
 
 def contact_success(request):
     return render(request, "main/thanks.html")
+
+
+@login_required
+def site_contactinfo(request):
+    if request.method == "POST":
+        form = SurveyContactInfoForm(data=request.POST)
+        if form.is_valid():
+            # TODO: storing stuff in Alumnus lives in the save method of the form
+            form.save()
+            messages.success(request, "Profile succesfully updated!")
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+    else:
+        form = SurveyContactInfoForm(instance=request.user.alumnus)
+
+    return render(request, "main/contactinfo_change_form.html", { "form": form,  })
+
+
+@login_required
+def site_privacysettings(request):
+    if request.method == "POST":
+        form = None
+        # form = SurveyPrivacySettingsForm(data=request.POST)
+        # if form.is_valid():
+        if True:
+            # form.save()
+            messages.success(request, "Profile succesfully updated!")
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+    else:
+        # form = SurveyContactInfoForm(instance=request.user.alumnus)
+        form = None
+        pass
+
+    return render(request, "main/privacysettings_change_form.html", { "form": form,  })
 
 
 # TODO: clean up code below

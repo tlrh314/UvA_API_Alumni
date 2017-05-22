@@ -6,9 +6,11 @@ from django.contrib.auth import views as auth_views
 
 from apiweb.context_processors import contactinfo
 from .views import index, contact, contact_success, privacy_policy
+from .views import site_contactinfo, site_privacysettings
 
 
 urlpatterns = [
+    url(r'^$', index, name='index'),
     url(r'^contact/$', contact, name='contact'),
     url(r'^thanks/$', contact_success, name='contact_success'),
     url(r'^privacy-policy/$', privacy_policy, name='privacy_policy'),
@@ -31,6 +33,10 @@ urlpatterns = [
         template_name='main/password_change_done.html',
         ), name='site_password_change_done'
     ),
+
+    url(r"^contactinfo/$", site_contactinfo, name="site_contactinfo"),
+    url(r"^privacysettings/$", site_privacysettings, name="site_privacysettings"),
+
     url(r'^password_reset/$', auth_views.PasswordResetView.as_view(
             template_name='main/password_reset_form.html',
             extra_context = {
@@ -63,5 +69,4 @@ urlpatterns = [
         template_name='main/password_reset_complete.html'
         ), name='site_password_reset_complete'
     ),
-    url(r'^', index, name='index'),
 ]

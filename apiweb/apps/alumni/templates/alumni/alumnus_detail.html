@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static %} 
+{% load bootstrap3 %}
 {% load template_filters %}
 
 {% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
@@ -9,8 +10,9 @@
 {% block content %}
 
 <div class="main-content" role="main">
+    {% bootstrap_messages %}
 
-  <h1 class="text-center"> {{ alumnus.full_name }} {% if alumnus.passed_away %} &dagger; {% endif %} </h1>
+    <h1 class="text-center"> {{ alumnus.full_name }} {% if alumnus.passed_away %} &dagger; {% endif %} </h1>
 
     <div class="col-xs-12 col-md-9">
         <div class="row">

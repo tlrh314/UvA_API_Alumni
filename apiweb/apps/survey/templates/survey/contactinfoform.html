@@ -1,0 +1,55 @@
+    <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
+        <div>
+            <h3>Contact Details of <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}" target="blank", style="color: black;">{{ request.user.alumnus.full_name }}</a> <br></h3>
+            <br>
+
+            Note that all of the fields are optional, thus, you can leave any number of them blank!
+        </div>
+
+        <br>
+
+        <div class="col-xs-12">
+            <form class="form-horizontal col-sm-12" role="form" action="" method="post"> {% csrf_token %}
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Please check the input in the following field(s):
+                        {% for error in form.errors %}
+                            {{ error|escape }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% for field in form.visible_fields %}
+
+                    {% if forloop.counter == 1 %} 
+                    <legend> Personal Information </legend>
+                    {% elif forloop.counter == 12 %} 
+                    <legend> Contact Information </legend>
+                    {% elif forloop.counter == 18 %} 
+                    <legend> Current Location </legend>
+                    {% endif %}
+
+                    {% if field.errors %} 
+                    <div class="form-group has-error has-feedback">
+                    {% else %}
+                    <div class="form-group">
+                    {% endif %}
+                        {{ field.label_tag }} {{ field }}
+
+                        {% if field.errors %}
+                        <i class="glyphicon glyphicon-remove form-control-feedback"></i>
+                        <div class="alert alert-danger">
+                            {% for error in field.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-success pull-right"> Next </button>
+
+            </form>
+        </div>

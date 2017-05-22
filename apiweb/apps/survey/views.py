@@ -12,9 +12,8 @@ from .forms import SurveyContactInfoForm
 from .forms import SurveyCareerInfoForm
 
 
-#TODO: make sure they are redirected to the correct page
 @login_required
-def survey_contactinfo(request):
+def survey_contactinfo(request, use_for_main=False):
     """ Step 0 of the survey is a modified password reset url/template. Once the
         Alumnus has received a personal email with a tokened url to the modified
         password reset template, pressing 'next' on that password reset form leads
@@ -23,66 +22,8 @@ def survey_contactinfo(request):
 
     if request.method == "POST":
         form = SurveyContactInfoForm(data=request.POST)
-        # TODO: if user is annonymous, then handle form differently then when Alumnus is know (which is when user is logged in)
-        # TODO: get alumus. Should be request.user.alumnus
-
         if form.is_valid():
-            # TODO: check and clean, then save only the fields that are not empty into the Alumnus?
-
-            academic_title              = form.cleaned_data["academic_title"]
-            initials                    = form.cleaned_data["initials"]
-            first_name                  = form.cleaned_data["first_name"]
-            middle_names                = form.cleaned_data["middle_names"]
-            prefix                      = form.cleaned_data["prefix"]
-            gender                      = form.cleaned_data["gender"]
-            birth_date                  = form.cleaned_data["birth_date"]
-            nationality                 = form.cleaned_data["nationality"]
-            place_of_birth              = form.cleaned_data["place_of_birth"]
-            photo                       = form.cleaned_data["photo"]
-            biography                   = form.cleaned_data["biography"]
-            email                       = form.cleaned_data["email"]
-            home_phone                  = form.cleaned_data["home_phone"]
-            mobile                      = form.cleaned_data["mobile"]
-            homepage                    = form.cleaned_data["homepage"]
-            facebook                    = form.cleaned_data["facebook"]
-            twitter                     = form.cleaned_data["twitter"]
-            linkedin                    = form.cleaned_data["linkedin"]
-            city                        = form.cleaned_data["city"]
-            country                     = form.cleaned_data["country"]
-
-            msg = ""
-            msg += "academic_title          = {0}\n".format(academic_title)
-            msg += "initials                = {0}\n".format(initials)
-            msg += "first_name              = {0}\n".format(first_name)
-            msg += "middle_names            = {0}\n".format(middle_names)
-            msg += "prefix                  = {0}\n".format(prefix)
-            msg += "gender                  = {0}\n".format(gender)
-            msg += "birth_date              = {0}\n".format(birth_date)
-            msg += "nationality             = {0}\n".format(nationality)
-            msg += "place_of_birth          = {0}\n".format(place_of_birth)
-            msg += "photo                   = {0}\n".format(photo)
-            msg += "biography               = {0}\n".format(biography)
-            msg += "email                   = {0}\n".format(email)
-            msg += "home_phone              = {0}\n".format(home_phone)
-            msg += "mobile                  = {0}\n".format(mobile)
-            msg += "homepage                = {0}\n".format(homepage)
-            msg += "facebook                = {0}\n".format(facebook)
-            msg += "twitter                 = {0}\n".format(twitter)
-            msg += "linkedin                = {0}\n".format(linkedin)
-            msg += "city                    = {0}\n".format(city)
-            msg += "country                 = {0}\n".format(country)
-            print(msg)
-
-
-            variable_list = [academic_title, initials, first_name, middle_names,
-            prefix, gender, birth_date, nationality, place_of_birth, photo, biography,
-            email, home_phone, mobile, homepage, facebook, twitter, linkedin, city, country]
-
-            for var in variable_list:
-                print(var)
-
-
-
+            form.save()
             return HttpResponseRedirect(reverse("survey:careerinfo"))
     else:
         form = SurveyContactInfoForm(instance=request.user.alumnus)
@@ -90,48 +31,14 @@ def survey_contactinfo(request):
     return render(request, "survey/survey_contactinfo.html", { "form": form,  })
 
 
-#TODO: make sure they are sent to the correct page
 @login_required
 def survey_careerinfo(request):
     """ Career info form is shown on success of the survey_contactinfo view/form. """
     if request.method == "POST":
         form = SurveyCareerInfoForm(data=request.POST)
 
-        # TODO: if user is annonymous, then handle form differently then when Alumnus is know (which is when user is logged in)
-        # TODO: get alumus. Should be request.user.alumnus
-
         if form.is_valid():
-            # TODO: check and clean, then save only the fields that are not empty into the Alumnus?
-            # TODO: get alumus. Should be request.user.alumnus
-            sector                     = form.cleaned_data["sector"]
-            company_name               = form.cleaned_data["company_name"]
-            position_name              = form.cleaned_data["position_name"]
-            is_current_job             = form.cleaned_data["is_current_job"]
-            is_inside_academia         = form.cleaned_data["is_inside_academia"]
-            location_job               = form.cleaned_data["location_job"]
-            start_date                 = form.cleaned_data["start_date"]
-            stop_date                  = form.cleaned_data["stop_date"]
-            comments                   = form.cleaned_data["comments"]
-
-            msg = ""
-            msg += "sector             = {0}\n".format(sector)
-            msg += "company_name       = {0}\n".format(company_name)
-            msg += "position_name      = {0}\n".format(position_name)
-            msg += "is_current_job     = {0}\n".format(is_current_job)
-            msg += "is_inside_academia = {0}\n".format(is_inside_academia)
-            msg += "location_job       = {0}\n".format(location_job)
-            msg += "start_date         = {0}\n".format(start_date)
-            msg += "stop_date          = {0}\n".format(stop_date)
-            msg += "comments           = {0}\n".format(comments)
-
-            variable_list = [sector, company_name, position_name, is_current_job, is_inside_academia, location_job, start_date, stop_date, comments]
-            for var in variable_list:
-                if var: print(len(var))
-
-
-
-
-            print(msg)
+            form.save()
             return HttpResponseRedirect(reverse("survey:survey_success"))
     else:
         form = SurveyCareerInfoForm(instance=request.user)

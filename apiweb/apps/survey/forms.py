@@ -90,19 +90,16 @@ class SendSurveyForm(PasswordResetForm):
             email, html_email_template_name=html_email_template_name,
         )
 
+
 class SurveyCareerInfoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SurveyCareerInfoForm, self).__init__(*args, **kwargs)
 
-    YES_NO_CHOICE = (
-        (1, "Yes"),
-        (2, "No"),
-    )
-
-    years_choices = range(1900, datetime.now().year+10)[::-1]
     class Meta:
         model = JobAfterLeaving
         exclude = ("alumnus", "date_created", "date_updated", "last_updated_by")
+
+    years_choices = range(1900, datetime.now().year+10)[::-1]
 
     sector = forms.ModelChoiceField(
         required=False,
@@ -124,13 +121,13 @@ class SurveyCareerInfoForm(forms.ModelForm):
 
     is_current_job = forms.ChoiceField(
         required=False,
-        choices=YES_NO_CHOICE,
+        choices=JobAfterLeaving.YES_OR_NO,
         widget=forms.Select(
             attrs={"class": "form-control"}))
 
     is_inside_academia = forms.ChoiceField(
         required=False,
-        choices=YES_NO_CHOICE,
+        choices=JobAfterLeaving.YES_OR_NO,
         widget=forms.Select(
             attrs={"class": "form-control"}))
 
@@ -163,9 +160,39 @@ class SurveyCareerInfoForm(forms.ModelForm):
         """
 
         position_name = self.cleaned_data.get("position_name")
-        if any(unicode.isdigit(c) for c in position_name):
+        if any(str.isdigit(c) for c in position_name):
             self._errors["position_name"] = ErrorList()
             self._errors["position_name"].append(error_messages["names"])
+
+    def save(self):
+        # TODO: check and clean, then save only the fields that are not empty into the Alumnus?
+        # TODO: get alumus. Should be request.user.alumnus
+        sector                     = form.cleaned_data["sector"]
+        company_name               = form.cleaned_data["company_name"]
+        position_name              = form.cleaned_data["position_name"]
+        is_current_job             = form.cleaned_data["is_current_job"]
+        is_inside_academia         = form.cleaned_data["is_inside_academia"]
+        location_job               = form.cleaned_data["location_job"]
+        start_date                 = form.cleaned_data["start_date"]
+        stop_date                  = form.cleaned_data["stop_date"]
+        comments                   = form.cleaned_data["comments"]
+
+        msg = ""
+        msg += "sector             = {0}\n".format(sector)
+        msg += "company_name       = {0}\n".format(company_name)
+        msg += "position_name      = {0}\n".format(position_name)
+        msg += "is_current_job     = {0}\n".format(is_current_job)
+        msg += "is_inside_academia = {0}\n".format(is_inside_academia)
+        msg += "location_job       = {0}\n".format(location_job)
+        msg += "start_date         = {0}\n".format(start_date)
+        msg += "stop_date          = {0}\n".format(stop_date)
+        msg += "comments           = {0}\n".format(comments)
+
+        variable_list = [sector, company_name, position_name, is_current_job, is_inside_academia, location_job, start_date, stop_date, comments]
+        for var in variable_list:
+            if var: print(len(var))
+
+        print(msg)
 
 
 class SurveyContactInfoForm(forms.ModelForm):
@@ -302,13 +329,13 @@ class SurveyContactInfoForm(forms.ModelForm):
     def clean(self):
         #first names cleaner
         first_name = self.cleaned_data.get("first_name")
-        if any(unicode.isdigit(c) for c in first_name):
+        if any(str.isdigit(c) for c in first_name):
             self._errors["first_name"] = ErrorList()
             self._errors["first_name"].append(error_messages["names"])
 
         #middle names cleaneer
         middle_names = self.cleaned_data.get("middle_names")
-        if any(unicode.isdigit(c) for c in middle_names):
+        if any(str.isdigit(c) for c in middle_names):
             self._errors["middle_names"] = ErrorList()
             self._errors["middle_names"].append(error_messages["names"])
 
@@ -320,7 +347,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
         #prefix cleaner
         prefix = self.cleaned_data.get("prefix")
-        if any(unicode.isdigit(c) for c in prefix):
+        if any(str.isdigit(c) for c in prefix):
             self._errors["prefix"] = ErrorList()
             self._errors["prefix"].append(error_messages["names"])
         allowed_prefix = ["van", "van der", "der", "den", "van den", "van de", "de", "in het", "in 't", "di"]
@@ -330,13 +357,13 @@ class SurveyContactInfoForm(forms.ModelForm):
 
         #place of birth cleaner
         place_of_birth = self.cleaned_data.get("place_of_birth")
-        if any(unicode.isdigit(c) for c in place_of_birth):
+        if any(str.isdigit(c) for c in place_of_birth):
             self._errors["place_of_birth"] = ErrorList()
             self._errors["place_of_birth"].append(error_messages["names"])
 
         #city cleaner
         city = self.cleaned_data.get("city")
-        if any(unicode.isdigit(c) for c in city):
+        if any(str.isdigit(c) for c in city):
             self._errors["city"] = ErrorList()
             self._errors["city"].append(error_messages["names"])
 
@@ -350,3 +377,57 @@ class SurveyContactInfoForm(forms.ModelForm):
         if mobile and not mobile.isdigit():
            self._errors["mobile"] = ErrorList()
            self._errors["mobile"].append(error_messages["numbers"])
+
+    def save(self):
+        # TODO: store in Alumnus
+        academic_title = self.cleaned_data["academic_title"]
+        initials       = self.cleaned_data["initials"]
+        first_name     = self.cleaned_data["first_name"]
+        middle_names   = self.cleaned_data["middle_names"]
+        prefix         = self.cleaned_data["prefix"]
+        gender         = self.cleaned_data["gender"]
+        birth_date     = self.cleaned_data["birth_date"]
+        nationality    = self.cleaned_data["nationality"]
+        place_of_birth = self.cleaned_data["place_of_birth"]
+        photo          = self.cleaned_data["photo"]
+        biography      = self.cleaned_data["biography"]
+        email          = self.cleaned_data["email"]
+        home_phone     = self.cleaned_data["home_phone"]
+        mobile         = self.cleaned_data["mobile"]
+        homepage       = self.cleaned_data["homepage"]
+        facebook       = self.cleaned_data["facebook"]
+        twitter        = self.cleaned_data["twitter"]
+        linkedin       = self.cleaned_data["linkedin"]
+        city           = self.cleaned_data["city"]
+        country        = self.cleaned_data["country"]
+
+        msg = ""
+        msg += "academic_title = {0}\n".format(academic_title)
+        msg += "initials       = {0}\n".format(initials)
+        msg += "first_name     = {0}\n".format(first_name)
+        msg += "middle_names   = {0}\n".format(middle_names)
+        msg += "prefix         = {0}\n".format(prefix)
+        msg += "gender         = {0}\n".format(gender)
+        msg += "birth_date     = {0}\n".format(birth_date)
+        msg += "nationality    = {0}\n".format(nationality)
+        msg += "place_of_birth = {0}\n".format(place_of_birth)
+        msg += "photo          = {0}\n".format(photo)
+        msg += "biography      = {0}\n".format(biography)
+        msg += "email          = {0}\n".format(email)
+        msg += "home_phone     = {0}\n".format(home_phone)
+        msg += "mobile         = {0}\n".format(mobile)
+        msg += "homepage       = {0}\n".format(homepage)
+        msg += "facebook       = {0}\n".format(facebook)
+        msg += "twitter        = {0}\n".format(twitter)
+        msg += "linkedin       = {0}\n".format(linkedin)
+        msg += "city           = {0}\n".format(city)
+        msg += "country        = {0}\n".format(country)
+        print(msg)
+
+
+        variable_list = [academic_title, initials, first_name, middle_names,
+        prefix, gender, birth_date, nationality, place_of_birth, photo, biography,
+        email, home_phone, mobile, homepage, facebook, twitter, linkedin, city, country]
+
+        for var in variable_list:
+            print(var)

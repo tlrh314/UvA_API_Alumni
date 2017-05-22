@@ -24,7 +24,7 @@ div.collapse.in form.navbar-form {
     margin-bottom: 10px;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1055px) {
     .navbar-header {
         float: none;
     }
