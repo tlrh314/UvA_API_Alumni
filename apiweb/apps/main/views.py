@@ -50,12 +50,15 @@ def page_not_found(request):
 def contact(request):
     form_class = ContactForm
 
+    recipients = []
+    recipients.append("timohalbesma@gmail.com")
     contactinfo = ContactInfo.objects.all()
     if contactinfo:
-        sent_to = contactinfo[0].secretary_email_address
+        recipients.append(contactinfo[0].secretary_email_address)
     else:
         # Hardcoded in case ContactInfo has no instances.
-        sent_to = "secr-astro-science@uva.nl"
+        recipients.append("secr-astro-science@uva.nl")
+
 
     if request.method == "POST":
         form = form_class(data=request.POST)
@@ -66,17 +69,18 @@ def contact(request):
             sender = form.cleaned_data["sender"]
             cc_myself = form.cleaned_data["cc_myself"]
 
-            recipients = ["timohalbesma@gmail.com"]  #  TODO: use sent_to
+            recipients = ["timohalbesma@gmail.com", "davidhendriks93@gmail.com"]  # TODO: remove
             if cc_myself:
                 recipients.append(sender)
 
-            msg = "This message sent trough API Alumnus Website\n\n"
+            # TODO: use site instead of hardcoded url
+            msg = "This message was automatically send from https://api-alumni.nl/contact\n\n"
             msg += "From: {0}\n".format(name)
             msg += "Email Address: {0}\n".format(sender)
             msg += "-------------------------------------------------\n\n"
             msg += "{0}\n\n".format(message)
 
-            send_mail("Message sent trough API Alumnus Website", msg, sent_to, recipients)
+            send_mail("Message from api-alumni.nl/contact", msg, "no-reply@api-alumni.nl", recipients) 
             return HttpResponseRedirect("/thanks/")
     else:
         form = ContactForm()

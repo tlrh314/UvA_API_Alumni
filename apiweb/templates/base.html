@@ -35,11 +35,29 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
 
     {% endblock stylesheets %}
+
     {# Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent #}
     <script type="text/javascript">
 window.cookieconsent_options = {"message":"We use temporary cookies to improve functionality of the website. By using this website you accept our Privacy Policy.","dismiss":"Accept!","learnMore":"Learn More","link":"{% url 'privacy_policy' %}","theme":"dark-bottom"};
     </script>
     {# End Cookie Consent plugin #}
+
+    {# Piwik #}
+    <script type="text/javascript">
+      var _paq = _paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//api-alumni.nl/piwik/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    {# End Piwik Code #}
+
 </head>
 <body style="background-image: url('{% static "img/library.jpg" %}');">
     {% include "header.html" %}
