@@ -50,10 +50,16 @@ def save_all_alumni_to_xls(request, queryset=None):
                 value = str(getattr(alumnus, attr, "")).encode('ascii', 'ignore')
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
+
+            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary 
+            if type(value) is bytes:
+                value = value.decode('unicode_escape')
+
             # Do some cleanups
             if value == "None": value = ""
             if attr == "student_id": value = int(value.split(".")[0]) if len(value) > 3 else ""
             if attr == "gender": value = int(value) if value != "" else ""
+
             sheet.write(row+1, col, value, style=borders)
 
     # # Return a response that allows to download the xls-file.
@@ -70,7 +76,7 @@ def save_all_theses_to_xls(request, queryset=None):
     xls = xlwt.Workbook(encoding='utf8')
     sheet = xls.add_sheet('API Theses Export')
 
-    alumnus_attributes = [ "title", "initials",  "first_name",  "nickname",
+    alumnus_attributes = [ "academic_title", "initials",  "first_name",  "nickname",
         "middle_names", "prefix", "last_name", "gender" ]
     attributes = [ "type", "date_start", "date_stop", "thesis_title",
                    "date_of_defence", "thesis_url", "thesis_slug", "thesis_advisor",
@@ -92,22 +98,38 @@ def save_all_theses_to_xls(request, queryset=None):
     for row, thesis in enumerate(theses):
         for col, attr in enumerate(alumnus_attributes):
             try:
-                print(getattr(thesis.alumnus, attr))
                 value = str(getattr(thesis.alumnus, attr, u"")).encode('ascii', 'ignore')
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
             # Do some cleanups
             if value == "None": value = ""
+
+            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary 
+            if type(value) is bytes:
+                value = value.decode('unicode_escape')           
+
             sheet.write(row+1, col, value, style=borders)
 
         for col, attr in enumerate(attributes):
             try:
+                if attr == "thesis_advisor":
+                    print(str(getattr(thesis,attr)))
+
                 value = str(getattr(thesis, attr, u"")).encode('ascii', 'ignore')
+
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
             # Do some cleanups
             if value == "None": value = ""
-            if attr == "thesis_advisor" and "None" in value: value = ""
+
+            if attr == "thesis_advisor":
+               value = str(getattr(thesis,attr,))
+
+
+            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary 
+            if type(value) is bytes:
+                value = value.decode('unicode_escape')  
+
             sheet.write(row+1, col+len(alumnus_attributes), value, style=borders)
 
     # # Return a response that allows to download the xls-file.
