@@ -19,9 +19,6 @@ from django_countries.fields import CountryField
 
 from ..research.models import ResearchTopic
 
-
-
-
 def get_mugshot_location(instance, filename):
     """ the media directory is already included """
     return os.path.join("uploads", "alumni", "mugshots",
@@ -327,6 +324,7 @@ class Degree(models.Model):
     @property
     def thesis_type(self):
         return self.type
+
 
 
 

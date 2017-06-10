@@ -25,7 +25,7 @@ def save_all_alumni_to_xls(request, queryset=None):
     xls = xlwt.Workbook(encoding='utf8')
     sheet = xls.add_sheet('API Alumni Export')
 
-    attributes = [ "title", "initials",  "first_name",  "nickname",  "middle_names",
+    attributes = [ "academic_title", "initials",  "first_name",  "nickname",  "middle_names",
                    "prefix", "last_name", "gender", "birth_date", "nationality",
                    "place_of_birth  ", "student_id",
                    "slug",  "email", "home_phone", "mobile",  "homepage", "facebook",
@@ -112,24 +112,34 @@ def save_all_theses_to_xls(request, queryset=None):
 
         for col, attr in enumerate(attributes):
             try:
-                if attr == "thesis_advisor":
-                    print(str(getattr(thesis,attr)))
-
                 value = str(getattr(thesis, attr, u"")).encode('ascii', 'ignore')
-
+                
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
             # Do some cleanups
             if value == "None": value = ""
 
+            #Need custom way to do this as the normal method gives strange errors
             if attr == "thesis_advisor":
-               value = str(getattr(thesis,attr,))
+                if not len(str(thesis)) == 0:
+                    res = Degree.objects.filter(thesis_title=thesis)[0].thesis_advisor.all()
+                    advisors_list = []
+                    for advisor in res:
+                        string = "'" + str(advisor.full_name) + "'"
+                        advisors_list.append(string)
+                    advisors_string = ', '.join(advisors_list)
+                    value = advisors_string
+                else:
+                    value = ""
 
+            if attr == "thesis_slug":
+                if len(str(thesis)) == 0:
+                    value = ""
 
             #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary 
             if type(value) is bytes:
                 value = value.decode('unicode_escape')  
-
+                
             sheet.write(row+1, col+len(alumnus_attributes), value, style=borders)
 
     # # Return a response that allows to download the xls-file.
