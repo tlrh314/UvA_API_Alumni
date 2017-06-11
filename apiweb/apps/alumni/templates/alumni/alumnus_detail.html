@@ -26,7 +26,11 @@
         </div>
 
         <div class="col-xs-12 col-sm-9">
-            <h3 class="text-left"> Contact Info </h3>
+            {% if not alumnus.passed_away %}
+                <h3 class="text-left"> Contact Info </h3>
+            {% else %}
+                <h3 class="text-left"> Personal Info </h3>
+            {% endif %}
             <table class="table">
                 <thead>
                 </thead>
@@ -67,7 +71,6 @@
         </table>
         </div>
         {% endif %}
-
 
         {% if alumnus.positions.all %}
         <div class="col-xs-12 pull-left">
@@ -112,7 +115,6 @@
 
         </div>
     </div>
-
 
     <div class="col-xs-12 col-md-3 pull-right text-left">
         {% get_supervisors alumnus as supervisors %}
