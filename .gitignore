@@ -97,6 +97,7 @@ apiweb/static/
 apiweb/apps/research/static/research/documents
 apiweb/apps/research/static/research/theses
 apiweb/apps/alumni/static/alumni/theses
+apiweb/templates/piwik.html
 media/
 
 db.sqlite3
