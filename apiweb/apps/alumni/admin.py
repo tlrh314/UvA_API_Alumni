@@ -105,7 +105,7 @@ class DegreeAdminInline(admin.StackedInline):
     extra = 0
     model = Degree
     filter_horizontal = ("thesis_advisor", )
-    readonly_fields = ("date_created", "date_updated", "last_updated_by")
+    readonly_fields = ("date_created", "date_updated", "last_updated_by", "thesis_slug")
 
 
 class DegreeListFilter(admin.SimpleListFilter):
@@ -134,7 +134,7 @@ class DegreeAdmin(admin.ModelAdmin):
         "date_start", "date_stop", "date_of_defence")
     ordering = ("alumnus__user__username", )
     filter_horizontal = ("thesis_advisor", )
-    readonly_fields = ("date_created", "date_updated", "last_updated_by")
+    readonly_fields = ("date_created", "date_updated", "last_updated_by", "thesis_slug", )
     actions = ("export_selected_degrees_to_excel", "export_all_degrees_to_excel", )
 
     max_num = 2
@@ -148,7 +148,7 @@ class DegreeAdmin(admin.ModelAdmin):
             "fields":
                 [ "thesis_title", "date_of_defence", "thesis_url", "dissertation_nr", "thesis_slug", "thesis_in_library" ]
             }
-        ), ( "Thesis Adivior ", {
+        ), ( "Thesis Advisor ", {
             "fields":
                 [ "thesis_advisor" ]
             }
