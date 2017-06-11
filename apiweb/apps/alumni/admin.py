@@ -31,7 +31,7 @@ from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 
 
 # Do not show the Site Admin
-# admin.site.unregister(Site)
+admin.site.unregister(Site)
 
 # Do not allow the Admin to change the User first_name, last_name or email.
 # The Alumnus has these fields, and when these fields are updated a signal is

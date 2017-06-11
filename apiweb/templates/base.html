@@ -42,21 +42,7 @@ window.cookieconsent_options = {"message":"We use temporary cookies to improve f
     </script>
     {# End Cookie Consent plugin #}
 
-    {# Piwik #}
-    <script type="text/javascript">
-      var _paq = _paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//api-alumni.nl/piwik/";
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', '1']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-      })();
-    </script>
-    {# End Piwik Code #}
+    {% include "piwik.html" %}
 
 </head>
 <body style="background-image: url('{% static "img/library.jpg" %}');">
