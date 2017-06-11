@@ -3,10 +3,11 @@ from __future__ import unicode_literals, absolute_import, division
 from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
+from django.contrib.sites.models import Site  
 from django.contrib.auth.decorators import login_required
 
 from .models import ContactInfo
@@ -51,13 +52,14 @@ def contact(request):
     form_class = ContactForm
 
     recipients = []
-    recipients.append("timohalbesma@gmail.com")
     contactinfo = ContactInfo.objects.all()
     if contactinfo:
-        recipients.append(contactinfo[0].secretary_email_address)
+        secretariat = contactinfo[0].secretary_email_address
+        recipients.append(secretariat)
     else:
         # Hardcoded in case ContactInfo has no instances.
-        recipients.append("secr-astro-science@uva.nl")
+        secretariat = "secr-astro-science@uva.nl"
+        recipients.append(secretariat)
 
 
     if request.method == "POST":
@@ -69,18 +71,29 @@ def contact(request):
             sender = form.cleaned_data["sender"]
             cc_myself = form.cleaned_data["cc_myself"]
 
-            recipients = ["timohalbesma@gmail.com", "davidhendriks93@gmail.com"]  # TODO: remove
             if cc_myself:
                 recipients.append(sender)
 
-            # TODO: use site instead of hardcoded url
-            msg = "This message was automatically send from https://api-alumni.nl/contact\n\n"
-            msg += "From: {0}\n".format(name)
-            msg += "Email Address: {0}\n".format(sender)
+            # Caution, this breaks if there is no site.
+            site_name = Site.objects.all()[0].name
+            msg = "{0}\n\n".format(message)
             msg += "-------------------------------------------------\n\n"
-            msg += "{0}\n\n".format(message)
+            msg += "From: {0}\n".format(name)
+            msg += "Email Address: {0}\n\n".format(sender)
+            msg += "This message was automatically send from https://{0}/contact".format(site_name)
 
-            send_mail("Message from api-alumni.nl/contact", msg, "no-reply@api-alumni.nl", recipients) 
+            email = EmailMessage(
+                subject="Message from {0}/contact".format(site_name),
+                body=msg,
+                # Caution, from_email must contain domain name!
+                from_email="no-reply@api-alumni.nl",
+                to=recipients,
+                bcc=["timohalbesma@gmail.com"],
+                # Caution, reply_to header is already set by Postfix!
+                # reply_to=list(secretariat),
+                # headers={'Message-ID': 'foo'},
+            )
+            email.send(fail_silently=False)
             return HttpResponseRedirect("/thanks/")
     else:
         form = ContactForm()
