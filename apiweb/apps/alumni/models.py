@@ -68,9 +68,9 @@ class PreviousPosition(models.Model):
     )
 
     FUNDING = (
-        (0, "Unknown"), (1, "ASTRON"), (2, "UvA"), (3, "SRON"), (4, "EC"),
-        (5, "NOVA"), (6, "NWO"), (7, "VU"),  (8, "KNAW"),
-        (9, "Other"),
+        (0, "Unknown"), (1, "ASTRON"), (2, "UvA"), (3, "UvA API"), (4, "UvA GRAPPA"), 
+        (5, "SRON"), (6, "EC"), (7, "NOVA"), (8, "NWO"), (9, "VU"),  (10, "KNAW"),
+        (11, "Other"),
     )
 
     alumnus          = models.ForeignKey("Alumnus", related_name="positions")
