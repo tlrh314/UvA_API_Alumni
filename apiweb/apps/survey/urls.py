@@ -5,7 +5,8 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth import views as auth_views
 
 from apiweb.context_processors import contactinfo
-from .views import survey_contactinfo, survey_careerinfo
+from .views import survey_contactinfo
+from .views import survey_careerinfo_current, survey_careerinfo_first, survey_careerinfo_second, survey_careerinfo_third
 from .views import survey_success
 
 
@@ -21,6 +22,13 @@ urlpatterns = [
             post_reset_login=True,
         ), name="survey_url"),
     url(r"^contactinfo/$", survey_contactinfo, name="contactinfo"),
-    url(r"^careerinfo/$", survey_careerinfo, name="careerinfo"),
+#    url(r"^careerinfo/$", survey_careerinfo, name="careerinfo"),
+    url(r"^careerinfo_current/$", survey_careerinfo_current, name="careerinfo_current"),
+    url(r"^careerinfo_first/$", survey_careerinfo_first, name="careerinfo_first"),
+    url(r"^careerinfo_second/$", survey_careerinfo_second, name="careerinfo_second"),
+    url(r"^careerinfo_third/$", survey_careerinfo_third, name="careerinfo_third"),
+
+
+
     url(r"^thanks/$", survey_success, name="survey_success")
 ]

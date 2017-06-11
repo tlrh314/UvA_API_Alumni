@@ -49,16 +49,27 @@ class JobAfterLeaving(models.Model):
         (5, "Other"),
     )
 
+
+    WHICH_POSITION_CHOICES = (
+        (0, "Current"),
+        (1, "First"),
+        (2, "Second"),
+        (3, "Third"),
+    )
+
+
     alumnus             = models.ForeignKey(Alumnus, related_name="job")
     sector              = models.ForeignKey(Sector, blank=True, null=True)
     company_name        = models.CharField(_("Company Name"), blank=True, max_length=100)
     position_name       = models.CharField(_("Position Name"), blank=True, max_length=100)
     is_current_job      = models.PositiveSmallIntegerField(_("Is Current"), choices=YES_OR_NO, default=1)
     is_inside_academia  = models.PositiveSmallIntegerField(_("In Academia"), choices=YES_OR_NO, default=1)
-    # location_job        = models.PositiveSmallIntegerField(_("location job"), choices=JOB_LOCATION_CHOICES, default=1)
     location_job        = CountryField(_("Location"), blank=True)
     start_date          = models.DateField(_("From"), blank=True, null=True)
     stop_date           = models.DateField(_("Until"), blank=True, null=True)
+
+    #Have 4 options for this, current, first after, second after, third after
+    which_position      = models.PositiveSmallIntegerField(_("Which position"), choices=WHICH_POSITION_CHOICES, default=0)
 
     comments            = models.TextField(_("comments"), blank=True)
     last_updated_by     = models.ForeignKey('auth.User', related_name="jobs_updated",

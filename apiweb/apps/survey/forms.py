@@ -97,7 +97,7 @@ class SurveyCareerInfoForm(forms.ModelForm):
 
     class Meta:
         model = JobAfterLeaving
-        exclude = ("alumnus", "date_created", "date_updated", "last_updated_by")
+        exclude = ("alumnus", "date_created", "date_updated", "last_updated_by", "which_position")
 
     years_choices = range(1900, datetime.now().year+10)[::-1]
 
@@ -141,7 +141,9 @@ class SurveyCareerInfoForm(forms.ModelForm):
         required=False,
         widget=extras.SelectDateWidget(
             years=years_choices,
-            attrs={"class":""}))
+            attrs={"class":"datetime-input"})
+#            attrs={"class":""})
+        )
 
     stop_date = forms.DateField(
         required=False,

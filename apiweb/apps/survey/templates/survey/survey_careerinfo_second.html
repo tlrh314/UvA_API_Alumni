@@ -12,19 +12,20 @@
 {% block content %}
 
 <div class="col-xs-12 main-content" role="main" style="width: 100%">
-    <h1 class="text-center"> API Alumni Survey (3/3) </h1>
+    <h1 class="text-center"> API Alumni Survey (5/6) </h1>
 
     <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
         <div>
             <h3> Career Information of <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}" target="blank", style="color: black;">{{ request.user.alumnus.full_name }}</a> <br></h3>
             <br>
-            Please provide us information regarding your current position.
+            Please provide us information regarding your <strong>second</strong> job after leaving the API. <br>
+            Note that all of the fields are optional, thus, you can leave any number of them blank! The provided information in this specific form will only be available for the API secretary and possible used for anonymised statistics.
         </div>
 
         <br>
 
         <div class="col-xs-12">
-            <form class="form-horizontal col-sm-12" role="form" action="{% url 'survey:careerinfo' %}" method="post"> {% csrf_token %}
+            <form class="form-horizontal col-sm-12" role="form" action="{% url 'survey:careerinfo_second' %}" method="post"> {% csrf_token %}
                 {% if form.errors %}
                     <div class="alert alert-danger">
                         Please check the input in the following field(s):
@@ -36,7 +37,7 @@
                 {% for field in form.visible_fields %}
 
                     {% if forloop.counter == 1 %} 
-                    <legend> Current Position </legend>
+                    <legend> Second job after leaving API </legend>
                     {% endif %}
 
                     {% if field.errors %} 
@@ -59,7 +60,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-success center-block pull-right"> Submit </button>
+                <button type="submit" class="btn btn-success center-block pull-right"> Next </button>
                     
                 </form>
         </div>
