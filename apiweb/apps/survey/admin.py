@@ -41,7 +41,7 @@ class JobAfterLeavingAdmin(admin.ModelAdmin):
         ( "Job information", {
             "fields":
                 [ "alumnus", "sector", "company_name", "position_name", "location_job",
-                  "is_inside_academia", "is_current_job",  "start_date", "stop_date" ]
+                  "is_inside_academia",  "start_date", "stop_date" ]
             }
         ), ( "Extra information", {
                 "classes": ["collapse"],
