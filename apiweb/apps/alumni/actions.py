@@ -116,8 +116,6 @@ def save_all_theses_to_xls(request, queryset=None):
                 
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
-            # Do some cleanups
-            if value == "None": value = ""
 
             #Need custom way to do this as the normal method gives strange errors
             if attr == "thesis_advisor":
@@ -140,6 +138,10 @@ def save_all_theses_to_xls(request, queryset=None):
             if type(value) is bytes:
                 value = value.decode('unicode_escape')  
                 
+            # Do some cleanups
+            if value == "None": value = ""
+            print(value)
+
             sheet.write(row+1, col+len(alumnus_attributes), value, style=borders)
 
     # # Return a response that allows to download the xls-file.
