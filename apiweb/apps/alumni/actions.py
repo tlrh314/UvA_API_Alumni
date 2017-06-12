@@ -101,13 +101,18 @@ def save_all_theses_to_xls(request, queryset=None):
                 value = str(getattr(thesis.alumnus, attr, u"")).encode('ascii', 'ignore')
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
-            # Do some cleanups
-            if value == "None": value = ""
 
             #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary 
             if type(value) is bytes:
                 value = value.decode('unicode_escape')           
 
+            # Do some cleanups
+            if value == "None": value = ""
+
+            if attr == 'gender':
+                if not value == "":
+                    value = Alumnus.GENDER_CHOICES[int(value)-1][1]
+                    
             sheet.write(row+1, col, value, style=borders)
 
         for col, attr in enumerate(attributes):
@@ -140,7 +145,7 @@ def save_all_theses_to_xls(request, queryset=None):
                 
             # Do some cleanups
             if value == "None": value = ""
-            print(value)
+            #print(value)
 
             sheet.write(row+1, col+len(alumnus_attributes), value, style=borders)
 
