@@ -92,7 +92,13 @@ def alumnus_list(request):
         alumni = alumni.order_by("last_name")
 
     # TODO: only show unique results, though distinct on columns is not supported by sqlite3
-    # alumni=alumni.distinct("last_name")
+    #alumni=alumni.distinct("last_name")
+    # FIX: use python to uniqueify
+    alumnus_unique = []
+    for alumnus in alumni:
+        if not alumnus in alumnus_unique:
+            alumnus_unique.append(alumnus)
+    alumni = alumnus_unique[:]
 
     # Paginate the list
     alumni_per_page = request.GET.get("limit", 15)
