@@ -10,7 +10,7 @@ intent to analyse and show (anonymised) statistics of career opportunities after
 {% block reset_link %}
 {{ protocol }}://{{ domain }}{% url 'survey:survey_url' uidb64=uid token=token %}
 {% endblock %}
-Furthermore, we have automatically created an account for you with username: <b>{{ user.get_username }}</b>
+Furthermore, we have automatically created an account for you with username: {{ user.get_username }}.
 In the first step of the survey we ask you to create a password, followed by providing some basic contact
 information. The last part consists of questions regarding current employment.
 
