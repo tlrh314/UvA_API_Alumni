@@ -77,8 +77,8 @@ class JobAfterLeaving(models.Model):
     date_created        = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated        = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
-
-
+    # Privacy
+    show_job = models.BooleanField(_("Show job on personal page"), blank=True, default=True)
 
     class Meta:
         verbose_name = _("Job After Leaving API")

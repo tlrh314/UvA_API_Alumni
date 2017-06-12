@@ -99,6 +99,8 @@ class SurveyCareerInfoForm(forms.ModelForm):
         model = JobAfterLeaving
         exclude = ("alumnus", "date_created", "date_updated", "last_updated_by", "which_position")
 
+
+    BOOL_CHOICES = ((True, 'Yes'), (False, 'No'))
     years_choices = range(1900, datetime.now().year+10)[::-1]
 
     sector = forms.ModelChoiceField(
@@ -155,6 +157,13 @@ class SurveyCareerInfoForm(forms.ModelForm):
         widget=TinyMCE(mce_attrs=TINYMCE_LOCAL_CONFIG)
     )
 
+    show_job = forms.BooleanField(
+        required=False,
+        help_text="Choose whether to display this information on your profile page",
+        widget=forms.Select(
+            choices=BOOL_CHOICES,
+            attrs={"class":"form-control"}))
+
     def clean(self):
         position_name = self.cleaned_data.get("position_name")
         if any(str.isdigit(c) for c in position_name):
@@ -172,8 +181,10 @@ class SurveyContactInfoForm(forms.ModelForm):
                     "office", "work_phone", "ads_name", "research", "contact",
                     "comments", "date_created", "date_updated", "last_updated_by",
                     "zipcode", "streetname", "streetnumber", "address")
+
     BOOL_CHOICES = ((True, 'Yes'), (False, 'No'))
     years_choices = range(1900, datetime.now().year+1)[::-1]
+
     academic_title = forms.ModelChoiceField(
         required=False,
         queryset=AcademicTitle.objects.all(),
@@ -280,7 +291,7 @@ class SurveyContactInfoForm(forms.ModelForm):
         help_text="Please give the full URL to your homepage",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
-    
+
     show_homepage = forms.BooleanField(
         required=False,
         help_text="Choose whether to display this information on your profile page",
@@ -319,7 +330,7 @@ class SurveyContactInfoForm(forms.ModelForm):
         help_text="Please give the full URL to LinkedIn",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
-    
+
     show_linkedin = forms.BooleanField(
         required=False,
         help_text="Choose whether to display this information on your profile page",
@@ -343,7 +354,7 @@ class SurveyContactInfoForm(forms.ModelForm):
             "academic_title", "initials", "first_name", "middle_names",
             "prefix", "last_name", "gender", "birth_date",  "nationality",
             "place_of_birth", "photo", "biography", "show_biography", "email",
-            "show_email", "home_phone", "mobile", "homepage", "show_homepage", 
+            "show_email", "home_phone", "mobile", "homepage", "show_homepage",
             "facebook", "show_facebook", "twitter","show_twitter", "linkedin",
             "show_linkedin", "city", "country" ]
 
