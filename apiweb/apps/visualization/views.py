@@ -5,35 +5,53 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 
+import json
+
 from ..alumni.models import Alumnus
 from ..alumni.models import Degree
+
 
 def tree(request):
     phd_theses = Degree.objects.filter(type="phd").order_by("date_of_defence")
     msc_theses = Degree.objects.filter(type="msc").order_by("date_of_defence")
 
-    # Create id for every
-    # for i, supervisor in enumerate(Alumnus.objects.filter(students__isnull=False).distinct()):
+    data_dict = {}
+    links_list, nodes_list, all_people = [], [], []
 
-
-    print('{\n  "nodes": [')
-    for i, supervisor in enumerate(Alumnus.objects.filter(students__isnull=False).distinct()):
-        print('    {"id": "'+supervisor.last_name+'", "group": '+str(i+1)+'},')
-    print('  ],\n  "links": [')
-
+    #Get all thesis, students and advisors for phd
     for thesis in phd_theses:
-        student = thesis.alumnus.last_name
+        student = thesis.alumnus
+                
         for i, supervisor in enumerate(thesis.thesis_advisor.all()):
-            # print('{"id":'+'"{}", "{}"'.format(student, supervisor))
-            print('    {"source": "'+supervisor.last_name+'", "target": "'+student+'", "value": '+str(i+1)+'},')
-    print('  ]\n}')
+            if not supervisor in all_people:
+                all_people.append(supervisor)
+            
+            link_dict = {}
+            link_dict["source"] = str(supervisor.last_name)
+            link_dict["target"] = str(student.last_name)
+            link_dict["value"] = i+1
+            links_list.append(link_dict)
+        
+        if not student in all_people:
+            all_people.append(student)
 
 
+    #Get all the nodes
+    for alumnus in all_people:
+        node_dict = {}
+        node_dict["id"] = str(alumnus.last_name)
+        node_dict["group"] = i+1
+        nodes_list.append(node_dict)
+    
+    data_dict["nodes"] = nodes_list
+    data_dict["links"] = links_list
 
+    with open('json_content_phd.json', 'w') as outfile:
+        json.dump(data_dict, outfile)
 
-
+    json_data = json.dumps(data_dict)
+#    print(json_data)
     return render(request, "visualization/tree.html")
-
 
 def tree2(request):
     return render(request, "visualization/tree2.html")
