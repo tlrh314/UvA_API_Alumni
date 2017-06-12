@@ -145,7 +145,7 @@
             </thead>
             <tbody>
             {% for job in alumnus.job.all %}
-                {% if job.show_job %}
+                {% if job.show_job and job.position_name %}
                 <tr>
                     <td>{% get_which_job job.which_position %} </td>
                     <td>{{ job.sector }} </td>
