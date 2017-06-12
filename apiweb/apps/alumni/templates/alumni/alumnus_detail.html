@@ -2,6 +2,7 @@
 {% load static %} 
 {% load bootstrap3 %}
 {% load template_filters %}
+{% load main_tags %}
 
 {% block stylesheets %} {{ block.super }} {% endblock stylesheets %}
 
@@ -24,6 +25,7 @@
                 {# <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img> #}
             {% endif %}
         </div>
+        {% endif %}
 
         <div class="col-xs-12 col-sm-9">
             {% if not alumnus.passed_away %}
@@ -48,33 +50,37 @@
 
                 {% if alumnus.facebook %}
                     {% if alumnus.show_facebook %}
-                        <tr><th>Facebook</th><td><a href="{{ alumnus.facebook }}">{{ alumnus.facebook }}</a></td></tr>                
+                        <tr><th>Facebook</th><td><a href="{{ alumnus.facebook }}" target="blank">{{ alumnus.facebook }}</a></td></tr>                
                     {% endif %}
                 {% endif %}
                 
                 {% if alumnus.twitter %}
                     {% if alumnus.show_twitter %}
-                        <tr><th>Twitter</th><td><a href="{{ alumnus.twitter }}">{{ alumnus.twitter }}</td></tr>                
+                        <tr><th>Twitter</th><td><a href="{{ alumnus.twitter }}" target="blank">{{ alumnus.twitter }}</td></tr>                
                     {% endif %}
                 {% endif %}
                 
                 {% if alumnus.linkedin %}
                     {% if alumnus.show_linkedin %} 
-                        <tr><th>Linkedin</th><td><a href="{{ alumnus.linkedin }}">{{ alumnus.linkedin }}</a></td></tr>                
+                        <tr><th>Linkedin</th><td><a href="{{ alumnus.linkedin }}" target="blank">{{ alumnus.linkedin }}</a></td></tr>                
                     {% endif %}
                 {% endif %}
                 
                 {% if alumnus.homepage %}
                     {% if alumnus.show_homepage %}
-                        <tr><th>Homepage</th><td><a href="{{ alumnus.homepage }}">{{ alumnus.homepage }}</a></td></tr>                
+                        <tr><th>Homepage</th><td><a href="{{ alumnus.homepage }}" target="blank">{{ alumnus.homepage }}</a></td></tr>                
                     {% endif %}
                 {% endif %}
 
 
                 </tbody>
             </table>
+            {% if alumnus.ads_name %}
+                <a target="_blank" href="{{ alumnus.ads_name|ads_url }}">
+                  <h3 class="text-left"> Publications </h3>
+                </a>
+            {% endif %}
         </div>
-        {% endif %}
 
         {% if alumnus.degrees.all %}
         <div class="col-xs-12 pull-left">
@@ -108,6 +114,9 @@
         <h3 class="text-left"> Positions at API </h3>
         <table class="table">
             <thead>
+                <th> Position Type </th>
+                <th> From </th>
+                <th> Until </th>
             </thead>
             <tbody>
             {% for api_position in alumnus.positions.all %}
@@ -122,16 +131,43 @@
         </div>
         {% endif %}
 
-        {% if alumnus.ads_name %}
+        {% if alumnus.job.all %}
         <div class="col-xs-12 pull-left">
-            <a target="_blank" href="{{ alumnus.ads_name|ads_url }}">
-              <h3 class="text-left"> Publications </h3>
-            </a>
-            {% comment %}
-            div class="embed-responsive embed-responsive-16by9">
-              <iframe class="embed-responsive-item" src="{{ alumnus.ads_name|ads_url }}" style="padding-left: 7px"></iframe>
-            </div>
-            {% endcomment %}
+        <h3 class="text-left"> Career Path after leaving API </h3>
+        <table class="table">
+            <thead>
+                <td> # </td>
+                <th> Sector </th>
+                <th> Company / Institute </th>
+                <th> Position </th>
+                <th> From </th>
+                <th> Until </th>
+            </thead>
+            <tbody>
+            {% for job in alumnus.job.all %}
+                {% if job.show_job and job.position_name %}
+                <tr>
+                    <td>{% get_which_job job.which_position %} </td>
+                    <td>{{ job.sector }} </td>
+                    <td>{{ job.company_name }} </td>
+                    <td>{{ job.position_name }} </td>
+                    {% if job.start_date %}
+                    <td>{{ job.start_date }} </td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    {% if job.stop_date %}
+                    <td>{{ job.stop_date }} </td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                </tr>
+                {% else %}
+                <tr></tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
         </div>
         {% endif %}
 
