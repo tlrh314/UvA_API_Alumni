@@ -13,7 +13,7 @@
 <div class="main-content" role="main">
     {% bootstrap_messages %}
 
-    <h1 class="text-center"> {{ alumnus.full_name }} {% if alumnus.passed_away %} &dagger; {% endif %} </h1>
+    <h1 class="text-center"> {{ alumnus.full_name }}{% if alumnus.passed_away %}&#42; {% endif %} </h1>
 
     <div class="col-xs-12 col-md-9">
         <div class="row">
@@ -37,7 +37,7 @@
                 <thead>
                 </thead>
                 <tbody>
-                <tr><th>Name</th><td>{{ alumnus.full_name }}</td></tr>
+                <tr><th>Name</th><td>{{ alumnus.full_name }}{% if alumnus.passed_away %}* (deceased) {% endif %}</td></tr>
                 {% if alumnus.show_email %}
                     <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
                 {% endif %}

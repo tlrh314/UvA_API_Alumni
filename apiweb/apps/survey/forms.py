@@ -121,12 +121,6 @@ class SurveyCareerInfoForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
-    is_current_job = forms.ChoiceField(
-        required=False,
-        choices=JobAfterLeaving.YES_OR_NO,
-        widget=forms.Select(
-            attrs={"class": "form-control"}))
-
     is_inside_academia = forms.ChoiceField(
         required=False,
         choices=JobAfterLeaving.YES_OR_NO,
