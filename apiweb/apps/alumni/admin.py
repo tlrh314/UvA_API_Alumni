@@ -262,7 +262,7 @@ class AlumnusAdmin(admin.ModelAdmin):
     form = AlumnusAdminForm
     filter_horizontal = ("research", "contact", )
     readonly_fields = ("get_full_name", "date_created", "date_updated", "last_updated_by")
-    actions = ("sent_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
+    actions = ("send_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
             "export_all_alumni_to_excel", "send_survey_email")
     # exclude = ("jobs", )
 
@@ -405,7 +405,7 @@ class AlumnusAdmin(admin.ModelAdmin):
         return None
     show_msc_year.short_description = "MSc"
 
-    def sent_password_reset(self, request, queryset):
+    def send_password_reset(self, request, queryset):
         for alumnus in queryset:
             if alumnus.user.email != alumnus.email:
                 alumnus.user.email = alumnus.email
@@ -428,7 +428,7 @@ class AlumnusAdmin(admin.ModelAdmin):
                 self.message_user(request, "Succesfully sent password reset email.")
             except ValidationError:
                 self.message_user(request, "Alumnus does not have a valid email address", level="error")
-    sent_password_reset.short_description = "Sent selected Alumni Password Reset"
+    send_password_reset.short_description = "Send selected Alumni Password Reset"
 
     def send_survey_email(self, request, queryset):
         print(queryset)
@@ -469,12 +469,12 @@ class AlumnusAdmin(admin.ModelAdmin):
                 reason.append("ValidationError")
 
         # Probably success for most, but report if email broke.
-        self.message_user(request, "The Survey Email was Successfully Sent!")
+        self.message_user(request, "The Survey Email was Successfully Send!")
         for alum, why in zip(exclude_alumni, reason):
             msg = "The following Alumnus was excluded: {0} ({1}).".format(alum, why)
             self.message_user(request, msg, level="error")
 
-    send_survey_email.short_description = "Sent selected Alumni Survey Email"
+    send_survey_email.short_description = "Send selected Alumni Survey Email"
 
     def reset_password_yourself(self, request, queryset):
         if len(queryset) != 1:

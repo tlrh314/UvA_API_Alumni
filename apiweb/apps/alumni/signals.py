@@ -10,7 +10,7 @@ from .models import Alumnus
 
 @receiver(signals.post_delete, sender=Alumnus)
 def delete_user_when_alumnus_is_deleted(sender, instance=None, **kwargs):
-    """ When Alumnus instance is deleted, the post_delete signal is sent.
+    """ When Alumnus instance is deleted, the post_delete signal is send.
         Here we receive the post_delete signal to also remove the related
         User instance. Note that this does not ask for confirmation in
         the Admin upon deleting the Alumnus instance. """
