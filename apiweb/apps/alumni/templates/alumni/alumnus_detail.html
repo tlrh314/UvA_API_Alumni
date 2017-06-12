@@ -122,8 +122,16 @@
             {% for api_position in alumnus.positions.all %}
                 <tr>
                     <td>{{ api_position }} </td>
+                    {% if api_position.date_start %}
                     <td>{{ api_position.date_start }} </td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    {% if api_position.date_stop %}
                     <td>{{ api_position.date_stop }} </td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>

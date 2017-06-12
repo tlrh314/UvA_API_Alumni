@@ -62,7 +62,6 @@ class JobAfterLeaving(models.Model):
     sector              = models.ForeignKey(Sector, blank=True, null=True)
     company_name        = models.CharField(_("Company Name"), blank=True, max_length=100)
     position_name       = models.CharField(_("Position Name"), blank=True, max_length=100)
-    is_current_job      = models.PositiveSmallIntegerField(_("Is Current"), choices=YES_OR_NO, default=1)
     is_inside_academia  = models.PositiveSmallIntegerField(_("In Academia"), choices=YES_OR_NO, default=1)
     location_job        = CountryField(_("Location"), blank=True)
     start_date          = models.DateField(_("From"), blank=True, null=True)
