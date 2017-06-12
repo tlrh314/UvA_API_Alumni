@@ -89,7 +89,7 @@ def contact(request):
                 # Caution, from_email must contain domain name!
                 from_email="no-reply@api-alumni.nl",
                 to=recipients,
-                bcc=["timohalbesma@gmail.com"],
+                bcc=["timohalbesma@gmail.com", "davidhendriks93@gmail.com" ],
                 # Caution, reply_to header is already set by Postfix!
                 # reply_to=list(secretariat),
                 # headers={'Message-ID': 'foo'},
