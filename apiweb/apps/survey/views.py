@@ -45,6 +45,7 @@ def survey_careerinfo_current(request):
         prefill_instance = False
 
     if request.method == "POST":
+        # TODO: this if statement is not necessary if prefill_instance is set to None in the try-expect clause above.
         if prefill_instance:
             form = SurveyCareerInfoForm(data=request.POST, instance=prefill_instance)
         else:
@@ -57,6 +58,7 @@ def survey_careerinfo_current(request):
             jobafterleaving.save()
             return HttpResponseRedirect(reverse("survey:careerinfo_first"))
     else:
+        # TODO: this if statement is not necessary if prefill_instance is set to None in the try-expect clause above.
         if prefill_instance:
             form = SurveyCareerInfoForm(instance=prefill_instance)
         else:
@@ -107,7 +109,7 @@ def survey_careerinfo_second(request):
             form = SurveyCareerInfoForm(data=request.POST, instance=prefill_instance)
         else:
             form = SurveyCareerInfoForm(data=request.POST)
-        
+
         if form.is_valid():
             jobafterleaving = form.save(commit=False)
             jobafterleaving.alumnus = request.user.alumnus

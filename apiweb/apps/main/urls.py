@@ -5,20 +5,23 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth import views as auth_views
 
 from apiweb.context_processors import contactinfo
+from .views import redirect_to_profile, page_not_found
 from .views import index, contact, contact_success, privacy_policy
-from .views import site_contactinfo, site_privacysettings
+from .views import site_contactinfo, site_careerinfo, site_theses
 
 
 urlpatterns = [
     url(r'^$', index, name='index'),
+    url(r'^404.html$', page_not_found, name='page_not_found'),
     url(r'^contact/$', contact, name='contact'),
     url(r'^thanks/$', contact_success, name='contact_success'),
     url(r'^privacy-policy/$', privacy_policy, name='privacy_policy'),
 
     url(r'^login/$', auth_views.LoginView.as_view(
-        template_name='main/login.html'
+        template_name='main/login.html',
         ), name="site_login"
     ),
+    url(r'^redirect_to_profile/$', redirect_to_profile, name='login_success'),
     url(r'^logout/$', auth_views.LogoutView.as_view(
         template_name='main/logged_out.html'
         ), name='site_logout'
@@ -34,8 +37,9 @@ urlpatterns = [
         ), name='site_password_change_done'
     ),
 
-    url(r"^contactinfo/$", site_contactinfo, name="site_contactinfo"),
-    url(r"^privacysettings/$", site_privacysettings, name="site_privacysettings"),
+    url(r"^update_contactinfo/$", site_contactinfo, name="site_contactinfo"),
+    url(r"^update_careerinfo/(?P<which_position_value>[0-3])$", site_careerinfo, name="site_careerinfo"),
+    url(r"^update_theses/$", site_theses, name="site_theses"),
 
     url(r'^password_reset/$', auth_views.PasswordResetView.as_view(
             template_name='main/password_reset_form.html',

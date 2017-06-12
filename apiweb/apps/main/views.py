@@ -7,7 +7,7 @@ from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
-from django.contrib.sites.models import Site  
+from django.contrib.sites.models import Site
 from django.contrib.auth.decorators import login_required
 
 from .models import ContactInfo
@@ -15,7 +15,8 @@ from .models import WelcomeMessage
 from .forms import ContactForm
 from ..interviews.models import Post
 from ..alumni.models import Degree
-from ..survey.forms import SurveyContactInfoForm
+from ..survey.models import JobAfterLeaving
+from ..survey.forms import SurveyContactInfoForm, SurveyCareerInfoForm
 
 
 def privacy_policy(request):
@@ -106,6 +107,12 @@ def contact_success(request):
 
 
 @login_required
+def redirect_to_profile(request):
+    messages.success(request, "Succesfully logged in!")
+    return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+
+
+@login_required
 def site_contactinfo(request):
     if request.method == "POST":
         form = SurveyContactInfoForm(data=request.POST, instance=request.user.alumnus)
@@ -122,7 +129,37 @@ def site_contactinfo(request):
 
 
 @login_required
-def site_privacysettings(request):
+def site_careerinfo(request, which_position_value=0):
+    try:
+        prefill_instance = JobAfterLeaving.objects.all().filter(alumnus=request.user.alumnus, which_position=which_position_value)[0]
+    except IndexError:
+        # This could occur if Alumnus did not yet supply the info
+        prefill_instance = None
+
+    if request.method == "POST":
+        form = SurveyCareerInfoForm(data=request.POST, instance=prefill_instance)
+
+        if form.is_valid():
+            jobafterleaving = form.save(commit=False)
+            jobafterleaving.alumnus = request.user.alumnus
+            jobafterleaving.which_position = which_position_value
+            jobafterleaving.save()
+            jobname = JobAfterLeaving.WHICH_POSITION_CHOICES[int(which_position_value)][1]
+            if jobname == "Current":
+                jobname += " Position"
+            else:
+                jobname += " Job after Leaving API"
+            messages.success(request, "{0} succesfully updated!".format(jobname))
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+    else:
+        form = SurveyCareerInfoForm(instance=prefill_instance)
+
+    return render(request, "main/careerinfo_change_form.html", {
+        "form": form, "which_position_value": which_position_value,})
+
+
+@login_required
+def site_theses(request):
     if request.method == "POST":
         form = None
         # form = SurveyPrivacySettingsForm(data=request.POST)
