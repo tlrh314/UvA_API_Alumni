@@ -27,6 +27,12 @@ def alumnus_list(request):
     position = request.GET.getlist("position", None)
     sort_on = request.GET.getlist("sort", None)
 
+    # print(defence_year)
+    # print(degree_type)
+    # print(position)
+    # print(sort_on)
+
+
     # Apply filters
     # TODO: if filtered/sorted on postdoc, then the year range is not limited to postdoc
     # so also alumni with PhD/MSc in the year range are shown

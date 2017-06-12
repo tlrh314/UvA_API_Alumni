@@ -157,7 +157,6 @@ class Alumnus(models.Model):
     last_checked    = models.DateTimeField(_("Date Last Checked"), blank=True, null=True,
         help_text=_("Update this field if you know that the contact information is up-to-date."))
 
-
     # Address information
     address         = models.CharField(_("address"), blank=True, max_length=40)
     streetname      = models.CharField(_("streetname"),blank=True, max_length=40)
@@ -188,15 +187,12 @@ class Alumnus(models.Model):
 
 
     #Privacy options
-    show_biography = models.BooleanField(_("Show biography on personal page"), blank=True, default=False)
-    show_facebook = models.BooleanField(_("Show facebook on personal page"), blank=True, default=False)
-    show_linkedin = models.BooleanField(_("Show linkedin on personal page"), blank=True, default=False)
-    show_twitter = models.BooleanField(_("Show twitter on personal page"), blank=True, default=False)
-    show_email = models.BooleanField(_("Show email on personal page"), blank=True, default=False)
-    show_homepage = models.BooleanField(_("Show homepage on personal page"), blank=True, default=False)
-
-
-
+    show_biography  = models.BooleanField(_("Show biography on personal page"), blank=True, default=False)
+    show_facebook   = models.BooleanField(_("Show facebook on personal page"), blank=True, default=False)
+    show_linkedin   = models.BooleanField(_("Show linkedin on personal page"), blank=True, default=False)
+    show_twitter    = models.BooleanField(_("Show twitter on personal page"), blank=True, default=False)
+    show_email      = models.BooleanField(_("Show email on personal page"), blank=True, default=False)
+    show_homepage   = models.BooleanField(_("Show homepage on personal page"), blank=True, default=False)
 
     class Meta:
         verbose_name = _("Alumnus")

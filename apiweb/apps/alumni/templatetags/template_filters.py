@@ -30,7 +30,7 @@ def filter_objects(context, filter_type, value):
         return new_url
 
     value = str(value)
-    print(value)
+
     # If you add a new filter you start at page 1 again
     # url = url.del_query_param("page")
 
