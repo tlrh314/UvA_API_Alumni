@@ -36,10 +36,41 @@
                 </thead>
                 <tbody>
                 <tr><th>Name</th><td>{{ alumnus.full_name }}</td></tr>
-                <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
-                <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
-                <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
-                <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
+                {% if alumnus.show_email %}
+                    <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
+                {% endif %}
+
+                {% if not alumnus.position == None %}
+                    <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
+                    <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
+                    <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
+                {% endif %}
+
+                {% if alumnus.facebook %}
+                    {% if alumnus.show_facebook %}
+                        <tr><th>Facebook</th><td><a href="{{ alumnus.facebook }}">{{ alumnus.facebook }}</a></td></tr>                
+                    {% endif %}
+                {% endif %}
+                
+                {% if alumnus.twitter %}
+                    {% if alumnus.show_twitter %}
+                        <tr><th>Twitter</th><td><a href="{{ alumnus.twitter }}">{{ alumnus.twitter }}</td></tr>                
+                    {% endif %}
+                {% endif %}
+                
+                {% if alumnus.linkedin %}
+                    {% if alumnus.show_linkedin %} 
+                        <tr><th>Linkedin</th><td><a href="{{ alumnus.linkedin }}">{{ alumnus.linkedin }}</a></td></tr>                
+                    {% endif %}
+                {% endif %}
+                
+                {% if alumnus.homepage %}
+                    {% if alumnus.show_homepage %}
+                        <tr><th>Homepage</th><td><a href="{{ alumnus.homepage }}">{{ alumnus.homepage }}</a></td></tr>                
+                    {% endif %}
+                {% endif %}
+
+
                 </tbody>
             </table>
         </div>

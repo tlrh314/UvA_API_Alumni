@@ -282,12 +282,16 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         ("Contact information", {
                 # "classes": ["collapse"],
-                "fields":["email", "linkedin", "facebook", "twitter", "homepage",
+                "fields":[("email", "show_email"),
+                        ("linkedin", "show_linkedin"),
+                        ("facebook", "show_facebook"),
+                        ("twitter", "show_twitter"),
+                        ("homepage","show_homepage"),
                           "mobile", "home_phone", "last_checked"]
                 }),
 
         ("Biography", {
-                 "fields": [ "mugshot", "photo", "biography"]
+                 "fields": [ "mugshot", "photo", ("biography", "show_biography")]
                 }),
 
         ("Adress information", {

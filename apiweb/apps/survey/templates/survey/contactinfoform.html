@@ -2,7 +2,8 @@
         <div>
             <h3>Contact Details of <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}" target="blank", style="color: black;">{{ request.user.alumnus.full_name }}</a> <br></h3>
             <br>
-
+            Please enter your contact information in the form below. <br>
+            Except for your name, no other information is directly shown on your profile page. Within this form, however, you are given the option to make certain fields visible to the public. <br>
             Note that all of the fields are optional, thus, you can leave any number of them blank!
         </div>
 
@@ -22,9 +23,9 @@
 
                     {% if forloop.counter == 1 %} 
                     <legend> Personal Information </legend>
-                    {% elif forloop.counter == 13 %} 
+                    {% elif forloop.counter == 14 %} 
                     <legend> Contact Information </legend>
-                    {% elif forloop.counter == 20 %} 
+                    {% elif forloop.counter == 26 %} 
                     <legend> Current Location </legend>
                     {% endif %}
 

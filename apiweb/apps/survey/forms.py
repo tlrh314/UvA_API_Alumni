@@ -142,7 +142,6 @@ class SurveyCareerInfoForm(forms.ModelForm):
         widget=extras.SelectDateWidget(
             years=years_choices,
             attrs={"class":"datetime-input"})
-#            attrs={"class":""})
         )
 
     stop_date = forms.DateField(
@@ -173,7 +172,7 @@ class SurveyContactInfoForm(forms.ModelForm):
                     "office", "work_phone", "ads_name", "research", "contact",
                     "comments", "date_created", "date_updated", "last_updated_by",
                     "zipcode", "streetname", "streetnumber", "address")
-
+    BOOL_CHOICES = ((True, 'Yes'), (False, 'No'))
     years_choices = range(1900, datetime.now().year+1)[::-1]
     academic_title = forms.ModelChoiceField(
         required=False,
@@ -243,9 +242,23 @@ class SurveyContactInfoForm(forms.ModelForm):
         max_length=2048,
         widget=TinyMCE(mce_attrs=TINYMCE_LOCAL_CONFIG))
 
+    show_biography = forms.BooleanField(
+        required=False,
+        help_text="Choose whether to display this information on your profile page",
+        widget=forms.Select(
+            choices=BOOL_CHOICES,
+            attrs={"class":"form-control"}))
+
     email = forms.EmailField(
         required=False,
         widget=forms.TextInput(
+            attrs={"class":"form-control"}))
+
+    show_email = forms.BooleanField(
+        required=False,
+        help_text="Choose whether to display this information on your profile page",
+        widget=forms.Select(
+            choices=BOOL_CHOICES,
             attrs={"class":"form-control"}))
 
     home_phone = forms.CharField(
@@ -267,6 +280,13 @@ class SurveyContactInfoForm(forms.ModelForm):
         help_text="Please give the full URL to your homepage",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
+    
+    show_homepage = forms.BooleanField(
+        required=False,
+        help_text="Choose whether to display this information on your profile page",
+        widget=forms.Select(
+            choices=BOOL_CHOICES,
+            attrs={"class":"form-control"}))
 
     facebook = forms.URLField(
         required=False,
@@ -274,17 +294,38 @@ class SurveyContactInfoForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
+    show_facebook = forms.BooleanField(
+        required=False,
+        help_text="Choose whether to display this information on your profile page",
+        widget=forms.Select(
+            choices=BOOL_CHOICES,
+            attrs={"class":"form-control"}))
+
     twitter = forms.URLField(
         required=False,
         help_text="Please give the full URL to your Twitter",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
+    show_twitter = forms.BooleanField(
+        required=False,
+        help_text="Choose whether to display this information on your profile page",
+        widget=forms.Select(
+            choices=BOOL_CHOICES,
+            attrs={"class":"form-control"}))
+
     linkedin = forms.URLField(
         required=False,
         help_text="Please give the full URL to LinkedIn",
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
+    
+    show_linkedin = forms.BooleanField(
+        required=False,
+        help_text="Choose whether to display this information on your profile page",
+        widget=forms.Select(
+            choices=BOOL_CHOICES,
+            attrs={"class":"form-control"}))
 
     city = forms.CharField(
         required=False,
@@ -297,6 +338,15 @@ class SurveyContactInfoForm(forms.ModelForm):
         choices=BLANK_CHOICE_DASH+list(countries),
         widget=forms.Select(
             attrs={"class": "form-control"}))
+
+    field_order= [
+            "academic_title", "initials", "first_name", "middle_names",
+            "prefix", "last_name", "gender", "birth_date",  "nationality",
+            "place_of_birth", "photo", "biography", "show_biography", "email",
+            "show_email", "home_phone", "mobile", "homepage", "show_homepage", 
+            "facebook", "show_facebook", "twitter","show_twitter", "linkedin",
+            "show_linkedin", "city", "country" ]
+
 
     def clean(self):
         first_name = self.cleaned_data.get("first_name")

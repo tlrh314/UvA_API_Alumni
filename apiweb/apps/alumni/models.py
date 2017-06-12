@@ -186,6 +186,18 @@ class Alumnus(models.Model):
     date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 
+
+    #Privacy options
+    show_biography = models.BooleanField(_("Show biography on personal page"), blank=True, default=False)
+    show_facebook = models.BooleanField(_("Show facebook on personal page"), blank=True, default=False)
+    show_linkedin = models.BooleanField(_("Show linkedin on personal page"), blank=True, default=False)
+    show_twitter = models.BooleanField(_("Show twitter on personal page"), blank=True, default=False)
+    show_email = models.BooleanField(_("Show email on personal page"), blank=True, default=False)
+    show_homepage = models.BooleanField(_("Show homepage on personal page"), blank=True, default=False)
+
+
+
+
     class Meta:
         verbose_name = _("Alumnus")
         verbose_name_plural = _("Alumni")
