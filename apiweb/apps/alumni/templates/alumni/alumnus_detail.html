@@ -141,40 +141,42 @@
             {% if alumnus.job.all %}
                 <div class="col-xs-12 pull-left">
                     <h3 class="text-left"> Career Path after leaving API </h3>
-                    <table class="table">
-                        <thead>
-                            <td> # </td>
-                            <th> Sector </th>
-                            <th> Company / Institute </th>
-                            <th> Position </th>
-                            <th> From </th>
-                            <th> Until </th>
-                        </thead>
-                        <tbody>
-                        {% for job in alumnus.job.all %}
-                            {% if job.show_job and job.position_name %}
-                                <tr>
-                                    <td>{% get_which_job job.which_position %} </td>
-                                    <td>{{ job.sector }} </td>
-                                    <td>{{ job.company_name }} </td>
-                                    <td>{{ job.position_name }} </td>
-                                    {% if job.start_date %}
-                                        <td>{{ job.start_date }} </td>
-                                    {% else %}
-                                        <td></td>
-                                    {% endif %}
-                                    {% if job.stop_date %}
-                                        <td>{{ job.stop_date }} </td>
-                                    {% else %}
-                                        <td></td>
-                                    {% endif %}
-                                </tr>
-                            {% else %}
-                                <tr></tr>
-                            {% endif %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <td> # </td>
+                                <th> Sector </th>
+                                <th> Company / Institute </th>
+                                <th> Position </th>
+                                <th> From </th>
+                                <th> Until </th>
+                            </thead>
+                            <tbody>
+                            {% for job in alumnus.job.all %}
+                                {% if job.show_job and job.position_name %}
+                                    <tr>
+                                        <td>{% get_which_job job.which_position %} </td>
+                                        <td>{{ job.sector }} </td>
+                                        <td>{{ job.company_name }} </td>
+                                        <td>{{ job.position_name }} </td>
+                                        {% if job.start_date %}
+                                            <td>{{ job.start_date }} </td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                        {% if job.stop_date %}
+                                            <td>{{ job.stop_date }} </td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                    </tr>
+                                {% else %}
+                                    <tr></tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             {% endif %}
 
