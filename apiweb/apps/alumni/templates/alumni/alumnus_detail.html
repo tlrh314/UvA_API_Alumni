@@ -17,176 +17,175 @@
 
     <div class="col-xs-12 col-md-9">
         <div class="row">
-        {% if not alumnus.passed_away %}
-        <div class="col-xs-12 col-sm-3">
-            {% if alumnus.photo %}
-            <img src="{{ alumnus.photo.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
-            {% else %}
-                {# <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img> #}
-            {% endif %}
-        </div>
-        {% endif %}
-
-        <div class="col-xs-12 col-sm-9">
             {% if not alumnus.passed_away %}
-                <h3 class="text-left"> Contact Info </h3>
-            {% else %}
-                <h3 class="text-left"> Personal Info </h3>
+                <div class="col-xs-12 col-sm-3">
+                    {% if alumnus.photo %}
+                        <img src="{{ alumnus.photo.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
+                    {% else %}
+                        {# <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img> #}
+                    {% endif %}
+                </div>
             {% endif %}
-            <table class="table">
-                <thead>
-                </thead>
-                <tbody>
-                <tr><th>Name</th><td>{{ alumnus.full_name }}{% if alumnus.passed_away %}* (deceased) {% endif %}</td></tr>
-                {% if alumnus.show_email %}
-                    <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
-                {% endif %}
 
-                {% if not alumnus.position == None %}
-                    <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
-                    <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
-                    <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
-                {% endif %}
-
-                {% if alumnus.facebook %}
-                    {% if alumnus.show_facebook %}
-                        <tr><th>Facebook</th><td><a href="{{ alumnus.facebook }}" target="blank">{{ alumnus.facebook }}</a></td></tr>                
-                    {% endif %}
-                {% endif %}
-                
-                {% if alumnus.twitter %}
-                    {% if alumnus.show_twitter %}
-                        <tr><th>Twitter</th><td><a href="{{ alumnus.twitter }}" target="blank">{{ alumnus.twitter }}</td></tr>                
-                    {% endif %}
-                {% endif %}
-                
-                {% if alumnus.linkedin %}
-                    {% if alumnus.show_linkedin %} 
-                        <tr><th>Linkedin</th><td><a href="{{ alumnus.linkedin }}" target="blank">{{ alumnus.linkedin }}</a></td></tr>                
-                    {% endif %}
-                {% endif %}
-                
-                {% if alumnus.homepage %}
-                    {% if alumnus.show_homepage %}
-                        <tr><th>Homepage</th><td><a href="{{ alumnus.homepage }}" target="blank">{{ alumnus.homepage }}</a></td></tr>                
-                    {% endif %}
-                {% endif %}
-
-
-                </tbody>
-            </table>
-            {% if alumnus.ads_name %}
-                <a target="_blank" href="{{ alumnus.ads_name|ads_url }}">
-                  <h3 class="text-left"> Publications </h3>
-                </a>
-            {% endif %}
-        </div>
-
-        {% if alumnus.degrees.all %}
-        <div class="col-xs-12 pull-left">
-        <h3 class="text-left"> Theses at API </h3>
-        <table class="table">
-            <tbody>
-            {% for thesis in alumnus.degrees.all %}
-            <tr><td>
-                {{ thesis.thesis_type|display_thesis_type }}:
-                <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">
-                    {% if thesis.thesis_title %}
-                        {{ thesis.thesis_title }}
-                    {% else %}
-                        <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
-                    {% endif %}
-                </a>
-                    {% if thesis.date_of_defence %}
-                        ({{ thesis.date_of_defence|date:"Y" }})
-                    {% else %}
-                        (Year Unknown)
-                    {% endif %}
-            </td></tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        </div>
-        {% endif %}
-
-        {% if alumnus.positions.all %}
-        <div class="col-xs-12 pull-left">
-        <h3 class="text-left"> Positions at API </h3>
-        <table class="table">
-            <thead>
-                <th> Position Type </th>
-                <th> From </th>
-                <th> Until </th>
-            </thead>
-            <tbody>
-            {% for api_position in alumnus.positions.all %}
-                <tr>
-                    <td>{{ api_position }} </td>
-                    {% if api_position.date_start %}
-                    <td>{{ api_position.date_start }} </td>
-                    {% else %}
-                    <td></td>
-                    {% endif %}
-                    {% if api_position.date_stop %}
-                    <td>{{ api_position.date_stop }} </td>
-                    {% else %}
-                    <td></td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        </div>
-        {% endif %}
-
-        {% if alumnus.job.all %}
-        <div class="col-xs-12 pull-left">
-        <h3 class="text-left"> Career Path after leaving API </h3>
-        <table class="table">
-            <thead>
-                <td> # </td>
-                <th> Sector </th>
-                <th> Company / Institute </th>
-                <th> Position </th>
-                <th> From </th>
-                <th> Until </th>
-            </thead>
-            <tbody>
-            {% for job in alumnus.job.all %}
-                {% if job.show_job and job.position_name %}
-                <tr>
-                    <td>{% get_which_job job.which_position %} </td>
-                    <td>{{ job.sector }} </td>
-                    <td>{{ job.company_name }} </td>
-                    <td>{{ job.position_name }} </td>
-                    {% if job.start_date %}
-                    <td>{{ job.start_date }} </td>
-                    {% else %}
-                    <td></td>
-                    {% endif %}
-                    {% if job.stop_date %}
-                    <td>{{ job.stop_date }} </td>
-                    {% else %}
-                    <td></td>
-                    {% endif %}
-                </tr>
+            <div class="col-xs-12 col-sm-9">
+                {% if not alumnus.passed_away %}
+                    <h3 class="text-left"> Contact Info </h3>
                 {% else %}
-                <tr></tr>
+                    <h3 class="text-left"> Personal Info </h3>
                 {% endif %}
-            {% endfor %}
-            </tbody>
-        </table>
-        </div>
-        {% endif %}
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr><th>Name</th><td>{{ alumnus.full_name }}{% if alumnus.passed_away %}* (deceased) {% endif %}</td></tr>
+                        {% if alumnus.show_email %}
+                            <tr><th>Email</th><td><a href="mailto:{{ alumnus.email }}">{{ alumnus.email }}</a></td></tr>
+                        {% endif %}
 
-        {% if alumnus.biography %}
-        <div class="col-xs-12 pull-left text-justify">
-            <h3 class="text-left"> Biography </h3>
-            {% autoescape off %}
-                {{ alumnus.biography }}
-            {% endautoescape %}
-        </div>
-        {% endif %}
+                        {% if not alumnus.position == None %}
+                            <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
+                            <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
+                            <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
+                        {% endif %}
+
+                        {% if alumnus.facebook %}
+                            {% if alumnus.show_facebook %}
+                                <tr><th>Facebook</th><td><a href="{{ alumnus.facebook }}" target="blank">{{ alumnus.facebook }}</a></td></tr>                
+                            {% endif %}
+                        {% endif %}
+                        
+                        {% if alumnus.twitter %}
+                            {% if alumnus.show_twitter %}
+                                <tr><th>Twitter</th><td><a href="{{ alumnus.twitter }}" target="blank">{{ alumnus.twitter }}</td></tr>                
+                            {% endif %}
+                        {% endif %}
+                        
+                        {% if alumnus.linkedin %}
+                            {% if alumnus.show_linkedin %} 
+                                <tr><th>Linkedin</th><td><a href="{{ alumnus.linkedin }}" target="blank">{{ alumnus.linkedin }}</a></td></tr>                
+                            {% endif %}
+                        {% endif %}
+                        
+                        {% if alumnus.homepage %}
+                            {% if alumnus.show_homepage %}
+                                <tr><th>Homepage</th><td><a href="{{ alumnus.homepage }}" target="blank">{{ alumnus.homepage }}</a></td></tr>                
+                            {% endif %}
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                {% if alumnus.ads_name %}
+                    <a target="_blank" href="{{ alumnus.ads_name|ads_url }}">
+                      <h3 class="text-left"> Publications </h3>
+                    </a>
+                {% endif %}
+            </div>
+
+            {% if alumnus.degrees.all %}
+                <div class="col-xs-12 pull-left">
+                    <h3 class="text-left"> Theses at API </h3>
+                    <table class="table">
+                        <tbody>
+                            {% for thesis in alumnus.degrees.all %}
+                            <tr><td>
+                                {{ thesis.thesis_type|display_thesis_type }}:
+                                <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">
+                                    {% if thesis.thesis_title %}
+                                        {{ thesis.thesis_title }}
+                                    {% else %}
+                                        <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
+                                    {% endif %}
+                                </a>
+                                    {% if thesis.date_of_defence %}
+                                        ({{ thesis.date_of_defence|date:"Y" }})
+                                    {% else %}
+                                        (Year Unknown)
+                                    {% endif %}
+                            </td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if alumnus.positions.all %}
+                <div class="col-xs-12 pull-left">
+                    <h3 class="text-left"> Positions at API </h3>
+                    <table class="table">
+                        <thead>
+                            <th> Position Type </th>
+                            <th> From </th>
+                            <th> Until </th>
+                        </thead>
+                        <tbody>
+                        {% for api_position in alumnus.positions.all %}
+                            <tr>
+                                <td>{{ api_position }} </td>
+                                {% if api_position.date_start %}
+                                <td>{{ api_position.date_start }} </td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
+                                {% if api_position.date_stop %}
+                                <td>{{ api_position.date_stop }} </td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if alumnus.job.all %}
+                <div class="col-xs-12 pull-left">
+                    <h3 class="text-left"> Career Path after leaving API </h3>
+                    <table class="table">
+                        <thead>
+                            <td> # </td>
+                            <th> Sector </th>
+                            <th> Company / Institute </th>
+                            <th> Position </th>
+                            <th> From </th>
+                            <th> Until </th>
+                        </thead>
+                        <tbody>
+                        {% for job in alumnus.job.all %}
+                            {% if job.show_job and job.position_name %}
+                                <tr>
+                                    <td>{% get_which_job job.which_position %} </td>
+                                    <td>{{ job.sector }} </td>
+                                    <td>{{ job.company_name }} </td>
+                                    <td>{{ job.position_name }} </td>
+                                    {% if job.start_date %}
+                                        <td>{{ job.start_date }} </td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                    {% if job.stop_date %}
+                                        <td>{{ job.stop_date }} </td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                </tr>
+                            {% else %}
+                                <tr></tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if alumnus.biography %}
+                <div class="col-xs-12 pull-left text-justify">
+                    <h3 class="text-left"> Biography </h3>
+                    {% autoescape off %}
+                        {{ alumnus.biography }}
+                    {% endautoescape %}
+                </div>
+            {% endif %}
 
         </div>
     </div>
@@ -194,50 +193,48 @@
     <div class="col-xs-12 col-md-3 pull-right text-left">
         {% get_supervisors alumnus as supervisors %}
         {% if supervisors.0 %}
-        <h3 class="text-left"> Thesis Advisors </h3>
+            <h3 class="text-left"> Thesis Advisors </h3>
             <table class="table">
                 <thead>
                 </thead>
                 <tbody>
-                {% for supervisor, date_of_defence in supervisors %}
-                <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }}
-                    {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %}</a></td></tr>
-                {% endfor %}
+                    {% for supervisor, date_of_defence in supervisors %}
+                    <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }}
+                        {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %}</a></td></tr>
+                    {% endfor %}
                 </tbody>
             </table>
         {% endif %}
 
         {% get_students alumnus "phd" as phd_students %}
         {% if phd_students.0 %}
-        <h3 class="text-left"> PhD Students </h3>
-        <table class="table">
-            <thead>
-            </thead>
-            <tbody>
-            {% for phd_student, date_of_defence in phd_students  %}
-            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' phd_student.slug %}">{{ phd_student }}
-                {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
-            {% endfor %}
-            </tbody>
-        </table>
+            <h3 class="text-left"> PhD Students </h3>
+            <table class="table">
+                <thead>
+                </thead>
+                <tbody>
+                    {% for phd_student, date_of_defence in phd_students  %}
+                    <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' phd_student.slug %}">{{ phd_student }}
+                        {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% endif %}
 
         {% get_students alumnus "msc" as msc_students %}
         {% if msc_students.0 %}
-        <h3 class="text-left"> MSc Students </h3>
-        <table class="table">
-            <thead>
-            </thead>
-            <tbody>
-            {% for msc_student, date_of_defence in msc_students  %}
-            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' msc_student.slug %}">{{ msc_student }}
-                {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
-            {% endfor %}
-            </tbody>
-        </table>
+            <h3 class="text-left"> MSc Students </h3>
+            <table class="table">
+                <thead>
+                </thead>
+                <tbody>
+                    {% for msc_student, date_of_defence in msc_students  %}
+                    <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' msc_student.slug %}">{{ msc_student }}
+                        {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% endif %}
     </div>
-
-
 </div>
 {% endblock content %}
