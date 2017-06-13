@@ -27,19 +27,18 @@ def tree(request):
                 all_people.append(supervisor)
             
             link_dict = {}
-            link_dict["source"] = str(supervisor.last_name)
-            link_dict["target"] = str(student.last_name)
+            link_dict["source"] = str(supervisor.last_name.replace("'"," "))
+            link_dict["target"] = str(student.last_name.replace("'"," "))
             link_dict["value"] = i+1
             links_list.append(link_dict)
         
         if not student in all_people:
             all_people.append(student)
 
-
     #Get all the nodes
     for alumnus in all_people:
         node_dict = {}
-        node_dict["id"] = str(alumnus.last_name)
+        node_dict["id"] = str(alumnus.last_name.replace("'"," "))
         node_dict["group"] = i+1
         nodes_list.append(node_dict)
     
@@ -50,8 +49,8 @@ def tree(request):
         json.dump(data_dict, outfile)
 
     json_data = json.dumps(data_dict)
-#    print(json_data)
-    return render(request, "visualization/tree.html")
+
+    return render(request, "visualization/tree.html", {'json_data': json_data})
 
 def tree2(request):
     return render(request, "visualization/tree2.html")
