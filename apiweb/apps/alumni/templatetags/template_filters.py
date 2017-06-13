@@ -168,15 +168,18 @@ def get_supervisors(alumnus):
     msc_theses = alumnus.degrees.filter(type="msc")
     supervisors = alumnus.degrees.none()
     date_of_defence = []
+    type_theses = []
     if len(msc_theses) >= 1:
         supervisors = supervisors | msc_theses[0].thesis_advisor.all()
         date_of_defence.append(msc_theses[0].date_of_defence)
+        type_theses.append("msc")
     if len(phd_theses) >= 1:
         supervisors = supervisors | phd_theses[0].thesis_advisor.all()
         date_of_defence.append(phd_theses[0].date_of_defence)
+        type_theses.append("phd")
     # Zip is an iterator so it can only exhaust, but it has no len.
     # Typecast to list such that we can check if the list is empty
-    return list(zip(supervisors, date_of_defence))
+    return list(zip(supervisors, date_of_defence, type_theses))
 
 
 @register.filter

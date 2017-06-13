@@ -198,9 +198,9 @@
                 <thead>
                 </thead>
                 <tbody>
-                    {% for supervisor, date_of_defence in supervisors %}
-                    <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }}
-                        {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %}</a></td></tr>
+                    {% for supervisor, date_of_defence, type in supervisors %}
+                        <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }}
+                        {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} ({{ type|display_thesis_type }}) </a></td></tr>
                     {% endfor %}
                 </tbody>
             </table>
