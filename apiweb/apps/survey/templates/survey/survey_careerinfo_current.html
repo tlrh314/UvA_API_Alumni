@@ -19,14 +19,18 @@
             <h3> Career Information of <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}" target="blank", style="color: black;">{{ request.user.alumnus.full_name }}</a> <br></h3>
             <br>
             Please provide us information regarding your <strong>current</strong> job if this job is <strong>outside the API</strong>. <br>
+            <br>
             Note that all of the fields are optional, thus, you can leave any number of them blank! The provided information in this specific form will only be available for the API secretary and possible used for anonymised statistics. If you choose to show this job it will be included on your personal page. <br>
-            <strong>Note: Only fill in this form if your occupation is outside the API!</strong>
+            <br>
+            <h4 class="text-center"> Note: Only fill in this form if your occupation is outside the API! <br>
+            If you are still an active API, please use 'Finish Survey' </h4>
         </div>
 
         <br>
 
         <div class="col-xs-12">
             <form class="form-horizontal col-sm-12" role="form" action="{% url 'survey:careerinfo_current' %}" method="post"> {% csrf_token %}
+
                 {% if form.errors %}
                     <div class="alert alert-danger">
                         Please check the input in the following field(s):
@@ -61,8 +65,8 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-success center-block pull-right"> Next </button>
-                    
+                <button type="submit" name="next" class="btn btn-success center-block pull-right"> Next </button>
+                <button type="submit" name="finish" class="btn btn-warning center-block pull-right"> Finish Survey </button>
                 </form>
         </div>
     </div>
