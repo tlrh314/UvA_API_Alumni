@@ -55,10 +55,15 @@ def save_all_alumni_to_xls(request, queryset=None):
             if type(value) is bytes:
                 value = value.decode('unicode_escape')
 
+
+
             # Do some cleanups
             if value == "None": value = ""
             if attr == "student_id": value = int(value.split(".")[0]) if len(value) > 3 else ""
-            if attr == "gender": value = int(value) if value != "" else ""
+            if attr == 'gender':
+                if not value == "":
+                    value = Alumnus.GENDER_CHOICES[int(value)-1][1]
+
 
             sheet.write(row+1, col, value, style=borders)
 
