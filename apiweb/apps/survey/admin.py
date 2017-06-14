@@ -33,6 +33,7 @@ class JobAfterLeavingAdminForm(forms.ModelForm):
 
 @admin.register(JobAfterLeaving)
 class JobAfterLeavingAdmin(admin.ModelAdmin):
+    list_display = ("alumnus", "which_position", "show_job", "sector", "company_name", "position_name", "is_inside_academia", "location_job", "start_date", "stop_date")
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
 
     form = JobAfterLeavingAdminForm
@@ -40,7 +41,7 @@ class JobAfterLeavingAdmin(admin.ModelAdmin):
     fieldsets = [
         ( "Job information", {
             "fields":
-                [ "alumnus", "sector", "company_name", "position_name", "location_job",
+                [ "alumnus", "which_position", "sector", "company_name", "position_name", "location_job",
                   "is_inside_academia",  "start_date", "stop_date" ]
             }
         ), ( "Extra information", {
