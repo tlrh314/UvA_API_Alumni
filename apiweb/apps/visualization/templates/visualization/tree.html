@@ -50,8 +50,8 @@
 <div class="main-content" role="main">
     <h1 class="text-center">Student-Supervisor Relation Tree</h1>
     <svg width="960" height="600"></svg>
+    <!-- if more elements, give ID -->
 </div>
-
 
 <div class="buttons">
   <button data-zoom="+1">Zoom In</button>
@@ -59,87 +59,75 @@
 </div>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<!-- <script src="{% static 'visualization/js/d3.min.js' %}"></script> -->
-<!-- <script src="{% static 'visualization/js/fisheye.js' %}"></script>
- -->
 <script>
-    // var zoom = d3.behavior.zoom()
-    //     .x(x)
-    //     .y(y)
-    //     .scaleExtent([1, 10])
-    //     .center([width / 2, height / 2])
-    //     .size([width, height])
-    //     .on("zoom", zoomed);
-
-
-////Doesnt work
-//     var svg = d3.select("svg")
-// //      .append("svg")
-//       .attr("width")
-//       .attr("height")
-//       .call(d3.zoom().on("zoom", function () {svg.attr("transform", d3.event.transform)}))
-//       .append("g");
-
-    
-    // var svg = d3.select("svg")
-    //   .append("svg")
-    //   .attr("width", "100%")
-    //   .attr("height", "100%")
-    //   .call(d3.zoom().on("zoom", function () {svg.attr("transform", d3.event.transform)}))
-    //   .append("g")
-
-    // width = +svg.attr("width"),
-    // height = +svg.attr("height");
-
 
     var svg = d3.select("svg")
         width = +svg.attr("width"),
         height = +svg.attr("height");
-//    svg.call(d3.zoom().on("zoom", function () {svg.attr("transform", d3.event.transform)}));
 
-//        .call(d3.zoom().on("zoom", function () {svg.attr("transform", d3.event.transform)}))
-    // var fisheye = d3.fisheye.circular()
-    //     .radius(200)
-    //     .distortion(2);
+    // build the arrow.
+    svg.append("svg:defs").selectAll("marker")
+            .data(["end"])      // Different link/path types can be defined here
+        .enter().append("svg:marker")    // This section adds in the arrows
+            .attr("id", String)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 15)
+            .attr("refY", -1.5)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+        .append("svg:path")
+            .attr("d", "M0,-5L10,0L0,5");
+
 
     var color = d3.scaleOrdinal(d3.schemeCategory20);
 
     var simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(function(d) { return d.id; }))
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
+            .force("link", d3.forceLink().id(function(d) { return d.id; }))
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter(width / 2, height / 2));
 
-    var data = '{{ json_data | safe }}'; 
+    var data = '{{ json_data | safe }}';
     graph = JSON.parse(data);
 
     var link = svg.append("g")
-        .attr("class", "links")
-        .selectAll("line")
-        .data(graph.links)
+            .attr("class", "links")
+            .selectAll("line")
+            .data(graph.links)
         .enter().append("line")
-        .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+            .attr("marker-end", "url(#end)")
+            .attr("stroke-width", function(d) { return Math.sqrt(2); });
 
     var node = svg.append("g")
-        .attr("class", "nodes")
-        .selectAll("circle")
-        .data(graph.nodes)
+            .attr("class", "nodes")
+            .selectAll("circle")
+            .data(graph.nodes)
         .enter().append("circle")
-        .attr("r", 5)
-        .attr("fill", function(d) { return color(d.group); })
-        .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
+            .attr("r", 5)
+            .attr("fill", function(d) { return color(d.group); })
+            .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var rectangle = svg.append("rect")
+            .attr("x",0)
+            .attr("y",0)
+            .attr("width",width)
+            .attr("height",height)
+            .attr("fill", "None")
+            .attr("stroke","black")
+            .attr("stroke-width",5);
 
     node.append("title")
-        .text(function(d) { return d.id; });
+            .text(function(d) { return d.id; });
 
     simulation
-        .nodes(graph.nodes)
-        .on("tick", ticked);
+            .nodes(graph.nodes)
+            .on("tick", ticked);
 
     simulation.force("link")
-        .links(graph.links);
+            .links(graph.links);
 
     function ticked() {
         link
