@@ -45,6 +45,10 @@ def survey_careerinfo_current(request):
         prefill_instance = False
 
     if request.method == "POST":
+        if "finish" in request.POST:
+            messages.success(request, "Thanks for taking the time to fill out our survey! Welcome to your personal alumnus page.")
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+
         # TODO: this if statement is not necessary if prefill_instance is set to None in the try-expect clause above.
         if prefill_instance:
             form = SurveyCareerInfoForm(data=request.POST, instance=prefill_instance)
@@ -77,6 +81,9 @@ def survey_careerinfo_first(request):
         prefill_instance = False
 
     if request.method == "POST":
+        if "finish" in request.POST:
+            messages.success(request, "Thanks for taking the time to fill out our survey! Welcome to your personal alumnus page.")
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
         if prefill_instance:
             form = SurveyCareerInfoForm(data=request.POST, instance=prefill_instance)
         else:
@@ -105,6 +112,9 @@ def survey_careerinfo_second(request):
         prefill_instance = False
 
     if request.method == "POST":
+        if "finish" in request.POST:
+            messages.success(request, "Thanks for taking the time to fill out our survey! Welcome to your personal alumnus page.")
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
         if prefill_instance:
             form = SurveyCareerInfoForm(data=request.POST, instance=prefill_instance)
         else:
