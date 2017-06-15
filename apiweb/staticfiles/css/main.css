@@ -290,3 +290,7 @@ body {
         overflow-x: visible;
     }
 }
+
+div#tree-wrapper {
+    overflow: scroll;
+}
