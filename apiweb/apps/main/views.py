@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import ContactInfo
 from .models import WelcomeMessage
+from .models import PrivacyPolicy
 from .forms import ContactForm
 from ..interviews.models import Post
 from ..alumni.models import Degree
@@ -20,7 +21,15 @@ from ..survey.forms import SurveyContactInfoForm, SurveyCareerInfoForm
 
 
 def privacy_policy(request):
-    return render(request, "main/privacy_policy.html", {})
+    pp = PrivacyPolicy.objects.all()
+    if pp:
+        policy = pp[0].policy
+        last_updated = pp[0].last_updated
+    else:
+        policy = "Our privacy policy is still work in progress."
+        last_updated = None
+    return render(request, "main/privacy_policy.html",
+        {"privacy_policy": policy, "privacy_policy_last_update": last_updated })
 
 
 def index(request):

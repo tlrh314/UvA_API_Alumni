@@ -30,6 +30,17 @@ class WelcomeMessage(models.Model):
     def clean(self):
         validate_only_one_instance(self)
 
+class PrivacyPolicy(models.Model):
+    policy = HTMLField(verbose_name=_("Privacy Policy"), blank=True)
+    last_updated = models.DateTimeField(_("Last Updated"), auto_now=True)
+
+    class Meta:
+        verbose_name = _("Privacy Policy")
+        verbose_name_plural = _("Privacy Policy")
+
+    def clean(self):
+        validate_only_one_instance(self)
+
 
 class ContactInfo(models.Model):
     secretary_email_address = models.EmailField(_("API Secretariat e-mail address"), default="secr-astro-science@uva.nl")

@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 from .models import ContactInfo
 from .models import WelcomeMessage
+from .models import PrivacyPolicy
 from ...settings import ADMIN_MEDIA_JS
 
 
@@ -21,6 +22,14 @@ class WelcomeMessageAdmin(admin.ModelAdmin):
     def rename_text(self, obj):
        return "Click here to change the Welcome Message/Photo"
     rename_text.short_description = "Welcome Page"
+
+@admin.register(PrivacyPolicy)
+class PrivacyPolicyAdmin(admin.ModelAdmin):
+    list_display = ("rename_text",)
+
+    def rename_text(self, obj):
+       return "Click here to change the Privacy Policy"
+    rename_text.short_description = "Privacy Policy"
 
 
 class ContactInfoForm(forms.ModelForm):

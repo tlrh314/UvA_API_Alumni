@@ -9,50 +9,18 @@
 <div class="main-content" role="main">
     <h1 class="text-center"> Privacy Policy </h1>
 
+    <h4 class="text-right">
+        Last updated: {{ privacy_policy_last_update }} 
+    </h4>
+
     <div class="text-justify">
-
-        <p>This privacy notice discloses the privacy practices for <span style="text-decoration: underline;"> {{ request.get_host }}</span>. This privacy notice applies solely to information collected by this website. It will notify you of the following:</p>
-        <ol type="1">
-            <li>What personally identifiable information is collected from you through the website, how it is used and with whom it may be shared.</li>
-            <li>What choices are available to you regarding the use of your data.</li>
-            <li>The security procedures in place to protect the misuse of your information.</li>
-            <li>How you can correct any inaccuracies in the information.</li>
-        </ol>
-        <p><strong>Information Collection, Use, and Sharing</strong> <br />
-        We have collected data from several databases available to the API. Our list of MSc and PhD theses has been compiled from the API library and contains the thesis author, title, date of publication (and/or date of defence), thesis advisor, and in most cases a short resum&eacute;. We have extracted the majority of this information apart from the short resum&eacute;. The list of alumni has been gathered from the API employment records, the full NOVA database `Astronmers in the Netherlands' (using only Amsterdam-based astronomers). Further personal information such as e-mail addresses, personal webpages, Facebook, Twitter and LinkedIn account information has been supplemented by gleaning information off the internet. The short biography has been read-in from the API Alumnibook compiled in 2011 and edited by Milena Hoekstra. Furthermore, we have used an earlier career development survey conducted around 2016. <br>
-        <br>
-
-        We are the sole owners of the information collected on this site. We have access to information obtained from the sources outlined in the paragraph above. Furthermore, we collect data regarding the career development of former API's that you voluntarily give us by filling out our survey, obtained from email correspondance with you or other direct contact from you. We will not sell or rent this information to anyone.</p>
-        <p>We will use your information to respond to you, regarding the reason you contacted us. We will display your information on your personal API Alumnus page if you so choose. Otherwise these data will only be available to the API secretariat to contact you in the near future. </p>
-        <p>Unless you ask us not to, we may contact you via email in the future to conduct a new survey, to send out a newsletter, or changes to this privacy policy.</p>
-
-        <p><strong>Your Access to and Control Over Information</strong> <br />You may opt out of any future contacts from us at any time. You can do the following at any time by contacting us via the email address or phone number given on our website:</p>
-        <ul>
-            <li>See what data we have about you, if any.</li>
-            <li>Change/correct any data we have about you.</li>
-            <li>Have us delete any data we have about you.</li>
-            <li>Express any concern you have about our use of your data.</li>
-        </ul>
-
-        <p><strong>Anonymised Statistics </strong><br>
-        We are currently implementing some anonymised statistics and data visualisations. We will, for example, show a student-supervisor relation tree. Your name will appear in this tree together with the relation between you, your supervisor and (if applicable) students that you have supervised. At this moment the API is still drafting which statistics to include, but an example could be the percentage of API alumni that is still active in academia, or now works at a bank.
-
-
-        <p><strong>Security</strong> <br />We take precautions to protect your information. When you submit sensitive information via the website, your information is protected both online and offline. Our website is SSL-protected to securely handle login, logout, and collecting your personal information in our career survey. </p>
-        <p>Wherever we collect sensitive information (such as credit card data), that information is encrypted and transmitted to us in a secure way. You can verify this by looking for a lock icon in the address bar and looking for "https" at the beginning of the address of the Web page.</p>
-        <p>While we use encryption to protect sensitive information transmitted online, we also protect your information offline. Only employees who need the information to perform a specific job (for example, the API secretariat) are granted access to personally identifiable information. The computers/servers in which we store personally identifiable information are kept in a secure environment.</p>
-
-        <p><strong>Cookies</strong><br>
-        Cookies are small textfiles stored on disk or memory of your computer. Cookies are harmless to your computer and to data stored on your computer. The API Alumnus website makes use of session cookies that will be removed from your computer when you close your web browser. We also use standard temporary cookies that are stored for a period of thirty days. Such a cookie is stored, for example, when you consent to our usage of cookies and to our privacy policy in the cookie pop-up. We also place external urls on our website (for example Facebook, Twitter, LinkedIn or your personal web page). These external parties have implemented their own cookie policy that may be applicable. <br>
-        <br>
-        The API Alumnus website furthermore places temporary cookies to analyse how our website is used (e.g. which pages are visited, where visitors are located, etc). We have chosen to use anonymised data that masks the last two triples of your IP address, although your browsing experience could be traced back to you. These data are not available to third parties like Google. We have chosen to make use of the open-source analytics tool <a href="https://piwik.org/" target="blank">Piwik</a>, hosted on our own servers. We do not make use of a cloud-based analytics service like Google Analytics where we are unable to guard your privacy. We like to empasize that Piwik does not have access to the tracking data. We furhtermore make use of the geolocation database GeoLite which is proprietary and owned by <a href="https://www.maxmind.com" target="blank">MaxMind</a>. <br>
-        <br>
-
-        <p><strong>Do Not Track</strong><br>
-        We respecteert do-not-track preferences which means that we do not track your browsing session if you have chosen to opt-out of tracking software in your browser. <br>
-
-        <p><strong>If you feel that we are not abiding by this privacy policy, you should contact us immediately via telephone at <br><span style="text-decoration: underline;"><a href="tel:{{ contactinfo.telephone_api }}">{{ api_phonenumber_formatted }}</a></span> or <span style="text-decoration: underline;"><a href="mailto:{{ contactinfo.secretary_email_address}}">{{ contactinfo.secretary_email_address}}</a></span>.</strong></p>
-
+        {% autoescape off %}
+            {{ privacy_policy }}
+        {% endautoescape %}
     </div>
+
+    <h4 class="text-center">
+        If you feel that we are not abiding by this privacy policy, you should contact us immediately <br> via telephone at <a href="tel:{{ contactinfo.telephone_api }}">{{ api_phonenumber_formatted }}</a> or <a href="mailto:{{ contactinfo.secretary_email_address}}">{{ contactinfo.secretary_email_address}}</a>
+    </h4>
 </div>
 {% endblock %}
