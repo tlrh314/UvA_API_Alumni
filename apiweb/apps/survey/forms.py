@@ -373,6 +373,8 @@ class SurveyContactInfoForm(forms.ModelForm):
         if any(str.isdigit(c) for c in prefix):
             self._errors["prefix"] = ErrorList()
             self._errors["prefix"].append(error_messages["names"])
+
+        # TODO: Expand to english prefixes too
         allowed_prefix = ["van", "van der", "der", "den", "van den", "van de", "de", "in het", "in 't", "di"]
         if prefix and prefix not in allowed_prefix:
             self._errors["prefix"] = ErrorList()
