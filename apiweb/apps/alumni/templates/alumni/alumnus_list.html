@@ -96,14 +96,14 @@
         <a href="{% filter_objects filter_type filter_value %}">
             <button type="button" class="btn btn-danger filter-btn" href="#">
                 {% if filter_type == "year" %}
-                {% get_yearrange filter_value as yearrange %}
-                    {{ filter_type|capitalize_filter_type }}: {{ yearrange }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {% get_yearrange filter_value as yearrange %}
+                        {{ filter_type|capitalize_filter_type }}: {{ yearrange }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% elif filter_type == "type" %}
                     {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_thesis_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                {% elif filter_type == "sort" %}
+                    {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% else %}
                     {{ filter_type }}: {{ filter_value }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-
-
                 {% endif %}
             </button>
         </a>
@@ -118,13 +118,13 @@
             {# Alumnus sort #}
             <th class="col-xs-5 table-bordered">
                 {% if active_sort == 'alumnus_az' %}
-                <a href="{% filter_objects 'sort' 'alumnus_za' %}" style="display: block; color: black;"> Alumnus
+                    <a href="{% filter_objects 'sort' 'alumnus_za' %}" style="display: block; color: black;"> Alumnus
                     <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
                 {% elif active_sort == 'alumnus_za' %}
-                <a href="{% filter_objects 'sort' 'alumnus_az' %}" style="display: block; color: black;"> Alumnus
+                    <a href="{% filter_objects 'sort' 'alumnus_az' %}" style="display: block; color: black;"> Alumnus
                     <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes-alt"></i></span></a>
                 {% else %}
-                <a href="{% filter_objects 'sort' 'alumnus_za' %}" style="display: block; color: black;"> Alumnus
+                    <a href="{% filter_objects 'sort' 'alumnus_za' %}" style="display: block; color: black;"> Alumnus
                     <span style="float:right;"><i class="glyphicon glyphicon-sort"></i></span></a>
                 {% endif %}
             </th>

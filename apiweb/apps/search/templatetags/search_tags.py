@@ -69,14 +69,30 @@ def get_obp_year(alumnus):
         return ""
 
     date_stop = obp_set[0].date_stop
+    date_start = obp_set[0].date_start
+
     for pos in obp_set:
         if not pos.date_stop:
             continue
         if pos.date_stop > date_stop:
             date_stop = pos.date_stop
 
+    show = False
+    for pos in obp_set:
+        if not pos.date_start:
+            continue
+        if pos.date_start < date_start:
+            date_start = pos.date_start
+        # if pos.date_start >= date_start:
+        #     show = True
+    
+    date_string = ""
     if not date_stop:
         return "Current"
     else:
-        return date_stop.strftime("%Y")
+        if show:
+            date_string += date_start.strftime("%Y")
+            date_string += " - " 
 
+        date_string += date_stop.strftime("%Y")
+        return date_string

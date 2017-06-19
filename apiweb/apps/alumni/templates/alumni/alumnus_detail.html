@@ -194,116 +194,45 @@
 
     <div class="col-xs-12 col-md-3 pull-right text-left">
         {% get_thesis_supervisors alumnus "phd" as phd_supervisors %}
-            {% if phd_supervisors.0 %}
-                {% if not phd_supervisors|display_length_result == 1 %}
-                    <h2 class="text-left"> Thesis Advisors (PhD)</h2>
-                {% else %}
-                    <h2 class="text-left"> Thesis Advisor (PhD)</h2>
-                {% endif %}  
-
-                <table class="table">
-                    <thead>
-                    </thead>
-                    <tbody>
-                        {% for phd_supervisor, date_of_defence, type in phd_supervisors %}
-                            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ phd_supervisor.full_name }}
-                            {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
-
-
         {% get_thesis_supervisors alumnus "msc" as msc_supervisors %}
-            {% if msc_supervisors.0 %}
-                {% if not msc_supervisors|display_length_result == 1 %}
-                    <h2 class="text-left"> Thesis Advisors (Msc)</h2>
+        {% with amt_msc=msc_supervisors|display_length_result amt_phd=phd_supervisors|display_length_result %}
+        {% with amt_tot=amt_msc|add:amt_phd %}
+            {% if not amt_tot == 0 %}
+                {% if amt_tot > 1 %}
+                    <h2 class="text-left"> Thesis Advisors</h2>
                 {% else %}
-                    <h2 class="text-left"> Thesis Advisor (Msc)</h2>
-                {% endif %}  
-
-                <table class="table">
-                    <thead>
-                    </thead>
-                    <tbody>
-                        {% for msc_supervisor, date_of_defence, type in msc_supervisors %}
-                            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ msc_supervisor.full_name }}
-                            {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                    <h2 class="text-left"> Thesis Advisor</h2>                       
+                {% endif %}
             {% endif %}
-<!--         {% get_supervisors alumnus as supervisors %}
-            {% if supervisors.0 %}
-                {% if not supervisors|display_length_result == 1 %}
-                    <h3 class="text-left"> Thesis Advisors </h3>
-                {% else %}
-                    <h3 class="text-left"> Thesis Advisor </h3>
-                {% endif %}  
+
+            {% if amt_phd > 0 %}
+                <h3 class="text-left">PhD</h3>
                 <table class="table">
-                    <thead>
-                    </thead>
-                    <tbody>
-                        {% for supervisor, date_of_defence, type in supervisors %}
-                            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ supervisor.full_name }}
-                            {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} ({{ type|display_thesis_type }}) </a></td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %} -->
-
-
-
-
-
-<!-- 
-
-
-
-        {% get_supervisors_phd alumnus as phd_supervisors %}
-            {% if phd_supervisors.0 %}
-                {% if not phd_supervisors|display_length_result == 1 %}
-                    <h2 class="text-left"> Thesis Advisors (PhD)</h2>
-                {% else %}
-                    <h2 class="text-left"> Thesis Advisor (PhD)</h2>
-                {% endif %}  
-
-                <table class="table">
-                    <thead>
-                    </thead>
+                    <thead></thead>
                     <tbody>
                         {% for phd_supervisor, date_of_defence, type in phd_supervisors %}
-                            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ phd_supervisor.full_name }}
+                            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' phd_supervisor.slug %}">{{ phd_supervisor.full_name }}
                             {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             {% endif %}
 
-        {% get_supervisors_msc alumnus as msc_supervisors %}
-            {% if msc_supervisors.0 %}
-                {% if not msc_supervisors|display_length_result == 1 %}
-                    <h2 class="text-left"> Thesis Advisors (Msc)</h2>
-                {% else %}
-                    <h2 class="text-left"> Thesis Advisor (Msc)</h2>
-                {% endif %}  
-
+            {% if amt_msc > 0 %}
+                <h3 class="text-left">Msc</h3>
                 <table class="table">
-                    <thead>
-                    </thead>
+                    <thead></thead>                    
                     <tbody>
                         {% for msc_supervisor, date_of_defence, type in msc_supervisors %}
-                            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' supervisor.slug %}">{{ msc_supervisor.full_name }}
+                            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' msc_supervisor.slug %}">{{ msc_supervisor.full_name }}
                             {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             {% endif %}
-
- -->
-
-
-
+        
+        {% endwith %}
+        {% endwith %}
 
 
         {% get_students alumnus "phd" as phd_students %}

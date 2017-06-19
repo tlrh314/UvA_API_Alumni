@@ -17,21 +17,14 @@ from .models import Alumnus, Degree
 
 register = template.Library()
 
-
 def alumnus_list(request):
     alumni = Alumnus.objects.all()
 
     # Get filters
     defence_year = request.GET.getlist("year", None)
     degree_type = request.GET.getlist("type", None)
-    position = request.GET.getlist("position", None)
+    positions = request.GET.getlist("positions", None)
     sort_on = request.GET.getlist("sort", None)
-
-    # print(defence_year)
-    # print(degree_type)
-    # print(position)
-    # print(sort_on)
-
 
     # Apply filters
     # TODO: if filtered/sorted on postdoc, then the year range is not limited to postdoc
@@ -39,16 +32,21 @@ def alumnus_list(request):
     if defence_year:
         multifilter = Q()
         for year in defence_year:
-
             end_year = str(int(year) + 10)
             if year == "1900":
                 end_year = str(int(year) + 50)
             date_range=[year+"-01-01",end_year+"-01-01"]
             multifilter = multifilter | Q(degrees__date_of_defence__range=date_range)
             multifilter = multifilter | Q(positions__date_stop__range=date_range)
+            multifilter = multifilter | Q(positions__date_start__range=date_range)
+            multifilter = multifilter | Q(positions__date_stop__range=date_range)
+
+            # print(Q(positions__date_stop__range=date_range))
+            # print(Q(positions__date_start__range=date_range))
+            # print(Q(positions__date_end__range=date_range))
 
         alumni = alumni.filter(multifilter).distinct()
-
+ 
     if degree_type:
         multifilter = Q()
         for degree in degree_type:
@@ -66,6 +64,7 @@ def alumnus_list(request):
         # Caution: sorting on degree/position implies filtering also
         if sort_on[0] == "msc_lh":
             alumni = alumni.filter(degrees__type__iexact="msc").distinct().order_by("degrees__date_of_defence")
+
         if sort_on[0] == "msc_hl":
             alumni = alumni.filter(degrees__type__iexact="msc").distinct().order_by("-degrees__date_of_defence")
 
@@ -271,13 +270,9 @@ def thesis_list(request):
     return render(request, "alumni/thesis_list.html", {
         "theses": theses, "theses_per_page": theses_per_page })
 
-
 def thesis_detail(request, thesis_slug):
     thesis = get_object_or_404(Degree, thesis_slug=thesis_slug)
-
     return render(request, "alumni/thesis_detail.html", {"thesis": thesis})
-
-
 
 def thesis_has_no_pdf(request):
     return render(request, "alumni/thesis_not_found.html")
