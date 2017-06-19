@@ -153,8 +153,7 @@ def alumnus_list(request):
         alumni = paginator.page(paginator.num_pages)
 
 
-    return render(request, "alumni/alumnus_list.html", {"alumni": alumni,
-        "alumni_per_page": int(alumni_per_page)})
+    return render(request, "alumni/alumnus_list.html", {"alumni": alumni, "alumni_per_page": int(alumni_per_page)})
 
 
 def alumnus_detail(request, slug):

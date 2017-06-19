@@ -111,6 +111,10 @@ def get_yearrange(year):
              "1980": "1980 - 1989", "1990": "1990 - 1999", "2000": "2000 - 2009",
              "2010": "2010 - 2019"}.get(year, "none")
 
+@register.simple_tag(name="get_amount_advisors")
+def get_amount_advisors(advisors_list):
+    #print(len(advisors_list))
+    return len(advisors_list)
 
 @register.simple_tag(name="get_degree_types")
 def get_degree_types():
@@ -126,7 +130,6 @@ def get_sorting_options():
 @register.simple_tag(name="set_query", takes_context=True)
 def set_query(context, type, value):
     url = URLObject(context.request.get_full_path())
-
     return url.set_query_param(type, value)
 
 @register.filter(name="capitalize_filter_type")
@@ -138,6 +141,9 @@ def capitalize_filter_type(filter_type):
 def display_thesis_type(thesis_type):
     return ({"phd":"PhD","msc":"MSc","bsc":"BSc"}.get(thesis_type,""))
 
+@register.filter(name="display_length_result")
+def display_length_result(advisors_list):
+    return len(advisors_list)
 
 @register.simple_tag(name="filter_content", takes_context=True)
 def filter_content(context, filter_type, value):
@@ -162,25 +168,121 @@ def get_students(alumnus, type):
     return [ (thesis.alumnus, thesis.date_of_defence) for thesis in theses_supervised if thesis.thesis_type == type ]
 
 
+@register.simple_tag(name="get_length")
+def get_length(input_list):
+    return len(input_list)
+
+
+
+@register.simple_tag(name="get_thesis_supervisors")
+def get_thesis_supervisors(alumnus, thesis_type):
+    """
+    parameter type: 'msc', 'phd'
+    """
+    theses = alumnus.degrees.filter(type=thesis_type)
+    thesis_supervisors = []   
+    date_of_defence = []
+    type_theses = []
+
+    if len(theses) >= 1:
+        for thesis in theses:
+            for supervisor in thesis.thesis_advisor.all():
+                thesis_supervisors.append(supervisor)
+                date_of_defence.append(thesis.date_of_defence)
+                type_theses.append(thesis_type)
+
+    # Zip is an iterator so it can only exhaust, but it has no len.
+    # Typecast to list such that we can check if the list is empty
+    return list(zip(thesis_supervisors, date_of_defence, type_theses))
+
+@register.simple_tag(name="get_supervisors_phd")
+def get_supervisors_phd(alumnus):
+    """
+    Direcct function to get phd supervisors of a degree
+    """
+    phd_theses = alumnus.degrees.filter(type="phd")
+    supervisors = alumnus.degrees.none()
+    thesis_supervisors = []
+    date_of_defence = []
+    type_theses = []
+
+    if len(phd_theses) >= 1:
+        for phd_thesis in phd_theses:
+            for supervisor in phd_thesis.thesis_advisor.all():
+                thesis_supervisors.append(supervisor)
+                date_of_defence.append(phd_thesis.date_of_defence)
+                type_theses.append("phd")
+
+    # Zip is an iterator so it can only exhaust, but it has no len.
+    # Typecast to list such that we can check if the list is empty
+    return list(zip(thesis_supervisors, date_of_defence, type_theses))
+
+@register.simple_tag(name="get_supervisors_msc")
+def get_supervisors_msc(alumnus):
+    """
+    Direcct function to get msc supervisors of a degree
+    """
+    msc_theses = alumnus.degrees.filter(type="msc")
+    supervisors = alumnus.degrees.none()
+    thesis_supervisors = []
+    date_of_defence = []
+    type_theses = []
+
+    if len(msc_theses) >= 1:
+        for msc_thesis in msc_theses:
+            for supervisor in msc_thesis.thesis_advisor.all():
+                thesis_supervisors.append(supervisor)
+                date_of_defence.append(msc_thesis.date_of_defence)
+                type_theses.append("msc")
+
+    # Zip is an iterator so it can only exhaust, but it has no len.
+    # Typecast to list such that we can check if the list is empty
+    return list(zip(thesis_supervisors, date_of_defence, type_theses))
+
+
+
 @register.simple_tag(name="get_supervisors")
 def get_supervisors(alumnus):
+    """
+    Old method, but basically loops over all the degrees a person has. 
+    """
     phd_theses = alumnus.degrees.filter(type="phd")
     msc_theses = alumnus.degrees.filter(type="msc")
     supervisors = alumnus.degrees.none()
+    thesis_supervisors = []
     date_of_defence = []
     type_theses = []
-    if len(msc_theses) >= 1:
-        supervisors = supervisors | msc_theses[0].thesis_advisor.all()
-        date_of_defence.append(msc_theses[0].date_of_defence)
-        type_theses.append("msc")
+
     if len(phd_theses) >= 1:
-        supervisors = supervisors | phd_theses[0].thesis_advisor.all()
-        date_of_defence.append(phd_theses[0].date_of_defence)
-        type_theses.append("phd")
+        for phd_thesis in phd_theses:
+            for supervisor in phd_thesis.thesis_advisor.all():
+                thesis_supervisors.append(supervisor)
+                date_of_defence.append(phd_thesis.date_of_defence)
+                type_theses.append("phd")
+    if len(msc_theses) >= 1:
+        for msc_thesis in msc_theses:
+            for supervisor in msc_thesis.thesis_advisor.all():
+                thesis_supervisors.append(supervisor)
+                date_of_defence.append(msc_thesis.date_of_defence)
+                type_theses.append("msc")  
+
+    # print(thesis_supervisors)
+    # print(date_of_defence)
+    # print(type_theses)
+
+    # if len(msc_theses) >= 1:
+    #     supervisors = supervisors | msc_theses[0].thesis_advisor.all()
+    #     date_of_defence.append(msc_theses[0].date_of_defence)
+    #     type_theses.append("msc")
+    # if len(phd_theses) >= 1:
+    #     supervisors = supervisors | phd_theses[0].thesis_advisor.all()
+    #     date_of_defence.append(phd_theses[0].date_of_defence)
+    #     type_theses.append("phd")
+
     # Zip is an iterator so it can only exhaust, but it has no len.
     # Typecast to list such that we can check if the list is empty
-    return list(zip(supervisors, date_of_defence, type_theses))
-
+#    return list(zip(supervisors, date_of_defence, type_theses))
+    return list(zip(thesis_supervisors, date_of_defence, type_theses))
 
 @register.filter
 @template.defaultfilters.stringfilter
