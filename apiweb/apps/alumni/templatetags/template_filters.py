@@ -78,11 +78,13 @@ def check_dropdown(context, filter_type, value):
 def get_active_filters(context):
     filterzip = []
     active_filters_dict = URLObject(context.request.get_full_path()).query.multi_dict
+
     for filter_type, filter_values in active_filters_dict.items():
         if filter_type not in ["type", "year", "sort"]:
             continue
         else:
             for filter_value in filter_values:
+                print(filter_value)
                 filterzip.append((filter_type, filter_value))
     return filterzip
 

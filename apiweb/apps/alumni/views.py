@@ -40,6 +40,7 @@ def alumnus_list(request):
             multifilter = multifilter | Q(positions__date_stop__range=date_range)
             multifilter = multifilter | Q(positions__date_start__range=date_range)
             multifilter = multifilter | Q(positions__date_stop__range=date_range)
+            #multifilter = multifilter 
 
             # print(Q(positions__date_stop__range=date_range))
             # print(Q(positions__date_start__range=date_range))

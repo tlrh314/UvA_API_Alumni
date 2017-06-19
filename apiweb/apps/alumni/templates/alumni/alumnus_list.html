@@ -56,7 +56,7 @@
                 </ul>
             </li>
 
-            {# Allow to sort #}
+<!--             {# Allow to sort #}
             {% get_sorting_options as sort_order_options %}
             <li role="presentation" class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
@@ -74,7 +74,7 @@
                     </li>
                     {% endfor %}
                 </ul>
-
+            </li> -->
         </ul>
     </div>
     {# End Filters #}
@@ -101,7 +101,7 @@
                 {% elif filter_type == "type" %}
                     {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_thesis_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% elif filter_type == "sort" %}
-                    {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {{ "type"|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% else %}
                     {{ filter_type }}: {{ filter_value }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% endif %}
