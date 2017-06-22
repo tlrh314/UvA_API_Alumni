@@ -124,7 +124,7 @@ def redirect_to_profile(request):
 @login_required
 def site_contactinfo(request):
     if request.method == "POST":
-        form = SurveyContactInfoForm(data=request.POST, instance=request.user.alumnus,  files=request.FILES)
+        form = SurveyContactInfoForm(data=request.POST, instance=request.user.alumnus, files=request.FILES)
         if form.is_valid():
             alumnus = form.save(commit=False)
             alumnus.user = request.user
