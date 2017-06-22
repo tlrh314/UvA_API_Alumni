@@ -42,9 +42,7 @@ def filter_objects(context, filter_type, value):
         if values:
             for v in values:
                 new_url = new_url.add_query_param(filter_type, v)
-
         return new_url
-
 
     # Add new filter
     new_url = url.add_query_param(filter_type, value)
@@ -84,7 +82,6 @@ def get_active_filters(context):
             continue
         else:
             for filter_value in filter_values:
-                print(filter_value)
                 filterzip.append((filter_type, filter_value))
     return filterzip
 
