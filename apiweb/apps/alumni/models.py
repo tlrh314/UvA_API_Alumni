@@ -12,12 +12,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import python_2_unicode_compatible
+from django.conf import settings
 
 from jsonfield import JSONField
 from tinymce.models import HTMLField
 from django_countries.fields import CountryField
 
 from ..research.models import ResearchTopic
+from .storage import OverwriteStorage
 
 def get_mugshot_location(instance, filename):
     """ the media directory is already included """
@@ -142,7 +144,7 @@ class Alumnus(models.Model):
     place_of_birth  = models.CharField(_("place of birth"), blank=True, max_length=40)
     student_id      = models.CharField(_("student_id"), blank=True, max_length=10)
     mugshot         = models.ImageField(_("mugshot"), upload_to=get_mugshot_location, blank=True, null=True)
-    photo           = models.ImageField(_("photo"), upload_to=get_photo_location, blank=True, null=True)
+    photo           = models.ImageField(_("photo"), upload_to=get_photo_location,storage=OverwriteStorage(), blank=True, null=True)
     biography       = HTMLField(_("biography"), blank=True, default="")
     slug            = models.SlugField(_("slug"), unique=True)
 
@@ -204,6 +206,7 @@ class Alumnus(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.full_name)
+
         try:
             # Work around a nasty bug in Django: don't use user=self.user
             # Also: is user__username better than user__pk?

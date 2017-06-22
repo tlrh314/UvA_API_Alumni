@@ -23,7 +23,7 @@ def survey_contactinfo(request, use_for_main=False):
         here. This form surves the purpose to gather contact information, and
         on success this form then moves on to the survey_careerinfo view/form. """
     if request.method == "POST":
-        form = SurveyContactInfoForm(data=request.POST, instance=request.user.alumnus)
+        form = SurveyContactInfoForm(data=request.POST, instance=request.user.alumnus, files=request.FILES)
         if form.is_valid():
             alumnus = form.save(commit=False)
             alumnus.user = request.user
