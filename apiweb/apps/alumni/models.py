@@ -306,27 +306,31 @@ class Degree(models.Model):
     def __str__(self):
         return self.thesis_title
 
+    def save(self, *args, **kwargs):
+        # Get dissertation_nr and increment
+        if self.type == "phd" and not self.dissertation_nr:
+            dissertation_nr = 0
+            for d in Degree.objects.all():  # ugly bruteforce
+                if d.dissertation_nr and d.dissertation_nr > dissertation_nr:
+                    dissertation_nr = d.dissertation_nr
+            self.dissertation_nr = dissertation_nr + 1
 
-    # TODO: Idea by david: Cant we just get all the theses with the same name, and then count them and do total +1 ? 
+        # Set slug as firstname-lastname-degreetype with clash-prevention
+        MAXCOUNT = 100
+        count = 0
+        base_slug = slugify(self.alumnus.full_name_no_title + "-" + self.type)
+        self.thesis_slug = base_slug
 
-    # Caution, now the pdf filename is slugify of the author name. This is
-    # now copied over from research.models.Thesis such that pdf url is correct
-    # So we do not slugify the thesis_title on save to avoid mismatch. TODO: fix slug on save
-    # def save(self, *args, **kwargs):
-    #     MAXCOUNT = 100
-    #     count = 0
-    #     base_slug = slugify(self.thesis_title)
-    #     self.thesis_slug = base_slug
-    #     # The following loop should prevent a DB exception when
-    #     # two people enter the same title at the same time
-    #     while count < MAXCOUNT:
-    #         try:
-    #             super(Degree, self).save(*args, **kwargs)
-    #         except IntegrityError:
-    #             count += 1
-    #             self.thesis_slug = base_slug + "_{0}".format(count)
-    #         else:
-    #             break
+        # The following loop should prevent a DB exception when
+        # two people enter the same title at the same time
+        while count < MAXCOUNT:
+            try:
+                super(Degree, self).save(*args, **kwargs)
+            except IntegrityError:
+                count += 1
+                self.thesis_slug = base_slug + "_{0}".format(count)
+            else:
+                break
 
     def get_absolute_url(self):
         return reverse("alumni:thesis-detail", args=[self.thesis_slug])
