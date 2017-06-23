@@ -81,7 +81,6 @@ def alumnus_list(request):
             alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("positions__date_start")
 
 
-
         # if sort_on[0] == "pd_hl":
         #     alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("-positions__date_stop")
 
