@@ -111,13 +111,13 @@
         {% endfor %}
     </div>
 
--    {% get_active_sort as active_sort %} 
+    {% get_active_sort as active_sort %} 
     <div class="table-responsive">
     <table class="table table-striped">
         <thead class="table-bordered">
             <tr>
             {# Alumnus sort #}
-            <th class="col-xs-5 table-bordered">
+            <th class="col-xs-4 table-bordered">
                 {% if active_sort == 'alumnus_az' %}
                     <a href="{% filter_objects 'sort' 'alumnus_za' %}" style="display: block; color: black;"> Alumnus
                     <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
@@ -156,7 +156,7 @@
                 {% endif %}
             </th>
             {# postdoc sort #}
-            <th class="col-xs-1 table-bordered">
+            <th class="col-xs-2 table-bordered">
                 {% if active_sort == 'pd_lh' %}
                     <a href="{% filter_objects 'sort' 'pd_hl' %}" style="display: block; color: black;"> Postdoc
                         <span style="float:right;"><i class="glyphicon glyphicon-sort-by-attributes"></i></span></a>
