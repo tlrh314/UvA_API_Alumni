@@ -306,6 +306,9 @@ class Degree(models.Model):
     def __str__(self):
         return self.thesis_title
 
+
+    # TODO: Idea by david: Cant we just get all the theses with the same name, and then count them and do total +1 ? 
+
     # Caution, now the pdf filename is slugify of the author name. This is
     # now copied over from research.models.Thesis such that pdf url is correct
     # So we do not slugify the thesis_title on save to avoid mismatch. TODO: fix slug on save
@@ -335,8 +338,3 @@ class Degree(models.Model):
     @property
     def thesis_type(self):
         return self.type
-
-
-
-
-
