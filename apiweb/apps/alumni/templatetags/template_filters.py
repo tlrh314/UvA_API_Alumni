@@ -139,7 +139,9 @@ def display_thesis_type(thesis_type):
 
 @register.filter(name="display_sort_type")
 def display_sort_type(sort_type):
-    return ({"phd":"PhD","msc":"MSc","bsc":"BSc","pd":"Postdoc","staff":"Staff","obp":"Support Staff"}.get(sort_type[:-3],""))
+    return ({"phd":"PhD", "msc":"MSc", "bsc":"BSc", "pd":"Postdoc", "staff":"Staff", 
+        "obp":"Support Staff", "alumnus":"Alumnus", "author":"Author", 
+        "thesis":"Thesis", "year": "Defence date", "title": "Thesis title"}.get(sort_type[:-3],""))
 
 
 @register.filter(name="display_length_result")

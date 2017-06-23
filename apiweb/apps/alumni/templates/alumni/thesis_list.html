@@ -22,13 +22,13 @@
                 <ul class="dropdown-menu">
                     <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
                     {% for type in degrees %}
-                    {# Reset possible old filter and add store filter #}
-                    <li>
-                        <a href="{% filter_objects 'type' type.0 %}" class="menu-link">
-                            <div class="menu-text"> {{ type.1 }} </div>
-                            <img class="check-box" src="{% check_dropdown 'type' type.0 %}">
-                        </a>
-                    </li>
+                        {# Reset possible old filter and add store filter #}
+                        <li>
+                            <a href="{% filter_objects 'type' type.0 %}" class="menu-link">
+                                <div class="menu-text"> {{ type.1 }} </div>
+                                <img class="check-box" src="{% check_dropdown 'type' type.0 %}">
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             </li>
@@ -42,18 +42,18 @@
                 <ul class="dropdown-menu">
                     <li><a href="{% filter_objects 'year' 'None' %}"><i> No filter </i></a></li>
                     {% for year in years %}
-                    {# Reset possible old filter and add store filter #}
-                    <li>
-                        <a href="{% filter_objects 'year' year.1 %}" class="menu-link">
-                            <div class="menu-text"> {{ year.0 }} </div>
-                            <img class="check-box" src="{% check_dropdown 'year' year.1 %}">
-                        </a>
-                    </li>
+                        {# Reset possible old filter and add store filter #}
+                        <li>
+                            <a href="{% filter_objects 'year' year.1 %}" class="menu-link">
+                                <div class="menu-text"> {{ year.0 }} </div>
+                                <img class="check-box" src="{% check_dropdown 'year' year.1 %}">
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             </li>
 
-            {# Allow to sort #}
+<!--             {# Allow to sort #}
             {% get_sorting_options as sort_order_options %}
             <li role="presentation" class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
@@ -62,17 +62,17 @@
                 <ul class="dropdown-menu">
                     <li><a href="{% filter_objects 'sort' 'None' %}"><i> No filter </i></a></li>
                     {% for order in sort_order_options %}
-                    {# Reset possible old filter and add store filter #}
-                    <li>
-                        <a href="{% filter_objects 'sort' order.1 %}" class="menu-link">
-                            <div class="menu-text"> {{ order.0 }} </div>
-                            <img class="check-box" src="{% check_dropdown 'sort' order.1 %}">
-                        </a>
-                    </li>
+                        {# Reset possible old filter and add store filter #}
+                        <li>
+                            <a href="{% filter_objects 'sort' order.1 %}" class="menu-link">
+                                <div class="menu-text"> {{ order.0 }} </div>
+                                <img class="check-box" src="{% check_dropdown 'sort' order.1 %}">
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             </li>
-
+ -->
         </ul>
     </div>
     {# End Filters #}
@@ -98,9 +98,14 @@
                     {{ filter_type|capitalize_filter_type }}: {{ yearrange }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% elif filter_type == "type" %}
                     {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_thesis_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                {% elif filter_type == "sort" %}
+                    {% if "author" in filter_value or "title" in filter_value or "year" in filter_value %}
+                        {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {% else %}
+                        {{ "type"|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {% endif %}
                 {% else %}
                     {{ filter_type }}: {{ filter_value }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-
 
                 {% endif %}
             </button>

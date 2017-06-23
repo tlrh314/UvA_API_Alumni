@@ -100,9 +100,18 @@
                         {{ filter_type|capitalize_filter_type }}: {{ yearrange }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% elif filter_type == "type" %}
                     {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_thesis_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                {# Little hack here, so the sort filter can be active, but we display it as a type filter button #}
                 {% elif filter_type == "sort" %}
-                    {{ "type"|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {% if "alumnus" in filter_value %}
+                        {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {# Little hack here, so the sort filter can be active, but we display it as a type filter button #}
+                    {% else %}
+                        {{ "type"|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    {% endif %}
+                    
+                
+
+
+
                 {% else %}
                     {{ filter_type }}: {{ filter_value }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 {% endif %}

@@ -4,7 +4,6 @@
 {% block content %}
 
 <div class="main-content" role="main">
-
     <div class="span9">
         <h1 class="text-center">{{ thesis.thesis_title }}</h1>
     </div>
@@ -14,9 +13,9 @@
             <div class="col-xs-12 col-sm-8">
                 <h3 class="text-left">
                     {% if thesis.type == "msc" %}
-                    Master's Thesis
+                        Master's Thesis
                     {% else %}
-                    PhD Dissertation
+                        PhD Dissertation
                     {% endif %}
                 </h3>
                 <table class="table">
@@ -27,17 +26,17 @@
                     <tr><th> Email </th><td><a href="mailto:{{ thesis.alumnus.email }}">{{ thesis.alumnus.email }}</a></td></tr>
                     <tr><th> Date </th><td>{{ thesis.date_of_defence|date:"j M Y" }}</td></tr>
                     <tr><th> URL </th><td>
-                            {% if thesis.thesis_url %}
+                        {% if thesis.thesis_url %}
                             <a href="{{ thesis.thesis_url }}" target="_blank"> UvA Thesis Library </a>
-                            {% endif %}
+                        {% endif %}
                     </td></tr>
                     <tr><th> Full Text </th><td>
-                            {% if thesis.thesis_pdf.name %}
+                        {% if thesis.thesis_pdf.name %}
                             <a href="{{ thesis.thesis_pdf.url }}" target="_blank"> Available. Click here for the full text. </a>
-                            {% else %}
+                        {% else %}
                             <a href="{% url 'contact' %}"> Unavailable. Please contact us if you can provide the full text!</a>
                             {# <a href="{% url 'alumni:thesis-has-no-pdf' %}"> PDF </a> #}
-                            {% endif %}
+                        {% endif %}
                     </td></tr>
                     </tbody>
                 </table>
@@ -49,9 +48,9 @@
                     <thead>
                     </thead>
                     <tbody>
-                    {% for advisor in thesis.thesis_advisor.all %}
-                    <tr><th><a href="{% url 'alumni:alumnus-detail' advisor.slug %}">{{ advisor.full_name }}</a></td></tr>
-                    {% endfor %}
+                        {% for advisor in thesis.thesis_advisor.all %}
+                            <tr><th><a href="{% url 'alumni:alumnus-detail' advisor.slug %}">{{ advisor.full_name }}</a></td></tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
