@@ -76,8 +76,14 @@ def alumnus_list(request):
 
         if sort_on[0] == "pd_lh":
             alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("positions__date_stop")
+
         if sort_on[0] == "pd_hl":
-            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("-positions__date_stop")
+            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("positions__date_start")
+
+
+
+        # if sort_on[0] == "pd_hl":
+        #     alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("-positions__date_stop")
 
         # TODO: if an alumnus has several staff positions, then the latest date_stop must be returned.
         # Is this aggregating / grouping several tables together, then taking the max?
@@ -86,14 +92,25 @@ def alumnus_list(request):
                 "Adjunct Staff", "Faculty Staff"]).distinct().order_by("positions__date_stop")
         if sort_on[0] == "staff_hl":
             alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
-                "Adjunct Staff", "Faculty Staff"]).distinct().order_by("-positions__date_stop")
+                "Adjunct Staff", "Faculty Staff"]).distinct().order_by("positions__date_start")
+
+        # if sort_on[0] == "staff_hl":
+        #     alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
+        #         "Adjunct Staff", "Faculty Staff"]).distinct().order_by("-positions__date_stop")
+
+
 
         if sort_on[0] == "obp_lh":
             alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
                 "Outreach", "OBP", "Software Developer", "Nova" ]).distinct().order_by("positions__date_stop")
+
         if sort_on[0] == "obp_hl":
             alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
-                "Outreach", "OBP", "Software Developer", "Nova" ]).distinct().order_by("-positions__date_stop")
+                "Outreach", "OBP", "Software Developer", "Nova" ]).distinct().order_by("positions__date_start")
+
+        # if sort_on[0] == "obp_hl":
+        #     alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
+        #         "Outreach", "OBP", "Software Developer", "Nova" ]).distinct().order_by("-positions__date_stop")
     else:
         alumni = alumni.order_by("last_name")
 
@@ -104,6 +121,7 @@ def alumnus_list(request):
     for alumnus in alumni:
         if not alumnus in alumnus_unique:
             alumnus_unique.append(alumnus)
+
     alumni = alumnus_unique[:]
 
     # Paginate the list

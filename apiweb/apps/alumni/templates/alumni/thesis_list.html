@@ -102,7 +102,7 @@
                     {% if "author" in filter_value or "title" in filter_value or "year" in filter_value %}
                         {{ filter_type|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     {% else %}
-                        {{ "type"|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        {{ "type/Sort"|capitalize_filter_type }}: {{ filter_value|display_sort_type }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     {% endif %}
                 {% else %}
                     {{ filter_type }}: {{ filter_value }} <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
