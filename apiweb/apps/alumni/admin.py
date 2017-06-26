@@ -266,7 +266,7 @@ class AlumnusAdmin(UserAdmin):
                  "fields": ["academic_title", "initials", "first_name", "prefix",
                             "last_name", "gender", "birth_date",
                              "place_of_birth", "nationality",]
-                             # "mugshot", "photo", "biography"]
+                             # "mugshot", "biography"]
                 }),
 
         ("Contact information", {
@@ -280,7 +280,7 @@ class AlumnusAdmin(UserAdmin):
                 }),
 
         ("Biography", {
-                 "fields": [ "mugshot", "photo", ("biography", "show_biography")]
+                 "fields": [ "mugshot", ("biography", "show_biography")]
                 }),
 
         ("Adress information", {

@@ -42,8 +42,8 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-3 pull-left interview-photo">
-                    {% if post.alumnus.photo %}
-                    <img src="{{ post.alumnus.photo.url }}" width="150px"></img>
+                    {% if post.alumnus.mugshot %}
+                    <img src="{{ post.alumnus.mugshot.url }}" width="150px"></img>
                     {% else %}
                     <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img>
                     {% endif %}

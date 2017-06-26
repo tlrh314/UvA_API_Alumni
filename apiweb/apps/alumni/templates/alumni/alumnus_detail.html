@@ -19,8 +19,8 @@
         <div class="row">
             {% if not alumnus.passed_away %}
                 <div class="col-xs-12 col-sm-3">
-                    {% if alumnus.photo %}
-                        <img src="{{ alumnus.photo.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
+                    {% if alumnus.mugshot %}
+                        <img src="{{ alumnus.mugshot.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
                     {% else %}
                         {# <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img> #}
                     {% endif %}

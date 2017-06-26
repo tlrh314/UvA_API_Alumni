@@ -30,11 +30,6 @@ def get_mugshot_location(instance, filename):
     return os.path.join("uploads", "alumni", "mugshots",
                         instance.username, filename)
 
-def get_photo_location(instance, filename):
-    """ the media directory is already included """
-    return os.path.join("uploads", "alumni", "photos",
-                        instance.username, filename)
-
 def get_thesis_pdf_location(instance, filename):
     """ the media directory is already included """
     return os.path.join("uploads", "theses", instance.type, filename)
@@ -173,8 +168,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     nationality     = CountryField(_("nationality"), blank=True)
     place_of_birth  = models.CharField(_("place of birth"), blank=True, max_length=40)
     student_id      = models.CharField(_("student_id"), blank=True, max_length=10)
-    mugshot         = models.ImageField(_("mugshot"), upload_to=get_mugshot_location, blank=True, null=True)
-    photo           = models.ImageField(_("photo"), upload_to=get_photo_location,storage=OverwriteStorage(), blank=True, null=True)
+    mugshot         = models.ImageField(_("mugshot"), upload_to=get_mugshot_location, storage=OverwriteStorage(), blank=True, null=True)
     biography       = HTMLField(_("biography"), blank=True, default="")
     slug            = models.SlugField(_("slug"), unique=True)
 

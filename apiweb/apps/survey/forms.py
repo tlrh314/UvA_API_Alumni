@@ -242,7 +242,7 @@ class SurveyContactInfoForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
-    photo = forms.ImageField(
+    mugshot = forms.ImageField(
         required=False)
 
     biography = forms.CharField(
@@ -350,7 +350,7 @@ class SurveyContactInfoForm(forms.ModelForm):
     field_order= [
             "academic_title", "initials", "first_name", "middle_names",
             "prefix", "last_name", "gender", "birth_date",  "nationality",
-            "place_of_birth", "photo", "biography", "show_biography", "email",
+            "place_of_birth", "mugshot", "biography", "show_biography", "email",
             "show_email", "home_phone", "mobile", "homepage", "show_homepage",
             "facebook", "show_facebook", "twitter","show_twitter", "linkedin",
             "show_linkedin", "city", "country" ]

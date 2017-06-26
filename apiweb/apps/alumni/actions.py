@@ -31,7 +31,7 @@ def save_all_alumni_to_xls(request, queryset=None):
                    "slug",  "email", "home_phone", "mobile",  "homepage", "facebook",
                    "twitter",  "linkedin",  "address", "streetname", "streetnumber",
                    "zipcode", "city", "country", "position", "specification", "office",
-                   "work_phone", "ads_name", #"biography",  "mugshot", "photo",
+                   "work_phone", "ads_name", #"biography",  "mugshot",
                    # "research", "contact", "comments", "date_created", "date_updated",
     ]
 
@@ -51,7 +51,7 @@ def save_all_alumni_to_xls(request, queryset=None):
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
 
-            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary 
+            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary
             if type(value) is bytes:
                 value = value.decode('unicode_escape')
 
@@ -63,7 +63,7 @@ def save_all_alumni_to_xls(request, queryset=None):
             if attr == 'gender':
                 if not value == "":
                     value = Alumnus.GENDER_CHOICES[int(value)-1][1]
-                    
+
             sheet.write(row+1, col, value, style=borders)
 
     # # Return a response that allows to download the xls-file.
@@ -106,9 +106,9 @@ def save_all_theses_to_xls(request, queryset=None):
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
 
-            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary 
+            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary
             if type(value) is bytes:
-                value = value.decode('unicode_escape')           
+                value = value.decode('unicode_escape')
 
             # Do some cleanups
             if value == "None": value = ""
@@ -116,13 +116,13 @@ def save_all_theses_to_xls(request, queryset=None):
             if attr == 'gender':
                 if not value == "":
                     value = Alumnus.GENDER_CHOICES[int(value)-1][1]
-                    
+
             sheet.write(row+1, col, value, style=borders)
 
         for col, attr in enumerate(attributes):
             try:
                 value = str(getattr(thesis, attr, u"")).encode('ascii', 'ignore')
-                
+
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
 
@@ -143,10 +143,10 @@ def save_all_theses_to_xls(request, queryset=None):
                 if len(str(thesis)) == 0:
                     value = ""
 
-            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary 
+            #The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary
             if type(value) is bytes:
-                value = value.decode('unicode_escape')  
-                
+                value = value.decode('unicode_escape')
+
             # Do some cleanups
             if value == "None": value = ""
             #print(value)
