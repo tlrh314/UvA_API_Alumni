@@ -100,6 +100,10 @@ def tree_msc(request):
     return render(request, "visualization/tree_msc.html", {'json_data': json_data})
 
 
+def nationality(request):
+    alumni = Alumnus.objects.all().exclude(nationality='')
+    
+    return render(request, "visualization/tree2.html")
 
 
 
