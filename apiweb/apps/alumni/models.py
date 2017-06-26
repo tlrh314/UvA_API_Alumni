@@ -249,8 +249,15 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.full_name)
-        count = Alumnus.objects.filter(slug__contains = self.slug).count()
-        if count:
+        print(self.slug)
+        try:
+            # Work around a nasty bug in Django: don't use user=self.user
+            # Also: is user__username better than user__pk?
+            Alumnus.objects.exclude(username=self.username).get(slug=self.slug)
+        except ObjectDoesNotExist:
+            pass
+        else:
+            count = Alumnus.objects.filter(slug__contains = self.slug).count()
             self.slug = "{0}_{1}".format(self.slug, str(count + 1))
         os.umask(0o002)  # change umask so created (sub)directories
                          # have correct permissions
