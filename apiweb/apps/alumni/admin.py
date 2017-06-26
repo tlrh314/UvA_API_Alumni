@@ -5,6 +5,7 @@ from django import forms
 from django.db import models
 from django.db.models import Q
 from django.contrib import admin
+from django.contrib.auth.models import Group
 from django.contrib.admin.sites import site
 from django.contrib.auth.forms import PasswordResetForm
 from django.http.response import HttpResponseRedirect
@@ -29,6 +30,7 @@ from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 
 
 # Do not show the Site Admin
+admin.site.unregister(Group)
 admin.site.unregister(Site)
 
 class PreviousPositionInline(admin.StackedInline):
