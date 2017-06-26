@@ -291,7 +291,7 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         ("Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
+                "fields": ["comments",  "date_created", "date_updated"]
                 }),
     ]
 
@@ -300,10 +300,6 @@ class AlumnusAdmin(admin.ModelAdmin):
         css = {
              "all": ("css/admin_extra.css",)
         }
-
-    def save_model(self, request, obj, form, change):
-        obj.last_updated_by = request.user
-        obj.save()
 
     def changelist_view(self, request, extra_context=None):
         """ Hack the default changelist_view to allow action "export_all_alumni_to_excel"
