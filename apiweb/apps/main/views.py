@@ -123,21 +123,21 @@ def contact_success(request):
 @login_required
 def redirect_to_profile(request):
     messages.success(request, "Succesfully logged in!")
-    return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+    return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
 
 
 @login_required
 def site_contactinfo(request):
     if request.method == "POST":
-        form = SurveyContactInfoForm(data=request.POST, instance=request.user.alumnus, files=request.FILES)
+        form = SurveyContactInfoForm(data=request.POST, instance=request.user, files=request.FILES)
         if form.is_valid():
             alumnus = form.save(commit=False)
-            alumnus.user = request.user
+            alumnus = request.user
             alumnus.save()
             messages.success(request, "Profile succesfully updated!")
-            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
     else:
-        form = SurveyContactInfoForm(instance=request.user.alumnus)
+        form = SurveyContactInfoForm(instance=request.user)
 
     return render(request, "main/contactinfo_change_form.html", { "form": form,  })
 
@@ -145,7 +145,7 @@ def site_contactinfo(request):
 @login_required
 def site_careerinfo(request, which_position_value=0):
     try:
-        prefill_instance = JobAfterLeaving.objects.all().filter(alumnus=request.user.alumnus, which_position=which_position_value)[0]
+        prefill_instance = JobAfterLeaving.objects.all().filter(alumnus=request.user, which_position=which_position_value)[0]
     except IndexError:
         # This could occur if Alumnus did not yet supply the info
         prefill_instance = None
@@ -155,7 +155,7 @@ def site_careerinfo(request, which_position_value=0):
 
         if form.is_valid():
             jobafterleaving = form.save(commit=False)
-            jobafterleaving.alumnus = request.user.alumnus
+            jobafterleaving.alumnus = request.user
             jobafterleaving.which_position = which_position_value
             jobafterleaving.save()
             jobname = JobAfterLeaving.WHICH_POSITION_CHOICES[int(which_position_value)][1]
@@ -164,7 +164,7 @@ def site_careerinfo(request, which_position_value=0):
             else:
                 jobname += " Job after Leaving API"
             messages.success(request, "{0} succesfully updated!".format(jobname))
-            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
     else:
         form = SurveyCareerInfoForm(instance=prefill_instance)
 
@@ -181,9 +181,9 @@ def site_theses(request):
         if True:
             # form.save()
             messages.success(request, "Profile succesfully updated!")
-            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.alumnus.slug}))
+            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
     else:
-        # form = SurveyPrivacySettingsForm(instance=request.user.alumnus)
+        # form = SurveyPrivacySettingsForm(instance=request.user)
         form = None
         pass
 
