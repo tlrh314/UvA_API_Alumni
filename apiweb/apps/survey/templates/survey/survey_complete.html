@@ -10,11 +10,11 @@
 
     <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
         <div>
-            Dear {{ request.user.alumnus.full_name }}, <br>
+            Dear {{ request.user.full_name }}, <br>
             <br>
             Thank you very much for taking the time to update your career and contact information in the API Alumnus Database.<br>
             <br>
-            You can now <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}">visit your personal alumnus page. </br>
+            You can now <a href="{% url 'alumni:alumnus-detail' request.user.slug %}">visit your personal alumnus page. </br>
             </div>
         </div>
     </div>
