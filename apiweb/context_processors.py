@@ -6,7 +6,7 @@ from django.contrib.sites.models import Site
 
 from apiweb.apps.main.models import ContactInfo
 from apiweb.apps.interviews.models import Post, Category
-from apiweb.apps.alumni.models import Degree
+from apiweb.apps.research.models import Thesis
 from .decorators import IPAddress
 from .settings import ALLOWED_IPS
 from .ipaddress import IPAddress
@@ -47,7 +47,7 @@ def get_latest_theses(request):
     if latest_interviews.count() > 6:
         latest_interviews = latest_interviews[:6]
 
-    latest_theses = Degree.objects.filter(type="phd").order_by("-date_of_defence")[:6]
+    latest_theses = Thesis.objects.filter(type="phd").order_by("-date_of_defence")[:6]
 
     return {"latest_interviews": latest_interviews, "latest_theses": latest_theses}
 

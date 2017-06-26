@@ -9,7 +9,7 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.template.defaultfilters import stringfilter
 
 from ..models import Alumnus
-from ..models import Degree
+from ...research.models import Thesis
 
 register = template.Library()
 
@@ -113,9 +113,9 @@ def get_yearrange(year):
 def get_amount_advisors(advisors_list):
     return len(advisors_list)
 
-@register.simple_tag(name="get_degree_types")
-def get_degree_types():
-    return Degree.DEGREE_TYPE
+@register.simple_tag(name="get_thesis_types")
+def get_thesis_types():
+    return Thesis.THESIS_TYPE
 
 @register.simple_tag(name="get_sorting_options")
 def get_sorting_options():
@@ -139,8 +139,8 @@ def display_thesis_type(thesis_type):
 
 @register.filter(name="display_sort_type")
 def display_sort_type(sort_type):
-    return ({"phd":"PhD", "msc":"MSc", "bsc":"BSc", "pd":"Postdoc", "staff":"Staff", 
-        "obp":"Support Staff", "alumnus":"Alumnus", "author":"Author", 
+    return ({"phd":"PhD", "msc":"MSc", "bsc":"BSc", "pd":"Postdoc", "staff":"Staff",
+        "obp":"Support Staff", "alumnus":"Alumnus", "author":"Author",
         "thesis":"Thesis", "year": "Defence date", "title": "Thesis title"}.get(sort_type[:-3],""))
 
 
@@ -167,20 +167,20 @@ def filter_content(context, filter_type, value):
 @register.simple_tag(name="get_students")
 def get_students(alumnus, type):
     theses_supervised = alumnus.students.all().order_by("-date_of_defence")
-    return [ (thesis.alumnus, thesis.date_of_defence) for thesis in theses_supervised if thesis.thesis_type == type ]
+    return [ (thesis.alumnus, thesis.date_of_defence) for thesis in theses_supervised if thesis.type == type ]
 
 @register.simple_tag(name="get_thesis_supervisors")
 def get_thesis_supervisors(alumnus, thesis_type):
     """
     parameter type: 'msc', 'phd'
     """
-    theses = alumnus.degrees.filter(type=thesis_type)
-    thesis_supervisors = []   
+    theses = alumnus.theses.filter(type=thesis_type)
+    thesis_supervisors = []
     date_of_defence = []
     type_theses = []
 
     for thesis in theses:
-        for supervisor in thesis.thesis_advisor.all():
+        for supervisor in thesis.advisor.all():
             thesis_supervisors.append(supervisor)
             date_of_defence.append(thesis.date_of_defence)
             type_theses.append(thesis_type)
@@ -192,27 +192,27 @@ def get_thesis_supervisors(alumnus, thesis_type):
 @register.simple_tag(name="get_supervisors")
 def get_supervisors(alumnus):
     """
-    Old method, but basically loops over all the degrees a person has. 
+    Old method, but basically loops over all the theses person has.
     """
-    phd_theses = alumnus.degrees.filter(type="phd")
-    msc_theses = alumnus.degrees.filter(type="msc")
-    supervisors = alumnus.degrees.none()
+    phd_theses = alumnus.theses.filter(type="phd")
+    msc_theses = alumnus.theses.filter(type="msc")
+    supervisors = alumnus.theses.none()
     thesis_supervisors = []
     date_of_defence = []
     type_theses = []
 
     if len(phd_theses) >= 1:
         for phd_thesis in phd_theses:
-            for supervisor in phd_thesis.thesis_advisor.all():
+            for supervisor in phd_thesis.advisor.all():
                 thesis_supervisors.append(supervisor)
                 date_of_defence.append(phd_thesis.date_of_defence)
                 type_theses.append("phd")
     if len(msc_theses) >= 1:
         for msc_thesis in msc_theses:
-            for supervisor in msc_thesis.thesis_advisor.all():
+            for supervisor in msc_thesis.advisor.all():
                 thesis_supervisors.append(supervisor)
                 date_of_defence.append(msc_thesis.date_of_defence)
-                type_theses.append("msc")  
+                type_theses.append("msc")
 
     # Zip is an iterator so it can only exhaust, but it has no len.
     # Typecast to list such that we can check if the list is empty

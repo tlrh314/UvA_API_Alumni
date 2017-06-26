@@ -21,7 +21,8 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from .forms import SearchForm
 from ...settings import GOOGLE_API_KEY
 from ...settings import GOOGLE_CX_ID
-from ..alumni.models import Alumnus, Degree
+from ..alumni.models import Alumnus
+from ..research.models import Thesis
 
 def search(request):
     """  Searches through following fields:
@@ -85,14 +86,14 @@ def search(request):
         if (term.isdigit() and len(term) == 4):
             end_year = str(int(term) + 1)
             date_range=[term+"-01-01",end_year+"-01-01"]
-            time_filter = (time_filter | Q(degrees__date_of_defence__range=date_range)
-                                       | Q(degrees__date_stop__range=date_range)
-                                       | Q(degrees__date_start__range=date_range))
+            time_filter = (time_filter | Q(theses__date_of_defence__range=date_range)
+                                       | Q(theses__date_stop__range=date_range)
+                                       | Q(theses__date_start__range=date_range))
 
         else:
             search_filter = (search_filter | Q(last_name__icontains=term)|
                                              Q(first_name__icontains=term) |
-                                             Q(degrees__thesis_title__icontains=term))
+                                             Q(theses__title__icontains=term))
 
     # Compute combined filter
     total_filter = time_filter & search_filter

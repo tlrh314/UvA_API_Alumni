@@ -13,15 +13,15 @@
     {# Filters #}
     <div class="col-md-12 text-center">
         <ul class="nav nav-pills selector-nav center-pills">
-            {# Degree type dropdown menu #}
-            {% get_degree_types as degrees %}
+            {# Thesis type dropdown menu #}
+            {% get_thesis_types as theses %}
             <li role="presentation" class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                    aria-expanded="false">Degree Type <span class="caret"></span>
+                    aria-expanded="false">Thesis Type <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
-                    {% for type in degrees %}
+                    {% for type in theses %}
                         {# Reset possible old filter and add store filter #}
                         <li>
                             <a href="{% filter_objects 'type' type.0 %}" class="menu-link">
@@ -82,7 +82,7 @@
 
         {# Reset all filters button #}
         {% if active_filters %}
-            <a class="dropdown-toggle" href="{% url 'alumni:thesis-list' %}" aria-haspopup="true" aria-expanded="false">
+            <a class="dropdown-toggle" href="{% url 'research:thesis-list' %}" aria-haspopup="true" aria-expanded="false">
                 <button type="button" class="btn btn-danger">
                     Reset All Filters <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>
@@ -189,20 +189,20 @@
             </tr>
         </thead>
         <tbody>
-            {% include "alumni/thesis_paginator.html" %}
+            {% include "research/thesis_paginator.html" %}
             {# Add the content #}
-            <h2 class="text-center">Total number of degrees : {{ theses.paginator.count }}</h2>
+            <h2 class="text-center">Total number of theses: {{ theses.paginator.count }}</h2>
             {% for thesis in theses%}
             <tr>
                 <td class="col-md-6">{% if thesis.thesis_title %}
-                        <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">{{ thesis.thesis_title }}
+                        <a href="{% url 'research:thesis-detail' thesis.slug %}">{{ thesis.title }}
                     {% else %}
                         <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
                     {% endif %}
-                    {% if thesis.thesis_pdf.name %}
-                        (<a href="{{ thesis.thesis_pdf.url }}">PDF</a>)
+                    {% if thesis.pdf.name %}
+                        (<a href="{{ thesis.pdf.url }}">PDF</a>)
                     {% else %}
-                        (<a href="{% url 'alumni:thesis-has-no-pdf' %}">PDF</a>)
+                        (<a href="{% url 'research:thesis-has-no-pdf' %}">PDF</a>)
                     {% endif %}
                 </td>
                 <td class="col-md-2"><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td>
@@ -228,6 +228,6 @@
         </tbody>
     </table>
     </div>
-    {% include "alumni/thesis_paginator.html" %}
+    {% include "research/thesis_paginator.html" %}
 </div>
 {% endblock content %}

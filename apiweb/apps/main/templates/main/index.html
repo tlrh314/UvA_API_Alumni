@@ -40,7 +40,7 @@
                     <h5 class="text-left">
                         {{ latest_thesis.date_of_defence|date:"M d, Y" }} • <a href="{% url 'alumni:alumnus-detail' latest_thesis.alumnus.slug %}">{{ latest_thesis.author }}</a>
                     </h5>
-                    <a href="{% url 'alumni:thesis-detail' latest_thesis.thesis_slug %}">{{ latest_thesis.thesis_title }}</a>
+                    <a href="{% url 'research:thesis-detail' latest_thesis.slug %}">{{ latest_thesis.title }}</a>
 
             </td></tr>
             </tbody>

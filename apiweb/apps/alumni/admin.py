@@ -1,12 +1,9 @@
 from __future__ import unicode_literals, absolute_import, division
-import copy
 
-from django import forms
 from django.db import models
 from django.db.models import Q
 from django.contrib import admin
 from django.http import HttpResponseRedirect
-from django.contrib.admin.sites import site
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import PasswordResetForm
@@ -20,16 +17,18 @@ from django.contrib.auth.forms import (
 
 from apiweb import context_processors
 from .models import PositionType, PreviousPosition
-from .models import Alumnus, AcademicTitle, Degree
+from .models import Alumnus, AcademicTitle
 from .forms import AlumnusAdminForm, PreviousPositionAdminForm
-from .actions import save_all_alumni_to_xls, save_all_theses_to_xls
+from .actions import save_all_alumni_to_xls
 from ..survey.admin import JobAfterLeavingAdminInline
 from ..survey.forms import SendSurveyForm
-from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
+from ..research.models import Thesis
+from ...settings import ADMIN_MEDIA_JS
 
 # Do not show the Site Admin
 admin.site.unregister(Group)
 admin.site.unregister(Site)
+
 
 class PreviousPositionInline(admin.StackedInline):
     model = PreviousPosition
@@ -38,6 +37,7 @@ class PreviousPositionInline(admin.StackedInline):
     extra = 0
     # There are two fk relations with Alumnus, so we must specify which one should be inlined
     fk_name = "alumnus"
+
 
 @admin.register(PreviousPosition)
 class PreviousPositionAdmin(admin.ModelAdmin):
@@ -85,125 +85,13 @@ class PreviousPositionAdmin(admin.ModelAdmin):
     get_alumnus.admin_order_field = "alumnus__last_name"
 
 
-class DegreeAdminInline(admin.StackedInline):
+class ThesisAdminInline(admin.StackedInline):
     extra = 0
-    model = Degree
-    filter_horizontal = ("thesis_advisor", )
-    readonly_fields = ("date_created", "date_updated", "last_updated_by", "thesis_slug")
+    model = Thesis
+    filter_horizontal = ("advisor", )
+    readonly_fields = ("date_created", "date_updated", "last_updated_by", "slug")
     # There are two fk relations with Alumnus, so we must specify which one should be inlined
     fk_name = "alumnus"
-
-
-class DegreeListFilter(admin.SimpleListFilter):
-    title = _("empty thesis title")
-    parameter_name = "have_title"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("yes", _("Yes")),
-            ("no",  _("No")),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == "no":
-            return queryset.filter(thesis_title__isnull=False).exclude(thesis_title="")
-
-        if self.value() == "yes":
-            return queryset.filter(Q(thesis_title__isnull=True) | Q(thesis_title__exact=""))
-
-
-@admin.register(Degree)
-class DegreeAdmin(admin.ModelAdmin):
-    list_display = ("get_author", "thesis_title", "show_year", "type")
-    list_filter = ("type", DegreeListFilter)
-    search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name",
-        "date_start", "date_stop", "date_of_defence")
-    ordering = ("alumnus__username", )
-    filter_horizontal = ("thesis_advisor", )
-    readonly_fields = ("date_created", "date_updated", "last_updated_by", "thesis_slug", )
-    actions = ("export_selected_degrees_to_excel", "export_all_degrees_to_excel", )
-
-    max_num = 2
-
-    fieldsets = [
-        ( "Degree Information", {
-            "fields":
-                [ "alumnus", "type", "date_start", "date_stop" ],
-            }
-        ), ( "Thesis Information", {
-            "fields":
-                [ "thesis_title", "date_of_defence", "thesis_url", "dissertation_nr", "thesis_slug", "thesis_in_library" ]
-            }
-        ), ( "Thesis Advisor ", {
-            "fields":
-                [ "thesis_advisor" ]
-            }
-        ), ( "Full Text and Cover Photo", {
-            "fields":
-                [ "thesis_pdf", "thesis_photo" ]
-            }
-        ), ( "Extra information", {
-                "classes": ["collapse"],
-                "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
-            }
-        ),
-    ]
-
-    class Media:
-        js = ADMIN_MEDIA_JS
-        css = {
-             "all": ("css/admin_extra.css",)
-        }
-
-    def save_model(self, request, obj, form, change):
-        obj.last_updated_by = request.user
-        obj.save()
-
-    def changelist_view(self, request, extra_context=None):
-        """ Hack the default changelist_view to allow action "export_all_degrees_to_excel"
-            to run without selecting any objects """
-        if "action" in request.POST and request.POST["action"] == "export_all_degrees_to_excel":
-            if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
-                post = request.POST.copy()
-                for u in Degree.objects.all():
-                    post.update({admin.ACTION_CHECKBOX_NAME: str(u.id)})
-                request._set_post(post)
-        return super(DegreeAdmin, self).changelist_view(request, extra_context)
-
-    def get_queryset(self, request):
-        """ This function defines how to sort on alumnus column in the list_display
-            http://stackoverflow.com/a/29083623 """
-        qs = super(DegreeAdmin, self).get_queryset(request)
-        qs = qs.annotate()
-        # TODO: this does not take into account the type of the Degree. Also, when
-        # filtering on type = "PhD" ordering of the Degrees could be done on the MSc degree
-        qs = qs.annotate(sort_author = models.Count("alumnus__last_name", distinct=True)).annotate(sort_year =
-                models.Count("alumnus__degrees__date_of_defence", distinct=True))
-        return qs
-
-    def get_author(self, obj):
-        """ We could use author instead of get_alumnus in list_display """
-        return obj.alumnus.full_name
-    get_author.short_description = "Author"
-    get_author.admin_order_field = "sort_author"
-
-    def show_year(self, obj):
-        if obj.date_of_defence:
-            return obj.date_of_defence.strftime("%Y")
-        elif obj.date_stop:
-            return obj.date_stop.strftime("%Y")
-        return None
-    show_year.short_description = "Year"
-    show_year.admin_order_field = "sort_year"
-
-    def export_selected_degrees_to_excel(self, request, queryset):
-        return save_all_theses_to_xls(request, queryset)
-    export_selected_degrees_to_excel.short_description = "Export selected Theses to Excel"
-
-    def export_all_degrees_to_excel(self, request, queryset):
-        return save_all_theses_to_xls(request, None)
-    export_all_degrees_to_excel.short_description = "Export all Theses to Excel"
-
 
 
 class NullListFilter(admin.SimpleListFilter):
@@ -241,14 +129,14 @@ class AlumnusAdmin(UserAdmin):
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
     ordering = ("username", )
-    search_fields = ("username", "email", "first_name", "last_name", "degrees__thesis_title",
+    search_fields = ("username", "email", "first_name", "last_name", "degrees__title",
         "degrees__date_start", "degrees__date_stop", "degrees__date_of_defence")
     list_display = ("get_alumnus", "email", "last_checked", "show_msc_year",
         "show_phd_year", "show_postdoc_year", "show_staff_year", "is_staff")
     list_filter = (
         EmptyEmailListFilter, EmptyLastCheckedListFilter, "passed_away",
         "is_staff", "is_superuser", "is_active", "groups")
-    inlines = (DegreeAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
+    inlines = (ThesisAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     filter_horizontal = ("groups", "user_permissions",)
     readonly_fields = ("get_full_name", "date_created", "date_updated")
     actions = ("send_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
@@ -492,14 +380,3 @@ class AlumnusAdmin(UserAdmin):
 @admin.register(PositionType)
 class PositionTypeAdmin(admin.ModelAdmin):
     readonly_fields = ("date_created", "date_updated")
-
-
-
-# Change order of models on the admin index, either modify the index.html template
-# Or register all models to custom class, then change the app_list and adjust urls.py
-# class MyAdminSite(django.contrib.admin.site.AdminSite):
-#     def index(self, request, extra_context=None):
-#         if extra_context is None:
-#             extra_context = {}
-#         extra_context["app_list"] = get_app_list_in_custom_order()
-#         return super(MyAdminSite, self).index(request, extra_context)

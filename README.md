@@ -16,7 +16,7 @@
 
 - **Create directories for the databases, create database and load initial data**
   - `mkdir -p apiweb/databases`
-  - `python manage.py makemigrations main alumni survey interviews`
+  - `python manage.py makemigrations main alumni survey research interviews`
   - `python manage.py migrate`
   - `python manage.py loaddata apiweb/apps/*/fixtures/*.json`
   - `python manage.py createsuperuser`

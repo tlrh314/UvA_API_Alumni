@@ -81,17 +81,17 @@
                 {% endif %}
             </div>
 
-            {% if alumnus.degrees.all %}
+            {% if alumnus.theses.all %}
                 <div class="col-xs-12 pull-left">
                     <h3 class="text-left"> Theses at API </h3>
                     <table class="table">
                         <tbody>
-                            {% for thesis in alumnus.degrees.all %}
+                            {% for thesis in alumnus.theses.all %}
                             <tr><td>
-                                {{ thesis.thesis_type|display_thesis_type }}:
-                                <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">
-                                    {% if thesis.thesis_title %}
-                                        {{ thesis.thesis_title }}
+                                {{ thesis.type|display_thesis_type }}:
+                                <a href="{% url 'research:thesis-detail' thesis.slug %}">
+                                    {% if thesis.title %}
+                                        {{ thesis.title }}
                                     {% else %}
                                         <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
                                     {% endif %}

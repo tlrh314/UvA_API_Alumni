@@ -30,15 +30,6 @@ def get_mugshot_location(instance, filename):
     return os.path.join("uploads", "alumni", "mugshots",
                         instance.username, filename)
 
-def get_thesis_pdf_location(instance, filename):
-    """ the media directory is already included """
-    return os.path.join("uploads", "theses", instance.type, filename)
-
-def get_thesis_photo_location(instance, filename):
-    """ the media directory is already included """
-    return os.path.join("uploads", "theses", instance.type, filename)
-
-
 
 @python_2_unicode_compatible
 class PositionType(models.Model):
@@ -285,91 +276,3 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     def age(self):
         TODAY = date.today()
         return "{}".format(int((TODAY-self.birth_date).days/365.0))
-
-
-@python_2_unicode_compatible
-class Degree(models.Model):
-    """ Represents a degree at API, either MSc or PhD.
-        A degree is obtained by writing and defending a thesis. """
-
-    DEGREE_TYPE = (
-        ("phd", "PhD"),
-        ("msc", "Master of Science"),
-        ("bsc", "Bachelor of Science"),
-    )
-
-    # Information about the degree
-    alumnus          = models.ForeignKey(Alumnus, related_name="degrees")
-    type             = models.CharField(max_length=3, choices=DEGREE_TYPE, default="PhD")
-    date_start       = models.DateField(_("Starting date"), blank=True, null=True)
-    date_stop        = models.DateField(_("Date finished"), blank=True, null=True)
-
-    # Information about the thesis
-    thesis_title     = models.CharField(_("Thesis Title"), blank=True, max_length=180)
-    date_of_defence  = models.DateField(_("Defence date"), blank=True, null=True, help_text=_("Date of the thesis or defense"))
-    thesis_url       = models.URLField(blank=True, null=True, help_text=_("UvA DARE or other URL to thesis"))
-    thesis_slug      = models.SlugField(blank=True, null=True, max_length=100, unique=True)
-    thesis_advisor   = models.ManyToManyField(Alumnus, blank=True, related_name="students")
-    dissertation_nr  = models.PositiveSmallIntegerField(_("PhD Dissertation Counter"), blank=True, null=True)
-    # Slug is for url
-
-    # TODO: set the maxlim for uploads to 30MB ?
-    thesis_pdf       = models.FileField(_("Full Text (pdf)"),
-        upload_to=get_thesis_pdf_location, blank=True, null=True)
-    # thesis_abstract  = models.HTMLField(_("Abstract"), blank=True, null=True)
-    thesis_photo     = models.ImageField(_("Thesis Photo"),
-        upload_to=get_thesis_photo_location, blank=True, null=True)
-    thesis_in_library= models.BooleanField(blank=True, default=False)
-
-    comments         = models.TextField(_("comments"), blank=True)
-    last_updated_by  = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
-        on_delete=models.SET_NULL, related_name="theses_updated")
-    date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
-    date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-
-    # students supervised --> class? anders kan je er maar een paar invullen
-    # privacy levels
-
-    class Meta:
-        verbose_name = _("MSc and/or PhD Thesis at API")
-        verbose_name_plural = _("MSc and/or PhD Theses at API")
-
-    def __str__(self):
-        return self.thesis_title
-
-    def save(self, *args, **kwargs):
-        # Get dissertation_nr and increment
-        if self.type == "phd" and not self.dissertation_nr:
-            dissertation_nr = 0
-            for d in Degree.objects.all():  # ugly bruteforce
-                if d.dissertation_nr and d.dissertation_nr > dissertation_nr:
-                    dissertation_nr = d.dissertation_nr
-            self.dissertation_nr = dissertation_nr + 1
-
-        # Set slug as firstname-lastname-degreetype with clash-prevention
-        MAXCOUNT = 100
-        count = 0
-        base_slug = slugify(self.alumnus.full_name_no_title + "-" + self.type)
-        self.thesis_slug = base_slug
-
-        # The following loop should prevent a DB exception when
-        # two people enter the same title at the same time
-        while count < MAXCOUNT:
-            try:
-                super(Degree, self).save(*args, **kwargs)
-            except IntegrityError:
-                count += 1
-                self.thesis_slug = base_slug + "_{0}".format(count)
-            else:
-                break
-
-    def get_absolute_url(self):
-        return reverse("alumni:thesis-detail", args=[self.thesis_slug])
-
-    @property
-    def author(self):
-        return self.alumnus.full_name
-
-    @property
-    def thesis_type(self):
-        return self.type

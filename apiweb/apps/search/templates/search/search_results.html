@@ -32,26 +32,26 @@
         <tr>
             <td><a href="{% url 'alumni:alumnus-detail' alumnus.slug %}">{{ alumnus.full_name_no_title}}</a></td>
                 <td>
-                {% for degree in alumnus.degrees.all %}
-                    {{ degree.type|display_thesis_type }}:
-                    {% if degree.thesis_title %}
-                        <a href="{% url 'alumni:thesis-detail' degree.thesis_slug %}">{{ degree.thesis_title }} </a><br>
+                {% for thesis in alumnus.theses.all %}
+                    {{ thesis.type|display_thesis_type }}:
+                    {% if thesis.title %}
+                        <a href="{% url 'alumni:thesis-detail' thesis.slug %}">{{ thesis.title }} </a><br>
                     {% else %}
                         <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a><br>
                     {% endif %}
                 {% endfor %}
                 </td>
                 <td>
-                {% for degree in alumnus.degrees.all %}
-                    {% if degree.type == 'msc'%}
-                        {{ degree.date_stop|date:"Y" }}
+                {% for thesis in alumnus.theses.all %}
+                    {% if thesis.type == 'msc'%}
+                        {{ thesis.date_stop|date:"Y" }}
                     {% endif %}
                 {% endfor %}
                 </td>
                 <td>
-                {% for degree in alumnus.degrees.all %}
-                    {% if degree.type == 'phd'%}
-                        {{ degree.date_of_defence|date:"Y" }}
+                {% for thesis in alumnus.theses.all %}
+                    {% if thesis.type == 'phd'%}
+                        {{ thesis.date_of_defence|date:"Y" }}
                     {% endif %}
                 {% endfor %}
                 </td>

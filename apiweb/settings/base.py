@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     'apiweb.apps.main',
     'apiweb.apps.search',
     'apiweb.apps.alumni',
+    'apiweb.apps.research',
     'apiweb.apps.survey',
     'apiweb.apps.interviews',
     'apiweb.apps.visualization',

@@ -15,7 +15,7 @@ from .models import WelcomeMessage
 from .models import PrivacyPolicy
 from .forms import ContactForm
 from ..interviews.models import Post
-from ..alumni.models import Degree
+from ..research.models import Thesis
 from ..survey.models import JobAfterLeaving
 from ..survey.forms import SurveyContactInfoForm, SurveyCareerInfoForm
 
@@ -44,7 +44,7 @@ def index(request):
     if latest_post:
         latest_post = latest_post.latest("date_created")
 
-    latest_thesis = Degree.objects.filter(type="phd")
+    latest_thesis = Thesis.objects.filter(type="phd")
     if latest_thesis:
         latest_thesis = latest_thesis.latest("date_of_defence")
 
