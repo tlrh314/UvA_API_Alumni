@@ -19,6 +19,8 @@ class JobAfterLeavingAdminInline(admin.StackedInline):
     model = JobAfterLeaving
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
     extra = 0
+    # There are two fk relations with Alumnus, so we must specify which one should be inlined
+    fk_name = "alumnus"
 
     def save_model(self, request, obj, form, change):
         obj.last_updated_by = request.user

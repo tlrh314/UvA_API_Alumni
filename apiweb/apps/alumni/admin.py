@@ -6,8 +6,6 @@ from django.db import models
 from django.db.models import Q
 from django.contrib import admin
 from django.contrib.admin.sites import site
-from django.contrib.auth.models import User
-from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import PasswordResetForm
 from django.http.response import HttpResponseRedirect
 from django.contrib.sites.models import Site
@@ -33,28 +31,13 @@ from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 # Do not show the Site Admin
 admin.site.unregister(Site)
 
-# Do not allow the Admin to change the User first_name, last_name or email.
-# The Alumnus has these fields, and when these fields are updated a signal is
-# sent from the Alumnus to the User to update the email, first_name and last_name
-# If the Admin could change these fields in the User there would be a mismatch.
-UserAdmin.readonly_fields = ("email", "first_name", "last_name")
-UserAdmin.fieldsets = (
-    (None, {"fields": ("username", "password")}),
-    (_("Personal info"), {"fields": ("first_name", "last_name", "email"),
-        "description": "Please change the personal info in the Alumnus Admin."}),
-    (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser",
-                                   "groups", "user_permissions")}),
-    (_("Important dates"), {"fields": ("last_login", "date_joined")}),
-)
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
-
-
 class PreviousPositionInline(admin.StackedInline):
     model = PreviousPosition
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
     exclude = ("fte_per_year",)
     extra = 0
+    # There are two fk relations with Alumnus, so we must specify which one should be inlined
+    fk_name = "alumnus"
 
 @admin.register(PreviousPosition)
 class PreviousPositionAdmin(admin.ModelAdmin):
@@ -106,6 +89,8 @@ class DegreeAdminInline(admin.StackedInline):
     model = Degree
     filter_horizontal = ("thesis_advisor", )
     readonly_fields = ("date_created", "date_updated", "last_updated_by", "thesis_slug")
+    # There are two fk relations with Alumnus, so we must specify which one should be inlined
+    fk_name = "alumnus"
 
 
 class DegreeListFilter(admin.SimpleListFilter):
@@ -132,7 +117,7 @@ class DegreeAdmin(admin.ModelAdmin):
     list_filter = ("type", DegreeListFilter)
     search_fields = ("thesis_title", "alumnus__last_name", "alumnus__first_name",
         "date_start", "date_stop", "date_of_defence")
-    ordering = ("alumnus__user__username", )
+    ordering = ("alumnus__username", )
     filter_horizontal = ("thesis_advisor", )
     readonly_fields = ("date_created", "date_updated", "last_updated_by", "thesis_slug", )
     actions = ("export_selected_degrees_to_excel", "export_all_degrees_to_excel", )
@@ -251,7 +236,7 @@ class AcademicTitleAdmin(admin.ModelAdmin):
 
 @admin.register(Alumnus)
 class AlumnusAdmin(admin.ModelAdmin):
-    ordering = ("user__username", )
+    ordering = ("username", )
     search_fields = ("first_name", "last_name", "degrees__thesis_title",
         "degrees__date_start", "degrees__date_stop", "degrees__date_of_defence")
     list_display = ("get_alumnus", "email", "last_checked", "show_msc_year",
@@ -260,8 +245,7 @@ class AlumnusAdmin(admin.ModelAdmin):
         EmptyEmailListFilter, EmptyLastCheckedListFilter, "passed_away")
     inlines = (DegreeAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     form = AlumnusAdminForm
-    filter_horizontal = ("research", "contact", )
-    readonly_fields = ("get_full_name", "date_created", "date_updated", "last_updated_by")
+    readonly_fields = ("get_full_name", "date_created", "date_updated")
     actions = ("send_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
             "export_all_alumni_to_excel", "send_survey_email")
     # exclude = ("jobs", )
@@ -269,7 +253,7 @@ class AlumnusAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Account information",
                 {
-                    "fields": ["user", "get_full_name", "show_person", "passed_away"]
+                    "fields": ["get_full_name", "show_person", "passed_away"]
                 }),
 
         ("Personal information", {
@@ -302,8 +286,7 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         ("Current Position", {
                 "classes": ["collapse"],
-                 "fields": ["position", "office", "work_phone",
-                             "ads_name", "research", "contact"]
+                 "fields": ["position", "office", "work_phone", "ads_name"]
                 }),
 
         ("Extra information", {
@@ -407,9 +390,6 @@ class AlumnusAdmin(admin.ModelAdmin):
 
     def send_password_reset(self, request, queryset):
         for alumnus in queryset:
-            if alumnus.user.email != alumnus.email:
-                alumnus.user.email = alumnus.email
-                alumnus.save()
             try:
                 validate_email( alumnus.email )
                 form = PasswordResetForm(data={"email": alumnus.email})
@@ -444,14 +424,10 @@ class AlumnusAdmin(admin.ModelAdmin):
                 exclude_alumni.append(alumnus)
                 reason.append("Passed Away")
                 continue
-            if not alumnus.user.email:
+            if not alumnus.email:
                 exclude_alumni.append(alumnus)
                 reason.append("Invalid Email")
-                # queryset = queryset.exclude(user=alumnus.user)
                 continue
-            if alumnus.user.email != alumnus.email:
-                alumnus.user.email = alumnus.email
-                alumnus.save()
 
             print("Sending email to", alumnus)
             try:

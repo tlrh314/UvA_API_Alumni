@@ -14,11 +14,11 @@ from .ipaddress import IPAddress
 class ContactInfoDefault(object):
     def __init__(self):
         """ Hardcoded in case there is no ContactInfo object """
-        secretary_email_address = "secr-astro-science@uva.nl"
-        address_api = "Sciencepark 904, 1098XH, Amsterdam"
-        postbox_address_api = "PO Box 94249, 1090 GE Amsterdam"
-        telephone_api = "0031205257491"
-        webmaster_email_address = "secr-astro-science@uva.nl"
+        self.secretary_email_address = "secr-astro-science@uva.nl"
+        self.address_api = "Sciencepark 904, 1098XH, Amsterdam"
+        self.postbox_address_api = "PO Box 94249, 1090 GE Amsterdam"
+        self.telephone_api = "0031205257491"
+        self.webmaster_email_address = "secr-astro-science@uva.nl"
 
 
 def contactinfo(request):

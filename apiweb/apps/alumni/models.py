@@ -5,31 +5,35 @@ import os.path
 from datetime import date
 
 from django.db import models
+from django.conf import settings
+from django.core.mail import send_mail
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import IntegrityError
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import python_2_unicode_compatible
-from django.conf import settings
 
 from jsonfield import JSONField
 from tinymce.models import HTMLField
 from django_countries.fields import CountryField
 
-from ..research.models import ResearchTopic
 from .storage import OverwriteStorage
+from .managers import AlumniManager
 
 def get_mugshot_location(instance, filename):
     """ the media directory is already included """
     return os.path.join("uploads", "alumni", "mugshots",
-                        instance.user.username, filename)
+                        instance.username, filename)
 
 def get_photo_location(instance, filename):
     """ the media directory is already included """
     return os.path.join("uploads", "alumni", "photos",
-                        instance.user.username, filename)
+                        instance.username, filename)
 
 def get_thesis_pdf_location(instance, filename):
     """ the media directory is already included """
@@ -90,8 +94,8 @@ class PreviousPosition(models.Model):
     comments         = models.TextField(_("comments"), blank=True)
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-    last_updated_by  = models.ForeignKey("auth.User", related_name="prevpos_updated",
-        on_delete=models.SET_DEFAULT, default=270)
+    last_updated_by  = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+        on_delete=models.SET_NULL, related_name="prevpos_updated")
 
     class Meta:
         verbose_name = _("Previous Position at API")
@@ -114,8 +118,9 @@ class AcademicTitle(models.Model):
 
 
 @python_2_unicode_compatible
-class Alumnus(models.Model):
-    """ Represents an alumnus of API. """
+class Alumnus(AbstractBaseUser, PermissionsMixin):
+    """ Represents an alumnus of API. Since we extend the AbstractBaseUser
+        we inherit the password, last_login, is_active fields. """
 
     GENDER_CHOICES = (
         (1, "Male"),
@@ -125,7 +130,32 @@ class Alumnus(models.Model):
     )
 
     # Account information
-    user            = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name="alumnus")
+    username_validator = UnicodeUsernameValidator()
+    username = models.CharField(
+        _("username"),
+        max_length=150,
+        unique=True,
+        help_text=_("Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."),
+        validators=[username_validator],
+        error_messages={
+            "unique": _("A user with that username already exists."),
+        },
+    )
+    is_staff = models.BooleanField(
+        _("staff status"),
+        default=False,
+        help_text=_("Designates whether the user can log into this admin site."),
+    )
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+
     show_person     = models.BooleanField(_("alumnus visible on website"), default=True)
     passed_away     = models.BooleanField(_("Deceased"), blank=True, default=False,
         help_text=_("If selected a cross will appear by the name of this alumnus on the website."))
@@ -149,6 +179,7 @@ class Alumnus(models.Model):
     slug            = models.SlugField(_("slug"), unique=True)
 
     # Contact information
+    # TODO: at a later point in time remove blank=True, null=True and add unique=True for email addresses
     email           = models.EmailField(_("email"), blank=True, null=True)
     home_phone      = models.CharField(_("home telephone"), blank=True, max_length=40)
     mobile          = models.CharField(_("mobile"), blank=True, max_length=40)
@@ -175,18 +206,11 @@ class Alumnus(models.Model):
     office          = models.CharField(_("office"), blank=True, max_length=40)
     work_phone      = models.CharField(_("work telephone"), blank=True, max_length=40)
     ads_name        = models.CharField(_("ads name"), blank=True, max_length=40)
-    research        = models.ManyToManyField(ResearchTopic, verbose_name=_("research"),
-        blank=True, related_name="alumnus_research")
-    contact         = models.ManyToManyField(ResearchTopic, verbose_name=_("contact"),
-        blank=True, related_name="alumnus_contact")
 
     # Extra information
     comments        = models.TextField(_("comments"), blank=True)
-    last_updated_by = models.ForeignKey("auth.User", related_name="alumni_updated",
-        on_delete=models.SET_DEFAULT, default=270)
     date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-
 
     #Privacy options
     show_biography  = models.BooleanField(_("Show biography on personal page"), blank=True, default=False)
@@ -196,37 +220,43 @@ class Alumnus(models.Model):
     show_email      = models.BooleanField(_("Show email on personal page"), blank=True, default=False)
     show_homepage   = models.BooleanField(_("Show homepage on personal page"), blank=True, default=False)
 
+    objects = AlumniManager()
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
+
     class Meta:
         verbose_name = _("Alumnus")
         verbose_name_plural = _("Alumni")
         ordering = ("last_name", "first_name")
+
+    def get_full_name(self):
+        """ Required when extending AbstractBaseUser """
+        full_name = "{0} {1}".format(self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        """ Required when extending AbstractBaseUser """
+        return self.first_name
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """ Required when extending AbstractBaseUser (?) """
+        send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def __str__(self):
         return self.full_name
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.full_name)
-
-        try:
-            # Work around a nasty bug in Django: don't use user=self.user
-            # Also: is user__username better than user__pk?
-            Alumnus.objects.exclude(
-                user__username=self.user.username).get(slug=self.slug)
-        except ObjectDoesNotExist:
-            pass
-        else:
-            count = Alumnus.objects.filter(slug__contains = self.slug).count()
-            self.slug = "{0}_{1}".format(self.slug, str(count + 1))
+        count = Alumnus.objects.filter(slug__contains = self.slug).count()
+        self.slug = "{0}_{1}".format(self.slug, str(count + 1))
         os.umask(0o002)  # change umask so created (sub)directories
                          # have correct permissions
         super(Alumnus, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("alumni:alumnus-detail", args=[self.slug])
-
-    @property
-    def username(self):
-        return self.user.username
 
     @property
     def full_name(self):
@@ -291,8 +321,8 @@ class Degree(models.Model):
     thesis_in_library= models.BooleanField(blank=True, default=False)
 
     comments         = models.TextField(_("comments"), blank=True)
-    last_updated_by  = models.ForeignKey("auth.User", related_name="theses_updated",
-        on_delete=models.SET_DEFAULT, default=270)
+    last_updated_by  = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+        on_delete=models.SET_NULL, related_name="theses_updated")
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
 

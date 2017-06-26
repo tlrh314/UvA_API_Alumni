@@ -116,10 +116,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
 
-    'apiweb.apps.people',
-    'apiweb.apps.research',
-
-    # 'nested_inline',
     'apiweb.apps.main',
     'apiweb.apps.search',
     'apiweb.apps.alumni',
@@ -130,13 +126,12 @@ INSTALLED_APPS = (
     'bootstrap3',
     'django_countries',
     'crispy_forms',
-    # 'cities_light',
 )
 
 # login URL for auth app
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/redirect_to_profile'
-#AUTH_USER_MODEL = 'alumni.Alumnus'
+AUTH_USER_MODEL = 'alumni.Alumnus'
 
 NEWS_LANGUAGES = ('en', 'nl')
 #NEWS_LANGUAGES = ('en',)  # 'nl')
