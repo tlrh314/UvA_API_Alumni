@@ -4,6 +4,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin import widgets
 from django.forms.utils import ErrorList
+from django.contrib.auth.forms import UserChangeForm
 
 from tinymce.widgets import TinyMCE
 from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
@@ -19,7 +20,7 @@ class PreviousPositionAdminForm(forms.ModelForm):
     funding = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.FUNDING)
 
 
-class AlumnusAdminForm(forms.ModelForm):
+class AlumnusAdminForm(UserChangeForm):
     # Change biography to TinyMCE field
     look = copy.copy(TINYMCE_MINIMAL_CONFIG)
     look["width"] = ""

@@ -158,7 +158,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     show_person     = models.BooleanField(_("alumnus visible on website"), default=True)
     passed_away     = models.BooleanField(_("Deceased"), blank=True, default=False,
-        help_text=_("If selected a cross will appear by the name of this alumnus on the website."))
+        help_text=_("If selected an asterisk will appear by the name of this alumnus on the website."))
 
     # Personal information
     academic_title  = models.ForeignKey(AcademicTitle, on_delete=models.SET_NULL, blank=True, null=True)
@@ -179,8 +179,8 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     slug            = models.SlugField(_("slug"), unique=True)
 
     # Contact information
-    # TODO: at a later point in time remove blank=True, null=True and add unique=True for email addresses
-    email           = models.EmailField(_("email"), blank=True, null=True)
+    # TODO: at a later point in time remove null=True and add unique=True for email addresses
+    email           = models.EmailField(_("email"), null=True)
     home_phone      = models.CharField(_("home telephone"), blank=True, max_length=40)
     mobile          = models.CharField(_("mobile"), blank=True, max_length=40)
     homepage        = models.URLField(_("homepage"), blank=True, null=True)
