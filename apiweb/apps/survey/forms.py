@@ -174,7 +174,10 @@ class SurveyContactInfoForm(forms.ModelForm):
                     "mugshot", "slug", "last_checked", "position", "specification",
                     "office", "work_phone", "ads_name", "research", "contact",
                     "comments", "date_created", "date_updated", "last_updated_by",
-                    "zipcode", "streetname", "streetnumber", "address")
+                    "zipcode", "streetname", "streetnumber", "address",
+                    # Below has to be removed b/c Alumnus is an extension of AbstractBaseUser
+                    "password", "last_login", "is_superuser", "groups",
+                    "user_permissions", "username", "is_staff", "is_active", "date_joined")
 
     BOOL_CHOICES = ((True, 'Yes'), (False, 'No'))
     years_choices = range(1900, datetime.now().year+1)[::-1]
