@@ -14,8 +14,13 @@
   - Setup local_settings: `mv api/api/local_settings.py.example api/api/local_settings.py`
   - Edit local_settings to tailor to your machine.
 
-- **Create directories for the databases**
+- **Create directories for the databases, create database and load initial data**
   - `mkdir -p apiweb/databases`
+  - `python manage.py makemigrations main alumni survey interviews`
+  - `python manage.py migrate`
+  - `python manage.py loaddata apiweb/apps/*/fixtures/*.json`
+  - `python manage.py createsuperuser`
+  - `python manage.py collectstatic`
 
 
 - **Create directories for Filebrowser**
