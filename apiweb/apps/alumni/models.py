@@ -233,8 +233,17 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         """ Required when extending AbstractBaseUser """
-        full_name = "{0} {1}".format(self.first_name, self.last_name)
-        return full_name.strip()
+        title_last = self.academic_title in AcademicTitle.objects.filter(title__in=["MA", "MSc", "BSc"])
+        if self.academic_title:
+            title = " "+str(self.academic_title) if title_last else str(self.academic_title)+" "
+        else:
+            title = ""
+
+        return ("{}{}{}{}{}{}".format(title if not title_last else "",
+            self.first_name+" " if self.first_name else "",
+            self.initials+" " if not self.first_name else "",
+            self.prefix+" " if self.prefix else "",
+            self.last_name, title if title_last else ""))
 
     def get_short_name(self):
         """ Required when extending AbstractBaseUser """
@@ -268,17 +277,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     @property
     def full_name(self):
-        title_last = self.academic_title in AcademicTitle.objects.filter(title__in=["MA", "MSc", "BSc"])
-        if self.academic_title:
-            title = " "+str(self.academic_title) if title_last else str(self.academic_title)+" "
-        else:
-            title = ""
-
-        return ("{}{}{}{}{}{}".format(title if not title_last else "",
-            self.first_name+" " if self.first_name else "",
-            self.initials+" " if not self.first_name else "",
-            self.prefix+" " if self.prefix else "",
-            self.last_name, title if title_last else ""))
+        return self.get_full_name()
 
     @property
     def full_name_no_title(self):
