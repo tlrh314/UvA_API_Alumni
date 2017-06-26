@@ -40,8 +40,13 @@ def index(request):
         welcome = "Welcome at the API Alumnus Website!"
 
     #Filtering all posts on whether they are published, and picking the latest
-    latest_post = Post.objects.filter(is_published=True).latest("date_created")
-    latest_thesis = Degree.objects.filter(type="phd").latest("date_of_defence")
+    latest_post = Post.objects.filter(is_published=True)
+    if latest_post:
+        latest_post = latest_post.latest("date_created")
+
+    latest_thesis = Degree.objects.filter(type="phd")
+    if latest_thesis:
+        latest_thesis = latest_thesis.latest("date_of_defence")
 
     return render(request, "main/index.html", {"welcome_text": welcome, "latest_post": latest_post, "latest_thesis": latest_thesis})
 
