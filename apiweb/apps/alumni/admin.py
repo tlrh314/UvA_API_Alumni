@@ -349,7 +349,9 @@ class AlumnusAdmin(admin.ModelAdmin):
     show_staff_year.short_description = "STAFF"
 
     def show_postdoc_year(self, obj):
-        postdoc = PositionType.objects.filter(name="Postdoc")[0]
+        postdoc = PositionType.objects.filter(name="Postdoc")
+        if len(postdoc) == 1:
+            postdoc = postdoc[0]
 
         # CAUTION, position is the current position while the related name of PreviousPosition is positions !!
         if obj.position == postdoc:
@@ -357,7 +359,7 @@ class AlumnusAdmin(admin.ModelAdmin):
 
         postdoc_set = obj.positions.filter(type=postdoc)
         if len(postdoc_set) is 0:
-            return ""
+            return "-"
 
         # Could have multiple date_stop
         postdoc = postdoc_set[0]
