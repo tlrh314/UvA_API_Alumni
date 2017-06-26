@@ -224,7 +224,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
     class Meta:
         verbose_name = _("Alumnus")
@@ -250,7 +250,8 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.full_name)
         count = Alumnus.objects.filter(slug__contains = self.slug).count()
-        self.slug = "{0}_{1}".format(self.slug, str(count + 1))
+        if count:
+            self.slug = "{0}_{1}".format(self.slug, str(count + 1))
         os.umask(0o002)  # change umask so created (sub)directories
                          # have correct permissions
         super(Alumnus, self).save(*args, **kwargs)
