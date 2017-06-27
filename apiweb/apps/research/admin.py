@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .actions import save_all_theses_to_xls
 from .models import Thesis
+from ..alumni.models import Alumnus
 from ...settings import ADMIN_MEDIA_JS
 
 
@@ -95,6 +96,11 @@ class ThesisAdmin(admin.ModelAdmin):
         qs = qs.annotate(sort_author = models.Count("alumnus__last_name", distinct=True)).annotate(sort_year =
                 models.Count("alumnus__theses__date_of_defence", distinct=True))
         return qs
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "advisor":
+            kwargs["queryset"] = Alumnus.objects.exclude(pk=request.user.pk)
+        return super(ThesisAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
     def get_author(self, obj):
         """ We could use author instead of get_alumnus in list_display """
