@@ -159,4 +159,4 @@ def add_theses():
 
 if __name__ == "__main__":
     add_alumni()
-    # add_theses()
+    add_theses()

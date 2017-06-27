@@ -250,8 +250,6 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
                 super(Alumnus, self).save(*args, **kwargs)
             except IntegrityError as e:
                 count += 1
-                print(str(e))
-                input()
                 # Fix for both sqlite3 and MySQL
                 if "UNIQUE constraint failed: alumni_alumnus.username" in str(e) \
                     or ( "Duplicate entry" in str(e) and "for key 'username'" in str(e)):
