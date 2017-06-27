@@ -6,6 +6,7 @@ from datetime import datetime
 from django.http import HttpResponse
 
 from .models import Thesis
+from ..alumni.models import Alumnus
 
 
 def save_all_theses_to_xls(request, queryset=None):
