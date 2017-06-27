@@ -9,6 +9,7 @@ import django
 django.setup()
 
 from django.conf import settings
+from django_countries.fields import Country
 from apiweb.apps.alumni.models import Alumnus
 from apiweb.apps.alumni.models import PositionType
 from apiweb.apps.alumni.models import AcademicTitle
@@ -25,7 +26,7 @@ with open("../dump_20170626T1629_alumni.json") as f:
         if entry["model"] == "alumni.alumnus":
             i += 1
             # if i > 10: break
-            if i < 610: continue
+            if i < 615 : continue
             alumnus = Alumnus()
             alumnus.pk =  entry["pk"]
             alumnus.set_password(Alumnus.objects.make_random_password())
@@ -65,7 +66,9 @@ with open("../dump_20170626T1629_alumni.json") as f:
             alumnus.streetnumber = entry["fields"]["streetnumber"]
             alumnus.zipcode = entry["fields"]["zipcode"]
             alumnus.city = entry["fields"]["city"]
-            alumnus.country = entry["fields"]["country"]  # CountryField
+            country = entry["fields"]["country"]  # CountryField
+            print(country)
+            alumnus.country = Country(country) if country else ""
             position = entry["fields"]["position"]
             alumnus.position = PositionType.objects.get(pk=position) if position else None
             alumnus.specification = entry["fields"]["specification"]
