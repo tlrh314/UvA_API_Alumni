@@ -94,7 +94,7 @@ class ThesisAdminInline(admin.StackedInline):
     fk_name = "alumnus"
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        try:  # breaks for add alumnus
+        try:  # Breaks for add alumnus
             current_alumnus = Alumnus.objects.get(pk=request.resolver_match.args[0])
             if db_field.name == "advisor":
                 kwargs["queryset"] = Alumnus.objects.exclude(username=current_alumnus.username)
