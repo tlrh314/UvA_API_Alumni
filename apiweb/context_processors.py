@@ -2,6 +2,8 @@ from __future__ import unicode_literals, absolute_import, division
 
 from django.db.models import Q
 from django.db.utils import OperationalError
+from django.db.utils import ProgrammingError as ProgError1
+from _mysql_exceptions import ProgrammingError as ProgError2
 from django.contrib.sites.models import Site
 
 from apiweb.apps.main.models import ContactInfo
@@ -30,10 +32,13 @@ def contactinfo(request):
         else:
             contactinfo = ContactInfoDefault()
             p = contactinfo.telephone_api
-    except OperationalError as e:
+    except (OperationalError, ProgError1, ProgError2) as e:
         # Catch in case the database was not yet created
         contactinfo = ContactInfoDefault()
         p = contactinfo.telephone_api
+    except:
+        print("Other error was raised. Please check the code and catch if needed")
+        raise
 
     api_phonenumber_formatted = "+"+p[2:4]+" (0)"+p[4:6]+" "+p[6:9]+" "+p[9:11]+" "+p[11:13]
 
