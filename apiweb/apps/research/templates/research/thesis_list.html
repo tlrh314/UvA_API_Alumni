@@ -14,14 +14,14 @@
     <div class="col-md-12 text-center">
         <ul class="nav nav-pills selector-nav center-pills">
             {# Thesis type dropdown menu #}
-            {% get_thesis_types as theses %}
+            {% get_thesis_types as theses_types %}
             <li role="presentation" class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                     aria-expanded="false">Thesis Type <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% filter_objects 'type' 'None' %}"><i> No filter </i></a></li>
-                    {% for type in theses %}
+                    {% for type in theses_types %}
                         {# Reset possible old filter and add store filter #}
                         <li>
                             <a href="{% filter_objects 'type' type.0 %}" class="menu-link">
@@ -192,17 +192,16 @@
             {% include "research/thesis_paginator.html" %}
             {# Add the content #}
             <h2 class="text-center">Total number of theses: {{ theses.paginator.count }}</h2>
-            {% for thesis in theses%}
+            {% for thesis in theses %}
             <tr>
-                <td class="col-md-6">{% if thesis.title %}
+                <td class="col-md-6">
+                    {% if thesis.title %}
                         <a href="{% url 'research:thesis-detail' thesis.slug %}">{{ thesis.title }}
                     {% else %}
                         <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
                     {% endif %}
                     {% if thesis.pdf.name %}
                         (<a href="{{ thesis.pdf.url }}">PDF</a>)
-                    {% else %}
-                        (<a href="{% url 'research:thesis-has-no-pdf' %}">PDF</a>)
                     {% endif %}
                 </td>
                 <td class="col-md-2"><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td>
