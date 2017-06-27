@@ -16,6 +16,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.utils import IntegrityError
 from django.utils.encoding import python_2_unicode_compatible
 
 from jsonfield import JSONField
@@ -242,15 +243,15 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
         return self.full_name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.full_name)
-        print(self.slug)
+        self.slug = slugify(self.full_name_no_title)
         try:
             # Work around a nasty bug in Django: don't use user=self.user
             # Also: is user__username better than user__pk?
             Alumnus.objects.exclude(username=self.username).get(slug=self.slug)
         except ObjectDoesNotExist:
             pass
-        else:
+        except IntegrityError:
+            print("sjenkie")
             count = Alumnus.objects.filter(slug__contains = self.slug).count()
             self.slug = "{0}_{1}".format(self.slug, str(count + 1))
         os.umask(0o002)  # change umask so created (sub)directories
