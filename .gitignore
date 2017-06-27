@@ -87,9 +87,6 @@ ENV/
 # Rope project settings
 .ropeproject
 
-# Migrations
-migrations/
-
 apiweb/settings/local.py
 
 databases/
