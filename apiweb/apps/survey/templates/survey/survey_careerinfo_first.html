@@ -16,7 +16,7 @@
 
     <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
         <div>
-            <h3> Career Information of <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}" target="blank", style="color: black;">{{ request.user.alumnus.full_name }}</a> <br></h3>
+            <h3> Career Information of <a href="{% url 'alumni:alumnus-detail' request.user.slug %}" target="blank", style="color: black;">{{ request.user.full_name }}</a> <br></h3>
             <br>
             Please provide us information regarding your <strong>first</strong> job after leaving the API. <br>
             <br>

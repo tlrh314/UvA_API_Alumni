@@ -2,6 +2,7 @@ from __future__ import unicode_literals, absolute_import, division
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from tinymce.models import HTMLField
 
@@ -38,8 +39,8 @@ class Category(models.Model):
 
     date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
     date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-    last_updated_by  = models.ForeignKey('auth.User', related_name="categories_updated",
-        on_delete=models.SET_DEFAULT, default=270)
+    last_updated_by  = models.ForeignKey(get_user_model(), null=True,
+        on_delete=models.SET_NULL, related_name="categories_updated")
 
     def __str__(self):
         return self.name
@@ -66,8 +67,8 @@ class Post(models.Model):
     is_published    = models.BooleanField(default=False)
     date_created    = models.DateTimeField(auto_now_add=True)
     date_published  = models.DateTimeField(blank=True, null=True)
-    last_updated_by = models.ForeignKey('auth.User', related_name="posts_updated",
-        on_delete=models.SET_DEFAULT, default=270)
+    last_updated_by = models.ForeignKey(get_user_model(), null=True,
+        on_delete=models.SET_NULL, related_name="posts_updated")
 
     category = models.ForeignKey(Category, blank=True, null=True)
     # featured = models.BooleanField(default=False,

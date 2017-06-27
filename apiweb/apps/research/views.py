@@ -1,130 +1,133 @@
 from __future__ import unicode_literals, absolute_import, division
 
-from django.views.generic import TemplateView, DetailView, ListView
-from .models import ResearchTopic
-from .models import Thesis
+import os.path
+
+from django import template
+from django.db.models import Q
+from django.http import Http404
+from django.contrib import messages
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from ..research.models import Thesis
 
 
-class LinksView(TemplateView):
-    template_name = 'research/links.html'
+register = template.Library()
 
 
-class GrbSoftwareView(TemplateView):
-    template_name = 'research/grb-software.html'
+def thesis_list(request):
+    theses = Thesis.objects.all()
 
-    def get_context_data(self, **kwargs):
-        context = super(GrbSoftwareView, self).get_context_data(**kwargs)
-        context['category'] = "cosmics"
-        context['object_list'] = ResearchTopic.objects.all().filter(
-            category='2')
-        return context
+    # Get filters
+    defence_year = request.GET.getlist("year", None)
+    thesis_types = request.GET.getlist("type", None)
+    sort_on = request.GET.getlist("sort", None)
 
+    # Apply filters
+    if thesis_types:
+        multifilter = Q()
+        for thesis_type in thesis_types:
+            multifilter = multifilter | Q(type=thesis_type)
 
-class IndexView(TemplateView):
-    template_name = 'research/index.html'
+        theses = theses.filter(multifilter).distinct()
 
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        categories = {}
-        categories['compacts'] = 'Neutron stars and black holes'
-        categories['cosmics'] = 'Cosmic explosions'
-        categories['astroparticles'] = 'Astroparticle physics'
-        categories['planets'] = 'Planet formation and exoplanets'
-        categories['stars'] = 'Stars, formation and evolution'
-        context['categories'] = categories
-        return context
+    if defence_year:
+        multifilter = Q()
+        for year in defence_year:
 
+            end_year = str(int(year) + 10)
+            if year == "1900":
+                end_year = str(int(year) + 50)
+            date_range=[year+"-01-01",end_year+"-01-01"]
+            multifilter = multifilter | Q(date_of_defence__range=date_range)
+            multifilter = multifilter | Q(date_stop__range=date_range)
 
-class CategoryView(ListView):
-    cattypes = {'compacts': 1, 'cosmics': 2, 'astroparticles': 3,
-                'planets': 4, 'stars': 5}
+        theses = theses.filter(multifilter).distinct()
 
-    def get_template_names(self):
-        # must return a list
-        names = ['research/' + self.category_type + '.html']
-        return names
+    # Sort the list
+    if sort_on:
+        if sort_on[0] == "author_az":
+            theses = theses.order_by("alumnus__last_name")
+        if sort_on[0] == "author_za":
+            theses = theses.order_by("-alumnus__last_name")
 
-    def get_queryset(self):
-        queryset = ResearchTopic.objects.all().filter(
-            category=self.cattypes[self.category_type])
-        return queryset
+        if sort_on[0] == "title_az":
+            theses = theses.order_by("title")
+        if sort_on[0] == "title_za":
+            theses = theses.order_by("-title")
 
-    def get_context_data(self, **kwargs):
-        context = super(CategoryView, self).get_context_data(**kwargs)
-        context['category'] = self.category_type
-        context['cattitle'] = ResearchTopic.CATEGORY[
-            self.cattypes[self.category_type]-1][1]
-        return context
+        # Caution: sorting on degree/position implies filtering also
+        if sort_on[0] == "msc_lh":
+            theses = theses.filter(type__iexact="msc").distinct().order_by("date_of_defence")
+        if sort_on[0] == "msc_hl":
+            theses = theses.filter(type__iexact="msc").distinct().order_by("-date_of_defence")
 
-    def dispatch(self, request, *args, **kwargs):
-        self.category_type = kwargs.get('category_type', None)
-        return super(CategoryView, self).dispatch(request, *args, **kwargs)
+        if sort_on[0] == "phd_lh":
+            theses = theses.filter(type__iexact="phd").distinct().order_by("date_of_defence")
+        if sort_on[0] == "phd_hl":
+            theses = theses.filter(type__iexact="phd").distinct().order_by("-date_of_defence")
 
+        # Year filter for date of defence which includes both MSc and PhD
+        if sort_on[0] == "year_lh":
+            theses = theses.order_by("date_of_defence")
+        if sort_on[0] == "year_hl":
+            theses = theses.order_by("-date_of_defence")
+    else:
+        theses = theses.order_by("-date_of_defence")
 
-class TopicView(DetailView):
-    cattypes = {'compacts': 1, 'cosmics': 2, 'astroparticles': 3,
-                'planets': 4, 'stars': 5}
-    template_name = 'research/researchtopic_detail.html'
+    # Paginate the list
+    theses_per_page = request.GET.get("limit", 15)
+    try:
+        theses_per_page = int(theses_per_page)
+    except ValueError as ScriptKiddyHackings :
+        if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
+            msg = "Error: '{0}' is not a valid limit, please use a number.".format(theses_per_page)
+            messages.error(request, msg)
+            theses_per_page = 15
+        else:
+            raise Http404
 
-    def get_queryset(self):
-        queryset = ResearchTopic.objects.all().filter(
-            category=self.cattypes[self.category_type])
-        return queryset
+    if theses_per_page < 15:
+        msg = "Error: '{0}' is not a valid limit, please use a number above 15.".format(theses_per_page)
+        messages.error(request, msg)
+        theses_per_page = 15
+    if theses_per_page > 200:
+        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(theses_per_page)
+        messages.error(request, msg)
+        theses_per_page = 200
+    paginator = Paginator(theses, theses_per_page)
+    page = request.GET.get('page', 1)
 
-    def get_context_data(self, **kwargs):
-        context = super(TopicView, self).get_context_data(**kwargs)
-        context['category'] = self.category_type
-        context['object_list'] = self.get_queryset()
-        context['cattitle'] = ResearchTopic.CATEGORY[
-            self.cattypes[self.category_type]-1][1]
-        return context
+    try:
+        page = int(page)
+    except ValueError as ScriptKiddyHackings :
+        if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
+            msg = "Error: '{0}' is not a valid pagenumber, please use a number.".format(page)
+            messages.error(request, msg)
+            page = 1
+        else:
+            raise Http404
 
-    def dispatch(self, request, *args, **kwargs):
-        self.category_type = kwargs.get('category_type', None)
-        return super(TopicView, self).dispatch(request, *args, **kwargs)
+    try:
+        theses = paginator.page(page)
+    except PageNotAnInteger:
+        msg = "Error: '{0}' is not a valid pagenumber.".format(page)
+        messages.error(request, msg)
+        page = 1
+        theses = paginator.page(page)
+    except EmptyPage:
+        msg = "Error: '{0}' is not a valid pagenumber.".format(page)
+        messages.error(request, msg)
+        page = paginator.num_pages
+        theses = paginator.page(page)
 
-#
-#class SoftwareView(TemplateView):
-#    cattypes = {'compacts': 1, 'cosmics': 2, 'astroparticles': 3,
-#                'planets': 4, 'stars': 5}
-#
-#    def get_template_names(self):
-#        # must return a list
-#        names  = ['research/' + self.category_type + '-software.html']
-#        return names
-#
-#    def get_context_data(self, **kwargs):
-#        context = super(SoftwareView, self).get_context_data(**kwargs)
-#        context['category'] = self.category_type
-#        context['cattitle'] = ResearchTopic.CATEGORY[
-#            self.cattypes[self.category_type]-1][1]
-#        return context
-#
-#    def dispatch(self, request, *args, **kwargs):
-#        self.category_type = kwargs.get('category_type', None)
-#        return super(SoftwareView, self).dispatch(request, *args, **kwargs)
-#
+    return render(request, "research/thesis_list.html", {
+        "theses": theses, "theses_per_page": theses_per_page })
 
-class ThesisView(ListView):
-    template_name = 'research/thesis_list.html'
+def thesis_detail(request, slug):
+    thesis = get_object_or_404(Thesis, slug=slug)
+    return render(request, "research/thesis_detail.html", {"thesis": thesis})
 
-    def get_queryset(self):
-        self.thesis_type = self.kwargs.get('thesis_type', None)
-        queryset = Thesis.objects.all().filter(
-            type=self.thesis_type).order_by('-date')
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super(ThesisView, self).get_context_data(**kwargs)
-
-        my_title = 'Theses at the Anton Pannekoek Institute'
-        if self.thesis_type == "phd":
-            my_title = 'Phd theses at the Anton Pannekoek Institute'
-        if self.thesis_type == "msc":
-            my_title = 'Master theses at the Anton Pannekoek Institute'
-        if self.thesis_type == "bsc":
-            my_title = 'Bachelor theses at the Anton Pannekoek Institute'
-
-        context['thesis_type'] = self.thesis_type
-        context['thesis_title'] = my_title
-        return context
+def thesis_has_no_pdf(request):
+    return render(request, "research/thesis_not_found.html")

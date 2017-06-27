@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% block banner %}<div id="banner"><h1>Research at the Institute</h1></div>{% endblock banner %}
-{% block breadcrumbs %}
-{{ block.super }} &#187; <a href="{% url 'research:index' %}">Research</a>
-{% endblock breadcrumbs %}
-
-{% block sidemenu %}
-{% include "research/sidemenu.html" %}
-{% endblock sidemenu %}

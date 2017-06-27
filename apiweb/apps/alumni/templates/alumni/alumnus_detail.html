@@ -19,8 +19,8 @@
         <div class="row">
             {% if not alumnus.passed_away %}
                 <div class="col-xs-12 col-sm-3">
-                    {% if alumnus.photo %}
-                        <img src="{{ alumnus.photo.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
+                    {% if alumnus.mugshot %}
+                        <img src="{{ alumnus.mugshot.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
                     {% else %}
                         {# <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img> #}
                     {% endif %}
@@ -81,17 +81,17 @@
                 {% endif %}
             </div>
 
-            {% if alumnus.degrees.all %}
+            {% if alumnus.theses.all %}
                 <div class="col-xs-12 pull-left">
                     <h3 class="text-left"> Theses at API </h3>
                     <table class="table">
                         <tbody>
-                            {% for thesis in alumnus.degrees.all %}
+                            {% for thesis in alumnus.theses.all %}
                             <tr><td>
-                                {{ thesis.thesis_type|display_thesis_type }}:
-                                <a href="{% url 'alumni:thesis-detail' thesis.thesis_slug %}">
-                                    {% if thesis.thesis_title %}
-                                        {{ thesis.thesis_title }}
+                                {{ thesis.type|display_thesis_type }}:
+                                <a href="{% url 'research:thesis-detail' thesis.slug %}">
+                                    {% if thesis.title %}
+                                        {{ thesis.title }}
                                     {% else %}
                                         <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
                                     {% endif %}

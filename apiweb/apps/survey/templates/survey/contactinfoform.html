@@ -1,6 +1,6 @@
     <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
         <div>
-            <h3>Contact Details of <a href="{% url 'alumni:alumnus-detail' request.user.alumnus.slug %}" target="blank", style="color: black;">{{ request.user.alumnus.full_name }}</a> <br></h3>
+            <h3>Contact Details of <a href="{% url 'alumni:alumnus-detail' request.user.slug %}" target="blank", style="color: black;">{{ request.user.full_name }}</a> <br></h3>
             <br>
             Please enter your contact information in the form below. <br>
             Except for your name, no other information is directly shown on your profile page. Within this form, however, you are given the option to make certain fields visible to the public. <br>

@@ -4,6 +4,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin import widgets
 from django.forms.utils import ErrorList
+from django.contrib.auth.forms import UserChangeForm
 
 from tinymce.widgets import TinyMCE
 from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
@@ -19,36 +20,12 @@ class PreviousPositionAdminForm(forms.ModelForm):
     funding = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.FUNDING)
 
 
-class UserRawIdWidget(widgets.ForeignKeyRawIdWidget):
-    """ Class to replace alumnus.user from dropdown to pk /w filter """
-    def url_parameters(self):
-        res = super(UserRawIdWidget, self).url_parameters()
-        object = self.attrs.get("object", None)
-        if object:
-            res["username__exact"] = object.user.username
-        return res
-
-
-class AlumnusAdminForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        """ Init is only defined to for UserRawIdWidget """
-        super(forms.ModelForm, self).__init__(*args, **kwargs)
-        obj = kwargs.get("instance", None)
-        if obj and obj.pk is not None:
-            self.fields["user"].widget = UserRawIdWidget(
-                rel=obj._meta.get_field("user").rel,
-                admin_site=admin.site,
-                # Pass the object to attrs
-                attrs={"object": obj}
-            )
-
+class AlumnusAdminForm(UserChangeForm):
     # Change biography to TinyMCE field
     look = copy.copy(TINYMCE_MINIMAL_CONFIG)
     look["width"] = ""
     look["height"] = "200"
     biography = forms.CharField(required=False, widget=TinyMCE(mce_attrs=look))
-    user = AutoCompleteSelectField('user', required=True, help_text=None, show_help_text=False)
-    # nationality = AutoCompleteSelectField("nationality", required=True, help_text=None)
 
     class Meta:
         fields = "__all__"
