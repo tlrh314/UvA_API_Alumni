@@ -3,7 +3,10 @@ from __future__ import unicode_literals, absolute_import, division
 from django.db.models import Q
 from django.db.utils import OperationalError
 from django.db.utils import ProgrammingError as ProgError1
-from _mysql_exceptions import ProgrammingError as ProgError2
+try:
+    from _mysql_exceptions import ProgrammingError as ProgError2
+except ModuleNotFoundError:
+    ProgError2 = ProgError1
 from django.contrib.sites.models import Site
 
 from apiweb.apps.main.models import ContactInfo
