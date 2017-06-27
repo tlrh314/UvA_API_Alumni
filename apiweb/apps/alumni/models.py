@@ -10,8 +10,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from sqlite3 import IntegrityError as IntErr1
-from django.db.utils import IntegrityError as IntErr2
+from django.db.utils import IntegrityError
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -243,17 +242,22 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         MAXCOUNT = 100
-        count = 0
+        count_s, count_u, count = 0, 0, 0
         base_slug = slugify(self.full_name_no_title)
         self.slug = base_slug
-        # The following loop should prevent a DB exception when
-        # two people enter the same title at the same time
-        while count < MAXCOUNT:
+        while count_s < MAXCOUNT and count_u < MAXCOUNT and count < MAXCOUNT:
             try:
                 super(Alumnus, self).save(*args, **kwargs)
-            except (IntErr1, IntErr2):
+            except IntegrityError as e:
                 count += 1
-                self.slug = base_slug + "_{0}".format(count)
+                print(str(e))
+                input()
+                if "UNIQUE constraint failed: alumni_alumnus.username" in str(e):
+                    count_u += 1
+                    self.username += "_{0}".format(count_u)
+                if "UNIQUE constraint failed: alumni_alumnus.slug" in str(e):
+                    count_s += 1
+                    self.slug = base_slug + "_{0}".format(count_s)
             else:
                 break
 
