@@ -93,6 +93,13 @@ class ThesisAdminInline(admin.StackedInline):
     # There are two fk relations with Alumnus, so we must specify which one should be inlined
     fk_name = "alumnus"
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        current_alumnus = Alumnus.objects.get(pk=request.resolver_match.args[0])
+        if db_field.name == "advisor":
+            kwargs["queryset"] = Alumnus.objects.exclude(username=current_alumnus.username)
+        return super(ThesisAdminInline, self).formfield_for_manytomany(db_field, request, **kwargs)
+
+
 
 class NullListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
@@ -129,8 +136,8 @@ class AlumnusAdmin(UserAdmin):
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
     ordering = ("username", )
-    search_fields = ("username", "email", "first_name", "last_name", "degrees__title",
-        "degrees__date_start", "degrees__date_stop", "degrees__date_of_defence")
+    search_fields = ("username", "email", "first_name", "last_name", "theses__title",
+        "theses__date_start", "theses__date_stop", "theses__date_of_defence")
     list_display = ("get_alumnus", "email", "last_checked", "show_msc_year",
         "show_phd_year", "show_postdoc_year", "show_staff_year", "is_staff")
     list_filter = (
@@ -275,22 +282,22 @@ class AlumnusAdmin(UserAdmin):
     show_postdoc_year.short_description = "PD"
 
     def show_phd_year(self, obj):
-        degrees = obj.degrees.filter(type="phd")
-        if len(degrees) is not 0:
-            if degrees[0].date_of_defence:
-                return degrees[0].date_of_defence.strftime("%Y")
-            elif degrees[0].date_stop:
-                return degrees[0].date_stop.strftime("%Y")
+        theses = obj.theses.filter(type="phd")
+        if len(theses) is not 0:
+            if theses[0].date_of_defence:
+                return theses[0].date_of_defence.strftime("%Y")
+            elif theses[0].date_stop:
+                return theses[0].date_stop.strftime("%Y")
         return None
     show_phd_year.short_description = "PhD"
 
     def show_msc_year(self, obj):
-        degrees = obj.degrees.filter(type="msc")
-        if len(degrees) is not 0:
-            if degrees[0].date_of_defence:
-                return degrees[0].date_of_defence.strftime("%Y")
-            elif degrees[0].date_stop:
-                return degrees[0].date_stop.strftime("%Y")
+        theses = obj.theses.filter(type="msc")
+        if len(theses) is not 0:
+            if theses[0].date_of_defence:
+                return theses[0].date_of_defence.strftime("%Y")
+            elif theses[0].date_stop:
+                return theses[0].date_stop.strftime("%Y")
         return None
     show_msc_year.short_description = "MSc"
 

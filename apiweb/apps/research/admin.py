@@ -98,8 +98,9 @@ class ThesisAdmin(admin.ModelAdmin):
         return qs
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
+        current_thesis = Thesis.objects.get(pk=request.resolver_match.args[0])
         if db_field.name == "advisor":
-            kwargs["queryset"] = Alumnus.objects.exclude(pk=request.user.pk)
+            kwargs["queryset"] = Alumnus.objects.exclude(username=current_thesis.alumnus.username)
         return super(ThesisAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
     def get_author(self, obj):
