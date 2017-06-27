@@ -252,12 +252,16 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
                 count += 1
                 print(str(e))
                 input()
-                if "UNIQUE constraint failed: alumni_alumnus.username" in str(e):
+                # Fix for both sqlite3 and MySQL
+                if "UNIQUE constraint failed: alumni_alumnus.username" in str(e) \
+                    or ( "Duplicate entry" in str(e) and "for key 'username'" in str(e)):
                     count_u += 1
                     self.username += "_{0}".format(count_u)
-                if "UNIQUE constraint failed: alumni_alumnus.slug" in str(e):
+                if "UNIQUE constraint failed: alumni_alumnus.slug" in str(e) \
+                    or ( "Duplicate entry" in str(e) and "for key 'username'" in str(e)):
                     count_s += 1
                     self.slug = base_slug + "_{0}".format(count_s)
+
             else:
                 break
 
