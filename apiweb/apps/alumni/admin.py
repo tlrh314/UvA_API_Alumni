@@ -94,10 +94,14 @@ class ThesisAdminInline(admin.StackedInline):
     fk_name = "alumnus"
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        current_alumnus = Alumnus.objects.get(pk=request.resolver_match.args[0])
-        if db_field.name == "advisor":
-            kwargs["queryset"] = Alumnus.objects.exclude(username=current_alumnus.username)
-        return super(ThesisAdminInline, self).formfield_for_manytomany(db_field, request, **kwargs)
+        try:  # breaks for add alumnus
+            current_alumnus = Alumnus.objects.get(pk=request.resolver_match.args[0])
+            if db_field.name == "advisor":
+                kwargs["queryset"] = Alumnus.objects.exclude(username=current_alumnus.username)
+            return super(ThesisAdminInline, self).formfield_for_manytomany(db_field, request, **kwargs)
+        except IndexError as e:
+            if str(e) == "tuple index out of range":
+                pass
 
 
 
