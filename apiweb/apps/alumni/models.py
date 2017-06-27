@@ -10,13 +10,12 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.db import IntegrityError
+from sqlite3 import IntegrityError as IntErr1
+from django.db.utils import IntegrityError as IntErr2
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.utils import IntegrityError
 from django.utils.encoding import python_2_unicode_compatible
 
 from jsonfield import JSONField
@@ -243,20 +242,20 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
         return self.full_name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.full_name_no_title)
-        try:
-            # Work around a nasty bug in Django: don't use user=self.user
-            # Also: is user__username better than user__pk?
-            Alumnus.objects.exclude(username=self.username).get(slug=self.slug)
-        except ObjectDoesNotExist:
-            pass
-        except IntegrityError:
-            print("sjenkie")
-            count = Alumnus.objects.filter(slug__contains = self.slug).count()
-            self.slug = "{0}_{1}".format(self.slug, str(count + 1))
-        os.umask(0o002)  # change umask so created (sub)directories
-                         # have correct permissions
-        super(Alumnus, self).save(*args, **kwargs)
+        MAXCOUNT = 100
+        count = 0
+        base_slug = slugify(self.full_name_no_title)
+        self.slug = base_slug
+        # The following loop should prevent a DB exception when
+        # two people enter the same title at the same time
+        while count < MAXCOUNT:
+            try:
+                super(Alumnus, self).save(*args, **kwargs)
+            except (IntErr1, IntErr2):
+                count += 1
+                self.slug = base_slug + "_{0}".format(count)
+            else:
+                break
 
     def get_absolute_url(self):
         return reverse("alumni:alumnus-detail", args=[self.slug])
