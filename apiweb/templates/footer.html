@@ -25,7 +25,7 @@
                 <h3> Recent Theses </h3>
                 <ul>
                     {% for thesis in latest_theses %}
-                    <li><a href=" {% url 'alumni:thesis-detail' thesis.thesis_slug %} "> {{ thesis.alumnus.full_name }}  <span>| {{ thesis.date_of_defence|date }}</span> </a></li>
+                    <li><a href=" {% url 'research:thesis-detail' thesis.slug %} "> {{ thesis.alumnus.full_name }}  <span>| {{ thesis.date_of_defence|date }}</span> </a></li>
                     {% endfor %}
                 </ul>
             </div>

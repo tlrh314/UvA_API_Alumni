@@ -8,8 +8,6 @@
 
 {% block content %}
 
-<h1 class="text-center">{{ thesis_title }}</h1>
-
 <div class="main-content" role="main">
     {% bootstrap_messages %}
     <h2 class="text-center">Search returned {% if alumni %} {{ alumni.count }} {% else %} 0 {% endif %} results</h2>
@@ -35,7 +33,7 @@
                 {% for thesis in alumnus.theses.all %}
                     {{ thesis.type|display_thesis_type }}:
                     {% if thesis.title %}
-                        <a href="{% url 'alumni:thesis-detail' thesis.slug %}">{{ thesis.title }} </a><br>
+                        <a href="{% url 'research:thesis-detail' thesis.slug %}">{{ thesis.title }} </a><br>
                     {% else %}
                         <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a><br>
                     {% endif %}

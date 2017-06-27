@@ -194,7 +194,7 @@
             <h2 class="text-center">Total number of theses: {{ theses.paginator.count }}</h2>
             {% for thesis in theses%}
             <tr>
-                <td class="col-md-6">{% if thesis.thesis_title %}
+                <td class="col-md-6">{% if thesis.title %}
                         <a href="{% url 'research:thesis-detail' thesis.slug %}">{{ thesis.title }}
                     {% else %}
                         <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
