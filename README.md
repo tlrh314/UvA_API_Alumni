@@ -16,7 +16,12 @@
   - Edit local_settings to tailor to your machine.
 
 - **Create directories for the databases, create database and load initial data**
-  - `mkdir -p apiweb/databases`
+  - Development: `mkdir -p apiweb/databases`
+  - Production: `mysql -u root -p`
+    - `CREATE 'user'@'localhost' IDENTIFIED BY 'password';`
+    - `CREATE DATABASE mydatabase CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
+    - `GRANT ALL PRIVILEGES ON mydatabase.* TO 'user'@'localhost';`
+    - `FLUSH PRIVILEGES;`
   - `python manage.py makemigrations main alumni survey research interviews`
   - `python manage.py migrate`
   - `python manage.py loaddata apiweb/apps/*/fixtures/*.json`
