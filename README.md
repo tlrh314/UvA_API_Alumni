@@ -16,12 +16,20 @@
   - Edit local_settings to tailor to your machine.
 
 - **Create directories for the databases, create database and load initial data**
-  - Development: `mkdir -p apiweb/databases`
-  - Production: `mysql -u root -p`
+  - **Development**: 
+  - `mkdir -p apiweb/databases`
+  - Create sql dump at production server `mysqldump -u root -p apialumni > ~/sqldump_$(date "+%Y%m%d").sql` (assuming databasename is 'apialumni')
+  - Copy database over to local machine, make sure sqlite3 is installed, and that scripts/mysql2sqlite3 is present and executable
+  - Convert database to sqlite3 `./scripts/mysql2sqlite3 sqldump_$(date "+%Y%m%d").sql | sqlite3 dev.db`
+  - Copy dev.db to apiweb/databases, and setup sqlite3 backend in settings/local.py
+  -
+  - **Production**:
+  - `mysql -u root -p`
     - `CREATE 'user'@'localhost' IDENTIFIED BY 'password';`
     - `CREATE DATABASE mydatabase CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
     - `GRANT ALL PRIVILEGES ON mydatabase.* TO 'user'@'localhost';`
     - `FLUSH PRIVILEGES;`
+  - **Both**:
   - `python manage.py makemigrations main alumni survey research interviews`
   - `python manage.py migrate`
   - `python manage.py loaddata apiweb/apps/*/fixtures/*.json`
