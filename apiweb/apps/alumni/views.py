@@ -35,7 +35,7 @@ def alumnus_list(request):
             if year == "1900":
                 end_year = str(int(year) + 50)
             date_range=[year+"-01-01",end_year+"-01-01"]
-            multifilter = multifilter | Q(degrees__date_of_defence__range=date_range)
+            multifilter = multifilter | Q(theses__date_of_defence__range=date_range)
             multifilter = multifilter | Q(positions__date_stop__range=date_range)
             multifilter = multifilter | Q(positions__date_start__range=date_range)
             multifilter = multifilter | Q(positions__date_stop__range=date_range)
@@ -50,7 +50,7 @@ def alumnus_list(request):
     if degree_type:
         multifilter = Q()
         for degree in degree_type:
-            multifilter = multifilter | Q(degrees__type=degree)
+            multifilter = multifilter | Q(theses__type=degree)
 
         alumni = alumni.filter(multifilter).distinct()
 
@@ -63,15 +63,15 @@ def alumnus_list(request):
 
         # Caution: sorting on degree/position implies filtering also
         if sort_on[0] == "msc_lh":
-            alumni = alumni.filter(degrees__type__iexact="msc").distinct().order_by("degrees__date_of_defence")
+            alumni = alumni.filter(theses__type__iexact="msc").distinct().order_by("theses__date_of_defence")
 
         if sort_on[0] == "msc_hl":
-            alumni = alumni.filter(degrees__type__iexact="msc").distinct().order_by("-degrees__date_of_defence")
+            alumni = alumni.filter(theses__type__iexact="msc").distinct().order_by("-theses__date_of_defence")
 
         if sort_on[0] == "phd_lh":
-            alumni = alumni.filter(degrees__type__iexact="phd").distinct().order_by("degrees__date_of_defence")
+            alumni = alumni.filter(theses__type__iexact="phd").distinct().order_by("theses__date_of_defence")
         if sort_on[0] == "phd_hl":
-            alumni = alumni.filter(degrees__type__iexact="phd").distinct().order_by("-degrees__date_of_defence")
+            alumni = alumni.filter(theses__type__iexact="phd").distinct().order_by("-theses__date_of_defence")
 
         if sort_on[0] == "pd_lh":
             alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("positions__date_stop")
