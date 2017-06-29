@@ -10,6 +10,8 @@ from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 
 from .models import ContactInfo
 from .models import WelcomeMessage
@@ -19,6 +21,7 @@ from .forms import ThesisForm
 from .forms import SelectThesisForm
 from ..interviews.models import Post
 from ..research.models import Thesis
+from ..alumni.models import Alumnus
 from ..survey.models import JobAfterLeaving
 from ..survey.forms import SurveyContactInfoForm, SurveyCareerInfoForm
 
@@ -137,6 +140,13 @@ def site_contactinfo(request):
             alumnus = form.save(commit=False)
             alumnus = request.user
             alumnus.save()
+
+            # Add record to LogEntry
+            content_type_pk = ContentType.objects.get_for_model(Alumnus).pk
+            LogEntry.objects.log_action(
+                request.user.pk, content_type_pk, alumnus.pk, str(alumnus), CHANGE,
+                change_message="Information updated by the alumnus self via the website.")
+
             messages.success(request, "Profile succesfully updated!")
             return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
     else:
@@ -151,6 +161,12 @@ def site_thesis_select(request):
         form = SelectThesisForm(data=request.POST, alumnus=request.user, files=request.FILES)
         if form.is_valid():
             thesis = form.cleaned_data["which_thesis"]
+
+            # Add record to LogEntry
+            content_type_pk = ContentType.objects.get_for_model(Thesis).pk
+            LogEntry.objects.log_action(
+                request.user.pk, content_type_pk, thesis.pk, str(thesis), CHANGE,
+                change_message="Thesis selected to be updated via the website.")
 
             if thesis:
                 return HttpResponseRedirect(reverse("site_thesis_update", kwargs={"slug": thesis.slug}))
@@ -168,6 +184,13 @@ def site_thesis_update(request, slug):
         form = ThesisForm(data=request.POST, instance=get_object_or_404(Thesis, slug=slug), files=request.FILES)
         if form.is_valid():
             thesis = form.save()
+
+            # Add record to LogEntry
+            content_type_pk = ContentType.objects.get_for_model(Thesis).pk
+            LogEntry.objects.log_action(
+                request.user.pk, content_type_pk, thesis.pk, str(thesis), CHANGE,
+                change_message="Thesis indeed updated via the website.")
+
             messages.success(request, "Thesis succesfully updated!")
             return HttpResponseRedirect(reverse("research:thesis-detail", kwargs={"slug": thesis.slug}))
     else:
@@ -185,6 +208,13 @@ def site_thesis_create(request):
             thesis = form.save(commit=False)
             thesis.alumnus = request.user
             thesis.save()
+
+            # Add record to LogEntry
+            content_type_pk = ContentType.objects.get_for_model(Thesis).pk
+            LogEntry.objects.log_action(
+                request.user.pk, content_type_pk, thesis.pk, str(thesis), CHANGE,
+                change_message="Thesis newly created via the website.")
+
             messages.success(request, "Succesfully created new thesis!")
             return HttpResponseRedirect(reverse("research:thesis-detail", kwargs={"slug": thesis.slug}))
     else:
@@ -214,6 +244,13 @@ def site_careerinfo(request, which_position_value=0):
                 jobname += " Position"
             else:
                 jobname += " Job after Leaving API"
+
+            # Add record to LogEntry
+            content_type_pk = ContentType.objects.get_for_model(JobAfterLeaving).pk
+            LogEntry.objects.log_action(
+                request.user.pk, content_type_pk, jobafterleaving.pk, str(jobafterleaving), CHANGE,
+                change_message="Job updated via the website.")
+
             messages.success(request, "{0} succesfully updated!".format(jobname))
             return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
     else:
