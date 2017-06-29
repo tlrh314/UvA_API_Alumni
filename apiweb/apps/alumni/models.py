@@ -217,7 +217,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         """ Required when extending AbstractBaseUser """
-        title_last = self.academic_title in AcademicTitle.objects.filter(title__in=["MA", "MSc", "BSc"])
+        title_last = self.academic_title in AcademicTitle.objects.filter(title__in=["MA", "MSc", "BSc", "PhD"])
         if self.academic_title:
             title = " "+str(self.academic_title) if title_last else str(self.academic_title)+" "
         else:
