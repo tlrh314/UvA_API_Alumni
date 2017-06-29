@@ -3,6 +3,7 @@ from __future__ import unicode_literals, absolute_import, division
 from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
@@ -14,6 +15,8 @@ from .models import ContactInfo
 from .models import WelcomeMessage
 from .models import PrivacyPolicy
 from .forms import ContactForm
+from .forms import ThesisForm
+from .forms import SelectThesisForm
 from ..interviews.models import Post
 from ..research.models import Thesis
 from ..survey.models import JobAfterLeaving
@@ -143,6 +146,54 @@ def site_contactinfo(request):
 
 
 @login_required
+def site_thesis_select(request):
+    if request.method == "POST":
+        form = SelectThesisForm(data=request.POST, alumnus=request.user, files=request.FILES)
+        if form.is_valid():
+            thesis = form.cleaned_data["which_thesis"]
+
+            if thesis:
+                return HttpResponseRedirect(reverse("site_thesis_update", kwargs={"slug": thesis.slug}))
+            else:
+                return HttpResponseRedirect(reverse("site_thesis_create"))
+    else:
+        form = SelectThesisForm(alumnus=request.user)
+
+    return render(request, "main/thesis_select.html", { "form": form, })
+
+
+@login_required
+def site_thesis_update(request, slug):
+    if request.method == "POST":
+        form = ThesisForm(data=request.POST, instance=get_object_or_404(Thesis, slug=slug), files=request.FILES)
+        if form.is_valid():
+            thesis = form.save()
+            messages.success(request, "Thesis succesfully updated!")
+            return HttpResponseRedirect(reverse("research:thesis-detail", kwargs={"slug": thesis.slug}))
+    else:
+        form = ThesisForm(instance=get_object_or_404(Thesis, slug=slug))
+
+    return render(request, "main/thesis_change.html", { "form": form, })
+
+
+@login_required
+def site_thesis_create(request):
+    if request.method == "POST":
+        form = ThesisForm(data=request.POST, files=request.FILES)
+        print(form)
+        if form.is_valid():
+            thesis = form.save(commit=False)
+            thesis.alumnus = request.user
+            thesis.save()
+            messages.success(request, "Succesfully created new thesis!")
+            return HttpResponseRedirect(reverse("research:thesis-detail", kwargs={"slug": thesis.slug}))
+    else:
+        form = ThesisForm()
+
+    return render(request, "main/thesis_add.html", { "form": form, })
+
+
+@login_required
 def site_careerinfo(request, which_position_value=0):
     try:
         prefill_instance = JobAfterLeaving.objects.all().filter(alumnus=request.user, which_position=which_position_value)[0]
@@ -170,24 +221,6 @@ def site_careerinfo(request, which_position_value=0):
 
     return render(request, "main/careerinfo_change_form.html", {
         "form": form, "which_position_value": which_position_value,})
-
-
-@login_required
-def site_theses(request):
-    if request.method == "POST":
-        form = None
-        # form = SurveyPrivacySettingsForm(data=request.POST)
-        # if form.is_valid():
-        if True:
-            # form.save()
-            messages.success(request, "Profile succesfully updated!")
-            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
-    else:
-        # form = SurveyPrivacySettingsForm(instance=request.user)
-        form = None
-        pass
-
-    return render(request, "main/privacysettings_change_form.html", { "form": form,  })
 
 
 # TODO: clean up code below

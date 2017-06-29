@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block stylesheets %} {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+{% endblock stylesheets %}
+
+{% block topscripts %} {{ block.super }}
+
+    <script type="text/javascript" src="{% static 'js/jquery-1.12.4.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
+
+    <script>
+    $( function() {
+        $( "#id_date_start" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+        });
+        $( "#id_date_stop" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+        });
+        $( "#id_date_of_defence" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+        });
+    } );
+    </script>
+
+{% endblock topscripts %}
+
+{% block title %} API - Alumni - Update Thesis {% endblock title %}
+
+{% block content %}
+
+<div class="col-xs-12 main-content" role="main" style="width: 100%">
+    <h1 class="text-center"> API Alumni Create Thesis </h1>
+    <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
+        <div class="col-xs-12">
+            <form class="form-horizontal col-sm-12" role="form" action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                    {% if field.help_text %}
+                    <p class="form-text text-muted">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-success center-block"> Update </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}  {% endblock scripts %}
+

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %} API - Alumni - Select Thesis {% endblock title %}
+
+{% block content %}
+
+<div class="col-xs-12 main-content" role="main" style="width: 100%">
+    <h1 class="text-center"> API Alumni Select Thesis to Change </h1>
+
+    <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
+
+        <div class="col-xs-12">
+            <form class="form-horizontal col-sm-12" role="form" action="" method="post"> {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                    {% if field.help_text %}
+                    <p class="form-text text-muted">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <h4 class="text-center">
+                    If you want to create a new thesis, please leave blank. 
+                </h4>
+
+                <button type="submit" class="btn btn-success center-block"> Select </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

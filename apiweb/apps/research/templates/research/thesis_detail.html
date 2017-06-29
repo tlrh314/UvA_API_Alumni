@@ -1,9 +1,13 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
+
 {% block title %} API - Thesis - {{ thesis.alumnus.full_name }} {% endblock title %}
 
 {% block content %}
 
 <div class="main-content" role="main">
+    {% bootstrap_messages %}
+    
     <div class="span9">
         <h1 class="text-center">{{ thesis.title }}</h1>
     </div>

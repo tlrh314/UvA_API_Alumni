@@ -7,7 +7,8 @@ from django.contrib.auth import views as auth_views
 from apiweb.context_processors import contactinfo
 from .views import redirect_to_profile, page_not_found
 from .views import index, contact, contact_success, privacy_policy
-from .views import site_contactinfo, site_careerinfo, site_theses
+from .views import site_contactinfo, site_careerinfo
+from .views import site_thesis_select, site_thesis_update, site_thesis_create
 
 
 urlpatterns = [
@@ -39,7 +40,9 @@ urlpatterns = [
 
     url(r"^update_contactinfo/$", site_contactinfo, name="site_contactinfo"),
     url(r"^update_careerinfo/(?P<which_position_value>[0-3])$", site_careerinfo, name="site_careerinfo"),
-    url(r"^update_theses/$", site_theses, name="site_theses"),
+    url(r"^select_thesis/$", site_thesis_select, name="site_thesis_select"),
+    url(r"^update_thesis/(?P<slug>.*)$", site_thesis_update, name="site_thesis_update"),
+    url(r"^create_thesis/$", site_thesis_create, name="site_thesis_create"),
 
     url(r'^password_reset/$', auth_views.PasswordResetView.as_view(
             template_name='main/password_reset_form.html',

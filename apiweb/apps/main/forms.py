@@ -1,5 +1,7 @@
 from django import forms
 
+from ..research.models import Thesis
+
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, widget=forms.TextInput(
         attrs={"class": "form-control required",
@@ -12,3 +14,38 @@ class ContactForm(forms.Form):
                "placeholder": "email@adres.nl - so we know how to reach you"}))
     cc_myself = forms.BooleanField(required=False, widget=forms.CheckboxInput(
         attrs={"class": "checkchoice"}))
+
+
+class SelectThesisForm(forms.Form):
+    def __init__(self, alumnus, *args, **kwargs):
+        super(SelectThesisForm, self).__init__(*args, **kwargs)
+
+        # Only show theses of the relevant Alumnus in the queryset
+        self.fields["which_thesis"].queryset = Thesis.objects.filter(alumnus=alumnus)
+
+    which_thesis = forms.ModelChoiceField(
+        label="Which thesis do you want to change?",
+        required=False,
+        queryset=None,  # note that we set the queryset in the init method above
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+
+
+class ThesisForm(forms.ModelForm):
+    class Meta:
+        model = Thesis
+        # TODO: Allow to change advisors with an ajax lookup?
+        fields = ("type", "date_start", "date_start", "date_stop", "title", "date_of_defence",
+                  "url", "pdf", "photo")
+
+        widgets = {
+            "type": forms.Select(attrs={"class": "form-control"}),
+            "date_start": forms.DateInput(attrs={"class": "form-control"}),
+            "date_stop": forms.DateInput(attrs={"class": "form-control"}),
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "date_of_defence": forms.DateInput(attrs={"class": "form-control"}),
+            "url": forms.URLInput(attrs={"class": "form-control"}),
+            # use FileInput to remove the clear tickbox
+            # "pdf": forms.ClearableFileInput(),
+            # "photo": forms.ClearableFileInput(),
+        }
