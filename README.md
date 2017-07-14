@@ -22,7 +22,10 @@
   - Copy database over to local machine, make sure sqlite3 is installed, and that scripts/mysql2sqlite3 is present and executable
   - Convert database to sqlite3 `./scripts/mysql2sqlite3 sqldump_$(date "+%Y%m%d").sql | sqlite3 dev.db`
   - Copy dev.db to apiweb/databases, and setup sqlite3 backend in settings/local.py
-  -
+  - Alternatively, the data can be dumped using `dumpdata` and loaded using `loaddata`
+    - `python manage.py dumpdata --exclude filebrowser --format json --indent 2 >> ~/dump_$(date "+%Y%m%d").json`
+    - Copy `~/dump_$(date "+%Y%m%d").json` to local machine, and read-in
+    - `python manage.py loaddata ~/dump_$(date "+%Y%m%d").json`
   - **Production**:
   - `mysql -u root -p`
     - `CREATE 'user'@'localhost' IDENTIFIED BY 'password';`
