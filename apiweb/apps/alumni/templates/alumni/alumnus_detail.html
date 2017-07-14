@@ -241,7 +241,7 @@
         {% with amt_tot_students=amt_msc_students|add:amt_phd_students %}
             {% if not amt_tot_students == 0 %}
                 {% if amt_tot_students > 1 %}
-                    <h2 class="text-left">Students Supervised</h2>
+                    <h2 class="text-left">Students Supervised {{ amt_tot_students }}</h2>
                 {% else %}
                     <h2 class="text-left">Student Supervised</h2>
                 {% endif %}
