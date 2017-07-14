@@ -9,6 +9,7 @@ from .views import redirect_to_profile, page_not_found
 from .views import index, contact, contact_success, privacy_policy
 from .views import site_contactinfo, site_careerinfo
 from .views import site_thesis_select, site_thesis_update, site_thesis_create
+from .views import AlumnusAutocomplete
 
 
 urlpatterns = [
@@ -42,6 +43,7 @@ urlpatterns = [
     url(r"^update_careerinfo/(?P<which_position_value>[0-3])$", site_careerinfo, name="site_careerinfo"),
     url(r"^select_thesis/$", site_thesis_select, name="site_thesis_select"),
     url(r"^update_thesis/(?P<slug>.*)$", site_thesis_update, name="site_thesis_update"),
+    url(r"^alumnus-autocomplete/$", AlumnusAutocomplete.as_view(), name='alumnus-autocomplete'),
     url(r"^create_thesis/$", site_thesis_create, name="site_thesis_create"),
 
     url(r'^password_reset/$', auth_views.PasswordResetView.as_view(

@@ -1,5 +1,7 @@
 from django import forms
 
+from dal import autocomplete
+
 from ..research.models import Thesis
 
 class ContactForm(forms.Form):
@@ -34,9 +36,8 @@ class SelectThesisForm(forms.Form):
 class ThesisForm(forms.ModelForm):
     class Meta:
         model = Thesis
-        # TODO: Allow to change advisors with an ajax lookup?
         fields = ("type", "date_start", "date_start", "date_stop", "title", "date_of_defence",
-                  "url", "pdf", "photo")
+                  "url", "pdf", "photo", "advisor")
 
         widgets = {
             "type": forms.Select(attrs={"class": "form-control"}),
@@ -45,6 +46,7 @@ class ThesisForm(forms.ModelForm):
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "date_of_defence": forms.DateInput(attrs={"class": "form-control"}),
             "url": forms.URLInput(attrs={"class": "form-control"}),
+            "advisor": autocomplete.ModelSelect2Multiple(url="alumnus-autocomplete")
             # use FileInput to remove the clear tickbox
             # "pdf": forms.ClearableFileInput(),
             # "photo": forms.ClearableFileInput(),
