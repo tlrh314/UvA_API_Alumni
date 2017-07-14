@@ -27,7 +27,9 @@
                     </thead>
                     <tbody>
                     <tr><th> Author </th><td><a href="{% url 'alumni:alumnus-detail' thesis.alumnus.slug %}">{{ thesis.alumnus.full_name }}</a></td></tr>
-                    <tr><th> Email </th><td><a href="mailto:{{ thesis.alumnus.email }}">{{ thesis.alumnus.email }}</a></td></tr>
+                    {% if thesis.alumnus.show_email %}
+                        <tr><th>Email</th><td><a href="mailto:{{ thesis.alumnus.email }}">{{ thesis.alumnus.email }}</a></td></tr>
+                    {% endif %}
                     <tr><th> Date </th><td>{{ thesis.date_of_defence|date:"j M Y" }}</td></tr>
                     <tr><th> URL </th><td>
                         {% if thesis.url %}
