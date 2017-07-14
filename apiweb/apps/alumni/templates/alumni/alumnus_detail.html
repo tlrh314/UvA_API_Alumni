@@ -195,8 +195,9 @@
     <div class="col-xs-12 col-md-3 pull-right text-left">
         {% get_thesis_supervisors alumnus "phd" as phd_supervisors %}
         {% get_thesis_supervisors alumnus "msc" as msc_supervisors %}
-        {% with amt_msc_supervisors=msc_supervisors|display_length_result amt_phd_supervisors=phd_supervisors|display_length_result %}
-        {% with amt_tot_supervisors=amt_msc_supervisors|add:amt_phd_supervisors %}
+        {% get_thesis_supervisors alumnus "bsc" as bsc_supervisors %}
+        {% with amt_bsc_supervisors=bsc_supervisors|display_length_result amt_msc_supervisors=msc_supervisors|display_length_result amt_phd_supervisors=phd_supervisors|display_length_result %}
+        {% with amt_tot_supervisors=amt_bsc_supervisors|add:amt_msc_supervisors|add:amt_phd_supervisors %}
             {% if not amt_tot_supervisors == 0 %}
                 {% if amt_tot_supervisors > 1 %}
                     <h2 class="text-left">Thesis Advisors</h2>
@@ -219,7 +220,7 @@
             {% endif %}
 
             {% if amt_msc_supervisors > 0 %}
-                <h3 class="text-left">Msc</h3>
+                <h3 class="text-left">MSc</h3>
                 <table class="table">
                     <thead></thead>                    
                     <tbody>
@@ -231,17 +232,31 @@
                 </table>
             {% endif %}
         
+            {% if amt_bsc_supervisors > 0 %}
+                <h3 class="text-left">BSc</h3>
+                <table class="table">
+                    <thead></thead>                    
+                    <tbody>
+                        {% for bsc_supervisor, date_of_defence, type in bsc_supervisors %}
+                            <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' bsc_supervisor.slug %}">{{ bsc_supervisor.full_name }}
+                            {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
         {% endwith %}
         {% endwith %}
 
 
         {% get_students alumnus "phd" as phd_students %}
         {% get_students alumnus "msc" as msc_students %}
-        {% with amt_msc_students=msc_students|display_length_result amt_phd_students=phd_students|display_length_result %}
-        {% with amt_tot_students=amt_msc_students|add:amt_phd_students %}
+        {% get_students alumnus "bsc" as bsc_students %}
+        {% with amt_bsc_students=bsc_students|display_length_result amt_msc_students=msc_students|display_length_result amt_phd_students=phd_students|display_length_result %}
+        {% with amt_tot_students=amt_bsc_students|add:amt_msc_students|add:amt_phd_students %}
             {% if not amt_tot_students == 0 %}
                 {% if amt_tot_students > 1 %}
-                    <h2 class="text-left">Students Supervised {{ amt_tot_students }}</h2>
+                    <h2 class="text-left">Students Supervised</h2>
                 {% else %}
                     <h2 class="text-left">Student Supervised</h2>
                 {% endif %}
@@ -283,6 +298,25 @@
                     </tbody>
                 </table>
             {% endif %}
+
+            {% if amt_bsc_students > 0 %}
+                {% if amt_bsc_students > 1 %}
+                    <h3 class="text-left">BSc Students</h3>
+                {% else %}
+                    <h3 class="text-left">BSc Student</h3>
+                {% endif %}
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        {% for bsc_student, date_of_defence in bsc_students  %}
+                        <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' bsc_student.slug %}">{{ bsc_student }}
+                            {% if date_of_defence %} ({{ date_of_defence|date:"Y" }}) {% else %} (<i class="fa fa-question">) {% endif %} </a></td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
         {% endwith %}
         {% endwith %}
 

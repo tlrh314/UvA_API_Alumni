@@ -19,7 +19,11 @@
                     {% if thesis.type == "msc" %}
                         Master's Thesis
                     {% else %}
-                        PhD Dissertation
+                        {% if thesis.type == "bsc" %}
+                            Bachelor's Thesis
+                        {% else %}
+                            PhD Dissertation
+                        {% endif %}
                     {% endif %}
                 </h3>
                 <table class="table">
