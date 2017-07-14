@@ -105,6 +105,8 @@ INSTALLED_APPS = (
     'tinymce',
     'ajax_select',
     'filebrowser',
+    'dal',
+    'dal_select2',
 
     'django.contrib.contenttypes',
     'django.contrib.auth',

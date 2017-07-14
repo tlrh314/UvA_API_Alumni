@@ -1,5 +1,6 @@
 from __future__ import unicode_literals, absolute_import, division
 
+from django.db.models import Q
 from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -12,6 +13,8 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+
+from dal import autocomplete
 
 from .models import ContactInfo
 from .models import WelcomeMessage
@@ -176,6 +179,19 @@ def site_thesis_select(request):
         form = SelectThesisForm(alumnus=request.user)
 
     return render(request, "main/thesis_select.html", { "form": form, })
+
+
+class AlumnusAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Alumnus.objects.none()
+
+        qs = Alumnus.objects.all()
+
+        if self.q:
+            qs = qs.filter(Q(last_name__icontains=self.q) | Q(first_name__icontains=self.q))
+
+        return qs
 
 
 @login_required
