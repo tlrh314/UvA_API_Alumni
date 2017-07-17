@@ -135,6 +135,9 @@ INSTALLED_APPS = (
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/redirect_to_profile'
 AUTH_USER_MODEL = 'alumni.Alumnus'
+AUTHENTICATION_BACKENDS = ['apiweb.apps.alumni.backends.EmailOrUsernameModelBackend','django.contrib.auth.backends.ModelBackend']
+
+
 
 NEWS_LANGUAGES = ('en', 'nl')
 #NEWS_LANGUAGES = ('en',)  # 'nl')

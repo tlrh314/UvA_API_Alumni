@@ -30,7 +30,8 @@ from ...settings import TINYMCE_MINIMAL_CONFIG
 error_messages = {
     "names": "Names cannot contain numbers",
     "numbers": "Phonenumbers can only contain numbers",
-    "initials": "Initials can only contain letters"
+    "initials": "Initials can only contain letters",
+    "duplicate_email": "This email adress is already in use!"
 }
 
 TINYMCE_LOCAL_CONFIG= {
@@ -259,6 +260,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
     email = forms.EmailField(
         required=False,
+        help_text="Your email address will also serve as a way to log in",
         widget=forms.TextInput(
             attrs={"class":"form-control"}))
 
@@ -402,3 +404,16 @@ class SurveyContactInfoForm(forms.ModelForm):
         if mobile and not mobile.isdigit():
            self._errors["mobile"] = ErrorList()
            self._errors["mobile"].append(error_messages["numbers"])
+
+        #Because there is also a possibility to log in with email, one must not use an email which is already in use.
+        # TODO: if the user has an email, but the form is empty, that means that the person wants to remove the data, but this way wouldt let it
+        # SO make a check whether there is instance data but form data is empty
+        email = self.cleaned_data.get("email")
+        #Remove this instance object from duplicate emails object list
+        if email:
+            duplicate_emails_excluded = Alumnus.objects.filter(email=email).exclude(pk=self.instance.pk)
+            if len(duplicate_emails_excluded) > 0:
+                self.errors["email"] = ErrorList()
+                self.errors["email"].append(error_messages["duplicate_email"])
+
+
