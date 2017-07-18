@@ -28,7 +28,7 @@
     - `python manage.py loaddata ~/dump_$(date "+%Y%m%d").json`
   - **Production**:
   - `mysql -u root -p`
-    - `CREATE 'user'@'localhost' IDENTIFIED BY 'password';`
+    - `CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';`
     - `CREATE DATABASE mydatabase CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
     - `GRANT ALL PRIVILEGES ON mydatabase.* TO 'user'@'localhost';`
     - `FLUSH PRIVILEGES;`
