@@ -119,7 +119,6 @@ def alumnus_list(request):
     for alumnus in alumni:
         if not alumnus in alumnus_unique:
             alumnus_unique.append(alumnus)
-
     alumni = alumnus_unique[:]
 
     # Paginate the list

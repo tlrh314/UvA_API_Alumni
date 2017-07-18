@@ -3,6 +3,7 @@ from django import forms
 from dal import autocomplete
 
 from ..research.models import Thesis
+from ..alumni.templatetags.template_filters import display_thesis_type
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, widget=forms.TextInput(
@@ -24,6 +25,8 @@ class SelectThesisForm(forms.Form):
 
         # Only show theses of the relevant Alumnus in the queryset
         self.fields["which_thesis"].queryset = Thesis.objects.filter(alumnus=alumnus)
+        #Add the type to the choices, to make it more clear.
+        self.fields["which_thesis"].label_from_instance = lambda obj: "%s: %s" % (display_thesis_type(obj.type), obj.title)
 
     which_thesis = forms.ModelChoiceField(
         label="Which thesis do you want to change?",

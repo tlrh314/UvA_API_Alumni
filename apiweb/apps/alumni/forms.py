@@ -105,7 +105,7 @@ class AlumnusAdminForm(UserChangeForm):
         duplicate_emails_excluded = Alumnus.objects.filter(email=email).exclude(pk=self.instance.pk)
         if len(duplicate_emails_excluded) > 0:
             self.errors["email"] = ErrorList()
-            self.errors["email"].append("The chose email address is already used")
+            self.errors["email"].append("The chosen email address is already used")
 
 
 # ##NEW USERFORM TEST
@@ -126,6 +126,5 @@ class CustomUserCreationForm(UserCreationForm):
         duplicate_emails = Alumnus.objects.filter(email=email)
         if len(duplicate_emails) > 0:
             self.errors["email"] = ErrorList()
-            self.errors["email"].append("The chose email address is already used")
-        #self.instance.email = self.cleaned_data.get('email')
+            self.errors["email"].append("The chosen email address is already used")
         return email
