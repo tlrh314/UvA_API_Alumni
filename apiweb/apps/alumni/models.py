@@ -164,7 +164,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     # Contact information
     # TODO: at a later point in time remove null=True and add unique=True for email addresses
-    email           = models.EmailField(_("email"), null=True)
+    email           = models.EmailField(_("email"),blank=True, null=True)
     home_phone      = models.CharField(_("home telephone"), blank=True, max_length=40)
     mobile          = models.CharField(_("mobile"), blank=True, max_length=40)
     homepage        = models.URLField(_("homepage"), blank=True, null=True)
