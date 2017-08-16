@@ -38,7 +38,10 @@ def save_all_theses_to_xls(request, queryset=None):
     for row, thesis in enumerate(theses):
         for col, attr in enumerate(alumnus_attributes):
             try:
-                value = str(getattr(thesis.alumnus, attr, u"")).encode('ascii', 'ignore')
+                if (attr == 'last_name') or (attr == 'first_name'):
+                    value = str(getattr(thesis.alumnus, attr, ""))
+                else:
+                    value = str(getattr(thesis.alumnus, attr, u"")).encode('ascii', 'ignore')
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
 
@@ -85,7 +88,6 @@ def save_all_theses_to_xls(request, queryset=None):
 
             # Do some cleanups
             if value == "None": value = ""
-            #print(value)
 
             sheet.write(row+1, col+len(alumnus_attributes), value, style=borders)
 
