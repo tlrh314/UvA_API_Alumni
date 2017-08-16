@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from .models import Alumnus
 
 
-def save_all_alumni_to_xls(request, queryset=None):
+def save_alumni_to_xls(request, queryset=None):
     xls = xlwt.Workbook(encoding='utf8')
     sheet = xls.add_sheet('API Alumni Export')
 
@@ -38,7 +38,10 @@ def save_all_alumni_to_xls(request, queryset=None):
     for row, alumnus in enumerate(alumni):
         for col, attr in enumerate(attributes):
             try:
-                value = str(getattr(alumnus, attr, "")).encode('ascii', 'ignore')
+                if (attr == 'last_name') or (attr == 'first_name'):
+                    value = str(getattr(alumnus, attr, ""))
+                else:
+                    value = str(getattr(alumnus, attr, "")).encode('ascii', 'ignore')
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
 
@@ -54,7 +57,7 @@ def save_all_alumni_to_xls(request, queryset=None):
             if attr == 'gender':
                 if not value == "":
                     value = Alumnus.GENDER_CHOICES[int(value)-1][1]
-
+                    
             sheet.write(row+1, col, value, style=borders)
 
     # # Return a response that allows to download the xls-file.

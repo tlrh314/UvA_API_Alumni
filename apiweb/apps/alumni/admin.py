@@ -19,7 +19,7 @@ from apiweb import context_processors
 from .models import PositionType, PreviousPosition
 from .models import Alumnus, AcademicTitle
 from .forms import AlumnusAdminForm, PreviousPositionAdminForm
-from .actions import save_all_alumni_to_xls
+from .actions import save_alumni_to_xls
 from ..survey.admin import JobAfterLeavingAdminInline
 from ..survey.forms import SendSurveyForm
 from ..research.models import Thesis
@@ -107,7 +107,6 @@ class ThesisAdminInline(admin.StackedInline):
                 pass
 
 
-
 class NullListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return (
@@ -120,6 +119,8 @@ class NullListFilter(admin.SimpleListFilter):
         if self.value() in ("0", "1"):
             return queryset.filter(**kwargs)
         return queryset
+
+# class SurveyCompleted()
 
 
 class EmptyEmailListFilter(NullListFilter):
@@ -331,7 +332,6 @@ class AlumnusAdmin(UserAdmin):
     send_password_reset.short_description = "Send selected Alumni Password Reset"
 
     def send_survey_email(self, request, queryset):
-        print(queryset)
         exclude_alumni = []
         reason = []
 
@@ -379,14 +379,14 @@ class AlumnusAdmin(UserAdmin):
             userpk = queryset[0].user_id
             return HttpResponseRedirect("/admin/auth/user/{0}/password/".format(userpk))
     reset_password_yourself.short_description = "Reset password of Alumnus yourself"
-
+    
     def export_selected_alumni_to_excel(self, request, queryset):
-        return save_all_alumni_to_xls(request, queryset)
+        return save_alumni_to_xls(request, queryset)
         self.message_user(request, "This function is not yet implemented.", level="error")
     export_selected_alumni_to_excel.short_description = "Export selected Alumni to Excel"
 
     def export_all_alumni_to_excel(self, request, queryset):
-        return save_all_alumni_to_xls(request, None)
+        return save_alumni_to_xls(request, None)
         # self.message_user(request, "This function is not yet implemented.", level="error")
     export_all_alumni_to_excel.short_description = "Export all Alumni to Excel"
 
