@@ -33,7 +33,7 @@ def save_all_theses_to_xls(request, queryset=None):
         theses = queryset
     else:  # used to export all theses to Excel
         theses = (Thesis.objects.filter(type="phd").order_by("-date_of_defence")
-            |  Thesis.objects.filter(type="msc").order_by("alumnus__last_name"))
+            |  Thesis.objects.filter(type="msc").order_by("alumnus__last_name")) | Thesis.objects.filter(type="bsc").order_by("alumnus__last_name")
 
     for row, thesis in enumerate(theses):
         for col, attr in enumerate(alumnus_attributes):
