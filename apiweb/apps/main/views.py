@@ -164,14 +164,12 @@ def site_thesis_select(request):
         form = SelectThesisForm(data=request.POST, alumnus=request.user, files=request.FILES)
         if form.is_valid():
             thesis = form.cleaned_data["which_thesis"]
-
-            # Add record to LogEntry
-            content_type_pk = ContentType.objects.get_for_model(Thesis).pk
-            LogEntry.objects.log_action(
-                request.user.pk, content_type_pk, thesis.pk, str(thesis), CHANGE,
-                change_message="Thesis selected to be updated via the website.")
-
             if thesis:
+                # Add record to LogEntry (only if the thesis exists, else it will raise an error)
+                content_type_pk = ContentType.objects.get_for_model(Thesis).pk
+                LogEntry.objects.log_action(
+                    request.user.pk, content_type_pk, thesis.pk, str(thesis), CHANGE,
+                    change_message="Thesis selected to be updated via the website.")
                 return HttpResponseRedirect(reverse("site_thesis_update", kwargs={"slug": thesis.slug}))
             else:
                 return HttpResponseRedirect(reverse("site_thesis_create"))
@@ -180,16 +178,15 @@ def site_thesis_select(request):
 
     return render(request, "main/thesis_select.html", { "form": form, })
 
-
 class AlumnusAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():
             return Alumnus.objects.none()
 
         qs = Alumnus.objects.all()
-
         if self.q:
             qs = qs.filter(Q(last_name__icontains=self.q) | Q(first_name__icontains=self.q))
+#            qs = qs.filter(Q(last_name__icontains=self.q) | Q(first_name__icontains=self.q)) | Q(full_name_no_title__icontains=self.q)
 
         return qs
 
@@ -219,7 +216,6 @@ def site_thesis_update(request, slug):
 def site_thesis_create(request):
     if request.method == "POST":
         form = ThesisForm(data=request.POST, files=request.FILES)
-        print(form)
         if form.is_valid():
             thesis = form.save(commit=False)
             thesis.alumnus = request.user

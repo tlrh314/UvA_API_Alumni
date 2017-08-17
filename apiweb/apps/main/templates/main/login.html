@@ -14,7 +14,7 @@
     <div id="contact-form-wrapper" class="text-justify col-xs-12 col-sm-8 col-sm-offset-2 ">
         {% if form.errors %}
         <div class="alert alert-danger">
-            Invalid Username/Password. Please try again.
+            Invalid Username (or email)/Password. Please try again.
         </div>
         {% endif %}
 
@@ -24,7 +24,7 @@
             {% else %}
             <div class="form-group">
             {% endif %}
-                <label for="id_username">Username:</label>
+                <label for="id_username">Username/Email:</label>
                 <input class="form-control" type="text" name="username" required="" id="id_username">
                 {% if form.errors %} 
                     <i class="glyphicon glyphicon-remove form-control-feedback"></i>

@@ -23,11 +23,14 @@ from django_countries.fields import CountryField
 
 from .storage import OverwriteStorage
 from .managers import AlumniManager
+from .validators import MyValidator
 
 def get_mugshot_location(instance, filename):
     """ the media directory is already included """
     return os.path.join("uploads", "alumni", "mugshots",
                         instance.username, filename)
+
+#Custom validator to block @ symbol
 
 
 @python_2_unicode_compatible
@@ -101,7 +104,6 @@ class AcademicTitle(models.Model):
     def __str__(self):
         return self.title
 
-
 @python_2_unicode_compatible
 class Alumnus(AbstractBaseUser, PermissionsMixin):
     """ Represents an alumnus of API. Since we extend the AbstractBaseUser
@@ -115,12 +117,12 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     )
 
     # Account information
-    username_validator = UnicodeUsernameValidator()
+    username_validator = MyValidator()
     username = models.CharField(
         _("username"),
         max_length=150,
         unique=True,
-        help_text=_("Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."),
+        help_text=_("Required. 150 characters or fewer. Letters, digits and ./+/-/_ only."),
         validators=[username_validator],
         error_messages={
             "unique": _("A user with that username already exists."),

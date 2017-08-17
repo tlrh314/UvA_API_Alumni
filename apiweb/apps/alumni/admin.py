@@ -24,6 +24,9 @@ from ..survey.admin import JobAfterLeavingAdminInline
 from ..survey.forms import SendSurveyForm
 from ..research.models import Thesis
 from ...settings import ADMIN_MEDIA_JS
+from .forms import CustomUserCreationForm
+
+
 
 # Do not show the Site Admin
 admin.site.unregister(Group)
@@ -137,7 +140,7 @@ class AcademicTitleAdmin(admin.ModelAdmin):
 @admin.register(Alumnus)
 class AlumnusAdmin(UserAdmin):
     form = AlumnusAdminForm
-    add_form = UserCreationForm
+    add_form = CustomUserCreationForm
     change_password_form = AdminPasswordChangeForm
     ordering = ("username", )
     search_fields = ("username", "email", "first_name", "last_name", "theses__title",

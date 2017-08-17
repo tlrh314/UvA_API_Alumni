@@ -4,11 +4,15 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin import widgets
 from django.forms.utils import ErrorList
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import (UserChangeForm, UserCreationForm)
+from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth import (
+ authenticate, get_user_model, password_validation,
+)
 
 from tinymce.widgets import TinyMCE
 from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
-
 
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
 from .models import PreviousPosition, Alumnus
@@ -31,8 +35,24 @@ class AlumnusAdminForm(UserChangeForm):
         fields = "__all__"
         model = Alumnus
 
+    username = forms.CharField(
+        required=True,
+        help_text=_("Required. 150 characters or fewer. Letters, digits and ./+/-/_ only."),
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}))
+
+    email = forms.EmailField(
+        required=False,
+        help_text="Your email address will also serve as a way to log in",
+        widget=forms.TextInput(
+            attrs={"class":"form-control"}))
 
     def clean(self):
+        username = self.cleaned_data.get("username")
+        if '@' in username:
+            self._errors["username"] = ErrorList()
+            self._errors["username"].append("The username cannot contain '@'.")
+
         initials = self.cleaned_data.get("initials")
         if any(str.isdigit(c) for c in initials):
             self._errors["initials"] = ErrorList()
@@ -77,3 +97,34 @@ class AlumnusAdminForm(UserChangeForm):
             self._errors["work_phone"] = ErrorList()
             self._errors["work_phone"].append("Phone numbers can only contain numbers")
 
+        #Because there is also a possibility to log in with email, one must not use an email which is already in use.
+        # TODO: if the user has an email, but the form is empty, that means that the person wants to remove the data, but this way wouldt let it
+        # SO make a check whether there is instance data but form data is empty
+        email = self.cleaned_data.get("email")
+        #Remove this instance object from duplicate emails object list
+        duplicate_emails_excluded = Alumnus.objects.filter(email=email).exclude(pk=self.instance.pk)
+        if len(duplicate_emails_excluded) > 0:
+            self.errors["email"] = ErrorList()
+            self.errors["email"].append("The chosen email address is already used")
+
+
+# ##NEW USERFORM TEST
+UserModel = get_user_model()
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = UserModel
+        fields = ("username","email")
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        if self._meta.model.USERNAME_FIELD in self.fields:
+            self.fields[self._meta.model.USERNAME_FIELD].widget.attrs.update({'autofocus': True})
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        duplicate_emails = Alumnus.objects.filter(email=email)
+        if len(duplicate_emails) > 0:
+            self.errors["email"] = ErrorList()
+            self.errors["email"].append("The chosen email address is already used")
+        return email
