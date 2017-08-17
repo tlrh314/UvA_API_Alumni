@@ -10,8 +10,6 @@ from ...settings import ADMIN_MEDIA_JS
 
 from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 
-
-
 # Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659, also present in theses admin and jobs admin
 class ExtendedActionsMixin(object):
     # actions that can be executed with no items selected on the admin change list.
@@ -56,13 +54,6 @@ class ExtendedActionsMixin(object):
         cl = self.get_changelist_instance(request)
         return cl.get_queryset(request)
 
-
-
-
-
-
-
-
 @admin.register(Sector)
 class SectorAdmin(admin.ModelAdmin):
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
@@ -79,12 +70,10 @@ class JobAfterLeavingAdminInline(admin.StackedInline):
         obj.last_updated_by = request.user
         obj.save()
 
-
 class JobAfterLeavingAdminForm(forms.ModelForm):
     alumnus = AutoCompleteSelectField('alumnus', required=True, help_text=None)
     # TODO: how to django_ajax without a model, but on the dict django_countries.data.COUNTRIES ?
     # location_job = AutoCompleteSelectField('location_job', required=True, help_text=None)
-
 
 @admin.register(JobAfterLeaving)
 class JobAfterLeavingAdmin(ExtendedActionsMixin, admin.ModelAdmin):
@@ -93,11 +82,8 @@ class JobAfterLeavingAdmin(ExtendedActionsMixin, admin.ModelAdmin):
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
     list_filter = ("which_position", "is_inside_academia", "sector", )
 
-
     actions = ("export_selected_jobs_to_excel", "export_all_jobs_to_excel", "export_filtered_jobs_to_excel",)
     extended_actions = ('export_all_jobs_to_excel', 'export_filtered_jobs_to_excel',)
-
-
 
     form = JobAfterLeavingAdminForm
 
@@ -138,3 +124,4 @@ class JobAfterLeavingAdmin(ExtendedActionsMixin, admin.ModelAdmin):
         queryset = self.get_filtered_queryset(request)
         return save_all_jobs_to_xls(request, queryset)
     export_filtered_jobs_to_excel.short_description = "Export filtered list of Jobs to Excel"
+

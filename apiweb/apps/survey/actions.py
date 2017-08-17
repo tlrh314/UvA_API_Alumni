@@ -33,7 +33,8 @@ def save_all_jobs_to_xls(request, queryset=None):
 	if queryset:
 		jobs = queryset
 	else:  # used to export all theses to Excel
-		jobs = JobAfterLeaving.objects.filter(which_position=0) | JobAfterLeaving.objects.filter(which_position=1) | JobAfterLeaving.objects.filter(which_position=2) | JobAfterLeaving.objects.filter(which_position=3)
+		jobs = JobAfterLeaving.objects.all()
+#		jobs = JobAfterLeaving.objects.filter(which_position=0) | JobAfterLeaving.objects.filter(which_position=1) | JobAfterLeaving.objects.filter(which_position=2) | JobAfterLeaving.objects.filter(which_position=3)
 		jobs = jobs.order_by("alumnus__last_name")
 
 	for row, job in enumerate(jobs):

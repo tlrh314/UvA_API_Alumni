@@ -71,7 +71,6 @@ class ThesisListFilter(admin.SimpleListFilter):
         if self.value() == "yes":
             return queryset.filter(Q(title__isnull=True) | Q(title__exact=""))
 
-
 @admin.register(Thesis)
 class ThesisAdmin(ExtendedActionsMixin, admin.ModelAdmin):
     list_display = ("get_author", "title", "show_year", "type")
@@ -179,3 +178,5 @@ class ThesisAdmin(ExtendedActionsMixin, admin.ModelAdmin):
         queryset = self.get_filtered_queryset(request)
         return save_all_theses_to_xls(request, queryset)
     export_filtered_degrees_to_excel.short_description = "Export filtered list of Theses to Excel"
+
+
