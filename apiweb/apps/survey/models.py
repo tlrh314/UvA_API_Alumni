@@ -50,7 +50,6 @@ class JobAfterLeaving(models.Model):
         (5, "Other"),
     )
 
-
     WHICH_POSITION_CHOICES = (
         (0, "Current"),
         (1, "First"),

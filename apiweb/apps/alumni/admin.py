@@ -19,7 +19,7 @@ from apiweb import context_processors
 from .models import PositionType, PreviousPosition
 from .models import Alumnus, AcademicTitle
 from .forms import AlumnusAdminForm, PreviousPositionAdminForm
-from .actions import save_all_alumni_to_xls
+from .actions import save_alumni_to_xls
 from ..survey.admin import JobAfterLeavingAdminInline
 from ..survey.forms import SendSurveyForm
 from ..research.models import Thesis
@@ -106,7 +106,49 @@ class ThesisAdminInline(admin.StackedInline):
             if str(e) == "tuple index out of range":
                 pass
 
+# Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659, also present in theses admin and jobs admin
+class ExtendedActionsMixin(object):
+    # actions that can be executed with no items selected on the admin change list.
+    # The filtered queryset displayed to the user will be used instead
+    extended_actions = []
 
+    def changelist_view(self, request, extra_context=None):
+        # if a extended action is called and there's no checkbox selected, select one with
+        # invalid id, to get an empty queryset
+        if 'action' in request.POST and request.POST['action'] in self.extended_actions:
+            if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
+                post = request.POST.copy()
+                post.update({admin.ACTION_CHECKBOX_NAME: 0})
+                request._set_post(post)
+        return super(ExtendedActionsMixin, self).changelist_view(request, extra_context)
+
+    def get_changelist_instance(self, request):
+        """
+        Returns a simple ChangeList view instance of the current ModelView.
+        (It's a simple instance since we don't populate the actions and list filter
+        as expected since those are not used by this class)
+        """
+        list_display = self.get_list_display(request)
+        list_display_links = self.get_list_display_links(request, list_display)
+        list_filter = self.get_list_filter(request)
+        search_fields = self.get_search_fields(request)
+        list_select_related = self.get_list_select_related(request)
+
+        ChangeList = self.get_changelist(request)
+
+        return ChangeList(
+            request, self.model, list_display,
+            list_display_links, list_filter, self.date_hierarchy,
+            search_fields, list_select_related, self.list_per_page,
+            self.list_max_show_all, self.list_editable, self,
+        )
+
+    def get_filtered_queryset(self, request):
+        """
+        Returns a queryset filtered by the URLs parameters
+        """
+        cl = self.get_changelist_instance(request)
+        return cl.get_queryset(request)
 
 class NullListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
@@ -120,6 +162,8 @@ class NullListFilter(admin.SimpleListFilter):
         if self.value() in ("0", "1"):
             return queryset.filter(**kwargs)
         return queryset
+
+# class SurveyCompleted()
 
 
 class EmptyEmailListFilter(NullListFilter):
@@ -138,7 +182,7 @@ class AcademicTitleAdmin(admin.ModelAdmin):
 
 
 @admin.register(Alumnus)
-class AlumnusAdmin(UserAdmin):
+class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
     form = AlumnusAdminForm
     add_form = CustomUserCreationForm
     change_password_form = AdminPasswordChangeForm
@@ -154,7 +198,11 @@ class AlumnusAdmin(UserAdmin):
     filter_horizontal = ("groups", "user_permissions",)
     readonly_fields = ("get_full_name", "date_created", "date_updated")
     actions = ("send_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
-            "export_all_alumni_to_excel", "send_survey_email")
+            "export_all_alumni_to_excel", "export_filtered_alumni_to_excel", "send_survey_email")
+
+    #To allow execution without checkbox
+    extended_actions = ('export_all_alumni_to_excel', 'export_filtered_alumni_to_excel',)
+
     # exclude = ("jobs", )
 
     fieldsets = [
@@ -331,7 +379,6 @@ class AlumnusAdmin(UserAdmin):
     send_password_reset.short_description = "Send selected Alumni Password Reset"
 
     def send_survey_email(self, request, queryset):
-        print(queryset)
         exclude_alumni = []
         reason = []
 
@@ -379,17 +426,23 @@ class AlumnusAdmin(UserAdmin):
             userpk = queryset[0].user_id
             return HttpResponseRedirect("/admin/auth/user/{0}/password/".format(userpk))
     reset_password_yourself.short_description = "Reset password of Alumnus yourself"
-
+    
     def export_selected_alumni_to_excel(self, request, queryset):
-        return save_all_alumni_to_xls(request, queryset)
-        self.message_user(request, "This function is not yet implemented.", level="error")
+        return save_alumni_to_xls(request, queryset)
+        # self.message_user(request, "This function is not yet implemented.", level="error")
     export_selected_alumni_to_excel.short_description = "Export selected Alumni to Excel"
 
     def export_all_alumni_to_excel(self, request, queryset):
-        return save_all_alumni_to_xls(request, None)
+        return save_alumni_to_xls(request, None)
         # self.message_user(request, "This function is not yet implemented.", level="error")
     export_all_alumni_to_excel.short_description = "Export all Alumni to Excel"
 
+    # In this function, I override the queryset. If the user wants to select (with checkbox) they can use 'export selected..'
+    # This override will ignore the queryset of checkboxes but will use the get_filtered_queryset result value, based on the active filters
+    def export_filtered_alumni_to_excel(self, request, queryset):
+        queryset = self.get_filtered_queryset(request)
+        return save_alumni_to_xls(request, queryset)
+    export_filtered_alumni_to_excel.short_description = "Export filtered list of Alumni to Excel"
 
 @admin.register(PositionType)
 class PositionTypeAdmin(admin.ModelAdmin):

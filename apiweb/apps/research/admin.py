@@ -1,7 +1,8 @@
 from __future__ import unicode_literals, absolute_import, division
 
-from django.contrib import admin
 from django.db import models
+from django.db.models import Q
+from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from .actions import save_all_theses_to_xls
@@ -9,6 +10,49 @@ from .models import Thesis
 from ..alumni.models import Alumnus
 from ...settings import ADMIN_MEDIA_JS
 
+# Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659, also present in theses admin and jobs admin
+class ExtendedActionsMixin(object):
+    # actions that can be executed with no items selected on the admin change list.
+    # The filtered queryset displayed to the user will be used instead
+    extended_actions = []
+
+    def changelist_view(self, request, extra_context=None):
+        # if a extended action is called and there's no checkbox selected, select one with
+        # invalid id, to get an empty queryset
+        if 'action' in request.POST and request.POST['action'] in self.extended_actions:
+            if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
+                post = request.POST.copy()
+                post.update({admin.ACTION_CHECKBOX_NAME: 0})
+                request._set_post(post)
+        return super(ExtendedActionsMixin, self).changelist_view(request, extra_context)
+
+    def get_changelist_instance(self, request):
+        """
+        Returns a simple ChangeList view instance of the current ModelView.
+        (It's a simple instance since we don't populate the actions and list filter
+        as expected since those are not used by this class)
+        """
+        list_display = self.get_list_display(request)
+        list_display_links = self.get_list_display_links(request, list_display)
+        list_filter = self.get_list_filter(request)
+        search_fields = self.get_search_fields(request)
+        list_select_related = self.get_list_select_related(request)
+
+        ChangeList = self.get_changelist(request)
+
+        return ChangeList(
+            request, self.model, list_display,
+            list_display_links, list_filter, self.date_hierarchy,
+            search_fields, list_select_related, self.list_per_page,
+            self.list_max_show_all, self.list_editable, self,
+        )
+
+    def get_filtered_queryset(self, request):
+        """
+        Returns a queryset filtered by the URLs parameters
+        """
+        cl = self.get_changelist_instance(request)
+        return cl.get_queryset(request)
 
 class ThesisListFilter(admin.SimpleListFilter):
     title = _("empty thesis title")
@@ -29,7 +73,7 @@ class ThesisListFilter(admin.SimpleListFilter):
 
 
 @admin.register(Thesis)
-class ThesisAdmin(admin.ModelAdmin):
+class ThesisAdmin(ExtendedActionsMixin, admin.ModelAdmin):
     list_display = ("get_author", "title", "show_year", "type")
     list_filter = ("type", ThesisListFilter)
     search_fields = ("title", "alumnus__last_name", "alumnus__first_name",
@@ -37,7 +81,8 @@ class ThesisAdmin(admin.ModelAdmin):
     ordering = ("alumnus__username", )
     filter_horizontal = ("advisor", )
     readonly_fields = ("date_created", "date_updated", "last_updated_by", "slug", )
-    actions = ("export_selected_degrees_to_excel", "export_all_degrees_to_excel", )
+    actions = ("export_selected_degrees_to_excel", "export_all_degrees_to_excel", "export_filtered_degrees_to_excel",)
+    extended_actions = ('export_all_degrees_to_excel', 'export_filtered_degrees_to_excel',)
 
     max_num = 2
 
@@ -75,16 +120,16 @@ class ThesisAdmin(admin.ModelAdmin):
         obj.last_updated_by = request.user
         obj.save()
 
-    def changelist_view(self, request, extra_context=None):
-        """ Hack the default changelist_view to allow action "export_all_degrees_to_excel"
-            to run without selecting any objects """
-        if "action" in request.POST and request.POST["action"] == "export_all_degrees_to_excel":
-            if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
-                post = request.POST.copy()
-                for u in Thesis.objects.all():
-                    post.update({admin.ACTION_CHECKBOX_NAME: str(u.id)})
-                request._set_post(post)
-        return super(ThesisAdmin, self).changelist_view(request, extra_context)
+    # def changelist_view(self, request, extra_context=None):
+    #     """ Hack the default changelist_view to allow action "export_all_degrees_to_excel"
+    #         to run without selecting any objects """
+    #     if "action" in request.POST and request.POST["action"] == "export_all_degrees_to_excel":
+    #         if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
+    #             post = request.POST.copy()
+    #             for u in Thesis.objects.all():
+    #                 post.update({admin.ACTION_CHECKBOX_NAME: str(u.id)})
+    #             request._set_post(post)
+    #     return super(ThesisAdmin, self).changelist_view(request, extra_context)
 
     def get_queryset(self, request):
         """ This function defines how to sort on alumnus column in the list_display
@@ -129,3 +174,8 @@ class ThesisAdmin(admin.ModelAdmin):
     def export_all_degrees_to_excel(self, request, queryset):
         return save_all_theses_to_xls(request, None)
     export_all_degrees_to_excel.short_description = "Export all Theses to Excel"
+
+    def export_filtered_degrees_to_excel(self, request, queryset):
+        queryset = self.get_filtered_queryset(request)
+        return save_all_theses_to_xls(request, queryset)
+    export_filtered_degrees_to_excel.short_description = "Export filtered list of Theses to Excel"
