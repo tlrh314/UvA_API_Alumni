@@ -20,6 +20,7 @@ urlpatterns = [
             },
             success_url=reverse_lazy("survey:contactinfo"),
             post_reset_login=True,
+            post_reset_login_backend="django.contrib.auth.backends.ModelBackend",
         ), name="survey_url"),
     url(r"^contactinfo/$", survey_contactinfo, name="contactinfo"),
 #    url(r"^careerinfo/$", survey_careerinfo, name="careerinfo"),
