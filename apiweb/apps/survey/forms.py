@@ -85,14 +85,14 @@ class SendSurveyForm(PasswordResetForm):
             "token": token_generator.make_token(alumnus),
             "protocol": "https" if use_https else "http",
         }
-        
+
         if extra_email_context is not None:
             context.update(extra_email_context)
-        
+
         #Small hack to easily test the email sending on the development server.
         if "runserver" in sys.argv:
-                survey_link = "http://127.0.0.1:8000/survey/OTU/%s"%context["token"]
-                print("\t%s"%(survey_link))
+            survey_link = "http://127.0.0.1:8000/survey/{0}/{1}".format(context["uid"], context["token"])
+            print("\t%s"%(survey_link))
         else:
             self.send_mail(
                 subject_template_name, email_template_name, context, from_email,
