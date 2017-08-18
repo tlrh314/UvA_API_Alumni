@@ -15,6 +15,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 
 from dal import autocomplete
+from datetime import datetime
 
 from .models import ContactInfo
 from .models import WelcomeMessage
@@ -190,7 +191,6 @@ class AlumnusAutocomplete(autocomplete.Select2QuerySetView):
 
         return qs
 
-
 @login_required
 def site_thesis_update(request, slug):
     if request.method == "POST":
@@ -250,7 +250,10 @@ def site_careerinfo(request, which_position_value=0):
             jobafterleaving = form.save(commit=False)
             jobafterleaving.alumnus = request.user
             jobafterleaving.which_position = which_position_value
+            jobafterleaving.alumnus.survey_info_updated = datetime.now()
+            jobafterleaving.alumnus.save()
             jobafterleaving.save()
+            
             jobname = JobAfterLeaving.WHICH_POSITION_CHOICES[int(which_position_value)][1]
             if jobname == "Current":
                 jobname += " Position"

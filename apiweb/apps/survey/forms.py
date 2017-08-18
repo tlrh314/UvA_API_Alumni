@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import, division
 
+import sys
 import copy
-
 from datetime import datetime
 from django import forms
 from django.forms import extras
@@ -10,6 +10,7 @@ from django.forms.utils import ErrorList
 from django.template import loader
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth import get_user_model, _get_backends
 from django.contrib.auth.forms import PasswordResetForm
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import force_bytes
@@ -17,6 +18,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models.fields import BLANK_CHOICE_DASH
+from django.contrib.sessions.models import Session
 
 from django_countries import countries
 from tinymce.widgets import TinyMCE
@@ -52,7 +54,6 @@ TINYMCE_LOCAL_CONFIG= {
 
 class SendSurveyForm(PasswordResetForm):
     email = forms.EmailField(label=_("Email"), max_length=254)
-
     # Here we overwrite the save method because the PasswordResetForm gets
     # all users given an e-mail address, but we want to e-mail one specific
     # alumnus only once. This avoids sending the same mail multiple times.
@@ -84,12 +85,19 @@ class SendSurveyForm(PasswordResetForm):
             "token": token_generator.make_token(alumnus),
             "protocol": "https" if use_https else "http",
         }
+        
         if extra_email_context is not None:
             context.update(extra_email_context)
-        self.send_mail(
-            subject_template_name, email_template_name, context, from_email,
-            email, html_email_template_name=html_email_template_name,
-        )
+        
+        #Small hack to easily test the email sending on the development server.
+        if "runserver" in sys.argv:
+                survey_link = "http://127.0.0.1:8000/survey/OTU/%s"%context["token"]
+                print("\t%s"%(survey_link))
+        else:
+            self.send_mail(
+                subject_template_name, email_template_name, context, from_email,
+                email, html_email_template_name=html_email_template_name,
+            )
 
 
 class SurveyCareerInfoForm(forms.ModelForm):
@@ -178,7 +186,7 @@ class SurveyContactInfoForm(forms.ModelForm):
                     "zipcode", "streetname", "streetnumber", "address",
                     # Below has to be removed b/c Alumnus is an extension of AbstractBaseUser
                     "password", "last_login", "is_superuser", "groups",
-                    "user_permissions", "username", "is_staff", "is_active", "date_joined")
+                    "user_permissions", "username", "is_staff", "is_active", "date_joined", "survey_info_updated")
 
     BOOL_CHOICES = ((True, 'Yes'), (False, 'No'))
     years_choices = range(1900, datetime.now().year+1)[::-1]

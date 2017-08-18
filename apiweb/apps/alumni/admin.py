@@ -1,5 +1,7 @@
 from __future__ import unicode_literals, absolute_import, division
 
+import sys
+
 from django.db import models
 from django.db.models import Q
 from django.contrib import admin
@@ -165,7 +167,6 @@ class NullListFilter(admin.SimpleListFilter):
 
 # class SurveyCompleted()
 
-
 class EmptyEmailListFilter(NullListFilter):
     title = u"Email Address"
     parameter_name = "email"
@@ -174,6 +175,8 @@ class EmptyEmailListFilter(NullListFilter):
 class EmptyLastCheckedListFilter(NullListFilter):
     title = u"Date Last Checked"
     parameter_name = "last_checked"
+
+
 
 
 @admin.register(AcademicTitle)
@@ -189,14 +192,14 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
     ordering = ("username", )
     search_fields = ("username", "email", "first_name", "last_name", "theses__title",
         "theses__date_start", "theses__date_stop", "theses__date_of_defence")
-    list_display = ("get_alumnus", "email", "last_checked", "show_msc_year",
+    list_display = ("get_alumnus", "email", "last_checked", "survey_info_updated", "show_msc_year",
         "show_phd_year", "show_postdoc_year", "show_staff_year", "is_staff")
     list_filter = (
-        EmptyEmailListFilter, EmptyLastCheckedListFilter, "passed_away",
+        EmptyEmailListFilter, EmptyLastCheckedListFilter, "passed_away", "survey_info_updated",
         "is_staff", "is_superuser", "is_active", "groups")
     inlines = (ThesisAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     filter_horizontal = ("groups", "user_permissions",)
-    readonly_fields = ("get_full_name", "date_created", "date_updated")
+    readonly_fields = ("get_full_name", "date_created", "date_updated", "survey_info_updated")
     actions = ("send_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
             "export_all_alumni_to_excel", "export_filtered_alumni_to_excel", "send_survey_email")
 
@@ -255,7 +258,7 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
 
         ("Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments",  "date_created", "date_updated"]
+                "fields": ["comments",  "date_created", "date_updated", "survey_info_updated"]
                 }),
     ]
     add_fieldsets = [
@@ -411,8 +414,13 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
                 exclude_alumni.append(alumnus)
                 reason.append("ValidationError")
 
-        # Probably success for most, but report if email broke.
-        self.message_user(request, "The Survey Email was Successfully Send!")
+        if "runserver" in sys.argv:
+            self.message_user(request, "The Survey Email was Successfully Sent to the terminal (because this is development)")
+        else:
+            # Probably success for most, but report if email broke.
+            self.message_user(request, "The Survey Email was Successfully Sent!")
+
+
         for alum, why in zip(exclude_alumni, reason):
             msg = "The following Alumnus was excluded: {0} ({1}).".format(alum, why)
             self.message_user(request, msg, level="error")

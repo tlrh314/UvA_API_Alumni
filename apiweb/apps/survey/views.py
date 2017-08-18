@@ -95,6 +95,8 @@ def survey_careerinfo_first(request):
             jobafterleaving = form.save(commit=False)
             jobafterleaving.alumnus = request.user.alumnus
             jobafterleaving.which_position = which_position_value
+            jobafterleaving.alumnus.survey_info_updated = datetime.now()
+            jobafterleaving.alumnus.save()
             jobafterleaving.save()
             return HttpResponseRedirect(reverse("survey:careerinfo_second"))
     else:
