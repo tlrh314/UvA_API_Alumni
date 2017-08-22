@@ -15,7 +15,7 @@ def save_all_jobs_to_xls(request, queryset=None):
 	sheet = xls.add_sheet('API Jobs Export')
 
 	alumnus_attributes = ["academic_title", "initials",  "first_name",  "nickname",
-		"middle_names", "prefix", "last_name", "gender" ]
+		"middle_names", "prefix", "last_name", "gender", "survey_info_updated"]
 
 	attributes = ["which_position", "sector", "company_name", "position_name", 
 	"is_inside_academia", "location_job", "start_date", "stop_date"]
@@ -58,6 +58,10 @@ def save_all_jobs_to_xls(request, queryset=None):
 				if not value == "":
 					value = Alumnus.GENDER_CHOICES[int(value)-1][1]
 
+			if attr == "survey_info_updated":
+				if not value == "":
+					value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f").strftime('%Y-%m-%d %H:%M:%S')
+					
 			sheet.write(row+1, col, value, style=borders)
 
 		for col, attr in enumerate(attributes):

@@ -60,7 +60,6 @@ def save_alumni_to_xls(request, queryset=None):
             if attr == "survey_info_updated":
                 if not value == "":
                     value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f").strftime('%Y-%m-%d %H:%M:%S')
-                    print(value)
                     
             sheet.write(row+1, col, value, style=borders)
 
