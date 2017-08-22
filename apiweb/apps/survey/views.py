@@ -1,5 +1,7 @@
 from __future__ import unicode_literals, absolute_import, division
 
+from datetime import datetime
+
 from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -60,6 +62,9 @@ def survey_careerinfo_current(request):
             jobafterleaving = form.save(commit=False)
             jobafterleaving.alumnus = request.user
             jobafterleaving.which_position = which_position_value
+            jobafterleaving.alumnus.survey_info_updated = datetime.now()
+            jobafterleaving.alumnus.save()
+            print("survey, cur %s"%jobafterleaving.alumnus.survey_info_updated)
             jobafterleaving.save()
             return HttpResponseRedirect(reverse("survey:careerinfo_first"))
     else:
@@ -93,10 +98,11 @@ def survey_careerinfo_first(request):
 
         if form.is_valid():
             jobafterleaving = form.save(commit=False)
-            jobafterleaving.alumnus = request.user.alumnus
+            jobafterleaving.alumnus = request.user
             jobafterleaving.which_position = which_position_value
             jobafterleaving.alumnus.survey_info_updated = datetime.now()
             jobafterleaving.alumnus.save()
+            print("survey, 1 %s"%jobafterleaving.alumnus.survey_info_updated)
             jobafterleaving.save()
             return HttpResponseRedirect(reverse("survey:careerinfo_second"))
     else:
@@ -111,7 +117,7 @@ def survey_careerinfo_second(request):
     """ Career info form is shown on success of the survey_contactinfo view/form. """
     which_position_value = 2
     try:
-        prefill_instance = JobAfterLeaving.objects.all().filter(alumnus=request.alumnus,
+        prefill_instance = JobAfterLeaving.objects.all().filter(alumnus=request.user,
             which_position=which_position_value)[0]
     except IndexError:
         prefill_instance = False
@@ -129,6 +135,9 @@ def survey_careerinfo_second(request):
             jobafterleaving = form.save(commit=False)
             jobafterleaving.alumnus = request.user
             jobafterleaving.which_position = which_position_value
+            jobafterleaving.alumnus.survey_info_updated = datetime.now()
+            jobafterleaving.alumnus.save()
+            print("survey, 2 %s"%jobafterleaving.alumnus.survey_info_updated)
             jobafterleaving.save()
             return HttpResponseRedirect(reverse("survey:careerinfo_third"))
     else:
@@ -160,6 +169,9 @@ def survey_careerinfo_third(request):
             jobafterleaving = form.save(commit=False)
             jobafterleaving.alumnus = request.user
             jobafterleaving.which_position = which_position_value
+            jobafterleaving.alumnus.survey_info_updated = datetime.now()
+            jobafterleaving.alumnus.save()
+            print("survey, 3 %s"%jobafterleaving.alumnus.survey_info_updated)
             jobafterleaving.save()
             messages.success(request, "Thanks for taking the time to fill out our survey! Welcome to your personal alumnus page.")
             return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))

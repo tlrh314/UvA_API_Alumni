@@ -7,7 +7,6 @@ from django.http import HttpResponse
 
 from .models import Alumnus
 
-
 def save_alumni_to_xls(request, queryset=None):
     xls = xlwt.Workbook(encoding='utf8')
     sheet = xls.add_sheet('API Alumni Export')

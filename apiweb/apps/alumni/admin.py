@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib import admin
 from django.http import HttpResponseRedirect
+from django.contrib.admin import DateFieldListFilter, FieldListFilter
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import PasswordResetForm
@@ -22,6 +23,9 @@ from .models import PositionType, PreviousPosition
 from .models import Alumnus, AcademicTitle
 from .forms import AlumnusAdminForm, PreviousPositionAdminForm
 from .actions import save_alumni_to_xls
+
+from .filters import EmptyEmailListFilter, EmptyLastCheckedListFilter, SurveyListFilter
+
 from ..survey.admin import JobAfterLeavingAdminInline
 from ..survey.forms import SendSurveyForm
 from ..research.models import Thesis
@@ -152,33 +156,6 @@ class ExtendedActionsMixin(object):
         cl = self.get_changelist_instance(request)
         return cl.get_queryset(request)
 
-class NullListFilter(admin.SimpleListFilter):
-    def lookups(self, request, model_admin):
-        return (
-            ("1", _("Is Empty")),
-            ("0",  _("Has a Value")),
-        )
-
-    def queryset(self, request, queryset):
-        kwargs = { "{0}__isnull".format(self.parameter_name) : self.value() == "1" }
-        if self.value() in ("0", "1"):
-            return queryset.filter(**kwargs)
-        return queryset
-
-# class SurveyCompleted()
-
-class EmptyEmailListFilter(NullListFilter):
-    title = u"Email Address"
-    parameter_name = "email"
-
-
-class EmptyLastCheckedListFilter(NullListFilter):
-    title = u"Date Last Checked"
-    parameter_name = "last_checked"
-
-
-
-
 @admin.register(AcademicTitle)
 class AcademicTitleAdmin(admin.ModelAdmin):
     pass
@@ -190,23 +167,27 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
     add_form = CustomUserCreationForm
     change_password_form = AdminPasswordChangeForm
     ordering = ("username", )
+
     search_fields = ("username", "email", "first_name", "last_name", "theses__title",
         "theses__date_start", "theses__date_stop", "theses__date_of_defence")
+
     list_display = ("get_alumnus", "email", "last_checked", "survey_info_updated", "show_msc_year",
         "show_phd_year", "show_postdoc_year", "show_staff_year", "is_staff")
+
     list_filter = (
-        EmptyEmailListFilter, EmptyLastCheckedListFilter, "passed_away", "survey_info_updated",
+        EmptyEmailListFilter, EmptyLastCheckedListFilter, "passed_away", SurveyListFilter,
         "is_staff", "is_superuser", "is_active", "groups")
+
     inlines = (ThesisAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     filter_horizontal = ("groups", "user_permissions",)
+
     readonly_fields = ("get_full_name", "date_created", "date_updated", "survey_info_updated")
+
     actions = ("send_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
-            "export_all_alumni_to_excel", "export_filtered_alumni_to_excel", "send_survey_email")
+            "export_all_alumni_to_excel", "export_filtered_alumni_to_excel", "send_survey_email", "send_filtered_alumni_survey_email")
 
     #To allow execution without checkbox
-    extended_actions = ('export_all_alumni_to_excel', 'export_filtered_alumni_to_excel',)
-
-    # exclude = ("jobs", )
+    extended_actions = ("export_all_alumni_to_excel", "export_filtered_alumni_to_excel", "send_filtered_alumni_survey_email")
 
     fieldsets = [
         (None,
@@ -273,17 +254,6 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
         css = {
              "all": ("css/admin_extra.css",)
         }
-
-    # def changelist_view(self, request, extra_context=None):
-    #     """ Hack the default changelist_view to allow action "export_all_alumni_to_excel"
-    #         to run without selecting any objects """
-    #     if "action" in request.POST and request.POST["action"] in ["export_all_alumni_to_excel"]:
-    #         if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
-    #             post = request.POST.copy()
-    #             for u in Alumnus.objects.all():
-    #                 post.update({admin.ACTION_CHECKBOX_NAME: str(u.id)})
-    #             request._set_post(post)
-    #     return super(AlumnusAdmin, self).changelist_view(request, extra_context)
 
     def get_alumnus(self, obj):
         """ We could use author instead of get_alumnus in list_display """
@@ -415,11 +385,10 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
                 reason.append("ValidationError")
 
         if "runserver" in sys.argv:
-            self.message_user(request, "The Survey Email was Successfully Sent to the terminal (because this is development)")
+            self.message_user(request, "The Survey Email was Successfully Sent to the terminal to {0} alumni (because this is development)!".format(str(queryset.count()-len(exclude_alumni))))
         else:
             # Probably success for most, but report if email broke.
-            self.message_user(request, "The Survey Email was Successfully Sent!")
-
+            self.message_user(request, "The Survey Email was Successfully sent to {0} alumni!".format(str(queryset.count()-len(exclude_alumni))))
 
         for alum, why in zip(exclude_alumni, reason):
             msg = "The following Alumnus was excluded: {0} ({1}).".format(alum, why)
@@ -427,12 +396,17 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
 
     send_survey_email.short_description = "Send selected Alumni Survey Email"
 
+    def send_filtered_alumni_survey_email(self, request, queryset):
+        queryset = self.get_filtered_queryset(request)
+        self.send_survey_email(request, queryset)
+    send_filtered_alumni_survey_email.short_description = "Send filtered list of Alumni Survey Email"
+
     def reset_password_yourself(self, request, queryset):
         if len(queryset) != 1:
             self.message_user(request, "Please select only one Alumnus!", level="error")
         else:
-            userpk = queryset[0].user_id
-            return HttpResponseRedirect("/admin/auth/user/{0}/password/".format(userpk))
+            userpk = queryset[0].pk
+            return HttpResponseRedirect("/admin/alumni/alumni/{0}/password/".format(userpk))
     reset_password_yourself.short_description = "Reset password of Alumnus yourself"
     
     def export_selected_alumni_to_excel(self, request, queryset):

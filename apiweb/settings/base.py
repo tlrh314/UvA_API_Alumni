@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'django_countries',
     'crispy_forms',
+    'rangefilter',
 )
 
 # login URL for auth app

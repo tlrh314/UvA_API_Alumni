@@ -3,12 +3,14 @@ from __future__ import unicode_literals, absolute_import, division
 from django.conf.urls import include, url
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import SetPasswordForm
 
 from apiweb.context_processors import contactinfo
 from .views import survey_contactinfo
 from .views import survey_careerinfo_current, survey_careerinfo_first, survey_careerinfo_second, survey_careerinfo_third
 from .views import survey_success
-
+from .forms import SendSurveyForm
+from ..alumni.backends import EmailOrUsernameModelBackend
 
 urlpatterns = [
     url(r"^(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
@@ -28,8 +30,5 @@ urlpatterns = [
     url(r"^careerinfo_first/$", survey_careerinfo_first, name="careerinfo_first"),
     url(r"^careerinfo_second/$", survey_careerinfo_second, name="careerinfo_second"),
     url(r"^careerinfo_third/$", survey_careerinfo_third, name="careerinfo_third"),
-
-
-
     url(r"^thanks/$", survey_success, name="survey_success")
 ]

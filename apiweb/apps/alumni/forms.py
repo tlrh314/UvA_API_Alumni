@@ -103,6 +103,7 @@ class AlumnusAdminForm(UserChangeForm):
         email = self.cleaned_data.get("email")
         #Remove this instance object from duplicate emails object list
         duplicate_emails_excluded = Alumnus.objects.filter(email=email).exclude(pk=self.instance.pk)
+        # TODO: Change len() to .count()
         if len(duplicate_emails_excluded) > 0:
             self.errors["email"] = ErrorList()
             self.errors["email"].append("The chosen email address is already used")
