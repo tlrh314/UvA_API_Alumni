@@ -37,6 +37,7 @@
     <h1 class="text-center"> Alumni Interviews </h1>
 
     <div class="col-xs-12 text-justify">
+    {% if posts %}
         {% for post in posts %}
             <h2 class="text-left interview-title"> {{ post.alumnus.full_name_no_title }} • {{ post.title }} </h2>
 
@@ -53,7 +54,6 @@
                     <h4 class="text-right interview-metadata">
                         {{ post.author.full_name_no_title }}  •  {{ post.date_published|date:"M d, Y" }}
                     </h4>
-
                     <br>
 
                     {% autoescape off %}
@@ -62,9 +62,14 @@
                     {% endautoescape %}
                 </div>
             </div>
-
             <hr>
         {% endfor %}
+
+    {% else %}
+            <h2>
+            There are no published interviews available
+            </h2>
+    {% endif %}
     </div>
 </div>
 {% endblock %}

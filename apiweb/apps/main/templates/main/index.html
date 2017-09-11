@@ -16,6 +16,7 @@
     </div>
 
     <div class="col-xs-12 col-lg-4 pull-left text-justify">
+        {% if latest_post %}
         <table class="table">
             <thead><tr><th style="padding-top: 0px; padding-bottom: 0px;"><h2 class="text-left" style="margin-bottom: 0px;"> Latest Interview </h2></tr></th></thead>
             <tbody><tr><td style="padding-top: 0px; padding-bottom: 0px;">
@@ -27,7 +28,7 @@
                 {% endautoescape %}
             </td></tr></tbody>
         </table>
-
+        {% endif %}
 
         <table class="table">
             <thead>
