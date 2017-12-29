@@ -18,6 +18,7 @@
 - **Create directories for the databases, create database and load initial data**
   - **Development**: 
   - `mkdir -p apiweb/databases`
+  - `touch apiweb/templates/piwik.html`
   - Create sql dump at production server `mysqldump -u root -p apialumni > ~/sqldump_$(date "+%Y%m%d").sql` (assuming databasename is 'apialumni')
   - Copy database over to local machine, make sure sqlite3 is installed, and that scripts/mysql2sqlite3 is present and executable
   - Convert database to sqlite3 `./scripts/mysql2sqlite3 sqldump_$(date "+%Y%m%d").sql | sqlite3 dev.db`
