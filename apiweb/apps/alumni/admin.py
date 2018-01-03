@@ -5,6 +5,7 @@ import sys
 from django.db import models
 from django.db.models import Q
 from django.contrib import admin
+from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.contrib.admin import DateFieldListFilter, FieldListFilter
 from django.contrib.auth.models import Group
@@ -171,8 +172,9 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
     search_fields = ("username", "email", "first_name", "last_name", "theses__title",
         "theses__date_start", "theses__date_stop", "theses__date_of_defence")
 
-    list_display = ("get_alumnus", "email", "date_created", "last_checked", "survey_info_updated", "show_msc_year",
-        "show_phd_year", "show_postdoc_year", "show_staff_year", "is_staff")
+    list_display = ("get_alumnus", "email", "last_checked", "survey_info_updated",
+        "survey_email_sent", "show_msc_year", "show_phd_year",
+        "show_postdoc_year", "show_staff_year", "is_staff")
 
     list_filter = (
         EmptyEmailListFilter, EmptyLastCheckedListFilter, "passed_away", SurveyListFilter,
@@ -181,7 +183,8 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
     inlines = (ThesisAdminInline, PreviousPositionInline, JobAfterLeavingAdminInline)
     filter_horizontal = ("groups", "user_permissions",)
 
-    readonly_fields = ("get_full_name", "date_created", "date_updated", "survey_info_updated")
+    readonly_fields = ("get_full_name", "date_created", "date_updated",
+        "survey_info_updated", "survey_email_sent")
 
     actions = ("send_password_reset", "reset_password_yourself", "export_selected_alumni_to_excel",
             "export_all_alumni_to_excel", "export_filtered_alumni_to_excel", "send_survey_email", "send_filtered_alumni_survey_email")
@@ -239,7 +242,8 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
 
         ("Extra information", {
                 "classes": ["collapse"],
-                "fields": ["comments",  "date_created", "date_updated", "survey_info_updated"]
+                "fields": ["comments",  "date_created", "date_updated",
+                           "survey_info_updated", "survey_email_sent"]
                 }),
     ]
     add_fieldsets = [
@@ -380,6 +384,8 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
                         "api_phonenumber_formatted": contactdict["api_phonenumber_formatted"]
                     }
                 )
+                alumnus.survey_email_sent = timezone.now()
+                alumnus.save()
             except ValidationError:
                 exclude_alumni.append(alumnus)
                 reason.append("ValidationError")
@@ -408,7 +414,7 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
             userpk = queryset[0].pk
             return HttpResponseRedirect("/admin/alumni/alumni/{0}/password/".format(userpk))
     reset_password_yourself.short_description = "Reset password of Alumnus yourself"
-    
+
     def export_selected_alumni_to_excel(self, request, queryset):
         return save_alumni_to_xls(request, queryset)
         # self.message_user(request, "This function is not yet implemented.", level="error")

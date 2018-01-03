@@ -205,8 +205,10 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     show_homepage   = models.BooleanField(_("Show homepage on personal page"), blank=True, default=False)
 
     # Extra field for survey completed
-    survey_info_updated = models.DateTimeField(_("Date survey info updated"), blank=True, null=True,         help_text='Use format: YYYY-MM-DD')
-
+    survey_info_updated = models.DateTimeField(_("Date survey info updated"), blank=True, null=True,
+        help_text='Use format: YYYY-MM-DD')
+    survey_email_sent = models.DateTimeField(_("Date survey email sent"), blank=True, null=True)
+        help_text='Use format: YYYY-MM-DD')
 
     objects = AlumniManager()
 

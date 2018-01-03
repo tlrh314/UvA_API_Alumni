@@ -3,7 +3,9 @@ from __future__ import unicode_literals, absolute_import, division
 
 import sys
 import copy
+import logging
 from datetime import datetime
+
 from django import forms
 from django.forms import extras
 from django.forms.utils import ErrorList
@@ -69,7 +71,12 @@ class SendSurveyForm(PasswordResetForm):
         Generate a one-use only link for resetting password and send it to the
         user.
         """
+
+        logger = logging.getLogger("survey")
+        logger.debug("Running save() method of SendSurveyForm")
+
         email = self.cleaned_data["email"]
+        logger.info("Sending Survey Email to: {0}".format(email))
         if not domain_override:
             current_site = get_current_site(request)
             site_name = current_site.name
@@ -93,11 +100,39 @@ class SendSurveyForm(PasswordResetForm):
         if "runserver" in sys.argv:
             survey_link = "http://127.0.0.1:8000/survey/{0}/{1}".format(context["uid"], context["token"])
             print("\t%s"%(survey_link))
+            logger.info("Mail was not sent because 'runserver' in sys.argv")
         else:
+            logger.info("Mail was sent to: {0}".format(email))
             self.send_mail(
                 subject_template_name, email_template_name, context, from_email,
                 email, html_email_template_name=html_email_template_name,
             )
+
+    # Here we overwrite the send_mail method because we want to bcc all the
+    # survey emails that we send out to survey@api-alumni.nl
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None,
+                  bcc_email="survey@api-alumni.nl"):
+        """
+        Send a django.core.mail.EmailMultiAlternatives to `to_email`.
+        """
+
+        logger = logging.getLogger("survey")
+        logger.debug("Running send_mail() method of SendSurveyForm")
+
+        subject = loader.render_to_string(subject_template_name, context)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        body = loader.render_to_string(email_template_name, context)
+
+        email_message = EmailMultiAlternatives(subject, body, from_email,
+            [to_email], bcc=[bcc_email])
+        if html_email_template_name is not None:
+            html_email = loader.render_to_string(html_email_template_name, context)
+            email_message.attach_alternative(html_email, 'text/html')
+
+        logger.info("Sending a copy to: {0}".format(bcc_email))
+        email_message.send()
 
 
 class SurveyCareerInfoForm(forms.ModelForm):
