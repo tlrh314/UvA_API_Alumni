@@ -16,7 +16,10 @@
 # Anything that is defined in base.py but for which you'd like another
 # value, you can override here.
 
+import os
 import os.path
+import logging
+from logging import handlers
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -103,6 +106,14 @@ STATICFILES_DIRS = (
 WSGI_APPLICATION = 'apiweb.server.wsgi.application'
 
 
+class GroupWriteRotatingFileHandler(logging.handlers.RotatingFileHandler):
+    """ https://stackoverflow.com/questions/1407474 """
+    def _open(self):
+        prevumask = os.umask(0o002)
+        rtv = logging.handlers.RotatingFileHandler._open(self)
+        os.umask(prevumask)
+        return rtv
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
@@ -111,6 +122,14 @@ WSGI_APPLICATION = 'apiweb.server.wsgi.application'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s [%(levelname)s] %(module)s'+\
+                    '%(name)s %(process)d %(thread)d: %(message)s'
+        },
+        'simple': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -121,7 +140,15 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'survey': {
+            'level': 'DEBUG',
+            'class': 'apiweb.settings.local.GroupWriteRotatingFileHandler',
+            'filename': 'survey.log',
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter': 'simple',
+        },
     },
     'loggers': {
         'django.request': {
@@ -129,8 +156,10 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'survey': {
+            'handlers': ['survey'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
 }
-
-
-
