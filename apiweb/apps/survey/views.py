@@ -66,7 +66,10 @@ def survey_careerinfo_current(request):
             jobafterleaving.alumnus.save()
             print("survey, cur %s"%jobafterleaving.alumnus.survey_info_updated)
             jobafterleaving.save()
-            return HttpResponseRedirect(reverse("survey:careerinfo_first"))
+            if "next" in request.POST:
+                return HttpResponseRedirect(reverse("survey:careerinfo_first"))
+            elif "prev" in request.POST:
+                return HttpResponseRedirect(reverse("survey:contactinfo"))
     else:
         # TODO: this if statement is not necessary if prefill_instance is set to None in the try-expect clause above.
         if prefill_instance:
@@ -104,7 +107,10 @@ def survey_careerinfo_first(request):
             jobafterleaving.alumnus.save()
             print("survey, 1 %s"%jobafterleaving.alumnus.survey_info_updated)
             jobafterleaving.save()
-            return HttpResponseRedirect(reverse("survey:careerinfo_second"))
+            if "next" in request.POST:
+                return HttpResponseRedirect(reverse("survey:careerinfo_second"))
+            elif "prev" in request.POST:
+                return HttpResponseRedirect(reverse("survey:careerinfo_current"))
     else:
         if prefill_instance:
             form = SurveyCareerInfoForm(instance=prefill_instance)
@@ -139,7 +145,11 @@ def survey_careerinfo_second(request):
             jobafterleaving.alumnus.save()
             print("survey, 2 %s"%jobafterleaving.alumnus.survey_info_updated)
             jobafterleaving.save()
-            return HttpResponseRedirect(reverse("survey:careerinfo_third"))
+
+            if "next" in request.POST:
+                return HttpResponseRedirect(reverse("survey:careerinfo_third"))
+            if "prev" in request.POST:
+                return HttpResponseRedirect(reverse("survey:careerinfo_first"))
     else:
         if prefill_instance:
             form = SurveyCareerInfoForm(instance=prefill_instance)
@@ -174,7 +184,11 @@ def survey_careerinfo_third(request):
             print("survey, 3 %s"%jobafterleaving.alumnus.survey_info_updated)
             jobafterleaving.save()
             messages.success(request, "Thanks for taking the time to fill out our survey! Welcome to your personal alumnus page.")
-            return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
+
+            if "next" in request.POST:
+                return HttpResponseRedirect(reverse("alumni:alumnus-detail", kwargs={"slug": request.user.slug}))
+            elif "prev" in request.POST:
+                return HttpResponseRedirect(reverse("survey:careerinfo_second"))
     else:
         if prefill_instance:
             form = SurveyCareerInfoForm(instance=prefill_instance)
