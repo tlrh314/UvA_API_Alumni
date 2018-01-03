@@ -26,11 +26,10 @@
             {% endif %}
 
             <div class="col-xs-12 col-sm-9">
-                {% if not alumnus.passed_away %}
-                    <h3 class="text-left"> Contact Info </h3>
-                {% else %}
-                    <h3 class="text-left"> Personal Info </h3>
-                {% endif %}
+                <h3 class="text-left">
+                    {% if not alumnus.passed_away %} Contact Info {% else %} Personal Info {% endif %}
+                    {% if request.user == alumnus %}<a href="{% url 'site_contactinfo' %}" style="color: black;"><i class="fa fa-edit"> edit</i></a>{% endif%}
+                </h3>
                 <table class="table">
                     <thead>
                     </thead>
@@ -97,6 +96,9 @@
                                     {% else %}
                                         (Year Unknown)
                                     {% endif %}
+                                    {% if request.user == alumnus %}
+                                    <a href="{% url 'site_thesis_update' thesis.slug %}" style="color: black;"><i class="fa fa-edit"> edit</i></a>
+                                    {% endif %}
                             </td></tr>
                             {% endfor %}
                         </tbody>
@@ -153,7 +155,9 @@
                                     <tr>
                                         <td>{% get_which_job job.which_position %} </td>
                                         <td>{{ job.sector }} </td>
-                                        <td>{{ job.company_name }} </td>
+                                        <td>{{ job.company_name }}
+                                        {% if request.user == alumnus %}<a href="{% url 'site_careerinfo' job.which_position %}" style="color: black;"><i class="fa fa-edit"> edit</i></a> {% endif %}
+                                        </td>
                                         <td>{{ job.position_name }} </td>
                                         {% if job.start_date %}
                                             <td>{{ job.start_date }} </td>
