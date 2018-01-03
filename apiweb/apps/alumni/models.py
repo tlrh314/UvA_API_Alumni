@@ -68,8 +68,8 @@ class PreviousPosition(models.Model):
     )
 
     alumnus          = models.ForeignKey("Alumnus", related_name="positions")
-    date_start       = models.DateField(_("Starting date"), blank=True, null=True)
-    date_stop        = models.DateField(_("Date finished"), blank=True, null=True)
+    date_start       = models.DateField(_("Starting date"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
+    date_stop        = models.DateField(_("Date finished"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
     type             = models.ForeignKey(PositionType, related_name="alumnus_set",
         blank=True, null=True, on_delete=models.SET_NULL)
     nova             = models.CharField(max_length=3, choices=NOVA_NETWORK, blank=True)
@@ -156,7 +156,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     prefix          = models.CharField(_("prefix"), blank=True, max_length=40)
     last_name       = models.CharField(_("last name"), max_length=40)
     gender          = models.PositiveSmallIntegerField(_("gender"), choices=GENDER_CHOICES, blank=True, null=True)
-    birth_date      = models.DateField(_("birth date"), blank=True, null=True)
+    birth_date      = models.DateField(_("birth date"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
     nationality     = CountryField(_("nationality"), blank=True)
     place_of_birth  = models.CharField(_("place of birth"), blank=True, max_length=40)
     student_id      = models.CharField(_("student_id"), blank=True, max_length=10)
@@ -174,7 +174,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     twitter         = models.URLField(_("twitter"), blank=True, null=True)
     linkedin        = models.URLField(_("linkedin"), blank=True, null=True)
     last_checked    = models.DateTimeField(_("Date Last Checked"), blank=True, null=True,
-        help_text=_("Update this field if you know that the contact information is up-to-date."))
+        help_text=_("Update this field if you know that the contact information is up-to-date. Use format: YYYY-MM-DD"))
 
     # Address information
     address         = models.CharField(_("address"), blank=True, max_length=40)
@@ -189,14 +189,12 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
         related_name="current_position", on_delete=models.SET_NULL)
     specification   = models.CharField(max_length=255, blank=True,
         help_text=_("Type of grant, or other indicator of funding"))
-    office          = models.CharField(_("office"), blank=True, max_length=40)
-    work_phone      = models.CharField(_("work telephone"), blank=True, max_length=40)
     ads_name        = models.CharField(_("ads name"), blank=True, max_length=40)
 
     # Extra information
     comments        = models.TextField(_("comments"), blank=True)
-    date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True)
-    date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+    date_created    = models.DateTimeField(_("Date Created"), auto_now_add=True, help_text='Use format: YYYY-MM-DD')
+    date_updated    = models.DateTimeField(_("Date Last Changed"), auto_now=True, help_text='Use format: YYYY-MM-DD')
 
     # Privacy options
     show_biography  = models.BooleanField(_("Show biography on personal page"), blank=True, default=False)
@@ -207,7 +205,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     show_homepage   = models.BooleanField(_("Show homepage on personal page"), blank=True, default=False)
 
     # Extra field for survey completed
-    survey_info_updated = models.DateTimeField(_("Date survey info updated"), blank=True, null=True)
+    survey_info_updated = models.DateTimeField(_("Date survey info updated"), blank=True, null=True,         help_text='Use format: YYYY-MM-DD')
 
 
     objects = AlumniManager()

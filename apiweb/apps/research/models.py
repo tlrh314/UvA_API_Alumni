@@ -38,12 +38,12 @@ class Thesis(models.Model):
     # Information about the thesis
     alumnus          = models.ForeignKey(Alumnus, related_name="theses")
     type             = models.CharField(max_length=3, choices=THESIS_TYPE, default="PhD")
-    date_start       = models.DateField(_("Starting date"), blank=True, null=True)
-    date_stop        = models.DateField(_("Date finished"), blank=True, null=True)
+    date_start       = models.DateField(_("Starting date"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
+    date_stop        = models.DateField(_("Date finished"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
 
     # Information about the thesis
     title     = models.CharField(_("Thesis Title"), blank=True, max_length=180)
-    date_of_defence  = models.DateField(_("Defence date"), blank=True, null=True, help_text=_("Date of the thesis or defense"))
+    date_of_defence  = models.DateField(_("Defence date"), blank=True, null=True, help_text=_("Date of the thesis or defense. Use format: YYYY-MM-DD"))
     url       = models.URLField(blank=True, null=True, help_text=_("UvA DARE or other URL to thesis"))
     slug      = models.SlugField(blank=True, null=True, max_length=100, unique=True)
     advisor   = models.ManyToManyField(Alumnus, blank=True, related_name="students")
@@ -61,8 +61,8 @@ class Thesis(models.Model):
     comments         = models.TextField(_("comments"), blank=True)
     last_updated_by  = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
         on_delete=models.SET_NULL, related_name="theses_updated")
-    date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
-    date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+    date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True, help_text='Use format: YYYY-MM-DD')
+    date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True, help_text='Use format: YYYY-MM-DD')
 
     # students supervised --> class? anders kan je er maar een paar invullen
     # privacy levels

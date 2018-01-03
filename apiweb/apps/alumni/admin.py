@@ -171,7 +171,7 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
     search_fields = ("username", "email", "first_name", "last_name", "theses__title",
         "theses__date_start", "theses__date_stop", "theses__date_of_defence")
 
-    list_display = ("get_alumnus", "email", "last_checked", "survey_info_updated", "show_msc_year",
+    list_display = ("get_alumnus", "email", "date_created", "last_checked", "survey_info_updated", "show_msc_year",
         "show_phd_year", "show_postdoc_year", "show_staff_year", "is_staff")
 
     list_filter = (
@@ -225,7 +225,7 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
 
         ("Current Position", {
                 "classes": ["collapse"],
-                 "fields": ["position", "office", "work_phone", "ads_name"]
+                 "fields": ["position", "ads_name"]
                 }),
 
         (_("Permissions"), {

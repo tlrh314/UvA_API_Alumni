@@ -18,11 +18,9 @@
     <div class="col-xs-12 col-md-9">
         <div class="row">
             {% if not alumnus.passed_away %}
-                <div class="col-xs-12 col-sm-3">
-                    {% if alumnus.mugshot %}
+                {% if alumnus.mugshot %}
+                    <div class="col-xs-12 col-sm-3">
                         <img src="{{ alumnus.mugshot.url }}" width="150px" style="margin-top: 46.5px; margin-bottom: 10px; padding-top: 8px;"></img>
-                    {% else %}
-                        {# <img src="{% static 'alumni/img/einstein.jpg' %}" width="150px"></img> #}
                     {% endif %}
                 </div>
             {% endif %}
@@ -44,8 +42,6 @@
 
                         {% if not alumnus.position == None %}
                             <tr><th>Position</th><td>{{ alumnus.position }}</td></tr>
-                            <tr><th>Office</th><td>{{ alumnus.office }}</td></tr>
-                            <tr><th>Phone</th><td>{{ alumnus.work_phone }}</td></tr>
                         {% endif %}
 
                         {% if alumnus.facebook %}

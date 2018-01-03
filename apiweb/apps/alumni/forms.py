@@ -1,6 +1,7 @@
 import copy
 
 from django import forms
+from django.forms import extras
 from django.contrib import admin
 from django.contrib.admin import widgets
 from django.forms.utils import ErrorList
@@ -48,6 +49,7 @@ class AlumnusAdminForm(UserChangeForm):
             attrs={"class":"form-control"}))
 
     def clean(self):
+        super().clean()
         username = self.cleaned_data.get("username")
         if '@' in username:
             self._errors["username"] = ErrorList()
@@ -123,6 +125,7 @@ class CustomUserCreationForm(UserCreationForm):
             self.fields[self._meta.model.USERNAME_FIELD].widget.attrs.update({'autofocus': True})
 
     def clean_email(self):
+        super().clean()
         email = self.cleaned_data.get("email")
         duplicate_emails = Alumnus.objects.filter(email=email)
         if len(duplicate_emails) > 0:
