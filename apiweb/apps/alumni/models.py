@@ -174,7 +174,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
     twitter         = models.URLField(_("twitter"), blank=True, null=True)
     linkedin        = models.URLField(_("linkedin"), blank=True, null=True)
     last_checked    = models.DateTimeField(_("Date Last Checked"), blank=True, null=True,
-        help_text=_("Update this field if you know that the contact information is up-to-date. Use format YYYY-MM-DD"))
+        help_text=_("Update this field if you know that the contact information is up-to-date. Use format: YYYY-MM-DD"))
 
     # Address information
     address         = models.CharField(_("address"), blank=True, max_length=40)
