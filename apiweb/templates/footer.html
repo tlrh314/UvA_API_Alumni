@@ -12,6 +12,7 @@
                 </ul>
             </div>
 
+            {% if latest_interviews %}
             <div class="col-xs-12 col-sm-6 col-md-3 footer-column text-centered-xs-sm">
                 <h3> Interviews </h3>
                 <ul>
@@ -20,8 +21,13 @@
                     {% endfor %}
                 </ul>
             </div>
+            {% endif %}
 
+            {% if latest_interviews %}
             <div class="col-xs-12 col-sm-6 col-md-3 footer-column text-centered-xs-sm">
+            {% else %}
+            <div class="col-xs-12 col-sm-12 col-md-6 footer-column text-centered-xs-sm">
+            {% endif %}
                 <h3> Recent Theses </h3>
                 <ul>
                     {% for thesis in latest_theses %}

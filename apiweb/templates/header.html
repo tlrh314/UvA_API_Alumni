@@ -62,8 +62,10 @@
                     <li><a href="{% url 'alumni:alumnus-list' %}"><span>ALUMNI</span></a></li>
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
                     <li><a href="{% url 'research:thesis-list' %}"><span>THESES</span></a></li>
+                    {% if latest_interviews %}
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
                     <li><a href="{% url 'interviews:index' %}"><span>INTERVIEWS</span></a></li>
+                    {% endif %}
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
                     <li><a href="{% url 'contact' %}"><span>CONTACT</span></a></li>
 
