@@ -228,7 +228,7 @@ class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
 
         ("Current Position", {
                 "classes": ["collapse"],
-                 "fields": ["position", "office", "work_phone", "ads_name"]
+                 "fields": ["position", "ads_name"]
                 }),
 
         (_("Permissions"), {
