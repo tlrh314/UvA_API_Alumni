@@ -208,6 +208,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
 
     # Extra field for survey completed
     survey_info_updated = models.DateTimeField(_("Date survey info updated"), blank=True, null=True)
+    survey_email_sent = models.DateTimeField(_("Date survey email sent"), blank=True, null=True)
 
 
     objects = AlumniManager()
