@@ -281,14 +281,14 @@ class SurveyContactInfoForm(forms.ModelForm):
 
     home_phone = forms.CharField(
         required=False,
-        help_text="Please use digits only",
+        help_text="Please use digits only. This information will not be publicly displayed",
         max_length=24,
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
 
     mobile = forms.CharField(
         required=False,
-        help_text="Please use digits only",
+        help_text="Please use digits only. This information will not be publicly displayed",
         max_length=24,
         widget=forms.TextInput(
             attrs={"class": "form-control"}))
@@ -367,6 +367,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
 
     def clean(self):
+        super().clean()
         first_name = self.cleaned_data.get("first_name")
         if any(str.isdigit(c) for c in first_name):
             self._errors["first_name"] = ErrorList()
@@ -386,12 +387,6 @@ class SurveyContactInfoForm(forms.ModelForm):
         if any(str.isdigit(c) for c in prefix):
             self._errors["prefix"] = ErrorList()
             self._errors["prefix"].append(error_messages["names"])
-
-        # TODO: Expand to english prefixes too
-        allowed_prefix = ["van", "van der", "der", "den", "van den", "van de", "de", "in het", "in 't", "di"]
-        if prefix and prefix not in allowed_prefix:
-            self._errors["prefix"] = ErrorList()
-            self._errors["prefix"].append("Valid options: {0}".format(allowed_prefix))
 
         place_of_birth = self.cleaned_data.get("place_of_birth")
         if any(str.isdigit(c) for c in place_of_birth):
