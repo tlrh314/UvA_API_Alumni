@@ -116,6 +116,10 @@ class SendSurveyForm(PasswordResetForm):
         """
         Send a django.core.mail.EmailMultiAlternatives to `to_email`.
         """
+
+        logger = logging.getLogger("survey")
+        logger.debug("Running send_mail() method of SendSurveyForm")
+
         subject = loader.render_to_string(subject_template_name, context)
         # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
@@ -127,6 +131,7 @@ class SendSurveyForm(PasswordResetForm):
             html_email = loader.render_to_string(html_email_template_name, context)
             email_message.attach_alternative(html_email, 'text/html')
 
+        logger.info("Sending a copy to: {0}".format(bcc_email))
         email_message.send()
 
 
