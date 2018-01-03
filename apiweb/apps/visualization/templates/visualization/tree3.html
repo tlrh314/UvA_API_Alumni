@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block stylesheets %} {{ block.super }} 
+<style>
+    .links line {
+      stroke: #999;
+      stroke-opacity: 0.6;
+    }
+    .nodes circle {
+      stroke: #fff;
+      stroke-width: 1.5px;
+    }
+    
+    .arrow{
+        stroke-width:5;
+        stroke:#000;
+        stroke-dasharray:5, 5;
+    }
+    
+    #marker {
+        stroke: black;
+        fill: black;
+    }
+
+    .buttons {
+      position: absolute;
+      right: 30px;
+      top: 30px;
+    }
+    
+    .body { 
+        margin:0;
+        position:fixed;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0; 
+    }
+    #cy {
+        width: 75vw;
+        height: 75vh;
+        display: block;
+    }
+
+</style>{% endblock stylesheets %}
+
+
+{% block title %}API - Research - Theses{% endblock title %}
+
+{% block content %}
+
+<div class="main-content" role="main">
+ <div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Theses
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="#" id="bsc">Bsc</a></li>
+    <li><a href="#" id="msc">Msc</a></li>
+    <li><a href="#" id="phd">PhD</a></li>
+  </ul>
+</div> 
+    <h1 class="text-center">Student-Supervisor Relation Tree</h1>
+    <div id="tree-wrapper">
+        <div id="cy"></div>
+    </div>
+    <!-- if more elements, give ID -->
+</div>
+
+<!-- <div class="buttons">
+  <button data-zoom="+1">Zoom In</button>
+  <button data-zoom="-1">Zoom Out</button>
+</div> -->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.7/cytoscape.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    
+
+    var data = '{{ json_data | safe }}',
+        graph = JSON.parse(data);
+    console.log(graph);
+
+    var cy = cytoscape({
+    container: document.getElementById('cy'),
+
+    layout: {
+        name: 'concentric',
+        concentric: function( ele ){ return ele.data('weight'); },
+        levelWidth: function( nodes ){ return 5; },
+        padding: 10
+      },
+    
+    style: cytoscape.stylesheet()
+    .selector('node')
+    .css({
+        'width': 'mapData(weight, 40, 80, 20, 60)',
+        'content': 'data(id)',
+        'text-valign': 'center',
+        'text-outline-width': 2,
+        'color': '#fff'
+    })
+    .selector(':selected')
+    .css({
+        'border-width': 3,
+        'border-color': '#333'
+    })
+    .selector('edge')
+    .css({
+        'curve-style': 'bezier',
+        'opacity': 0.666,
+        'width': 'mapData(strength, 70, 100, 2, 6)',
+        'target-arrow-shape': 'triangle',
+        'source-arrow-shape': 'circle',
+        'line-color': function( ele ) {
+            var type = ele.data('type');
+            if (type == 'bsc') { return 'red'; }
+            else if (type == 'msc') { return 'black'; }
+            else if (type == 'phd') { return 'green'; }
+            else { return 'white; '}
+        }
+    })
+    .selector('.faded')
+    .css({
+        'opacity': 0.25,
+        'text-opacity': 0
+    }),
+    elements: graph
+
+    });
+
+    $("#bsc").click(function(e) {
+        removeEdges(e.currentTarget.id);
+    });
+    $("#msc").click(function(e) {
+        removeEdges(e.currentTarget.id);  
+    });
+    $("#phd").click(function(e) {
+        removeEdges(e.currentTarget.id);
+    });
+
+    edges = cy.edges();
+    nodes = cy.nodes();
+
+    function removeEdges(wanted) {
+        edges.restore();
+        edges.forEach(function(ele) {
+            if (ele.data('type') != wanted) {
+                ele.remove();
+            }
+        })
+    }
+
+</script>
+
+{% endblock content %}
