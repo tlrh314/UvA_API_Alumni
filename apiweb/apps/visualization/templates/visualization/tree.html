@@ -60,6 +60,9 @@
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
+    var data = '{{ json_data | safe }}';
+    graph = JSON.parse(data);
+    console.log(graph);
 
     var svg = d3.select("svg")
         width = +svg.attr("width"),
@@ -87,8 +90,6 @@
             .force("charge", d3.forceManyBody())
             .force("center", d3.forceCenter(width / 2, height / 2));
 
-    var data = '{{ json_data | safe }}';
-    graph = JSON.parse(data);
 
     var link = svg.append("g")
             .attr("class", "links")
