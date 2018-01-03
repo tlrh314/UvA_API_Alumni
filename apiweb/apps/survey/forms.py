@@ -149,7 +149,7 @@ class SurveyCareerInfoForm(forms.ModelForm):
 
     sector = forms.ModelChoiceField(
         required=False,
-        queryset=Sector.objects.all(),
+        queryset=Sector.objects.all().order_by("name"),
         widget=forms.Select(
             attrs={"class": "form-control"}))
 
@@ -221,7 +221,8 @@ class SurveyContactInfoForm(forms.ModelForm):
                     "zipcode", "streetname", "streetnumber", "address",
                     # Below has to be removed b/c Alumnus is an extension of AbstractBaseUser
                     "password", "last_login", "is_superuser", "groups",
-                    "user_permissions", "username", "is_staff", "is_active", "date_joined", "survey_info_updated")
+                    "user_permissions", "username", "is_staff", "is_active", "date_joined",
+                    "survey_info_updated", "survey_email_sent")
 
     BOOL_CHOICES = ((True, 'Yes'), (False, 'No'))
     years_choices = range(1900, datetime.now().year+1)[::-1]
