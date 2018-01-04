@@ -73,7 +73,7 @@ def view_b(request):
     #print data_dict
 
     json_data = json.dumps(data_dict)
-    return render(request, "visualization/vis_f.html", {'json_data': json_data})
+    return render(request, "visualization/vis_b.html", {'json_data': json_data})
 
 def view_c(request):
     """
