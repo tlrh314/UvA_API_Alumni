@@ -119,7 +119,7 @@ def view_d(request):
     print (data_dict)
 
     json_data = json.dumps(data_dict)
-    return render(request, "visualization/vis_f.html", {'json_data': json_data})
+    return render(request, "visualization/vis_d.html", {'json_data': json_data})
 
 def view_e(request):
     """
@@ -136,7 +136,7 @@ def view_e(request):
     for el in country_counts:
         data_dict[el['country']] = el['amount']
     json_data = json.dumps(data_dict)
-    return render(request, "visualization/vis_f.html", {'json_data': json_data})
+    return render(request, "visualization/vis_e.html", {'json_data': json_data})
 
 def view_f(request):
     """
