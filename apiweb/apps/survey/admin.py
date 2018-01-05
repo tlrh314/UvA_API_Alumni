@@ -78,9 +78,9 @@ class JobAfterLeavingAdminForm(forms.ModelForm):
 @admin.register(JobAfterLeaving)
 class JobAfterLeavingAdmin(ExtendedActionsMixin, admin.ModelAdmin):
     list_display = ("alumnus", "which_position", "show_job", "sector", "company_name", "position_name", 
-        "is_inside_academia", "location_job", "start_date", "stop_date")
+        "is_inside_academia", "is_inside_astronomy", "location_job", "start_date", "stop_date")
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
-    list_filter = ("which_position", "is_inside_academia", "sector", )
+    list_filter = ("which_position", "is_inside_academia", "is_inside_astronomy", "sector", )
 
     actions = ("export_selected_jobs_to_excel", "export_all_jobs_to_excel", "export_filtered_jobs_to_excel",)
     extended_actions = ('export_all_jobs_to_excel', 'export_filtered_jobs_to_excel',)
@@ -91,7 +91,7 @@ class JobAfterLeavingAdmin(ExtendedActionsMixin, admin.ModelAdmin):
         ( "Job information", {
             "fields":
                 [ "alumnus", "which_position", "sector", "company_name", "position_name", "location_job",
-                  "is_inside_academia",  "start_date", "stop_date" ]
+                  "is_inside_academia", "is_inside_astronomy", "start_date", "stop_date" ]
             }
         ), ( "Extra information", {
                 "classes": ["collapse"],

@@ -171,6 +171,12 @@ class SurveyCareerInfoForm(forms.ModelForm):
         widget=forms.Select(
             attrs={"class": "form-control"}))
 
+    is_inside_astronomy = forms.ChoiceField(
+        required=False,
+        choices=JobAfterLeaving.YES_OR_NO,
+        widget=forms.Select(
+            attrs={"class": "form-control"}))
+
     location_job = forms.ChoiceField(
         required=False,
         choices=BLANK_CHOICE_DASH+list(countries),
