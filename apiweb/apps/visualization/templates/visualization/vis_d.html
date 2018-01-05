@@ -79,7 +79,12 @@
             data.values.push(+val);
             data.labels.push(capitalize(key));
         });
-        plotSettings.title = title;
+        if (data.values.length == 0) {
+            plotSettings.title = title + ': no data available';
+        }
+        else {
+            plotSettings.title = title;
+        }
 
         Plotly.newPlot('chartContainer', [data], plotSettings);
         if (update) {

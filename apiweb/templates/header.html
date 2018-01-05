@@ -44,12 +44,11 @@
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'site_password_change' %}"><span>CHANGE PASSWORD</span></a></li>
                                 <li><a href="{% url 'site_contactinfo' %}"><span>UPDATE CONTACTINFO</span></a></li>
-                                <li><a href="{% url 'site_thesis_select' %}"><span>UPDATE THESES </span></a></li>
+                                <li><a href="{% url 'site_thesis_select' %}"><span>UPDATE THESES</span></a></li>
                                 <li><a href="{% url 'site_careerinfo' 0 %}"><span>UPDATE CURRENT POSITION</span></a></li>
                                 <li><a href="{% url 'site_careerinfo' 1 %}"><span>UPDATE FIRST JOB</span></a></li>
                                 <li><a href="{% url 'site_careerinfo' 2 %}"><span>UPDATE SECOND JOB</span></a></li>
                                 <li><a href="{% url 'site_careerinfo' 3 %}"><span>UPDATE THIRD JOB</span></a></li>
-                                {# <li><a href="{% url 'site_theses' %}"><span>UPDATE THESES</span></a></li> #}
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'site_logout' %}"><span>LOGOUT</span></a></li>
                             </ul>
@@ -68,7 +67,18 @@
                     {% endif %}
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
                     <li><a href="{% url 'contact' %}"><span>CONTACT</span></a></li>
-
+                    <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span>VISUALIZATIONS</span></a>
+                        <ul class="dropdown-menu navbar-dropdown-wrapper col-xs-12">
+                            <li><a href="{% url 'visualization:tree' %}"><span>STUDENT-SUPERVISOR TREE</span></a></li>
+                            <li><a href="{% url 'visualization:view_a' %}"><span>IN ASTRONOMY</span></a></li>
+                            <li><a href="{% url 'visualization:view_b' %}"><span>JOB LOCATION</span></a></li>
+                            <li><a href="{% url 'visualization:view_d' %}"><span>JOB SECTOR</span></a></li>
+                            <li><a href="{% url 'visualization:view_e' %}"><span>LAND OF ORIGIN</span></a></li>
+                            <li><a href="{% url 'visualization:view_f' %}"><span>GENDER DISTRIBUTIONS</span></a></li>
+                        </ul>
+                    </li>                    
                 </ul>
             </div>
         </div>
