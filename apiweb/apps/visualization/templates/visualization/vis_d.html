@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block stylesheets %} {{ block.super }} 
+<style>
+    .modebar {
+        display: none !important;
+    }
+    #chartContainer {
+        height: 600px;
+        width: 100%;
+    }
+</style>{% endblock stylesheets %}
+
+{% block title %} API - Visualisation - Job - Sector {% endblock title %}
+
+{% block content %}
+
+<div class="main-content" role="main">
+    <div class="text-center">
+        <ul class="nav nav-pills selector-nav center-pills">
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">Selection<span class="caret"></span>
+                </a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="sector_1">First job sector</a></li>
+                <li><a href="#" id="sector_2">Second job sector</a></li>
+                <li><a href="#" id="sector_3">Third job sector</a></li>
+                <li><a href="#" id="sector_cur">Current job sector</a></li>
+            </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="chartContainer"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script type="text/javascript">
+    var data = '{{ json_data | safe }}',
+        graph = JSON.parse(data);
+
+    var plotSettings = {
+        hoverinfo: 'label+percent',
+        title: 'Current job',
+        titlefont: {
+            family: 'inherit',
+            size: 36,
+            color: '#000000'
+        },
+        showtitle: true
+    };
+
+    updateGraph(graph.sector_cur, 'Current job sector', update=false);
+
+    $('#sector_1').click(function(e) {
+        updateGraph(graph[e.currentTarget.id], 'First job sector');
+    });
+    $('#sector_2').click(function(e) {
+        updateGraph(graph[e.currentTarget.id], 'Second job sector');
+    });
+    $('#sector_3').click(function(e) {
+        updateGraph(graph[e.currentTarget.id], 'Third job sector');
+    });
+    $('#sector_cur').click(function(e) {
+        updateGraph(graph[e.currentTarget.id], 'Current job sector');
+    });
+
+
+    function updateGraph(dataset, title, update=true) {
+        data = {
+            values: [],
+            labels: [],
+            type: 'pie'
+        };
+        $.each(dataset, function(key, val) {
+            data.values.push(+val);
+            data.labels.push(capitalize(key));
+        });
+        plotSettings.title = title;
+
+        Plotly.newPlot('chartContainer', [data], plotSettings);
+        if (update) {
+            Plotly.redraw('chartContainer');
+        }
+    }
+
+    function capitalize(s) {
+        s = s.replace(/_/g," ");
+
+        return s[0].toUpperCase() + s.slice(1);
+    }
+
+</script>
+
+{% endblock content %}
