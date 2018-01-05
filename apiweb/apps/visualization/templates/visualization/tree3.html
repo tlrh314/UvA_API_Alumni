@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block stylesheets %} {{ block.super }} 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css"/>
 <style>
     .body { 
         margin:0;
@@ -24,6 +25,10 @@
 
 {% block content %}
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.7/cytoscape.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+
 <div class="main-content" role="main">
     <div class="text-center">
         <ul class="nav nav-pills selector-nav center-pills">
@@ -35,23 +40,28 @@
                 <li><a href="#" id="bsc">Bsc</a></li>
                 <li><a href="#" id="msc">Msc</a></li>
                 <li><a href="#" id="phd">PhD</a></li>
+                <li><a href="#" id="all">All</a></li>
+            </ul>
+            </li>
+        </ul>
+        <ul class="nav nav-pills selector-nav center-pills">
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">Style<span class="caret"></span>
+                </a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="concentric">Concentric</a></li>
+                <li><a href="#" id="breadth-first">Breadth first</a></li>
+                <li><a href="#" id="circle">Circle</a></li>
+                <li><a href="#" id="grid">Grid</a></li>
             </ul>
             </li>
         </ul>
     </div> 
     <h1 class="text-center">Student-Supervisor Relation Tree</h1>
-    <div id="cy"></div>
+    <div id="cy" data-toggle="tooltip"></div>
     <!-- if more elements, give ID -->
 </div>
-
-<!-- <div class="buttons">
-  <button data-zoom="+1">Zoom In</button>
-  <button data-zoom="-1">Zoom Out</button>
-</div> -->
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.7/cytoscape.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 
     
@@ -70,6 +80,7 @@
     var cy = cytoscape({
     container: document.getElementById('cy'),
     layout: layoutStyle,
+    
     style: cytoscape.stylesheet()
     .selector('node')
     .css({
@@ -107,18 +118,70 @@
     elements: graph
 
     });
+    cy.edges().on('mouseover', function(event) {
+        $("#cy").qtip({
+            content: 'hello',
+            show: {
+                event: event.type,
+                ready: true
+            },
+            hide: {
+                event: 'mouseout unfocus'
+            }
+        }, event);
+    });
+
+    // $("#cy").mouseover(function() {
+
+    // })
+
+
+    $('#concentric').click(function(e) {
+        layoutStyle = {
+            name: 'concentric',
+            concentric: function( ele ){ return ele.data('weight'); },
+            levelWidth: function( nodes ){ return 5; },
+            padding: 10
+        }; 
+        var layout = cy.layout(layoutStyle);
+        layout.run();
+    });
+    $('#circle').click(function(e) {
+        layoutStyle = {
+            name: 'circle',
+            padding: 10
+        };
+        var layout = cy.layout(layoutStyle);
+        layout.run();
+    });
+    $('#grid').click(function(e) {
+        layoutStyle = {
+            name: 'grid',
+            padding: 10
+        };
+        var layout = cy.layout(layoutStyle);
+        layout.run();
+    });
+    $('#breadth-first').click(function(e) {
+        layoutStyle = {
+            name: 'breadthfirst',
+            padding: 10
+        };
+        var layout = cy.layout(layoutStyle);
+        layout.run();
+    });
 
     $("#bsc").click(function(e) {
         removeEdges(e.currentTarget.id);
-        // removeUnusedNodes();
     });
     $("#msc").click(function(e) {
-        removeEdges(e.currentTarget.id);  
-        // removeUnusedNodes();
+        removeEdges(e.currentTarget.id);
     });
     $("#phd").click(function(e) {
         removeEdges(e.currentTarget.id);
-        // removeUnusedNodes();
+    });
+    $("#all").click(function(e) {
+        removeEdges(e.currentTarget.id);
     });
 
     const edges = cy.edges();
@@ -132,11 +195,13 @@
         edges.forEach(function(ele) {
             ele.restore();
         })
-        edges.forEach(function(ele) {
-            if (ele.data('type') != wanted) {
-                ele.remove();
-            }
-        });
+        if (wanted != 'all') {
+            edges.forEach(function(ele) {
+                if (ele.data('type') != wanted) {
+                    ele.remove();
+                }
+            });
+        }
         var nodesWithoutEdges = cy.nodes().filter(node => node.connectedEdges(":visible").size() === 0);
         nodesWithoutEdges.forEach(function(ele) {
             ele.remove();
