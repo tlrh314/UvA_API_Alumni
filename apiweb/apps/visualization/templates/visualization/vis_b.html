@@ -7,30 +7,31 @@
         display: none !important;
     }
     #chartContainer {
-        height: 600px;
+        height: 90%;
         width: 100%;
     }
 </style>{% endblock stylesheets %}
 
-{% block title %} API - Visualisation - Tree {% endblock title %}
+{% block title %} API - Visualisation - Jobs - Country {% endblock title %}
 
 {% block content %}
-
 <div class="main-content" role="main">
-    <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Selection
-    <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li><a href="#" id="jobs_1">First job</a></li>
-            <li><a href="#" id="jobs_2">Second job</a></li>
-            <li><a href="#" id="jobs_3">Third job</a></li>
-            <li><a href="#" id="jobs_cur">Current job</a></li>
+    <div class="text-center">
+        <ul class="nav nav-pills selector-nav center-pills">
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">Selection<span class="caret"></span>
+                </a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="jobs_1">First job</a></li>
+                <li><a href="#" id="jobs_2">Second job</a></li>
+                <li><a href="#" id="jobs_3">Third job</a></li>
+                <li><a href="#" id="jobs_cur">Current job</a></li>
+            </ul>
+            </li>
         </ul>
-</div>
-    <h1 class="text-center"> Student-Supervisor Relation Tree </h1>
-        <div id="tree-wrapper">
-        <div id="chartContainer"></div>
     </div>
+    <div id="chartContainer"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -44,9 +45,9 @@
         hoverinfo: 'label+percent',
         title: 'Current job',
         titlefont: {
-            family: 'Courier New, monospace',
-            size: 18,
-            color: '#7f7f7f'
+            family: 'inherit',
+            size: 36,
+            color: '#000000'
         },
         showtitle: true
     };
@@ -75,7 +76,7 @@
         };
         $.each(dataset, function(key, val) {
             data.values.push(+val);
-            data.labels.push(key);
+            data.labels.push(capitalize(key));
         });
         plotSettings.title = title;
 
@@ -83,6 +84,12 @@
         if (update) {
             Plotly.redraw('chartContainer');
         }
+    }
+
+    function capitalize(s) {
+        s = s.replace(/_/g," ");
+
+        return s[0].toUpperCase() + s.slice(1);
     }
 
 </script>

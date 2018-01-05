@@ -166,7 +166,9 @@ def tree(request):
     # phd_theses = Thesis.objects.filter(type="phd").order_by("date_of_defence")
     # msc_theses = Thesis.objects.filter(type="msc").order_by("date_of_defence")
 
-    theses = Thesis.objects.all().order_by("date_of_defence")
+    #theses = Thesis.objects.all().order_by("date_of_defence")
+    theses = Thesis.objects.exclude(advisor=None)
+
     data_dict = {}
     links_list, nodes_list, all_people = [], [], []
 
