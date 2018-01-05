@@ -42,6 +42,6 @@ urlpatterns = [
     url(r'^interviews/', include('apiweb.apps.interviews.urls', namespace='interviews')),
     url(r'^search/', include('apiweb.apps.search.urls', namespace='search')),
     url(r'^survey/', include('apiweb.apps.survey.urls', namespace='survey')),
-    url(r'^vis/', include('apiweb.apps.visualization.urls', namespace='vizualisation')),
+    url(r'^visualization/', include('apiweb.apps.visualization.urls', namespace='visualization')),
     url(r'^', include('apiweb.apps.main.urls')),
 ]

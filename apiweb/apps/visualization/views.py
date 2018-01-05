@@ -16,21 +16,41 @@ def view_a(request):
     View to display whether the 1,2,3rd job outside api is within or outside the field of astronomy
     """
 
-    # jobs_outside = 
-    # jobs_inside = 
+    data_dict, data_dict_cur, data_dict_1, data_dict_2, data_dict_3 = {}, {}, {}, {}, {}
 
-    # jobs_cur = JobAfterLeaving.objects.filter(which_position=0)
-    # jobs_1 = JobAfterLeaving.objects.filter(which_position=1)
-    # jobs_2 = JobAfterLeaving.objects.filter(which_position=2)
-    # jobs_3 = JobAfterLeaving.objects.filter(which_position=3)
+    fieldname = 'is_inside_astronomy'
 
+    jobs_all = JobAfterLeaving.objects.all()
+    jobs_in_astronomy = jobs_all.exclude(is_inside_astronomy=None)
 
+    jobs_cur = jobs_in_astronomy.filter(which_position=0)
+    jobs_1 = jobs_in_astronomy.filter(which_position=1)
+    jobs_2 = jobs_in_astronomy.filter(which_position=2)
+    jobs_3 =jobs_in_astronomy.filter(which_position=3)
 
+    astronomy_counts_cur = jobs_cur.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    for el in astronomy_counts_cur:
+        data_dict_cur[el[fieldname]] = el['amount']
 
-    # json_data = json.dumps(data_dict)
-    # print(json_data)
+    astronomy_counts_1 = jobs_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    for el in astronomy_counts_1:
+        data_dict_1[el[fieldname]] = el['amount']
+    
+    astronomy_counts_2 = jobs_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    for el in astronomy_counts_2:
+        data_dict_2[el[fieldname]] = el['amount']
+    
+    astronomy_counts_3 = jobs_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    for el in astronomy_counts_3:
+        data_dict_3[el[fieldname]] = el['amount']
 
+    data_dict['jobs_cur'] = data_dict_cur
+    data_dict['jobs_1'] = data_dict_1
+    data_dict['jobs_2'] = data_dict_2
+    data_dict['jobs_3'] = data_dict_3
+    #print data_dict
 
+    json_data = json.dumps(data_dict)
 
     return render(request, "visualization/vis_a.html", {'json_data': json_data})
 
@@ -62,7 +82,7 @@ def view_b(request):
     for el in location_counts_2:
         data_dict_2[el[fieldname]] = el['amount']
     
-    location_counts_3 = jobs_cur.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    location_counts_3 = jobs_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in location_counts_3:
         data_dict_3[el[fieldname]] = el['amount']
 
@@ -161,13 +181,11 @@ def view_f(request):
     json_data = json.dumps(data_dict)
     return render(request, "visualization/vis_f.html", {'json_data': json_data})
 
-######
 
 def tree(request):
     # phd_theses = Thesis.objects.filter(type="phd").order_by("date_of_defence")
     # msc_theses = Thesis.objects.filter(type="msc").order_by("date_of_defence")
 
-    #theses = Thesis.objects.all().order_by("date_of_defence")
     theses = Thesis.objects.exclude(advisor=None)
 
     data_dict = {}
