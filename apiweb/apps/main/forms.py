@@ -49,7 +49,8 @@ class ThesisForm(forms.ModelForm):
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "date_of_defence": forms.DateInput(attrs={"class": "form-control"}),
             "url": forms.URLInput(attrs={"class": "form-control"}),
-            "advisor": autocomplete.ModelSelect2Multiple(url="alumnus-autocomplete")
+            "advisor": autocomplete.ModelSelect2Multiple(url="alumnus-autocomplete",
+                attrs={"class": "form-control"})
             # use FileInput to remove the clear tickbox
             # "pdf": forms.ClearableFileInput(),
             # "photo": forms.ClearableFileInput(),

@@ -6,8 +6,6 @@
 {% endblock stylesheets %}
 
 {% block topscripts %} {{ block.super }}
-
-    <script type="text/javascript" src="{% static 'js/jquery-1.12.4.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
 
     <script>
@@ -59,5 +57,7 @@
 
 {% endblock %}
 
-{% block scripts %}  {% endblock scripts %}
-
+{% block scripts %} 
+    {{ form.media }}
+    {{ block.super }}
+{% endblock scripts %}
