@@ -6,28 +6,6 @@
 {% endblock stylesheets %}
 
 {% block topscripts %} {{ block.super }}
-    <script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
-
-    <script>
-    $( function() {
-        $( "#id_date_start" ).datepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: "yy-mm-dd"
-        });
-        $( "#id_date_stop" ).datepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: "yy-mm-dd"
-        });
-        $( "#id_date_of_defence" ).datepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: "yy-mm-dd"
-        });
-    } );
-    </script>
-
 {% endblock topscripts %}
 
 {% block title %} API - Alumni - Update Thesis {% endblock title %}
@@ -58,6 +36,25 @@
 {% endblock %}
 
 {% block scripts %} 
-    {{ form.media }}
     {{ block.super }}
+    <script>
+    $(document).ready( function() {
+        $( "#id_date_start" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+        });
+        $( "#id_date_stop" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+        });
+        $( "#id_date_of_defence" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+        });
+    } );
+    </script>
+    {{ form.media }}
 {% endblock scripts %}
