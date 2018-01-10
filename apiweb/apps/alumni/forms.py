@@ -102,13 +102,17 @@ class AlumnusAdminForm(UserChangeForm):
         #Because there is also a possibility to log in with email, one must not use an email which is already in use.
         # TODO: if the user has an email, but the form is empty, that means that the person wants to remove the data, but this way wouldt let it
         # SO make a check whether there is instance data but form data is empty
+
+
         email = self.cleaned_data.get("email")
-        #Remove this instance object from duplicate emails object list
-        duplicate_emails_excluded = Alumnus.objects.filter(email=email).exclude(pk=self.instance.pk)
-        # TODO: Change len() to .count()
-        if len(duplicate_emails_excluded) > 0:
-            self.errors["email"] = ErrorList()
-            self.errors["email"].append("The chosen email address is already used")
+        if email:
+
+            #Remove this instance object from duplicate emails object list
+            duplicate_emails_excluded = Alumnus.objects.filter(email=email).exclude(pk=self.instance.pk)
+            # TODO: Change len() to .count()
+            if len(duplicate_emails_excluded) > 0:
+                self.errors["email"] = ErrorList()
+                self.errors["email"].append("The chosen email address is already used")
 
 
 # ##NEW USERFORM TEST
