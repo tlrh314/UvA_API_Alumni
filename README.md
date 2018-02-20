@@ -28,6 +28,7 @@
     - Copy `~/dump_$(date "+%Y%m%d").json` to local machine, and read-in
     - `python manage.py loaddata ~/dump_$(date "+%Y%m%d").json`
   - **Production**:
+  - `mv apiweb/templates/piwik.html.example apiweb/templates/piwik.html`
   - `mysql -u root -p`
     - `CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';`
     - `CREATE DATABASE mydatabase CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
