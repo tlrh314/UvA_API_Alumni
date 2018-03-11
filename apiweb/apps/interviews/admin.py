@@ -92,8 +92,7 @@ class InterviewAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(InterviewAdmin, self).get_form(request, obj, **kwargs)
-        alumnus = Alumnus.objects.get(pk=request.user.pk)
-        form.base_fields["author"].initial = alumnus.id
+        form.base_fields["author"].initial = request.user.id
 
         # interview = Category.objects.filter(name="Interview")[0]
         # if interview:
