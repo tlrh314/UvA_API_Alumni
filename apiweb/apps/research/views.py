@@ -36,7 +36,12 @@ def thesis_list(request):
         multifilter = Q()
         for year in defence_year:
 
-            end_year = str(int(year) + 10)
+            try:
+                end_year = str(int(year) + 10)
+            except ValueError as e:
+                if "invalid literal for int() with base 10" in str(e):
+                    raise Http404
+
             if year == "1900":
                 end_year = str(int(year) + 50)
             date_range=[year+"-01-01",end_year+"-01-01"]
