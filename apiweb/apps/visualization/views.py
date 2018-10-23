@@ -2,6 +2,7 @@ from django.http import Http404
 from django.db.models import Count
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 
 import json
@@ -11,6 +12,7 @@ from ..research.models import Thesis
 from ..survey.models import JobAfterLeaving
 
 
+@login_required
 def view_a(request):
     """
     View to display whether the 1,2,3rd job outside api is within or outside the field of astronomy
@@ -35,11 +37,11 @@ def view_a(request):
     astronomy_counts_1 = jobs_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in astronomy_counts_1:
         data_dict_1[el[fieldname]] = el['amount']
-    
+
     astronomy_counts_2 = jobs_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in astronomy_counts_2:
         data_dict_2[el[fieldname]] = el['amount']
-    
+
     astronomy_counts_3 = jobs_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in astronomy_counts_3:
         data_dict_3[el[fieldname]] = el['amount']
@@ -54,17 +56,19 @@ def view_a(request):
 
     return render(request, "visualization/vis_a.html", {'json_data': json_data})
 
+
+@login_required
 def view_b(request):
     """
     View to the location of the 1,2,3rd job (NL, eu..)
     """
-    
+
     data_dict, data_dict_cur, data_dict_1, data_dict_2, data_dict_3 = {}, {}, {}, {}, {}
 
     fieldname = 'location_job'
-    jobs_all = JobAfterLeaving.objects.all() 
+    jobs_all = JobAfterLeaving.objects.all()
     jobs_with_location = jobs_all.exclude(location_job='')
-    
+
     jobs_cur = jobs_with_location.filter(which_position=0)
     jobs_1 = jobs_with_location.filter(which_position=1)
     jobs_2 = jobs_with_location.filter(which_position=2)
@@ -77,11 +81,11 @@ def view_b(request):
     location_counts_1 = jobs_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in location_counts_1:
         data_dict_1[el[fieldname]] = el['amount']
-    
+
     location_counts_2 = jobs_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in location_counts_2:
         data_dict_2[el[fieldname]] = el['amount']
-    
+
     location_counts_3 = jobs_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in location_counts_3:
         data_dict_3[el[fieldname]] = el['amount']
@@ -95,12 +99,16 @@ def view_b(request):
     json_data = json.dumps(data_dict)
     return render(request, "visualization/vis_b.html", {'json_data': json_data})
 
+
+@login_required
 def view_c(request):
     """
     View to visualize, if the job is in the field of astronomy, whether it is at a university, or a different institute type
     """
     pass
 
+
+@login_required
 def view_d(request):
     """
     View to visualize, if not inside field of astronomy, which sector the job is in.
@@ -108,9 +116,9 @@ def view_d(request):
     data_dict, data_dict_cur, data_dict_1, data_dict_2, data_dict_3 = {}, {}, {}, {}, {}
 
     fieldname = 'sector__name'
-    jobs_all = JobAfterLeaving.objects.all() 
+    jobs_all = JobAfterLeaving.objects.all()
     jobs_with_sector = jobs_all.exclude(sector=None)
-    
+
     sector_cur = jobs_with_sector.filter(which_position=0)
     sector_1 = jobs_with_sector.filter(which_position=1)
     sector_2 = jobs_with_sector.filter(which_position=2)
@@ -123,11 +131,11 @@ def view_d(request):
     sector_counts_1 = sector_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in sector_counts_1:
         data_dict_1[el[fieldname]] = el['amount']
-    
+
     sector_counts_2 = sector_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in sector_counts_2:
         data_dict_2[el[fieldname]] = el['amount']
-    
+
     sector_counts_3 = sector_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in sector_counts_3:
         data_dict_3[el[fieldname]] = el['amount']
@@ -141,6 +149,8 @@ def view_d(request):
     json_data = json.dumps(data_dict)
     return render(request, "visualization/vis_d.html", {'json_data': json_data})
 
+
+@login_required
 def view_e(request):
     """
     What is the land of origin of the alumni
@@ -149,16 +159,18 @@ def view_e(request):
     data_dict = {}
     fieldname = 'country'
 
-    alumni = Alumnus.objects.all()    
+    alumni = Alumnus.objects.all()
     alumni_with_country = alumni.exclude(country='')
-    
+
     country_counts = alumni_with_country.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
     for el in country_counts:
         data_dict[el['country']] = el['amount']
-        
+
     json_data = json.dumps(data_dict)
     return render(request, "visualization/vis_e.html", {'json_data': json_data})
 
+
+@login_required
 def view_f(request):
     """
     What is the gender of the alumnus?
@@ -182,6 +194,8 @@ def view_f(request):
     return render(request, "visualization/vis_f.html", {'json_data': json_data})
 
 
+
+@login_required
 def tree(request):
     # phd_theses = Thesis.objects.filter(type="phd").order_by("date_of_defence")
     # msc_theses = Thesis.objects.filter(type="msc").order_by("date_of_defence")

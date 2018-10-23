@@ -79,7 +79,6 @@ def survey_careerinfo_current(request):
     return render(request, "survey/survey_careerinfo_current.html", { "form": form })
 
 
-
 @login_required
 def survey_careerinfo_first(request):
     """ Career info form is shown on success of the survey_contactinfo view/form. """
@@ -117,6 +116,7 @@ def survey_careerinfo_first(request):
         else:
             form = SurveyCareerInfoForm()
     return render(request, "survey/survey_careerinfo_first.html", { "form": form })
+
 
 @login_required
 def survey_careerinfo_second(request):
@@ -196,5 +196,7 @@ def survey_careerinfo_third(request):
             form = SurveyCareerInfoForm()
     return render(request, "survey/survey_careerinfo_third.html", { "form": form })
 
+
+@login_required
 def survey_success(request):
     return render(request, "survey/survey_complete.html", {} )

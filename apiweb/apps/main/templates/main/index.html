@@ -20,12 +20,16 @@
         <table class="table">
             <thead><tr><th style="padding-top: 0px; padding-bottom: 0px;"><h2 class="text-left" style="margin-bottom: 0px;"> Latest Interview </h2></tr></th></thead>
             <tbody><tr><td style="padding-top: 0px; padding-bottom: 0px;">
+                {% if request.user.is_authenticated %}
                 <h5 class="text-left">{{ latest_post.date_published|date:"M d, Y"}} • <a href="{% url 'alumni:alumnus-detail' latest_post.alumnus.slug %}">{{ latest_post.alumnus.full_name }}</a></h5>
                 {% autoescape off %}
                 {{ latest_post.teaser }}
                 <a href="{% url 'interviews:detail' latest_post.slug %}">
                     <button class="btn btn-primary pull-right" type="submit">Read More</button></a>
                 {% endautoescape %}
+                {% else %} 
+                <h5 class="text-left"><a href="{% url 'site_login' %}">Please login to view this content.</a></h5>
+                {% endif %}
             </td></tr></tbody>
         </table>
         {% endif %}
@@ -38,10 +42,14 @@
             </thead>
             <tbody>
             <tr><td style="padding-top: 0px; padding-bottom: 0px;">
+                {% if request.user.is_authenticated %}
                     <h5 class="text-left">
                         {{ latest_thesis.date_of_defence|date:"M d, Y" }} • <a href="{% url 'alumni:alumnus-detail' latest_thesis.alumnus.slug %}">{{ latest_thesis.author }}</a>
                     </h5>
                     <a href="{% url 'research:thesis-detail' latest_thesis.slug %}">{{ latest_thesis.title }}</a>
+                    {% else %}
+                    <h5 class="text-left"><a href="{% url 'site_login' %}">Please login to view this content.</a></h5
+                    {% endif %}
 
             </td></tr>
             </tbody>

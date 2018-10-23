@@ -8,6 +8,7 @@ from django.http import Http404
 from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from ..research.models import Thesis
@@ -16,6 +17,7 @@ from ..research.models import Thesis
 register = template.Library()
 
 
+@login_required
 def thesis_list(request):
     theses = Thesis.objects.all()
 
@@ -130,9 +132,13 @@ def thesis_list(request):
     return render(request, "research/thesis_list.html", {
         "theses": theses, "theses_per_page": theses_per_page })
 
+
+@login_required
 def thesis_detail(request, slug):
     thesis = get_object_or_404(Thesis, slug=slug)
     return render(request, "research/thesis_detail.html", {"thesis": thesis})
 
+
+@login_required
 def thesis_has_no_pdf(request):
     return render(request, "research/thesis_not_found.html")

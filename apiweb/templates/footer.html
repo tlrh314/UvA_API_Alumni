@@ -15,10 +15,14 @@
             {% if latest_interviews %}
             <div class="col-xs-12 col-sm-6 col-md-3 footer-column text-centered-xs-sm">
                 <h3> Interviews </h3>
-                <ul>
+                <ul> 
+                {% if request.user.is_authenticated %}
                     {% for interview in latest_interviews %}
                     <li><a href="{% url 'interviews:detail' interview.slug %}"> {{ interview.alumnus.full_name }} {{ interview.title }} <span>| {{ interview.date_published|date }}</span></a></li>
                     {% endfor %}
+                {% else %}
+                <li><a href="{% url 'site_login' %}">Please login to view this content.</a></li>
+                {% endif %}
                 </ul>
             </div>
             {% endif %}
@@ -30,9 +34,13 @@
             {% endif %}
                 <h3> Recent Theses </h3>
                 <ul>
+                {% if request.user.is_authenticated %}
                     {% for thesis in latest_theses %}
                     <li><a href=" {% url 'research:thesis-detail' thesis.slug %} "> {{ thesis.alumnus.full_name }}  <span>| {{ thesis.date_of_defence|date }}</span> </a></li>
                     {% endfor %}
+                {% else %}
+                    <li><a href="{% url 'site_login' %}">Please login to view this content.</a></li>
+                {% endif %}
                 </ul>
             </div>
 
@@ -73,7 +81,7 @@
                     <li><a href="https://www.linkedin.com/groups/12005398" target="_blank"> <i class="fa fa-fw fa-linkedin"></i> </a></li>
 
                 </ul>
-            <p>&copy; Anton Pannekoek Institute, 2017. All rights reserved.</p>
+            <p>&copy; Anton Pannekoek Institute, 2017-2018. All rights reserved.</p>
         </div>
         </div>
     </footer>

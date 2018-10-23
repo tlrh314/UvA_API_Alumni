@@ -16,6 +16,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic import FormView
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse, reverse_lazy
 
 from .forms import SearchForm
@@ -24,6 +25,8 @@ from ...settings import GOOGLE_CX_ID
 from ..alumni.models import Alumnus
 from ..research.models import Thesis
 
+
+@login_required
 def search(request):
     """  Searches through following fields:
             - Alumni first name

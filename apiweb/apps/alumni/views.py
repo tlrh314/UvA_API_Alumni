@@ -8,6 +8,7 @@ from django.http import Http404
 from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Alumnus
@@ -16,6 +17,7 @@ from .models import Alumnus
 register = template.Library()
 
 
+@login_required
 def alumnus_list(request):
     alumni = Alumnus.objects.all()
 
@@ -171,6 +173,7 @@ def alumnus_list(request):
     return render(request, "alumni/alumnus_list.html", {"alumni": alumni, "alumni_per_page": int(alumni_per_page)})
 
 
+@login_required
 def alumnus_detail(request, slug):
     alumnus = get_object_or_404(Alumnus, slug=slug)
     return render(request, "alumni/alumnus_detail.html", {"alumnus": alumnus})

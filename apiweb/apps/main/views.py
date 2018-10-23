@@ -253,7 +253,7 @@ def site_careerinfo(request, which_position_value=0):
             jobafterleaving.alumnus.survey_info_updated = datetime.now()
             jobafterleaving.alumnus.save()
             jobafterleaving.save()
-            
+
             jobname = JobAfterLeaving.WHICH_POSITION_CHOICES[int(which_position_value)][1]
             if jobname == "Current":
                 jobname += " Position"
