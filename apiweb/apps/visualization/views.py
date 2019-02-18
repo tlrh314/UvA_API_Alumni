@@ -1,7 +1,7 @@
 from django.http import Http404
+from django.urls import reverse
 from django.db.models import Count
 from django.shortcuts import render
-from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 

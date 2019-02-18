@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, absolute_import, division
 
-from django.conf.urls import include, url
+from django.urls import include, path
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import views as auth_views
 
@@ -13,40 +13,40 @@ from .views import AlumnusAutocomplete
 
 
 urlpatterns = [
-    url(r'^$', index, name='index'),
-    url(r'^404.html$', page_not_found, name='page_not_found'),
-    url(r'^contact/$', contact, name='contact'),
-    url(r'^thanks/$', contact_success, name='contact_success'),
-    url(r'^privacy-policy/$', privacy_policy, name='privacy_policy'),
+    path('', index, name='index'),
+    path('404.html', page_not_found, name='page_not_found'),
+    path('contact/', contact, name='contact'),
+    path('thanks/', contact_success, name='contact_success'),
+    path('privacy-policy/', privacy_policy, name='privacy_policy'),
 
-    url(r'^login/$', auth_views.LoginView.as_view(
+    path('login/', auth_views.LoginView.as_view(
         template_name='main/login.html',
         ), name="site_login"
     ),
-    url(r'^redirect_to_profile/$', redirect_to_profile, name='login_success'),
-    url(r'^logout/$', auth_views.LogoutView.as_view(
+    path('redirect_to_profile/', redirect_to_profile, name='login_success'),
+    path('logout/', auth_views.LogoutView.as_view(
         template_name='main/logged_out.html'
         ), name='site_logout'
     ),
 
-    url(r'^password_change/$', auth_views.PasswordChangeView.as_view(
+    path('password_change/', auth_views.PasswordChangeView.as_view(
         template_name='main/password_change_form.html',
         success_url = reverse_lazy('site_password_change_done')
         ), name='site_password_change'
     ),
-    url(r'^password_change/done/$', auth_views.PasswordChangeDoneView.as_view(
+    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='main/password_change_done.html',
         ), name='site_password_change_done'
     ),
 
-    url(r"^update_contactinfo/$", site_contactinfo, name="site_contactinfo"),
-    url(r"^update_careerinfo/(?P<which_position_value>[0-3])$", site_careerinfo, name="site_careerinfo"),
-    url(r"^select_thesis/$", site_thesis_select, name="site_thesis_select"),
-    url(r"^update_thesis/(?P<slug>.*)$", site_thesis_update, name="site_thesis_update"),
-    url(r"^alumnus-autocomplete/$", AlumnusAutocomplete.as_view(), name='alumnus-autocomplete'),
-    url(r"^create_thesis/$", site_thesis_create, name="site_thesis_create"),
+    path("update_contactinfo/", site_contactinfo, name="site_contactinfo"),
+    path("update_careerinfo/<which_position_value>/", site_careerinfo, name="site_careerinfo"),
+    path("select_thesis/", site_thesis_select, name="site_thesis_select"),
+    path("update_thesis/<slug>", site_thesis_update, name="site_thesis_update"),
+    path("alumnus-autocomplete/", AlumnusAutocomplete.as_view(), name='alumnus-autocomplete'),
+    path("create_thesis/", site_thesis_create, name="site_thesis_create"),
 
-    url(r'^password_reset/$', auth_views.PasswordResetView.as_view(
+    path('password_reset/', auth_views.PasswordResetView.as_view(
             template_name='main/password_reset_form.html',
             extra_context = {
                 "api_phonenumber_formatted": contactinfo(None)["api_phonenumber_formatted"],
@@ -60,7 +60,7 @@ urlpatterns = [
             success_url = reverse_lazy('site_password_reset_done')
         ), name='site_password_reset'
     ),
-    url(r'^password_reset/done/$', auth_views.PasswordResetDoneView.as_view(
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(
             template_name='main/password_reset_done.html',
             extra_context = {
                 "api_phonenumber_formatted": contactinfo(None)["api_phonenumber_formatted"],
@@ -68,13 +68,13 @@ urlpatterns = [
             },
         ), name='site_password_reset_done'
     ),
-    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+    path('reset/<uidb64>/<token>/',
         auth_views.PasswordResetConfirmView.as_view(
             template_name='main/password_reset_confirm.html',
             success_url = reverse_lazy('site_password_reset_complete')
         ), name='site_password_reset_confirm'
     ),
-    url(r'^reset/done/$', auth_views.PasswordResetCompleteView.as_view(
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(
         template_name='main/password_reset_complete.html'
         ), name='site_password_reset_complete'
     ),

@@ -7,10 +7,10 @@ import logging
 from datetime import datetime
 
 from django import forms
-from django.forms import extras
+from django.urls import reverse
+from django.forms import widgets
 from django.forms.utils import ErrorList
 from django.template import loader
-from django.core.urlresolvers import reverse
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth import get_user_model, _get_backends
 from django.contrib.auth.forms import PasswordResetForm
@@ -185,14 +185,14 @@ class SurveyCareerInfoForm(forms.ModelForm):
 
     start_date = forms.DateField(
         required=False,
-        widget=extras.SelectDateWidget(
+        widget=widgets.SelectDateWidget(
             years=years_choices,
             attrs={"class":"datetime-input"})
         )
 
     stop_date = forms.DateField(
         required=False,
-        widget=extras.SelectDateWidget(
+        widget=widgets.SelectDateWidget(
             years=years_choices,
             attrs={"class":""}))
 
@@ -277,7 +277,7 @@ class SurveyContactInfoForm(forms.ModelForm):
 
     birth_date = forms.DateField(
         required=False,
-        widget=extras.SelectDateWidget(
+        widget=widgets.SelectDateWidget(
             years=years_choices,
             attrs={"class":""}))
 

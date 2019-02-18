@@ -67,7 +67,7 @@ class PreviousPosition(models.Model):
         (9, "Other"), (10, "UvA API"), (11, "UvA GRAPPA"),
     )
 
-    alumnus          = models.ForeignKey("Alumnus", related_name="positions")
+    alumnus          = models.ForeignKey("Alumnus", related_name="positions", on_delete=models.CASCADE)
     date_start       = models.DateField(_("Starting date"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
     date_stop        = models.DateField(_("Date finished"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
     type             = models.ForeignKey(PositionType, related_name="alumnus_set",

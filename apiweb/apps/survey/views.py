@@ -2,11 +2,11 @@ from __future__ import unicode_literals, absolute_import, division
 
 from datetime import datetime
 
+from django.urls import reverse
 from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, RedirectView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required

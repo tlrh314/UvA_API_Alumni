@@ -58,8 +58,8 @@ class JobAfterLeaving(models.Model):
     )
 
 
-    alumnus             = models.ForeignKey(Alumnus, related_name="job")
-    sector              = models.ForeignKey(Sector, blank=True, null=True)
+    alumnus             = models.ForeignKey(Alumnus, related_name="job", on_delete=models.CASCADE)
+    sector              = models.ForeignKey(Sector, blank=True, null=True, on_delete=models.SET_NULL)
     company_name        = models.CharField(_("Company Name"), blank=True, max_length=100)
     position_name       = models.CharField(_("Position Name"), blank=True, max_length=100)
     is_inside_academia  = models.PositiveSmallIntegerField(_("In Academia"), choices=YES_OR_NO, default=1)

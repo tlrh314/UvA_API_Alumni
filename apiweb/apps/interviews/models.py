@@ -50,7 +50,7 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    author          = models.ForeignKey(Alumnus)
+    author          = models.ForeignKey(Alumnus, on_delete=models.CASCADE)
     title           = models.CharField(max_length=300)
     slug            = models.SlugField(unique=True, blank=True, null=True)
     teaser          = models.TextField(blank=True, help_text=_("Short teaser for the list of posts."))
@@ -62,7 +62,8 @@ class Post(models.Model):
     # )
     content         = HTMLField(default="")
 
-    alumnus         = models.ForeignKey(Alumnus, related_name="interviews", blank=True, null=True)
+    alumnus         = models.ForeignKey(Alumnus, related_name="interviews",
+        blank=True, null=True, on_delete=models.SET_NULL)
 
     is_published    = models.BooleanField(default=False)
     date_created    = models.DateTimeField(auto_now_add=True)
@@ -70,7 +71,8 @@ class Post(models.Model):
     last_updated_by = models.ForeignKey(get_user_model(), null=True,
         on_delete=models.SET_NULL, related_name="posts_updated")
 
-    category = models.ForeignKey(Category, blank=True, null=True)
+    category = models.ForeignKey(Category, blank=True, null=True,
+        on_delete=models.SET_NULL)
     # featured = models.BooleanField(default=False,
     #         help_text="Should this post be shown in the featured list?")
     # top_story = models.BooleanField(default=False,

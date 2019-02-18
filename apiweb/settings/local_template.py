@@ -129,6 +129,7 @@ LOGGING = {
         },
         'simple': {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        }
     },
     'filters': {
         'require_debug_false': {

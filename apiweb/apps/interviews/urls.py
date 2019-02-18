@@ -1,7 +1,8 @@
-from django.conf.urls import url
+from django.urls import path
 from . import views
 
+app_name = "interviews"
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'(?P<slug>.*)/$', views.detail, name='detail')
+    path('', views.index, name='index'),
+    path('<slug>', views.detail, name='detail')
 ]

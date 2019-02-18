@@ -36,7 +36,7 @@ class Thesis(models.Model):
     )
 
     # Information about the thesis
-    alumnus          = models.ForeignKey(Alumnus, related_name="theses")
+    alumnus          = models.ForeignKey(Alumnus, related_name="theses", on_delete=models.CASCADE)
     type             = models.CharField(max_length=3, choices=THESIS_TYPE, default="PhD")
     date_start       = models.DateField(_("Starting date"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
     date_stop        = models.DateField(_("Date finished"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')

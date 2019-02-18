@@ -14,10 +14,10 @@ except ImportError:
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
 from django.views.generic import FormView
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse, reverse_lazy
 
 from .forms import SearchForm
 from ...settings import GOOGLE_API_KEY
