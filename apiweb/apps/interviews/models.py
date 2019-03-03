@@ -73,6 +73,7 @@ class Post(models.Model):
 
     category = models.ForeignKey(Category, blank=True, null=True,
         on_delete=models.SET_NULL)
+
     # featured = models.BooleanField(default=False,
     #         help_text="Should this post be shown in the featured list?")
     # top_story = models.BooleanField(default=False,
