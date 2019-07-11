@@ -14,8 +14,8 @@ from apiweb.context_processors import contactinfo
 
 admin.autodiscover()
 
-handler404 = 'main.views.page_not_found'
-handler500 = 'main.views.page_not_found'
+handler404 = "apiweb.apps.main.views.page_not_found"
+handler500 = handler404
 
 
 urlpatterns = [

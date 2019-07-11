@@ -61,7 +61,7 @@ def index(request):
     return render(request, "main/index.html", {"welcome_text": welcome, "latest_post": latest_post, "latest_thesis": latest_thesis})
 
 
-def page_not_found(request):
+def page_not_found(request, exception=None, template_name=None):
     # TODO: passing contactinfo is given to all templates in context_processors.py.
     # The page_not_found method does not need to give contactinfo to template?
     contactinfo = ContactInfo.objects.all()
@@ -70,7 +70,11 @@ def page_not_found(request):
     else:
         # Hardcoded in case ContactInfo has no instances.
         webmaster_email_address = "secr-astro-science@uva.nl"
-    return render(request, "404.html", {"webmaster_email_address": webmaster_email_address})
+    return render(request, "404.html", {
+        "webmaster_email_address": webmaster_email_address,
+        "request_path": request.path,
+        "exception": exception.__class__.__name__
+    })
 
 
 def contact(request):
