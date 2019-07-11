@@ -53,6 +53,15 @@ FLICKR_USERID = 'secret'
 FLICKR_SECRET = 'secret'
 FLICKR_TOKEN_PATH = os.path.join(BASE_DIR, 'databases', 'flickr')
 
+SENTRY_DSN_API = "secret"
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+sentry_sdk.init(
+    dsn=SENTRY_DSN_API,
+    integrations=[DjangoIntegration()],
+    environment="development"
+)
+
 
 DATABASES = {
     'default': {
