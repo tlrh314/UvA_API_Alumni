@@ -26,7 +26,7 @@ ipython-genutils==0.2.0
 jedi==0.10.2
 jsonfield==2.0.2
 Markdown==2.6.8
-oauthlib==2.0.2
+oauthlib==3.0.2
 olefile==0.44
 packaging==16.8
 pexpect==4.2.1
@@ -40,14 +40,14 @@ pyparsing==2.2.0
 python-utils==2.2.0
 pytz==2017.2
 reportlab==3.4.0
-requests==2.18.4
-requests-oauthlib==0.8.0
-requests-toolbelt==0.8.0
+requests==2.22.0
+requests-oauthlib==1.2.0
+requests-toolbelt==0.9.1
 simplegeneric==0.8.1
 six==1.10.0
 traitlets==4.3.2
 Unidecode==0.4.21
-urllib3==1.22
+urllib3==1.25.3
 URLObject==2.4.3
 wcwidth==0.1.7
 wget==3.2
