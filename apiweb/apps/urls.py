@@ -15,10 +15,15 @@ from apiweb.context_processors import contactinfo
 admin.autodiscover()
 
 handler404 = "apiweb.apps.main.views.page_not_found"
-handler500 = handler404
+handler500 = "apiweb.apps.main.views.handler500"
+
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
 
 
 urlpatterns = [
+    path('sentry-debug/', trigger_error),
     path('admin/filebrowser/', site.urls),
     path('tinymce/', include('tinymce.urls')),
     path('ajax_select/', include(ajax_select_urls)),

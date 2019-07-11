@@ -143,3 +143,6 @@ NEWS_LANGUAGES = ('en', 'nl')
 #NEWS_LANGUAGES = ('en',)  # 'nl')
 
 TEMPLATE403 = '403.html'
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'secret'  # overwritten in local.py

@@ -9,7 +9,7 @@ from django.urls import include, path, re_path
 
 
 handler404 = "apiweb.apps.main.views.page_not_found"
-handler500 = handler404
+handler500 = "apiweb.apps.main.views.handler500"
 
 urlpatterns = [
     path("", include("apiweb.apps.urls"))

@@ -3,7 +3,7 @@ from .base import *
 try:
     from .local import *
 except ImportError:
-    pass
+    raise
 
 # Add any base settings that should come after local, but
 try:

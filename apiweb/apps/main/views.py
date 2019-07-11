@@ -77,6 +77,17 @@ def page_not_found(request, exception=None, template_name=None):
     })
 
 
+def handler500(request, *args, **argv):
+    from django.conf import settings
+    from sentry_sdk import last_event_id
+
+    return render(request, "500.html", {
+        'sentry_event_id': last_event_id(),
+        'sentry_dsn': settings.SENTRY_DSN_API
+    }, status=500)
+
+
+
 def contact(request):
     form_class = ContactForm
 

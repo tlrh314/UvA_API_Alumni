@@ -23,10 +23,18 @@ from logging import handlers
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-ADMINS = (('Admin Naam', 'Admin@emailaddress.com'),
-          ('Admin2 Naam', 'Admin2@emailaddress.com'),)
-
-MANAGERS = ADMINS
+# ADMINS = (('Admin Naam', 'Admin@emailaddress.com'),
+#           ('Admin2 Naam', 'Admin2@emailaddress.com'),)
+#
+# MANAGERS = ADMINS
+SENTRY_DSN_API = "secret"
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+sentry_sdk.init(
+    dsn=SENTRY_DSN_API,
+    integrations=[DjangoIntegration()],
+    environment="development"
+)
 
 
 DEBUG = True
@@ -52,16 +60,6 @@ FLICKR_APIKEY = 'secret'
 FLICKR_USERID = 'secret'
 FLICKR_SECRET = 'secret'
 FLICKR_TOKEN_PATH = os.path.join(BASE_DIR, 'databases', 'flickr')
-
-SENTRY_DSN_API = "secret"
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-sentry_sdk.init(
-    dsn=SENTRY_DSN_API,
-    integrations=[DjangoIntegration()],
-    environment="development"
-)
-
 
 DATABASES = {
     'default': {
