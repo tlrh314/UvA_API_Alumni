@@ -31,7 +31,7 @@ olefile==0.44
 packaging==16.8
 pexpect==4.7.0
 pickleshare==0.7.4
-Pillow==5.4.1
+Pillow==6.2.0
 progressbar2==3.34.2
 prompt-toolkit==1.0.15
 ptyprocess==0.5.2
