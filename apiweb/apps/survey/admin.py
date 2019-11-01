@@ -44,7 +44,7 @@ class ExtendedActionsMixin(object):
             request, self.model, list_display,
             list_display_links, list_filter, self.date_hierarchy,
             search_fields, list_select_related, self.list_per_page,
-            self.list_max_show_all, self.list_editable, self,
+            self.list_max_show_all, self.list_editable, self, self.sortable_by
         )
 
     def get_filtered_queryset(self, request):
@@ -77,7 +77,7 @@ class JobAfterLeavingAdminForm(forms.ModelForm):
 
 @admin.register(JobAfterLeaving)
 class JobAfterLeavingAdmin(ExtendedActionsMixin, admin.ModelAdmin):
-    list_display = ("alumnus", "which_position", "show_job", "sector", "company_name", "position_name", 
+    list_display = ("alumnus", "which_position", "show_job", "sector", "company_name", "position_name",
         "is_inside_academia", "is_inside_astronomy", "location_job", "start_date", "stop_date")
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
     list_filter = ("which_position", "is_inside_academia", "is_inside_astronomy", "sector", )
