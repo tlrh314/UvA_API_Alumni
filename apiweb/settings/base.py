@@ -178,7 +178,7 @@ DEFAULT_FROM_EMAIL = "no-reply@api-alumni.nl"
 SERVER_EMAIL = "no-reply@api-alumni.nl"
 
 GOOGLE_API_KEY = env('GOOGLE_API_KEY')
-GOOGLE_CX_ID env('GOOGLE_CX_ID')
+GOOGLE_CX_ID = env('GOOGLE_CX_ID')
 
 FLICKR_APIKEY = env('FLICKR_APIKEY')
 FLICKR_USERID = env('FLICKR_USERID')
@@ -191,7 +191,7 @@ DATABASES = {
     # 'wiki':  env.db('DATABASE_WIKI'),
 }
 if "mysql" in DATABASES["default"]["ENGINE"]:
-    if not DATABASES["default"]["OPTIONS"]:
+    if "OPTIONS" not in DATABASES["default"]:
         DATABASES["default"]["OPTIONS"] = dict()
     DATABASES["default"]["OPTIONS"]["init_command"] = "SET foreign_key_checks = 0;"
 DATABASE_ROUTERS = [
