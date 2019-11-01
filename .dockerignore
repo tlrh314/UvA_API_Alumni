@@ -1,0 +1,33 @@
+# Auto-generated
+**/__pycache__/
+**/*.swp
+**/*.pyc
+**/.DS_Store
+
+# Not needed to run the application
+.astropy/
+.cache/
+.config/
+.coveragerc
+.dockerignore
+.git/
+.gitignore
+.ipython/
+.local/
+.mysql_history
+.pki/
+.travis/
+.travis.yml
+.viminfo
+Dockerfile
+docker-compose*
+nginx/
+
+# Development storage location, and do not want to copy secrets into the image
+**/*.sqlite3
+storage/
+settings/.env
+staticfiles/node_modules
+static
+**/*.dot
+**/*.pdf

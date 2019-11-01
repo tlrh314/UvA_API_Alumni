@@ -1,12 +1,10 @@
 from .base import *
-# Attempt to add local settings
-try:
-    from .local import *
-except ImportError:
-    raise
 
-# Add any base settings that should come after local, but
-try:
-    from .extra import *
-except ImportError:
-    pass
+# NB, Load the filebrowser settings after base to ensure SECRET_KEY is set
+from filebrowser.sites import site
+from django.core.files.storage import FileSystemStorage
+site.storage = FileSystemStorage(
+    location=STATIC_ROOT,
+    base_url=STATIC_URL
+)
+site.directory = "img/"

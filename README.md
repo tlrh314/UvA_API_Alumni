@@ -1,12 +1,12 @@
 # UvA_API_Alumni
 
 - **Dependencies**
-  - Python 3.7.3
-  - Django 2.2.4
+  - Python 3.7.5
+  - Django 2.2.6
   - See requirements.txt for package dependencies 
   - Note that iPython and its dependencies are not strictly necessary
 
-- **Installation**
+- **Installation (Option 1)**
   - Install dependencies (assuming Debian based GNU/Linux) `sudo apt install apache2 apache2-dev apache2-utils apache2-mpm-prefork mysql mysql-dev python-dev libapache2-mod-wsgi libffi-dev python-cffi libjpeg-dev zlib1g-dev openssl build-essential libssl-dev`
   - Create virtualenvironment: `virtualenv api_alumni`
   - Activate virtualenv: `source api_alumni/bin/activate`
@@ -63,3 +63,34 @@
     - `export LC_ALL='en_US.UTF-8'`
     - Added the following line to the apach2 server config `/etc/apache2/apache2.conf`
     - `AddDefaultCharset utf-8`
+
+## **Alternatively, run with Docker (Option 2a)**
+- Make sure Docker Engine and docker-compose are installed 
+  (see [Docker docs[(https://docs.docker.com/install/))
+
+### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
+- Build the image: `docker build -t apiweb .`
+- Setup local settings: `cp apiweb/settings/.env.example apiweb/settings/.env`
+- Edit `settings/.env` to tailor to your machine.
+- Run the server: `docker run --rm -it -v "$(pwd)/apiweb/settings/.env:/apiweb/settings/.env" -v "$(pwd)":/apiweb -p 1337:1337 
+  --name runserver apiweb bash -c "python manage.py runserver 0.0.0.0:1337"` (and leave running)
+  - Visit the website at http://localhost:1337
+- In a new terminal, one can execute commands in the running container. Load the fixtures:
+  - `docker exec runserver bash -c "python manage.py loaddata apps/*/fixtures/*.json"`
+- In a new terminal, one can attach to the container in an interactive session:
+  - `docker exec -it runserver bash`
+
+### **Running the full stack: nginx + uwsgi w/ mariadb (mysql) database (Option 2b)**
+- `./nginx/generate_sslcert.sh`
+- `docker-compose up -d mariadb`
+  - On first launch, the database and user will be created (you don't have to do anything)
+- `docker-compose build django nginx`
+- `docker-compose up --build`
+- In a new terminal, one can attach to the container in an interactive session:
+  - `docker exec -it apiweb bash`
+- Now add the initial data (run this command in the container!)
+  - `python manage.py loaddata apps/*/fixtures/*.json` 
+- Create a superuser (run this command in the container)
+  - `python manage.py createsuperuser`
+- Visit the website at https://localhost (and accept the self-signed 
+  certificate warning of the browser)

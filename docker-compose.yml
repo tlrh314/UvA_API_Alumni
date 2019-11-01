@@ -1,0 +1,71 @@
+version: "3.7"
+
+services:
+
+  nginx:
+    build:
+      context: nginx
+    image: apiweb-nginx
+    depends_on:
+      - 'django'
+    restart: unless-stopped
+    volumes:
+      - ${APIWEB_STORAGE-./storage/}certbot/conf:/etc/letsencrypt
+      - ${APIWEB_STORAGE-./storage/}certbot/www:/var/www/certbot
+      - ${APIWEB_STORAGE-./storage/}django/media:/var/www/apiweb/media
+      - ${APIWEB_STORAGE-./storage/}django/static:/var/www/apiweb/static
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ${APIWEB_STORAGE-./storage/}certbot/conf:/etc/letsencrypt
+      - ${APIWEB_STORAGE-./storage/}certbot/www:/var/www/certbot
+    restart: unless-stopped
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  mariadb:
+    image: mariadb:10.4
+    environment:
+      - MYSQL_ROOT_PASSWORD=${APIWEB_MYSQL_ROOT_PASSWORD-secret}
+      - MYSQL_USER=${APIWEB_MYSQL_USER-dbuser}
+      - MYSQL_PASSWORD=${APIWEB_MYSQL_PASSWORD-dbpassword}
+      - MYSQL_DATABASE=${APIWEB_MYSQL_DATABASE-apiweb}
+    volumes:
+      - ${APIWEB_STORAGE-./storage/}mariadb:/var/lib/mysql
+    restart: unless-stopped
+
+  django:
+    build:
+      context: .
+    image: apiweb
+    environment:
+      DJANGO_SETTINGS_MODULE: apiweb.settings
+      DJANGO_ENV_FILE: apiweb/settings/.env
+    depends_on:
+      - 'mariadb'
+    volumes:
+      - ./uwsgi:/app/uwsgi
+      - ./apiweb:/app/apiweb
+      - ./databases:/app/databases
+      - ./manage.py:/app/manage.py
+      - ./entrypoint.sh:/app/entrypoint.sh
+      - ./apiweb/settings/.env:/app/apiweb/settings/.env:ro
+      - ${APIWEB_STORAGE-./storage/}django/log:/app/log:rw
+      - ${APIWEB_STORAGE-./storage/}django/media:/app/apiweb/media:rw
+      - ${APIWEB_STORAGE-./storage/}django/static:/app/apiweb/static:rw
+    restart: unless-stopped
+    command: ['uwsgi', '--ini', 'uwsgi/apiweb.ini']
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    command: 'redis-server ${REDIS_PASSWORD-}'
+
+
+networks:
+  default:
+    name: supaharris
