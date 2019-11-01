@@ -87,7 +87,7 @@ class SendSurveyForm(PasswordResetForm):
             "email": email,
             "domain": domain,
             "site_name": site_name,
-            "uid": urlsafe_base64_encode(force_bytes(alumnus.pk)).decode(),
+            "uid": urlsafe_base64_encode(force_bytes(alumnus.pk)),
             "user": alumnus,
             "token": token_generator.make_token(alumnus),
             "protocol": "https" if use_https else "http",
