@@ -64,14 +64,15 @@
     - Added the following line to the apach2 server config `/etc/apache2/apache2.conf`
     - `AddDefaultCharset utf-8`
 
-## **Alternatively, run with Docker (Option 2a)**
+## **Alternatively, run with Docker (Option 2)**
 - Make sure Docker Engine and docker-compose are installed 
-  (see [Docker docs[(https://docs.docker.com/install/))
+  (see [Docker docs](https://docs.docker.com/install/))
 
 ### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
 - Build the image: `docker build -t apiweb .`
 - Setup local settings: `cp apiweb/settings/.env.example apiweb/settings/.env`
 - Edit `settings/.env` to tailor to your machine.
+- TODO: command below misses a considerable number of volumes linked into the container. See `docker-compose.yml`
 - Run the server: `docker run --rm -it -v "$(pwd)/apiweb/settings/.env:/apiweb/settings/.env" -v "$(pwd)":/apiweb -p 1337:1337 
   --name runserver apiweb bash -c "python manage.py runserver 0.0.0.0:1337"` (and leave running)
   - Visit the website at http://localhost:1337
