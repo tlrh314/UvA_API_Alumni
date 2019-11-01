@@ -72,7 +72,7 @@ class ThesisListFilter(admin.SimpleListFilter):
             return queryset.filter(Q(title__isnull=True) | Q(title__exact=""))
 
 @admin.register(Thesis)
-class ThesisAdmin(ExtendedActionsMixin, admin.ModelAdmin):
+class ThesisAdmin(admin.ModelAdmin):
     list_display = ("get_author", "title", "show_year", "type")
     list_filter = ("type", ThesisListFilter)
     search_fields = ("title", "alumnus__last_name", "alumnus__first_name",

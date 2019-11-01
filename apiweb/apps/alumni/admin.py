@@ -163,7 +163,7 @@ class AcademicTitleAdmin(admin.ModelAdmin):
 
 
 @admin.register(Alumnus)
-class AlumnusAdmin(ExtendedActionsMixin, UserAdmin):
+class AlumnusAdmin(UserAdmin):
     form = AlumnusAdminForm
     add_form = CustomUserCreationForm
     change_password_form = AdminPasswordChangeForm

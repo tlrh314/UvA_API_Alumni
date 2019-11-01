@@ -76,7 +76,7 @@ class JobAfterLeavingAdminForm(forms.ModelForm):
     # location_job = AutoCompleteSelectField('location_job', required=True, help_text=None)
 
 @admin.register(JobAfterLeaving)
-class JobAfterLeavingAdmin(ExtendedActionsMixin, admin.ModelAdmin):
+class JobAfterLeavingAdmin(admin.ModelAdmin):
     list_display = ("alumnus", "which_position", "show_job", "sector", "company_name", "position_name",
         "is_inside_academia", "is_inside_astronomy", "location_job", "start_date", "stop_date")
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
