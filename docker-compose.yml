@@ -48,11 +48,7 @@ services:
     depends_on:
       - 'mariadb'
     volumes:
-      - ./uwsgi:/app/uwsgi
-      - ./apiweb:/app/apiweb
-      - ./databases:/app/databases
-      - ./manage.py:/app/manage.py
-      - ./entrypoint.sh:/app/entrypoint.sh
+      - .:/app
       - ./apiweb/settings/.env:/app/apiweb/settings/.env:ro
       - ${APIWEB_STORAGE-./storage/}django/log:/app/log:rw
       - ${APIWEB_STORAGE-./storage/}django/media:/app/apiweb/media:rw
