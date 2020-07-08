@@ -15,8 +15,8 @@ from .views import AlumnusAutocomplete
 urlpatterns = [
     path('', index, name='index'),
     path('404.html', page_not_found, name='page_not_found'),
-    path('contact/', contact, name='contact'),
-    path('thanks/', contact_success, name='contact_success'),
+    # path('contact/', contact, name='contact'),
+    # path('thanks/', contact_success, name='contact_success'),
     path('privacy-policy/', privacy_policy, name='privacy_policy'),
 
     path('login/', auth_views.LoginView.as_view(
