@@ -43,7 +43,7 @@
                                 <li><a href="{% url 'alumni:alumnus-detail' user.slug %}"><span>MY PROFILE</span></a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'site_password_change' %}"><span>CHANGE PASSWORD</span></a></li>
-                                {# <li><a href="{% url 'site_contactinfo' %}"><span>UPDATE CONTACTINFO</span></a></li> #}
+                                <li><a href="{% url 'site_contactinfo' %}"><span>UPDATE CONTACTINFO</span></a></li>
                                 <li><a href="{% url 'site_thesis_select' %}"><span>UPDATE THESES</span></a></li>
                                 <li><a href="{% url 'site_careerinfo' 0 %}"><span>UPDATE CURRENT POSITION</span></a></li>
                                 <li><a href="{% url 'site_careerinfo' 1 %}"><span>UPDATE FIRST JOB</span></a></li>
@@ -65,8 +65,10 @@
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
                     <li><a href="{% url 'interviews:index' %}"><span>INTERVIEWS</span></a></li>
                     {% endif %}
+                    {% comment %}
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
                     <li><a href="{% url 'contact' %}"><span>CONTACT</span></a></li>
+                    {% endcomment %}
                     {% if request.user.is_authenticated %}
                     <li class="hidden-xs hidden-sm hidden-md"><a>|</a></li>
                     <li class="dropdown">
