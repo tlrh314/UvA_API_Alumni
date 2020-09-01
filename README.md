@@ -98,14 +98,22 @@
 
 ## Testing the code
 To run all the tests
+
 - `python manage.py test`
+
 Or to run tests in one specific file
+
 - `python manage.py test apiweb.apps.main.tests`
+
 Or to run one specific `TestCase`
+
 - `python manage.py test apiweb.apps.main.tests.PasswordResetTestCase`
+
 Or to run one specific test in one specific `TestCase`
+
 - `python manage.py test apiweb.apps.main.tests.PasswordResetTestCase.test_password_reset_complete`
 
 To speed up running the test suite one can keep the database afterwards so the
 next iteration does not need to create it:
+
 - `python manage.py test --keepdb`
