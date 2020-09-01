@@ -1,5 +1,5 @@
 from django.contrib.auth.tokens import default_token_generator
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -15,6 +15,9 @@ class PasswordResetTestCase(TestCase):
         cls.ralph.set_password(cls.ralph_password)
         cls.ralph.save()
 
+    def setUp(self):
+        self.client = Client()
+
     def test_password_reset(self):
         url = reverse("site_password_reset")
         self.assertEqual(url, "/password_reset/")
@@ -22,6 +25,10 @@ class PasswordResetTestCase(TestCase):
     def test_password_reset_done(self):
         url = reverse("site_password_reset_done",)
         self.assertEqual(url, "/password_reset/done/")
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "main/password_reset_done.html")
 
     def test_password_reset_confirm(self):
         url = reverse(
