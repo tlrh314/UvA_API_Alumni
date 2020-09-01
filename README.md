@@ -3,7 +3,7 @@
 - **Dependencies**
   - Python 3.8.5
   - Django 2.2.15
-  - See requirements.txt for package dependencies 
+  - See requirements.txt for package dependencies
   - Note that iPython and its dependencies are not strictly necessary
 
 - **Installation (Option 1)**
@@ -16,7 +16,7 @@
   - Edit local_settings to tailor to your machine.
 
 - **Create directories for the databases, create database and load initial data**
-  - **Development**: 
+  - **Development**:
   - `mkdir -p apiweb/databases`
   - `touch apiweb/templates/piwik.html`
   - Create sql dump at production server `mysqldump -u root -p apialumni > ~/sqldump_$(date "+%Y%m%d").sql` (assuming databasename is 'apialumni')
@@ -45,7 +45,7 @@
 - **Create directories for Filebrowser**
   - `mkdir -p apiweb/media/uploads`
   - `mkdir -p apiweb/media/_versions`
-  
+
 - **On production only, also set permissions for Apache2**
   - `setfacl -m u::rwx,u:www-data:rwx,g::rwx,o:rx apiweb/databases `
   - `setfacl -d -m u::rwx,u:www-data:rwx,g::rwx,o:rx apiweb/media/uploads`
@@ -65,7 +65,7 @@
     - `AddDefaultCharset utf-8`
 
 ## **Alternatively, run with Docker (Option 2)**
-- Make sure Docker Engine and docker-compose are installed 
+- Make sure Docker Engine and docker-compose are installed
   (see [Docker docs](https://docs.docker.com/install/))
 
 ### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
@@ -73,7 +73,7 @@
 - Setup local settings: `cp apiweb/settings/.env.example apiweb/settings/.env`
 - Edit `settings/.env` to tailor to your machine.
 - TODO: command below misses a considerable number of volumes linked into the container. See `docker-compose.yml`
-- Run the server: `docker run --rm -it -v "$(pwd)/apiweb/settings/.env:/apiweb/settings/.env" -v "$(pwd)":/apiweb -p 1337:1337 
+- Run the server: `docker run --rm -it -v "$(pwd)/apiweb/settings/.env:/apiweb/settings/.env" -v "$(pwd)":/apiweb -p 1337:1337
   --name runserver apiweb bash -c "python manage.py runserver 0.0.0.0:1337"` (and leave running)
   - Visit the website at http://localhost:1337
 - In a new terminal, one can execute commands in the running container. Load the fixtures:
@@ -90,8 +90,22 @@
 - In a new terminal, one can attach to the container in an interactive session:
   - `docker exec -it apiweb bash`
 - Now add the initial data (run this command in the container!)
-  - `python manage.py loaddata apps/*/fixtures/*.json` 
+  - `python manage.py loaddata apps/*/fixtures/*.json`
 - Create a superuser (run this command in the container)
   - `python manage.py createsuperuser`
-- Visit the website at https://localhost (and accept the self-signed 
+- Visit the website at https://localhost (and accept the self-signed
   certificate warning of the browser)
+
+## Testing the code
+To run all the tests
+- `python manage.py test`
+Or to run tests in one specific file
+- `python manage.py test apiweb.apps.main.tests`
+Or to run one specific `TestCase`
+- `python manage.py test apiweb.apps.main.tests.PasswordResetTestCase`
+Or to run one specific test in one specific `TestCase`
+- `python manage.py test apiweb.apps.main.tests.PasswordResetTestCase.test_password_reset_complete`
+
+To speed up running the test suite one can keep the database afterwards so the
+next iteration does not need to create it:
+- `python manage.py test --keepdb`

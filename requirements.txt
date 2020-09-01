@@ -12,6 +12,8 @@ django-extensions==3.0.4
 django-filebrowser-no-grappelli==3.8.0
 django-nested-inline==0.4.2
 django-tinymce4-lite==1.8.0
+factory-boy==3.0.1
+Faker==4.1.2
 flickrapi==2.4.0
 idna==2.10
 ipython==7.17.0
