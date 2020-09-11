@@ -46,8 +46,8 @@ COPY uwsgi /app/uwsgi
 COPY manage.py /app/manage.py
 COPY entrypoint.sh /app/entrypoint.sh
 
-RUN chown -R apiweb:apiweb /app/apiweb
+RUN chown -R apiweb:apiweb /app
 
-USER apiweb 
+USER apiweb
 
 ENTRYPOINT ["/app/entrypoint.sh"]
