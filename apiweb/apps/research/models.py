@@ -1,24 +1,24 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
 import os
 import os.path
 
-from django.db import models
 from django.conf import settings
-from django.db import IntegrityError
+from django.db import IntegrityError, models
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
-
+from django.utils.translation import ugettext_lazy as _
 from tinymce.models import HTMLField
 
 from ..alumni.models import Alumnus
 
+
 def get_thesis_pdf_location(instance, filename):
     """ the media directory is already included """
     return os.path.join("uploads", "theses", instance.type, filename)
+
 
 def get_thesis_photo_location(instance, filename):
     """ the media directory is already included """
@@ -36,33 +36,58 @@ class Thesis(models.Model):
     )
 
     # Information about the thesis
-    alumnus          = models.ForeignKey(Alumnus, related_name="theses", on_delete=models.CASCADE)
-    type             = models.CharField(max_length=3, choices=THESIS_TYPE, default="PhD")
-    date_start       = models.DateField(_("Starting date"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
-    date_stop        = models.DateField(_("Date finished"), blank=True, null=True, help_text='Use format: YYYY-MM-DD')
+    alumnus = models.ForeignKey(
+        Alumnus, related_name="theses", on_delete=models.CASCADE
+    )
+    type = models.CharField(max_length=3, choices=THESIS_TYPE, default="PhD")
+    date_start = models.DateField(
+        _("Starting date"), blank=True, null=True, help_text="Use format: YYYY-MM-DD"
+    )
+    date_stop = models.DateField(
+        _("Date finished"), blank=True, null=True, help_text="Use format: YYYY-MM-DD"
+    )
 
     # Information about the thesis
-    title     = models.CharField(_("Thesis Title"), blank=True, max_length=180)
-    date_of_defence  = models.DateField(_("Defence date"), blank=True, null=True, help_text=_("Date of the thesis or defense. Use format: YYYY-MM-DD"))
-    url       = models.URLField(blank=True, null=True, help_text=_("UvA DARE or other URL to thesis"))
-    slug      = models.SlugField(blank=True, null=True, max_length=100, unique=True)
-    advisor   = models.ManyToManyField(Alumnus, blank=True, related_name="students")
-    dissertation_nr  = models.PositiveSmallIntegerField(_("PhD Dissertation Counter"), blank=True, null=True)
+    title = models.CharField(_("Thesis Title"), blank=True, max_length=180)
+    date_of_defence = models.DateField(
+        _("Defence date"),
+        blank=True,
+        null=True,
+        help_text=_("Date of the thesis or defense. Use format: YYYY-MM-DD"),
+    )
+    url = models.URLField(
+        blank=True, null=True, help_text=_("UvA DARE or other URL to thesis")
+    )
+    slug = models.SlugField(blank=True, null=True, max_length=100, unique=True)
+    advisor = models.ManyToManyField(Alumnus, blank=True, related_name="students")
+    dissertation_nr = models.PositiveSmallIntegerField(
+        _("PhD Dissertation Counter"), blank=True, null=True
+    )
     # Slug is for url
 
     # TODO: set the maxlim for uploads to 30MB ?
-    pdf       = models.FileField(_("Full Text (pdf)"),
-        upload_to=get_thesis_pdf_location, blank=True, null=True)
+    pdf = models.FileField(
+        _("Full Text (pdf)"), upload_to=get_thesis_pdf_location, blank=True, null=True
+    )
     # abstract  = models.HTMLField(_("Abstract"), blank=True, null=True)
-    photo     = models.ImageField(_("Thesis Photo"),
-        upload_to=get_thesis_photo_location, blank=True, null=True)
-    in_library= models.BooleanField(blank=True, default=False)
+    photo = models.ImageField(
+        _("Thesis Photo"), upload_to=get_thesis_photo_location, blank=True, null=True
+    )
+    in_library = models.BooleanField(blank=True, default=False)
 
-    comments         = models.TextField(_("comments"), blank=True)
-    last_updated_by  = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
-        on_delete=models.SET_NULL, related_name="theses_updated")
-    date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True, help_text='Use format: YYYY-MM-DD')
-    date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True, help_text='Use format: YYYY-MM-DD')
+    comments = models.TextField(_("comments"), blank=True)
+    last_updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="theses_updated",
+    )
+    date_created = models.DateTimeField(
+        _("Date Created"), auto_now_add=True, help_text="Use format: YYYY-MM-DD"
+    )
+    date_updated = models.DateTimeField(
+        _("Date Last Changed"), auto_now=True, help_text="Use format: YYYY-MM-DD"
+    )
 
     # students supervised --> class? anders kan je er maar een paar invullen
     # privacy levels

@@ -1,11 +1,9 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
-from ..news.sitemap import EventSitemap, PressSitemap
-from ..news.sitemap import ColloquiumSitemap, PizzaSitemap
-from ..research.sitemap import ResearchSitemap
-from ..people.sitemap import PersonSitemap
 from ..jobs.sitemap import JobSitemap
-
+from ..news.sitemap import ColloquiumSitemap, EventSitemap, PizzaSitemap, PressSitemap
+from ..people.sitemap import PersonSitemap
+from ..research.sitemap import ResearchSitemap
 
 sitemaps = dict(
     colloquia=ColloquiumSitemap,
@@ -14,4 +12,5 @@ sitemaps = dict(
     press=PressSitemap,
     jobs=JobSitemap,
     people=PersonSitemap,
-    research=ResearchSitemap)
+    research=ResearchSitemap,
+)

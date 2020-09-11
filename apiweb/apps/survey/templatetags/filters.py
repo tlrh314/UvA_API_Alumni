@@ -1,9 +1,11 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
+
+import re
 
 from django import template
-from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
-import re
+from django.utils.safestring import mark_safe
+
 try:
     inttypes = (int, long)
 except NameError:
@@ -12,9 +14,10 @@ except NameError:
 
 register = template.Library()
 
+
 @register.filter
 def truncchar(value, arg):
-    '''
+    """
     Truncate after a certain number of characters.
     Source: http://www.djangosnippets.org/snippets/194/
     Notes
@@ -24,12 +27,12 @@ def truncchar(value, arg):
     -------
     {{ long_blurb|truncchar:20 }}
     The above will display 20 characters of the long blurb followed by "..."
-    '''
+    """
 
     if len(value) < arg:
         return value
     else:
-        return value[:arg] + '...'
+        return value[:arg] + "..."
 
 
 @register.filter
@@ -63,13 +66,12 @@ def re_label(string):
     return string.replace(old, new)
 
 
-
 @register.filter
 def hash(d, key):
     try:
         return d[key]
     except (KeyError, TypeError):
-        return ''
+        return ""
 
 
 @register.filter
@@ -84,19 +86,19 @@ def clearemptylines(text):
     which then causes the resulting HTML to be less readable.
     """
 
-    lines = text.split('\n')
+    lines = text.split("\n")
     newlines = []
     for line in lines:
-        if line.strip() == '':
+        if line.strip() == "":
             continue
         newlines.append(line)
-    return '\n'.join(newlines)
+    return "\n".join(newlines)
 
 
 #
-#@register.filter
-#@template.defaultfilters.stringfilter
-#def emailize(value):
+# @register.filter
+# @template.defaultfilters.stringfilter
+# def emailize(value):
 #    """Turns text with plain email addresses into clickable ones"""
 #    return re.sub("(?P<front>^|\s)(?P<email>[^\s]+@[^\s]+)"
 #                  "(?P<back>\s|$)",
@@ -116,19 +118,21 @@ def romanize(value):
         return ""
     if value < 1 or value > 3999:
         return ""
-    romanNumeralMap = (('M', 1000),
-                       ('CM', 900),
-                       ('D', 500),
-                       ('CD', 400),
-                       ('C', 100),
-                       ('XC', 90),
-                       ('L', 50),
-                       ('XL', 40),
-                       ('X', 10),
-                       ('IX', 9),
-                       ('V', 5),
-                       ('IV', 4),
-                       ('I', 1))
+    romanNumeralMap = (
+        ("M", 1000),
+        ("CM", 900),
+        ("D", 500),
+        ("CD", 400),
+        ("C", 100),
+        ("XC", 90),
+        ("L", 50),
+        ("XL", 40),
+        ("X", 10),
+        ("IX", 9),
+        ("V", 5),
+        ("IV", 4),
+        ("I", 1),
+    )
     result = ""
     for numeral, integer in romanNumeralMap:
         while value >= integer:
@@ -144,17 +148,19 @@ def nonbreakable(value, autoescape=None):
     # see http://docs.djangoproject.com/en/dev/howto/custom-template-tags/\
     # #filters-and-auto-escaping
     value = conditional_escape(value) if autoescape else value
-    #esc = conditional_escape if autoescape else lambda s: s
+    # esc = conditional_escape if autoescape else lambda s: s
     characters = " -"
     replacements = ["&nbsp;", "&ndash;"]
     for char, repl in zip(characters, replacements):
         value = value.replace(char, repl)
     return mark_safe(value)
+
+
 nonbreakable.needs_autoescape = True
 
 
 @register.filter
-def menulist(menu, selected_item='', href_for_select=0):
+def menulist(menu, selected_item="", href_for_select=0):
     """Recursively build up a menu into an unordered list"""
 
     """
@@ -191,7 +197,7 @@ def menulist(menu, selected_item='', href_for_select=0):
     </ul>
     """
 
-    selected_item = selected_item.split(',')
+    selected_item = selected_item.split(",")
     if len(selected_item) == 2:
         href_for_select = int(selected_item[1])
     selected_item = selected_item[0]
@@ -210,12 +216,10 @@ def menulist(menu, selected_item='', href_for_select=0):
             if label != selected_item or href_for_select == True:
                 menu_string += "</a> "
         if isinstance(submenu, (tuple, list)):
-            menu_string += "\n" + menulist(submenu, selected_item,
-                                           href_for_select)
+            menu_string += "\n" + menulist(submenu, selected_item, href_for_select)
         menu_string += "</li>\n"
     menu_string += "</ul>\n"
     return menu_string
-
 
 
 @register.filter
@@ -233,61 +237,63 @@ def paginate(page, arg="3,2"):
 
     """
 
-    args = [int(val) for val in arg.split(',')]
+    args = [int(val) for val in arg.split(",")]
     if len(args) > 0:
         surrounding = args[0]
         leading = trailing = 2
     if len(args) > 1:
         leading = trailing = args[1]
     paginator = page.paginator
-    if (paginator.num_pages == 1 or 0 in [surrounding, leading, trailing]):
+    if paginator.num_pages == 1 or 0 in [surrounding, leading, trailing]:
         return ""
     current = page.number
     firstpage, lastpage = 1, paginator.num_pages
-    start = set(range(firstpage, leading+1))
-    end = set(range(lastpage+1-trailing, lastpage+1))
-    surround = set(range(max(1, current-surrounding),
-                         min(lastpage+1, current+surrounding+1)))
+    start = set(range(firstpage, leading + 1))
+    end = set(range(lastpage + 1 - trailing, lastpage + 1))
+    surround = set(
+        range(
+            max(1, current - surrounding), min(lastpage + 1, current + surrounding + 1)
+        )
+    )
     ellipses = True, True
-    if start.intersection(surround) or max(start)+1 == min(surround):
+    if start.intersection(surround) or max(start) + 1 == min(surround):
         start = start.union(surround)
         surround = set()
         ellipses = False, True
-    elif end.intersection(surround) or min(end)-1 == max(surround):
+    elif end.intersection(surround) or min(end) - 1 == max(surround):
         end = end.union(surround)
         surround = set()
         ellipses = True, False
-    if start.intersection(end) or max(start)+1 == min(end):
+    if start.intersection(end) or max(start) + 1 == min(end):
         start = start.union(end)
         end = set()
         surround = ()
         ellipses = False, False
     pagenumbers = []
     if current > 1:
-        pagenumbers.append('<a href="?page={}">previous</a>'.format(current-1))
+        pagenumbers.append('<a href="?page={}">previous</a>'.format(current - 1))
     for num in sorted(start):
         if num == current:
-            pagenumbers.append('{}'.format(num))
+            pagenumbers.append("{}".format(num))
         else:
             pagenumbers.append('<a href="?page={}">{}</a>'.format(num, num))
     if ellipses[0]:
-        pagenumbers.append('...')
+        pagenumbers.append("...")
     for num in sorted(surround):
         if num == current:
-            pagenumbers.append('{}'.format(num))
+            pagenumbers.append("{}".format(num))
         else:
             pagenumbers.append('<a href="?page={}">{}</a>'.format(num, num))
     if ellipses[1]:
-        pagenumbers.append('...')
+        pagenumbers.append("...")
     for num in sorted(end):
         if num == current:
-            pagenumbers.append('{}'.format(num))
+            pagenumbers.append("{}".format(num))
         else:
             pagenumbers.append('<a href="?page={}">{}</a>'.format(num, num))
     if current < lastpage:
-        pagenumbers.append('<a href="?page={}">next</a>'.format(current+1))
+        pagenumbers.append('<a href="?page={}">next</a>'.format(current + 1))
     return mark_safe("|".join(pagenumbers))
-
 
 
 @register.filter

@@ -19,26 +19,26 @@
         {% endif %}
 
         <form class="form-horizontal col-sm-12" role="form" action="" method="post"> {% csrf_token %}
-            {% if form.errors %} 
+            {% if form.errors %}
             <div class="form-group has-error has-feedback">
             {% else %}
             <div class="form-group">
             {% endif %}
                 <label for="id_username">Username/Email:</label>
                 <input class="form-control" type="text" name="username" required="" id="id_username">
-                {% if form.errors %} 
+                {% if form.errors %}
                     <i class="glyphicon glyphicon-remove form-control-feedback"></i>
                 {% endif %}
             </div>
 
-            {% if form.errors %} 
+            {% if form.errors %}
             <div class="form-group has-error has-feedback">
             {% else %}
             <div class="form-group">
             {% endif %}
                 <label for="id_password">Password:</label>
                 <input class="form-control" type="password" name="password" required="" id="id_password">
-                {% if form.errors %} 
+                {% if form.errors %}
                     <i class="glyphicon glyphicon-remove form-control-feedback"></i>
                 {% endif %}
             </div>
@@ -50,9 +50,9 @@
             <div class="text-center">
                 {% url 'site_password_reset' as password_reset_url %}
                 {% if password_reset_url %}
-                    <a href="{{ password_reset_url }}"> 
-                        Forgotten your password or username? 
-                    </a> 
+                    <a href="{{ password_reset_url }}">
+                        Forgotten your password or username?
+                    </a>
                 {% endif %}
 
             </div>

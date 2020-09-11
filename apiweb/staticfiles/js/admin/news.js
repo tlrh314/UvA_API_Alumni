@@ -7,8 +7,8 @@ function update_date_off(element)
 	}
     date = new Date(parseInt(date[0])+1, parseInt(date[1])-1, date[2]);
     month = parseInt(date.getMonth()) + 1;
-    strdate = new String(date.getFullYear() + "-" + 
-			 month + "-" + 
+    strdate = new String(date.getFullYear() + "-" +
+			 month + "-" +
 			 date.getDate());
     $("#id_date_off").attr("value", strdate);
 }

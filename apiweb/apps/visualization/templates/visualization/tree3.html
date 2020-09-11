@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block stylesheets %} {{ block.super }} 
+{% block stylesheets %} {{ block.super }}
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css"/> -->
 <style>
-    .body { 
+    .body {
         margin:0;
         position:fixed;
         top:0;
         right:0;
         bottom:0;
-        left:0; 
+        left:0;
     }
     #cy {
         width: 75vw;
@@ -59,14 +59,14 @@
             </ul>
             </li>
         </ul>
-    </div> 
+    </div>
     <h1 class="text-center">Student-Supervisor Relation Tree</h1>
     <div id="cy" data-toggle="tooltip"></div>
     <!-- if more elements, give ID -->
 </div>
 <script type="text/javascript">
 
-    
+
 
     var data = '{{ json_data | safe }}',
         graph = JSON.parse(data);
@@ -76,12 +76,12 @@
         concentric: function( ele ){ return ele.data('weight'); },
         levelWidth: function( nodes ){ return 5; },
         padding: 10
-    };  
+    };
 
     var cy = cytoscape({
     container: document.getElementById('cy'),
     layout: layoutStyle,
-    
+
     style: cytoscape.stylesheet()
     .selector('node')
     .css({
@@ -145,7 +145,7 @@
             concentric: function( ele ){ return ele.data('weight'); },
             levelWidth: function( nodes ){ return 5; },
             padding: 10
-        }; 
+        };
         var layout = cy.layout(layoutStyle);
         layout.run();
     });
@@ -199,7 +199,7 @@
     const nodes = cy.nodes();
 
     function removeEdges(wanted) {
-        
+
         nodes.forEach(function(ele) {
             ele.restore();
         });

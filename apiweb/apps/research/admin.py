@@ -1,14 +1,15 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
+from django.contrib import admin
 from django.db import models
 from django.db.models import Q
-from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
+from ...settings import ADMIN_MEDIA_JS
+from ..alumni.models import Alumnus
 from .actions import save_all_theses_to_xls
 from .models import Thesis
-from ..alumni.models import Alumnus
-from ...settings import ADMIN_MEDIA_JS
+
 
 # Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659, also present in theses admin and jobs admin
 class ExtendedActionsMixin(object):
@@ -19,7 +20,7 @@ class ExtendedActionsMixin(object):
     def changelist_view(self, request, extra_context=None):
         # if a extended action is called and there's no checkbox selected, select one with
         # invalid id, to get an empty queryset
-        if 'action' in request.POST and request.POST['action'] in self.extended_actions:
+        if "action" in request.POST and request.POST["action"] in self.extended_actions:
             if not request.POST.getlist(admin.ACTION_CHECKBOX_NAME):
                 post = request.POST.copy()
                 post.update({admin.ACTION_CHECKBOX_NAME: 0})
@@ -41,10 +42,19 @@ class ExtendedActionsMixin(object):
         ChangeList = self.get_changelist(request)
 
         return ChangeList(
-            request, self.model, list_display,
-            list_display_links, list_filter, self.date_hierarchy,
-            search_fields, list_select_related, self.list_per_page,
-            self.list_max_show_all, self.list_editable, self, self.sortable_by
+            request,
+            self.model,
+            list_display,
+            list_display_links,
+            list_filter,
+            self.date_hierarchy,
+            search_fields,
+            list_select_related,
+            self.list_per_page,
+            self.list_max_show_all,
+            self.list_editable,
+            self,
+            self.sortable_by,
         )
 
     def get_filtered_queryset(self, request):
@@ -54,6 +64,7 @@ class ExtendedActionsMixin(object):
         cl = self.get_changelist_instance(request)
         return cl.get_queryset(request)
 
+
 class ThesisListFilter(admin.SimpleListFilter):
     title = _("empty thesis title")
     parameter_name = "have_title"
@@ -61,7 +72,7 @@ class ThesisListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return (
             ("yes", _("Yes")),
-            ("no",  _("No")),
+            ("no", _("No")),
         )
 
     def queryset(self, request, queryset):
@@ -71,49 +82,76 @@ class ThesisListFilter(admin.SimpleListFilter):
         if self.value() == "yes":
             return queryset.filter(Q(title__isnull=True) | Q(title__exact=""))
 
+
 @admin.register(Thesis)
 class ThesisAdmin(admin.ModelAdmin):
     list_display = ("get_author", "title", "show_year", "type")
     list_filter = ("type", ThesisListFilter)
-    search_fields = ("title", "alumnus__last_name", "alumnus__first_name",
-        "date_start", "date_stop", "date_of_defence")
-    ordering = ("alumnus__username", )
-    filter_horizontal = ("advisor", )
-    readonly_fields = ("date_created", "date_updated", "last_updated_by", "slug", )
-    actions = ("export_selected_degrees_to_excel", "export_all_degrees_to_excel", "export_filtered_degrees_to_excel",)
-    extended_actions = ('export_all_degrees_to_excel', 'export_filtered_degrees_to_excel',)
+    search_fields = (
+        "title",
+        "alumnus__last_name",
+        "alumnus__first_name",
+        "date_start",
+        "date_stop",
+        "date_of_defence",
+    )
+    ordering = ("alumnus__username",)
+    filter_horizontal = ("advisor",)
+    readonly_fields = (
+        "date_created",
+        "date_updated",
+        "last_updated_by",
+        "slug",
+    )
+    actions = (
+        "export_selected_degrees_to_excel",
+        "export_all_degrees_to_excel",
+        "export_filtered_degrees_to_excel",
+    )
+    extended_actions = (
+        "export_all_degrees_to_excel",
+        "export_filtered_degrees_to_excel",
+    )
 
     max_num = 2
 
     fieldsets = [
-        ( "Thesis Information", {
-            "fields":
-                [ "alumnus", "type", "date_start", "date_stop" ],
-            }
-        ), ( "Thesis Information", {
-            "fields":
-                [ "title", "date_of_defence", "url", "dissertation_nr", "slug", "in_library" ]
-            }
-        ), ( "Thesis Advisor ", {
-            "fields":
-                [ "advisor" ]
-            }
-        ), ( "Full Text and Cover Photo", {
-            "fields":
-                [ "pdf", "photo" ]
-            }
-        ), ( "Extra information", {
+        (
+            "Thesis Information",
+            {"fields": ["alumnus", "type", "date_start", "date_stop"],},
+        ),
+        (
+            "Thesis Information",
+            {
+                "fields": [
+                    "title",
+                    "date_of_defence",
+                    "url",
+                    "dissertation_nr",
+                    "slug",
+                    "in_library",
+                ]
+            },
+        ),
+        ("Thesis Advisor ", {"fields": ["advisor"]}),
+        ("Full Text and Cover Photo", {"fields": ["pdf", "photo"]}),
+        (
+            "Extra information",
+            {
                 "classes": ["collapse"],
-                "fields": ["comments",  "date_created", "date_updated", "last_updated_by"]
-            }
+                "fields": [
+                    "comments",
+                    "date_created",
+                    "date_updated",
+                    "last_updated_by",
+                ],
+            },
         ),
     ]
 
     class Media:
         js = ADMIN_MEDIA_JS
-        css = {
-             "all": ("css/admin_extra.css",)
-        }
+        css = {"all": ("css/admin_extra.css",)}
 
     def save_model(self, request, obj, form, change):
         obj.last_updated_by = request.user
@@ -137,8 +175,11 @@ class ThesisAdmin(admin.ModelAdmin):
         qs = qs.annotate()
         # TODO: this does not take into account the type of the Thesis. Also, when
         # filtering on type = "PhD" ordering of the Theses could be done on the MSc Thesis
-        qs = qs.annotate(sort_author = models.Count("alumnus__last_name", distinct=True)).annotate(sort_year =
-                models.Count("alumnus__theses__date_of_defence", distinct=True))
+        qs = qs.annotate(
+            sort_author=models.Count("alumnus__last_name", distinct=True)
+        ).annotate(
+            sort_year=models.Count("alumnus__theses__date_of_defence", distinct=True)
+        )
         return qs
 
     # def formfield_for_manytomany(self, db_field, request, **kwargs):
@@ -154,6 +195,7 @@ class ThesisAdmin(admin.ModelAdmin):
     def get_author(self, obj):
         """ We could use author instead of get_alumnus in list_display """
         return obj.alumnus.full_name
+
     get_author.short_description = "Author"
     get_author.admin_order_field = "sort_author"
 
@@ -163,20 +205,26 @@ class ThesisAdmin(admin.ModelAdmin):
         elif obj.date_stop:
             return obj.date_stop.strftime("%Y")
         return None
+
     show_year.short_description = "Year"
     show_year.admin_order_field = "sort_year"
 
     def export_selected_degrees_to_excel(self, request, queryset):
         return save_all_theses_to_xls(request, queryset)
-    export_selected_degrees_to_excel.short_description = "Export selected Theses to Excel"
+
+    export_selected_degrees_to_excel.short_description = (
+        "Export selected Theses to Excel"
+    )
 
     def export_all_degrees_to_excel(self, request, queryset):
         return save_all_theses_to_xls(request, None)
+
     export_all_degrees_to_excel.short_description = "Export all Theses to Excel"
 
     def export_filtered_degrees_to_excel(self, request, queryset):
         queryset = self.get_filtered_queryset(request)
         return save_all_theses_to_xls(request, queryset)
-    export_filtered_degrees_to_excel.short_description = "Export filtered list of Theses to Excel"
 
-
+    export_filtered_degrees_to_excel.short_description = (
+        "Export filtered list of Theses to Excel"
+    )

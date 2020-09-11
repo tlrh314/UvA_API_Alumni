@@ -21,15 +21,15 @@
                 {% endif %}
                 {% for field in form.visible_fields %}
 
-                    {% if forloop.counter == 1 %} 
+                    {% if forloop.counter == 1 %}
                     <legend> Personal Information </legend>
-                    {% elif forloop.counter == 14 %} 
+                    {% elif forloop.counter == 14 %}
                     <legend> Contact Information </legend>
-                    {% elif forloop.counter == 26 %} 
+                    {% elif forloop.counter == 26 %}
                     <legend> Current Location </legend>
                     {% endif %}
 
-                    {% if field.errors %} 
+                    {% if field.errors %}
                     <div class="form-group has-error has-feedback">
                     {% else %}
                     <div class="form-group">

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
 import sys
 
@@ -8,14 +8,10 @@ from django.conf.urls.static import static
 from django.urls import include, path, re_path
 from django.views import defaults as default_views
 
-
 handler404 = "apiweb.apps.main.views.page_not_found"
 handler500 = "apiweb.apps.main.views.handler500"
 
-urlpatterns = [
-    path("", include("apiweb.apps.urls"))
-    
-]
+urlpatterns = [path("", include("apiweb.apps.urls"))]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

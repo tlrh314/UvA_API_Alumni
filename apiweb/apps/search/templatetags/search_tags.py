@@ -2,7 +2,7 @@ import datetime
 
 from django import template
 
-from ...alumni.models import Alumnus, PreviousPosition, PositionType
+from ...alumni.models import Alumnus, PositionType, PreviousPosition
 
 register = template.Library()
 
@@ -16,10 +16,11 @@ register = template.Library()
 #
 #
 
+
 @register.simple_tag(name="get_postdoc_year")
 def get_postdoc_year(alumnus):
     # TODO: which position type to include as staff?
-    postdoc_set = alumnus.positions.filter(type__name__in=["Postdoc", ])
+    postdoc_set = alumnus.positions.filter(type__name__in=["Postdoc",])
 
     show_start_date_postdoc = True
     today = datetime.date.today()
@@ -33,11 +34,11 @@ def get_postdoc_year(alumnus):
     for pos in postdoc_set:
         if pos.date_stop:
             if pos.date_stop > date_stop:
-                date_stop = pos.date_stop     
+                date_stop = pos.date_stop
         if show_start_date_postdoc:
             if pos.date_start:
                 if pos.date_start < date_start:
-                    date_start = pos.date_start      
+                    date_start = pos.date_start
 
     date_string = ""
     if show_start_date_postdoc:
@@ -56,12 +57,19 @@ def get_postdoc_year(alumnus):
             date_string += date_stop.strftime("%Y")
     return date_string
 
+
 @register.simple_tag(name="get_staff_year")
 def get_staff_year(alumnus):
     # TODO: which position type to include as staff?
-    staff_set = alumnus.positions.filter(type__name__in=[
-        "Research Staff", "Adjunct Staff", "Faculty Staff", "Teacher",
-        "Emeritus", ])
+    staff_set = alumnus.positions.filter(
+        type__name__in=[
+            "Research Staff",
+            "Adjunct Staff",
+            "Faculty Staff",
+            "Teacher",
+            "Emeritus",
+        ]
+    )
 
     show_start_date_staff = True
     today = datetime.date.today()
@@ -75,11 +83,11 @@ def get_staff_year(alumnus):
     for pos in staff_set:
         if pos.date_stop:
             if pos.date_stop > date_stop:
-                date_stop = pos.date_stop     
+                date_stop = pos.date_stop
         if show_start_date_staff:
             if pos.date_start:
                 if pos.date_start < date_start:
-                    date_start = pos.date_start      
+                    date_start = pos.date_start
 
     date_string = ""
     if show_start_date_staff:
@@ -102,9 +110,16 @@ def get_staff_year(alumnus):
 @register.simple_tag(name="get_obp_year")
 def get_obp_year(alumnus):
     # TODO: which position type to include as OBP ?
-    obp_set = alumnus.positions.filter(type__name__in=[
-        "Instrumentation", "Institute Manager", "Outreach", "OBP",
-        "Software Developer", "Nova" ])
+    obp_set = alumnus.positions.filter(
+        type__name__in=[
+            "Instrumentation",
+            "Institute Manager",
+            "Outreach",
+            "OBP",
+            "Software Developer",
+            "Nova",
+        ]
+    )
 
     show_start_date_obp = True
     today = datetime.date.today()
@@ -118,17 +133,17 @@ def get_obp_year(alumnus):
     for pos in obp_set:
         if pos.date_stop:
             if pos.date_stop > date_stop:
-                date_stop = pos.date_stop     
+                date_stop = pos.date_stop
         if show_start_date_obp:
             if pos.date_start:
                 if pos.date_start < date_start:
-                    date_start = pos.date_start      
+                    date_start = pos.date_start
 
     date_string = ""
     if show_start_date_obp:
         if date_start:
             date_string += date_start.strftime("%Y")
-            date_string += " - "         
+            date_string += " - "
     if not date_stop:
         if not date_start:
             date_string += "Current"
@@ -140,7 +155,6 @@ def get_obp_year(alumnus):
         else:
             date_string += date_stop.strftime("%Y")
     return date_string
-
 
     # for pos in obp_set:
     #     if not pos.date_stop:

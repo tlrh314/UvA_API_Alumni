@@ -1,8 +1,21 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
 import json
 import re
 from functools import reduce
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import FormView
+
+from ...settings import GOOGLE_API_KEY, GOOGLE_CX_ID
+from ..alumni.models import Alumnus
+from ..research.models import Thesis
+from .forms import SearchForm
 
 try:
     from urllib import urlencode
@@ -10,20 +23,6 @@ try:
 except ImportError:
     from urllib.parse import urlencode
     from urllib.request import urlopen, URLError
-
-from django.db.models import Q
-from django.contrib import messages
-from django.shortcuts import render
-from django.views.generic import FormView
-from django.http import HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
-from django.contrib.auth.decorators import login_required
-
-from .forms import SearchForm
-from ...settings import GOOGLE_API_KEY
-from ...settings import GOOGLE_CX_ID
-from ..alumni.models import Alumnus
-from ..research.models import Thesis
 
 
 @login_required
@@ -45,19 +44,25 @@ def search(request):
 
     # If no keywords, return nothing
     if not words:
-        return render(request, "search/search_results.html", {"alumni": [], "key_words": []})
+        return render(
+            request, "search/search_results.html", {"alumni": [], "key_words": []}
+        )
 
     if len(words) <= 2:
         msg = "Please use at least 3 characters to search. "
         msg += "Tip: you can use exact match by placing ' or \" around words!"
         messages.error(request, msg)
-        return render(request, "search/search_results.html", {"alumni": [], "key_words": []})
+        return render(
+            request, "search/search_results.html", {"alumni": [], "key_words": []}
+        )
 
     if len(words.split()) > 10:
         msg = "Please limit your search to <10 words. "
         msg += "Tip: you can use exact match by placing ' or \" around words!"
         messages.error(request, msg)
-        return render(request, "search/search_results.html", {"alumni": [], "key_words": []})
+        return render(
+            request, "search/search_results.html", {"alumni": [], "key_words": []}
+        )
 
     # Check if must be exact match (i.e. if between quotation marks)
     words = words.replace("'", '"')
@@ -73,8 +78,9 @@ def search(request):
 
     # Set maximum number of words
     if len(terms) > 42:
-        return render(request, "search/search_results.html", {"alumni": [],
-                                                              "key_words": []})
+        return render(
+            request, "search/search_results.html", {"alumni": [], "key_words": []}
+        )
     #  Remove single characters
     terms = [term for term in terms if len(term) > 1]
 
@@ -86,17 +92,23 @@ def search(request):
     for term in terms:
 
         # Check if year, if set time filters
-        if (term.isdigit() and len(term) == 4):
+        if term.isdigit() and len(term) == 4:
             end_year = str(int(term) + 1)
-            date_range=[term+"-01-01",end_year+"-01-01"]
-            time_filter = (time_filter | Q(theses__date_of_defence__range=date_range)
-                                       | Q(theses__date_stop__range=date_range)
-                                       | Q(theses__date_start__range=date_range))
+            date_range = [term + "-01-01", end_year + "-01-01"]
+            time_filter = (
+                time_filter
+                | Q(theses__date_of_defence__range=date_range)
+                | Q(theses__date_stop__range=date_range)
+                | Q(theses__date_start__range=date_range)
+            )
 
         else:
-            search_filter = (search_filter | Q(last_name__icontains=term)|
-                                             Q(first_name__icontains=term) |
-                                             Q(theses__title__icontains=term))
+            search_filter = (
+                search_filter
+                | Q(last_name__icontains=term)
+                | Q(first_name__icontains=term)
+                | Q(theses__title__icontains=term)
+            )
 
     # Compute combined filter
     total_filter = time_filter & search_filter
@@ -105,10 +117,14 @@ def search(request):
     results = alumni.filter(total_filter).distinct()
 
     if len(results) > 10:
-        msg = "Search matched {0} items. Tip: you can use exact match by placing ' or \" around words!".format(len(results))
+        msg = "Search matched {0} items. Tip: you can use exact match by placing ' or \" around words!".format(
+            len(results)
+        )
         messages.warning(request, msg)
 
-    return render(request, "search/search_results.html", {"alumni": results, "key_words": terms})
+    return render(
+        request, "search/search_results.html", {"alumni": results, "key_words": terms}
+    )
 
 
 class SearchView(FormView):
@@ -119,13 +135,15 @@ class SearchView(FormView):
 
     def google_search(self, search_terms, start=1):
         GOOGLE_URL = "https://www.googleapis.com/customsearch/v1"
-        params = urlencode({
-            "key": GOOGLE_API_KEY,
-            "cx": GOOGLE_CX_ID,
-            "q": search_terms,
-            "num": 10,              # items per page
-            "start": start          # starting page
-            })
+        params = urlencode(
+            {
+                "key": GOOGLE_API_KEY,
+                "cx": GOOGLE_CX_ID,
+                "q": search_terms,
+                "num": 10,  # items per page
+                "start": start,  # starting page
+            }
+        )
         url = "{}?{}".format(GOOGLE_URL, params)
         try:
             search_response = urlopen(url)
@@ -152,7 +170,8 @@ class SearchView(FormView):
         if context["results"]:
             context["google_link"] = (
                 "http://www.google.com/search?q={}+"
-                "site:www.astro.uva.nl".format(search_terms))
+                "site:www.astro.uva.nl".format(search_terms)
+            )
         else:
             context["results_empty"] = True
         return context

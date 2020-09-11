@@ -1,11 +1,11 @@
-from django.http import Http404
-from django.urls import reverse
-from django.db.models import Count
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, RedirectView
-
 import json
+
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.http import Http404
+from django.shortcuts import render
+from django.urls import reverse
+from django.views.generic import RedirectView, TemplateView
 
 from ..alumni.models import Alumnus
 from ..research.models import Thesis
@@ -20,7 +20,7 @@ def view_a(request):
 
     data_dict, data_dict_cur, data_dict_1, data_dict_2, data_dict_3 = {}, {}, {}, {}, {}
 
-    fieldname = 'is_inside_astronomy'
+    fieldname = "is_inside_astronomy"
 
     jobs_all = JobAfterLeaving.objects.all()
     jobs_in_astronomy = jobs_all.exclude(is_inside_astronomy=None)
@@ -28,33 +28,41 @@ def view_a(request):
     jobs_cur = jobs_in_astronomy.filter(which_position=0)
     jobs_1 = jobs_in_astronomy.filter(which_position=1)
     jobs_2 = jobs_in_astronomy.filter(which_position=2)
-    jobs_3 =jobs_in_astronomy.filter(which_position=3)
+    jobs_3 = jobs_in_astronomy.filter(which_position=3)
 
-    astronomy_counts_cur = jobs_cur.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    astronomy_counts_cur = (
+        jobs_cur.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in astronomy_counts_cur:
-        data_dict_cur[el[fieldname]] = el['amount']
+        data_dict_cur[el[fieldname]] = el["amount"]
 
-    astronomy_counts_1 = jobs_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    astronomy_counts_1 = (
+        jobs_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in astronomy_counts_1:
-        data_dict_1[el[fieldname]] = el['amount']
+        data_dict_1[el[fieldname]] = el["amount"]
 
-    astronomy_counts_2 = jobs_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    astronomy_counts_2 = (
+        jobs_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in astronomy_counts_2:
-        data_dict_2[el[fieldname]] = el['amount']
+        data_dict_2[el[fieldname]] = el["amount"]
 
-    astronomy_counts_3 = jobs_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    astronomy_counts_3 = (
+        jobs_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in astronomy_counts_3:
-        data_dict_3[el[fieldname]] = el['amount']
+        data_dict_3[el[fieldname]] = el["amount"]
 
-    data_dict['jobs_cur'] = data_dict_cur
-    data_dict['jobs_1'] = data_dict_1
-    data_dict['jobs_2'] = data_dict_2
-    data_dict['jobs_3'] = data_dict_3
-    #print data_dict
+    data_dict["jobs_cur"] = data_dict_cur
+    data_dict["jobs_1"] = data_dict_1
+    data_dict["jobs_2"] = data_dict_2
+    data_dict["jobs_3"] = data_dict_3
+    # print data_dict
 
     json_data = json.dumps(data_dict)
 
-    return render(request, "visualization/vis_a.html", {'json_data': json_data})
+    return render(request, "visualization/vis_a.html", {"json_data": json_data})
 
 
 @login_required
@@ -65,39 +73,47 @@ def view_b(request):
 
     data_dict, data_dict_cur, data_dict_1, data_dict_2, data_dict_3 = {}, {}, {}, {}, {}
 
-    fieldname = 'location_job'
+    fieldname = "location_job"
     jobs_all = JobAfterLeaving.objects.all()
-    jobs_with_location = jobs_all.exclude(location_job='')
+    jobs_with_location = jobs_all.exclude(location_job="")
 
     jobs_cur = jobs_with_location.filter(which_position=0)
     jobs_1 = jobs_with_location.filter(which_position=1)
     jobs_2 = jobs_with_location.filter(which_position=2)
-    jobs_3 =jobs_with_location.filter(which_position=3)
+    jobs_3 = jobs_with_location.filter(which_position=3)
 
-    location_counts_cur = jobs_cur.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    location_counts_cur = (
+        jobs_cur.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in location_counts_cur:
-        data_dict_cur[el[fieldname]] = el['amount']
+        data_dict_cur[el[fieldname]] = el["amount"]
 
-    location_counts_1 = jobs_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    location_counts_1 = (
+        jobs_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in location_counts_1:
-        data_dict_1[el[fieldname]] = el['amount']
+        data_dict_1[el[fieldname]] = el["amount"]
 
-    location_counts_2 = jobs_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    location_counts_2 = (
+        jobs_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in location_counts_2:
-        data_dict_2[el[fieldname]] = el['amount']
+        data_dict_2[el[fieldname]] = el["amount"]
 
-    location_counts_3 = jobs_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    location_counts_3 = (
+        jobs_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in location_counts_3:
-        data_dict_3[el[fieldname]] = el['amount']
+        data_dict_3[el[fieldname]] = el["amount"]
 
-    data_dict['jobs_cur'] = data_dict_cur
-    data_dict['jobs_1'] = data_dict_1
-    data_dict['jobs_2'] = data_dict_2
-    data_dict['jobs_3'] = data_dict_3
-    #print data_dict
+    data_dict["jobs_cur"] = data_dict_cur
+    data_dict["jobs_1"] = data_dict_1
+    data_dict["jobs_2"] = data_dict_2
+    data_dict["jobs_3"] = data_dict_3
+    # print data_dict
 
     json_data = json.dumps(data_dict)
-    return render(request, "visualization/vis_b.html", {'json_data': json_data})
+    return render(request, "visualization/vis_b.html", {"json_data": json_data})
 
 
 @login_required
@@ -115,7 +131,7 @@ def view_d(request):
     """
     data_dict, data_dict_cur, data_dict_1, data_dict_2, data_dict_3 = {}, {}, {}, {}, {}
 
-    fieldname = 'sector__name'
+    fieldname = "sector__name"
     jobs_all = JobAfterLeaving.objects.all()
     jobs_with_sector = jobs_all.exclude(sector=None)
 
@@ -124,30 +140,40 @@ def view_d(request):
     sector_2 = jobs_with_sector.filter(which_position=2)
     sector_3 = jobs_with_sector.filter(which_position=3)
 
-    sector_counts_cur = sector_cur.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    sector_counts_cur = (
+        sector_cur.values(fieldname)
+        .order_by(fieldname)
+        .annotate(amount=Count(fieldname))
+    )
     for el in sector_counts_cur:
-        data_dict_cur[el[fieldname]] = el['amount']
+        data_dict_cur[el[fieldname]] = el["amount"]
 
-    sector_counts_1 = sector_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    sector_counts_1 = (
+        sector_1.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in sector_counts_1:
-        data_dict_1[el[fieldname]] = el['amount']
+        data_dict_1[el[fieldname]] = el["amount"]
 
-    sector_counts_2 = sector_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    sector_counts_2 = (
+        sector_2.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in sector_counts_2:
-        data_dict_2[el[fieldname]] = el['amount']
+        data_dict_2[el[fieldname]] = el["amount"]
 
-    sector_counts_3 = sector_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    sector_counts_3 = (
+        sector_3.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    )
     for el in sector_counts_3:
-        data_dict_3[el[fieldname]] = el['amount']
+        data_dict_3[el[fieldname]] = el["amount"]
 
-    data_dict['sector_cur'] = data_dict_cur
-    data_dict['sector_1'] = data_dict_1
-    data_dict['sector_2'] = data_dict_2
-    data_dict['sector_3'] = data_dict_3
-    print (data_dict)
+    data_dict["sector_cur"] = data_dict_cur
+    data_dict["sector_1"] = data_dict_1
+    data_dict["sector_2"] = data_dict_2
+    data_dict["sector_3"] = data_dict_3
+    print(data_dict)
 
     json_data = json.dumps(data_dict)
-    return render(request, "visualization/vis_d.html", {'json_data': json_data})
+    return render(request, "visualization/vis_d.html", {"json_data": json_data})
 
 
 @login_required
@@ -157,17 +183,21 @@ def view_e(request):
     """
 
     data_dict = {}
-    fieldname = 'country'
+    fieldname = "country"
 
     alumni = Alumnus.objects.all()
-    alumni_with_country = alumni.exclude(country='')
+    alumni_with_country = alumni.exclude(country="")
 
-    country_counts = alumni_with_country.values(fieldname).order_by(fieldname).annotate(amount=Count(fieldname))
+    country_counts = (
+        alumni_with_country.values(fieldname)
+        .order_by(fieldname)
+        .annotate(amount=Count(fieldname))
+    )
     for el in country_counts:
-        data_dict[el['country']] = el['amount']
+        data_dict[el["country"]] = el["amount"]
 
     json_data = json.dumps(data_dict)
-    return render(request, "visualization/vis_e.html", {'json_data': json_data})
+    return render(request, "visualization/vis_e.html", {"json_data": json_data})
 
 
 @login_required
@@ -185,14 +215,13 @@ def view_f(request):
     alumni_other = alumni_with_gender.filter(gender=3)
     alumni_not_say = alumni_with_gender.filter(gender=4)
 
-    data_dict['male'] = alumni_male.count()
-    data_dict['female'] = alumni_female.count()
-    data_dict['other'] = alumni_other.count()
-    data_dict['rather_not_say'] = alumni_not_say.count()
+    data_dict["male"] = alumni_male.count()
+    data_dict["female"] = alumni_female.count()
+    data_dict["other"] = alumni_other.count()
+    data_dict["rather_not_say"] = alumni_not_say.count()
 
     json_data = json.dumps(data_dict)
-    return render(request, "visualization/vis_f.html", {'json_data': json_data})
-
+    return render(request, "visualization/vis_f.html", {"json_data": json_data})
 
 
 @login_required
@@ -205,7 +234,7 @@ def tree(request):
     data_dict = {}
     links_list, nodes_list, all_people = [], [], []
 
-    #Get all thesis, students and advisors for phd
+    # Get all thesis, students and advisors for phd
     for thesis in theses:
         student = thesis.alumnus
 
@@ -214,8 +243,8 @@ def tree(request):
                 all_people.append(supervisor)
 
             link_dict = {"data": {}}
-            link_dict["data"]["source"] = str(supervisor.last_name.replace("'"," "))
-            link_dict["data"]["target"] = str(student.last_name.replace("'"," "))
+            link_dict["data"]["source"] = str(supervisor.last_name.replace("'", " "))
+            link_dict["data"]["target"] = str(student.last_name.replace("'", " "))
             link_dict["data"]["type"] = thesis.type
             link_dict["data"]["thesis_url"] = thesis.get_absolute_url()
             link_dict["strength"] = 1
@@ -224,10 +253,10 @@ def tree(request):
         if not student in all_people:
             all_people.append(student)
 
-    #Get all the nodes
+    # Get all the nodes
     for alumnus in all_people:
         node_dict = {"data": {}}
-        node_dict["data"]["id"] = str(alumnus.last_name.replace("'"," "))
+        node_dict["data"]["id"] = str(alumnus.last_name.replace("'", " "))
         # node_dict["group"] = i+1
         node_dict["data"]["weight"] = alumnus.students.count() + 1
         node_dict["data"]["alumnus_url"] = alumnus.get_absolute_url()
@@ -237,4 +266,4 @@ def tree(request):
     data_dict["edges"] = links_list
 
     json_data = json.dumps(data_dict)
-    return render(request, "visualization/tree3.html", {'json_data': json_data})
+    return render(request, "visualization/tree3.html", {"json_data": json_data})

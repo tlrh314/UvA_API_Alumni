@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block stylesheets %} {{ block.super }} 
+{% block stylesheets %} {{ block.super }}
 <style>
     .links line {
       stroke: #999;
@@ -11,13 +11,13 @@
       stroke: #fff;
       stroke-width: 1.5px;
     }
-    
+
     .arrow{
         stroke-width:5;
         stroke:#000;
         stroke-dasharray:5, 5;
     }
-    
+
     #marker {
         stroke: black;
         fill: black;
@@ -28,14 +28,14 @@
       right: 30px;
       top: 30px;
     }
-    
-    .body { 
+
+    .body {
         margin:0;
         position:fixed;
         top:0;
         right:0;
         bottom:0;
-        left:0; 
+        left:0;
     }
 
 </style>{% endblock stylesheets %}
@@ -164,4 +164,3 @@
 
 
 {% endblock content %}
-

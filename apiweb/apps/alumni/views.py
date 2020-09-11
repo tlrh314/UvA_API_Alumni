@@ -1,18 +1,16 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
 import os.path
 
 from django import template
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import Http404
-from django.contrib import messages
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404, render
 
 from .models import Alumnus
-
 
 register = template.Library()
 
@@ -36,12 +34,12 @@ def alumnus_list(request):
             end_year = str(int(year) + 10)
             if year == "1900":
                 end_year = str(int(year) + 50)
-            date_range=[year+"-01-01",end_year+"-01-01"]
+            date_range = [year + "-01-01", end_year + "-01-01"]
             multifilter = multifilter | Q(theses__date_of_defence__range=date_range)
             multifilter = multifilter | Q(positions__date_stop__range=date_range)
             multifilter = multifilter | Q(positions__date_start__range=date_range)
             multifilter = multifilter | Q(positions__date_stop__range=date_range)
-            #multifilter = multifilter
+            # multifilter = multifilter
 
             # print(Q(positions__date_stop__range=date_range))
             # print(Q(positions__date_start__range=date_range))
@@ -65,22 +63,45 @@ def alumnus_list(request):
 
         # Caution: sorting on degree/position implies filtering also
         if sort_on[0] == "msc_lh":
-            alumni = alumni.filter(theses__type__iexact="msc").distinct().order_by("theses__date_of_defence")
+            alumni = (
+                alumni.filter(theses__type__iexact="msc")
+                .distinct()
+                .order_by("theses__date_of_defence")
+            )
 
         if sort_on[0] == "msc_hl":
-            alumni = alumni.filter(theses__type__iexact="msc").distinct().order_by("-theses__date_of_defence")
+            alumni = (
+                alumni.filter(theses__type__iexact="msc")
+                .distinct()
+                .order_by("-theses__date_of_defence")
+            )
 
         if sort_on[0] == "phd_lh":
-            alumni = alumni.filter(theses__type__iexact="phd").distinct().order_by("theses__date_of_defence")
+            alumni = (
+                alumni.filter(theses__type__iexact="phd")
+                .distinct()
+                .order_by("theses__date_of_defence")
+            )
         if sort_on[0] == "phd_hl":
-            alumni = alumni.filter(theses__type__iexact="phd").distinct().order_by("-theses__date_of_defence")
+            alumni = (
+                alumni.filter(theses__type__iexact="phd")
+                .distinct()
+                .order_by("-theses__date_of_defence")
+            )
 
         if sort_on[0] == "pd_lh":
-            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("positions__date_stop")
+            alumni = (
+                alumni.filter(positions__type__name__in=["Postdoc",])
+                .distinct()
+                .order_by("positions__date_stop")
+            )
 
         if sort_on[0] == "pd_hl":
-            alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("positions__date_start")
-
+            alumni = (
+                alumni.filter(positions__type__name__in=["Postdoc",])
+                .distinct()
+                .order_by("positions__date_start")
+            )
 
         # if sort_on[0] == "pd_hl":
         #     alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("-positions__date_stop")
@@ -88,25 +109,67 @@ def alumnus_list(request):
         # TODO: if an alumnus has several staff positions, then the latest date_stop must be returned.
         # Is this aggregating / grouping several tables together, then taking the max?
         if sort_on[0] == "staff_lh":
-            alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
-                "Adjunct Staff", "Faculty Staff"]).distinct().order_by("positions__date_stop")
+            alumni = (
+                alumni.filter(
+                    positions__type__name__in=[
+                        "Full Professor",
+                        "Research Staff",
+                        "Adjunct Staff",
+                        "Faculty Staff",
+                    ]
+                )
+                .distinct()
+                .order_by("positions__date_stop")
+            )
         if sort_on[0] == "staff_hl":
-            alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
-                "Adjunct Staff", "Faculty Staff"]).distinct().order_by("positions__date_start")
+            alumni = (
+                alumni.filter(
+                    positions__type__name__in=[
+                        "Full Professor",
+                        "Research Staff",
+                        "Adjunct Staff",
+                        "Faculty Staff",
+                    ]
+                )
+                .distinct()
+                .order_by("positions__date_start")
+            )
 
         # if sort_on[0] == "staff_hl":
         #     alumni = alumni.filter(positions__type__name__in=["Full Professor", "Research Staff",
         #         "Adjunct Staff", "Faculty Staff"]).distinct().order_by("-positions__date_stop")
 
-
-
         if sort_on[0] == "obp_lh":
-            alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
-                "Outreach", "OBP", "Software Developer", "Nova" ]).distinct().order_by("positions__date_stop")
+            alumni = (
+                alumni.filter(
+                    positions__type__name__in=[
+                        "Instrumentation",
+                        "Institute Manager",
+                        "Outreach",
+                        "OBP",
+                        "Software Developer",
+                        "Nova",
+                    ]
+                )
+                .distinct()
+                .order_by("positions__date_stop")
+            )
 
         if sort_on[0] == "obp_hl":
-            alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
-                "Outreach", "OBP", "Software Developer", "Nova" ]).distinct().order_by("positions__date_start")
+            alumni = (
+                alumni.filter(
+                    positions__type__name__in=[
+                        "Instrumentation",
+                        "Institute Manager",
+                        "Outreach",
+                        "OBP",
+                        "Software Developer",
+                        "Nova",
+                    ]
+                )
+                .distinct()
+                .order_by("positions__date_start")
+            )
 
         # if sort_on[0] == "obp_hl":
         #     alumni = alumni.filter(positions__type__name__in=["Instrumentation", "Institute Manager",
@@ -115,7 +178,7 @@ def alumnus_list(request):
         alumni = alumni.order_by("last_name")
 
     # TODO: only show unique results, though distinct on columns is not supported by sqlite3
-    #alumni=alumni.distinct("last_name")
+    # alumni=alumni.distinct("last_name")
     # FIX: use python to uniqueify
     alumnus_unique = []
     for alumnus in alumni:
@@ -128,20 +191,26 @@ def alumnus_list(request):
 
     try:
         alumni_per_page = int(alumni_per_page)
-    except ValueError as ScriptKiddyHackings :
+    except ValueError as ScriptKiddyHackings:
         if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
-            msg = "Error: '{0}' is not a valid limit, please use a number.".format(alumni_per_page)
+            msg = "Error: '{0}' is not a valid limit, please use a number.".format(
+                alumni_per_page
+            )
             messages.error(request, msg)
             alumni_per_page = 15
         else:
             raise Http404
 
     if alumni_per_page < 15:
-        msg = "Error: '{0}' is not a valid limit, please use a number above 15.".format(alumni_per_page)
+        msg = "Error: '{0}' is not a valid limit, please use a number above 15.".format(
+            alumni_per_page
+        )
         alumni_per_page = 15
         messages.error(request, msg)
     if alumni_per_page > 200:
-        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(alumni_per_page)
+        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(
+            alumni_per_page
+        )
         messages.error(request, msg)
         alumni_per_page = 200
 
@@ -150,9 +219,11 @@ def alumnus_list(request):
 
     try:
         page = int(page)
-    except ValueError as ScriptKiddyHackings :
+    except ValueError as ScriptKiddyHackings:
         if "invalid literal for int() with base 10:" in str(ScriptKiddyHackings):
-            msg = "Error: '{0}' is not a valid pagenumber, please use a number.".format(page)
+            msg = "Error: '{0}' is not a valid pagenumber, please use a number.".format(
+                page
+            )
             messages.error(request, msg)
             page = 1
         else:
@@ -169,8 +240,11 @@ def alumnus_list(request):
         messages.error(request, msg)
         alumni = paginator.page(paginator.num_pages)
 
-
-    return render(request, "alumni/alumnus_list.html", {"alumni": alumni, "alumni_per_page": int(alumni_per_page)})
+    return render(
+        request,
+        "alumni/alumnus_list.html",
+        {"alumni": alumni, "alumni_per_page": int(alumni_per_page)},
+    )
 
 
 @login_required

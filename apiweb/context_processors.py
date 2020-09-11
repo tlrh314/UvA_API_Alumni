@@ -1,20 +1,23 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
+from django.contrib.sites.models import Site
 from django.db.models import Q
 from django.db.utils import OperationalError
 from django.db.utils import ProgrammingError as ProgError1
+
+from apiweb.apps.interviews.models import Category, Post
+from apiweb.apps.main.models import ContactInfo
+from apiweb.apps.research.models import Thesis
+
+from .decorators import IPAddress
+from .ipaddress import IPAddress
+from .settings import ALLOWED_IPS
+
 try:
     from _mysql_exceptions import ProgrammingError as ProgError2
 except ModuleNotFoundError:
     ProgError2 = ProgError1
-from django.contrib.sites.models import Site
 
-from apiweb.apps.main.models import ContactInfo
-from apiweb.apps.interviews.models import Post, Category
-from apiweb.apps.research.models import Thesis
-from .decorators import IPAddress
-from .settings import ALLOWED_IPS
-from .ipaddress import IPAddress
 
 class ContactInfoDefault(object):
     def __init__(self):
@@ -43,9 +46,14 @@ def contactinfo(request):
         print("Other error was raised. Please check the code and catch if needed")
         raise
 
-    api_phonenumber_formatted = "+"+p[2:4]+" (0)"+p[4:6]+" "+p[6:9]+" "+p[9:11]+" "+p[11:13]
+    api_phonenumber_formatted = (
+        "+" + p[2:4] + " (0)" + p[4:6] + " " + p[6:9] + " " + p[9:11] + " " + p[11:13]
+    )
 
-    return {"contactinfo": contactinfo, "api_phonenumber_formatted": api_phonenumber_formatted }
+    return {
+        "contactinfo": contactinfo,
+        "api_phonenumber_formatted": api_phonenumber_formatted,
+    }
 
 
 def get_latest_theses(request):
@@ -66,11 +74,13 @@ def ipaddress(request):
 
     ipaddress = IPAddress(request.META["REMOTE_ADDR"])
 
-    return {"ipaddress": dict(
-        is_allowed=ipaddress.matches(ALLOWED_IPS),
-        number=ipaddress.number,
-        name=ipaddress.name
-        )}
+    return {
+        "ipaddress": dict(
+            is_allowed=ipaddress.matches(ALLOWED_IPS),
+            number=ipaddress.number,
+            name=ipaddress.name,
+        )
+    }
 
 
 def location(request):

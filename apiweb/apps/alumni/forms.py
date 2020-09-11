@@ -1,27 +1,28 @@
 import copy
 
+from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 from django import forms
 from django.contrib import admin
 from django.contrib.admin import widgets
-from django.forms.utils import ErrorList
-from django.contrib.auth.forms import (UserChangeForm, UserCreationForm)
+from django.contrib.auth import authenticate, get_user_model, password_validation
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
+from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import (
- authenticate, get_user_model, password_validation,
-)
-
 from tinymce.widgets import TinyMCE
-from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 
 from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
-from .models import PreviousPosition, Alumnus
+from .models import Alumnus, PreviousPosition
 
 
 class PreviousPositionAdminForm(forms.ModelForm):
-    nova = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.NOVA_NETWORK)
+    nova = forms.MultipleChoiceField(
+        widget=forms.RadioSelect(), choices=PreviousPosition.NOVA_NETWORK
+    )
     # Remove following line for dropdown.
-    funding = forms.MultipleChoiceField(widget=forms.RadioSelect(), choices=PreviousPosition.FUNDING)
+    funding = forms.MultipleChoiceField(
+        widget=forms.RadioSelect(), choices=PreviousPosition.FUNDING
+    )
 
 
 class AlumnusAdminForm(UserChangeForm):
@@ -37,20 +38,22 @@ class AlumnusAdminForm(UserChangeForm):
 
     username = forms.CharField(
         required=True,
-        help_text=_("Required. 150 characters or fewer. Letters, digits and ./+/-/_ only."),
-        widget=forms.TextInput(
-            attrs={"class": "form-control"}))
+        help_text=_(
+            "Required. 150 characters or fewer. Letters, digits and ./+/-/_ only."
+        ),
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
 
     email = forms.EmailField(
         required=False,
         help_text="Your email address will also serve as a way to log in",
-        widget=forms.TextInput(
-            attrs={"class":"form-control"}))
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
 
     def clean(self):
         super().clean()
         username = self.cleaned_data.get("username")
-        if '@' in username:
+        if "@" in username:
             self._errors["username"] = ErrorList()
             self._errors["username"].append("The username cannot contain '@'.")
 
@@ -60,7 +63,9 @@ class AlumnusAdminForm(UserChangeForm):
             self._errors["initials"].append("Initials cannot contain numbers")
         if "." in initials:
             self._errors["initials"] = ErrorList()
-            self._errors["initials"].append("Please give initials without dots, letters only")
+            self._errors["initials"].append(
+                "Please give initials without dots, letters only"
+            )
 
         first_name = self.cleaned_data.get("first_name")
         if any(str.isdigit(c) for c in first_name):
@@ -72,16 +77,18 @@ class AlumnusAdminForm(UserChangeForm):
             self._errors["prefix"] = ErrorList()
             self._errors["prefix"].append("Prefixes cannot contain numbers")
 
-        #As last name is already required, we cannot just override this stuff. So lets' ''try''
+        # As last name is already required, we cannot just override this stuff. So lets' ''try''
         last_name = self.cleaned_data.get("last_name")
         if last_name and any(str.isdigit(c) for c in last_name):
-                self._errors["last_name"] = ErrorList()
-                self._errors["last_name"].append("Last names cannot contain numbers")
+            self._errors["last_name"] = ErrorList()
+            self._errors["last_name"].append("Last names cannot contain numbers")
 
         place_of_birth = self.cleaned_data.get("place_of_birth")
         if any(str.isdigit(c) for c in place_of_birth):
             self._errors["place_of_birth"] = ErrorList()
-            self._errors["place_of_birth"].append("Places of birth cannot contain numbers")
+            self._errors["place_of_birth"].append(
+                "Places of birth cannot contain numbers"
+            )
 
         mobile = self.cleaned_data.get("mobile")
         if mobile and not any(str.isdigit(c) for c in mobile):
@@ -98,16 +105,17 @@ class AlumnusAdminForm(UserChangeForm):
             self._errors["work_phone"] = ErrorList()
             self._errors["work_phone"].append("Phone numbers can only contain numbers")
 
-        #Because there is also a possibility to log in with email, one must not use an email which is already in use.
+        # Because there is also a possibility to log in with email, one must not use an email which is already in use.
         # TODO: if the user has an email, but the form is empty, that means that the person wants to remove the data, but this way wouldt let it
         # SO make a check whether there is instance data but form data is empty
-
 
         email = self.cleaned_data.get("email")
         if email:
 
-            #Remove this instance object from duplicate emails object list
-            duplicate_emails_excluded = Alumnus.objects.filter(email=email).exclude(pk=self.instance.pk)
+            # Remove this instance object from duplicate emails object list
+            duplicate_emails_excluded = Alumnus.objects.filter(email=email).exclude(
+                pk=self.instance.pk
+            )
             # TODO: Change len() to .count()
             if len(duplicate_emails_excluded) > 0:
                 self.errors["email"] = ErrorList()
@@ -117,6 +125,7 @@ class AlumnusAdminForm(UserChangeForm):
 # ##NEW USERFORM TEST
 UserModel = get_user_model()
 
+
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = UserModel
@@ -125,7 +134,9 @@ class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
         if self._meta.model.USERNAME_FIELD in self.fields:
-            self.fields[self._meta.model.USERNAME_FIELD].widget.attrs.update({'autofocus': True})
+            self.fields[self._meta.model.USERNAME_FIELD].widget.attrs.update(
+                {"autofocus": True}
+            )
 
     def clean_email(self):
         super().clean()

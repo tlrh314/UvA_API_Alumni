@@ -27,7 +27,7 @@
                 <a href="{% url 'interviews:detail' latest_post.slug %}">
                     <button class="btn btn-primary pull-right" type="submit">Read More</button></a>
                 {% endautoescape %}
-                {% else %} 
+                {% else %}
                 <h5 class="text-left"><a href="{% url 'site_login' %}">Please login to view this content.</a></h5>
                 {% endif %}
             </td></tr></tbody>

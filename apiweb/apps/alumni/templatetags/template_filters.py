@@ -1,15 +1,15 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
 from django import template
-from urlobject import URLObject
-from django.utils.http import urlquote
-from django.utils.safestring import mark_safe
-from django.utils.html import conditional_escape
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.template.defaultfilters import stringfilter
+from django.utils.html import conditional_escape
+from django.utils.http import urlquote
+from django.utils.safestring import mark_safe
+from urlobject import URLObject
 
-from ..models import Alumnus
 from ...research.models import Thesis
+from ..models import Alumnus
 
 register = template.Library()
 
@@ -67,10 +67,15 @@ def check_dropdown(context, filter_type, value):
     # Check if the to be checked value is in the dictionary
     if filter_type in filters.keys():
         if str(value) in filters[filter_type]:
-            return static("img/checkbox-on.png")  # "http://2.bp.blogspot.com/-n1da2kDa_ZY/UXeCtSd5KJI/AAAAAAAAAMw/0ktttvBNCWU/s1600/check_box.png"
+            return static(
+                "img/checkbox-on.png"
+            )  # "http://2.bp.blogspot.com/-n1da2kDa_ZY/UXeCtSd5KJI/AAAAAAAAAMw/0ktttvBNCWU/s1600/check_box.png"
 
     # If it is not in the dictionary return the empty checkbox
-    return static("img/checkbox-off.png") # "http://www.clipartbest.com/cliparts/LiK/rrX/LiKrrXy4T.png"
+    return static(
+        "img/checkbox-off.png"
+    )  # "http://www.clipartbest.com/cliparts/LiK/rrX/LiKrrXy4T.png"
+
 
 @register.simple_tag(name="get_active_filters", takes_context=True)
 def get_active_filters(context):
@@ -85,6 +90,7 @@ def get_active_filters(context):
                 filterzip.append((filter_type, filter_value))
     return filterzip
 
+
 @register.simple_tag(name="get_active_sort", takes_context=True)
 def get_active_sort(context):
     active_filters_dict = URLObject(context.request.get_full_path()).query.multi_dict
@@ -94,59 +100,87 @@ def get_active_sort(context):
 
 @register.simple_tag(name="get_defence_years")
 def get_defence_years():
-    return [("1900 - 1959", 1900, 1959),
-            ("1960 - 1969", 1960, 1969),
-            ("1970 - 1979", 1970, 1979),
-            ("1980 - 1989", 1980, 1989),
-            ("1990 - 1999", 1990, 1999),
-            ("2000 - 2009", 2000, 2009),
-            ("2010 - 2019", 2010, 2019)]
+    return [
+        ("1900 - 1959", 1900, 1959),
+        ("1960 - 1969", 1960, 1969),
+        ("1970 - 1979", 1970, 1979),
+        ("1980 - 1989", 1980, 1989),
+        ("1990 - 1999", 1990, 1999),
+        ("2000 - 2009", 2000, 2009),
+        ("2010 - 2019", 2010, 2019),
+    ]
 
 
 @register.simple_tag(name="get_yearrange")
 def get_yearrange(year):
-    return { "1900": "1900 - 1959", "1960": "1960 - 1969", "1970": "1970 - 1979",
-             "1980": "1980 - 1989", "1990": "1990 - 1999", "2000": "2000 - 2009",
-             "2010": "2010 - 2019"}.get(year, "none")
+    return {
+        "1900": "1900 - 1959",
+        "1960": "1960 - 1969",
+        "1970": "1970 - 1979",
+        "1980": "1980 - 1989",
+        "1990": "1990 - 1999",
+        "2000": "2000 - 2009",
+        "2010": "2010 - 2019",
+    }.get(year, "none")
+
 
 @register.simple_tag(name="get_amount_advisors")
 def get_amount_advisors(advisors_list):
     return len(advisors_list)
 
+
 @register.simple_tag(name="get_thesis_types")
 def get_thesis_types():
     return Thesis.THESIS_TYPE
 
+
 @register.simple_tag(name="get_sorting_options")
 def get_sorting_options():
-    return [("Author AZ", "author_az"),
-            ("Author ZA", "author_za"),]
-            # ("Year High-Low", "year_hl"),
-            # ("Year Low-High", "year_lh")]
+    return [
+        ("Author AZ", "author_az"),
+        ("Author ZA", "author_za"),
+    ]
+    # ("Year High-Low", "year_hl"),
+    # ("Year Low-High", "year_lh")]
+
 
 @register.simple_tag(name="set_query", takes_context=True)
 def set_query(context, type, value):
     url = URLObject(context.request.get_full_path())
     return url.set_query_param(type, value)
 
+
 @register.filter(name="capitalize_filter_type")
 def capitalize_filter_type(filter_type):
-    return filter_type[0].upper()+filter_type[1:]
+    return filter_type[0].upper() + filter_type[1:]
+
 
 @register.filter(name="display_thesis_type")
 def display_thesis_type(thesis_type):
-    return ({"phd":"PhD","msc":"MSc","bsc":"BSc"}.get(thesis_type,""))
+    return {"phd": "PhD", "msc": "MSc", "bsc": "BSc"}.get(thesis_type, "")
+
 
 @register.filter(name="display_sort_type")
 def display_sort_type(sort_type):
-    return ({"phd":"PhD", "msc":"MSc", "bsc":"BSc", "pd":"Postdoc", "staff":"Staff",
-        "obp":"Support Staff", "alumnus":"Alumnus", "author":"Author",
-        "thesis":"Thesis", "year": "Defence date", "title": "Thesis title"}.get(sort_type[:-3],""))
+    return {
+        "phd": "PhD",
+        "msc": "MSc",
+        "bsc": "BSc",
+        "pd": "Postdoc",
+        "staff": "Staff",
+        "obp": "Support Staff",
+        "alumnus": "Alumnus",
+        "author": "Author",
+        "thesis": "Thesis",
+        "year": "Defence date",
+        "title": "Thesis title",
+    }.get(sort_type[:-3], "")
 
 
 @register.filter(name="display_length_result")
 def display_length_result(advisors_list):
     return len(advisors_list)
+
 
 @register.simple_tag(name="filter_content", takes_context=True)
 def filter_content(context, filter_type, value):
@@ -164,10 +198,16 @@ def filter_content(context, filter_type, value):
     # If you add a new filter you start at page 1 again
     url = url.del_query_param("page")
 
+
 @register.simple_tag(name="get_students")
 def get_students(alumnus, type):
     theses_supervised = alumnus.students.all().order_by("-date_of_defence")
-    return [ (thesis.alumnus, thesis.date_of_defence) for thesis in theses_supervised if thesis.type == type ]
+    return [
+        (thesis.alumnus, thesis.date_of_defence)
+        for thesis in theses_supervised
+        if thesis.type == type
+    ]
+
 
 @register.simple_tag(name="get_thesis_supervisors")
 def get_thesis_supervisors(alumnus, thesis_type):
@@ -188,6 +228,7 @@ def get_thesis_supervisors(alumnus, thesis_type):
     # Zip is an iterator so it can only exhaust, but it has no len.
     # Typecast to list such that we can check if the list is empty
     return list(zip(thesis_supervisors, date_of_defence, type_theses))
+
 
 @register.simple_tag(name="get_supervisors")
 def get_supervisors(alumnus):
@@ -218,6 +259,7 @@ def get_supervisors(alumnus):
     # Typecast to list such that we can check if the list is empty
     return list(zip(thesis_supervisors, date_of_defence, type_theses))
 
+
 @register.filter
 @template.defaultfilters.stringfilter
 def ads_url(value, autoescape=None):
@@ -234,9 +276,14 @@ def ads_url(value, autoescape=None):
         link = "http://adsabs.harvard.edu/cgi-bin/nph-abs_connect?library&" + value
         #      "http://adsabs.harvard.edu/cgi-bin/abs_connect?param1=val1&param2=val2&"
     else:
-        link = "http://adsabs.harvard.edu/cgi-bin/nph-abs_connect?" \
-               "db_key=AST&db_key=INST&db_key=PHY&author=" + urlquote(value) + \
-               "&nr_to_return=2000&start_nr=1"
+        link = (
+            "http://adsabs.harvard.edu/cgi-bin/nph-abs_connect?"
+            "db_key=AST&db_key=INST&db_key=PHY&author="
+            + urlquote(value)
+            + "&nr_to_return=2000&start_nr=1"
+        )
 
     return mark_safe(link)
+
+
 ads_url.needs_autoescape = True

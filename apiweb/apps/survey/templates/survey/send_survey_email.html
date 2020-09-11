@@ -1,11 +1,11 @@
 {% load i18n %}{% autoescape off %}Dear {{ full_name_no_title }},
 
-The Anton Pannekoek Institute is happy to announce that we have developed and launched a new website for our alumni! 
+The Anton Pannekoek Institute is happy to announce that we have developed and launched a new website for our alumni!
 You can now search for alumni and theses of the API, starting with Anton Pannekoek up to the present day by
 surfing to {{ site_name }}. You are receiving this e-mail because you are one of our alumni.
 
 We would like to ask you to verify your (contact) information, and we kindly ask you to fill out a survey.
-The goal of the survey is to gather information on your current whereabouts and occupation. Furthermore, we 
+The goal of the survey is to gather information on your current whereabouts and occupation. Furthermore, we
 intend to analyse and show (anonymised) statistics of career opportunities after leaving the API.
 {% block reset_link %}
 {{ protocol }}://{{ domain }}{% url 'survey:survey_url' uidb64=uid token=token %}
@@ -15,7 +15,7 @@ You can either use that username, or this email adress as a way to log in.
 In the first step of the survey we ask you to create a password, followed by providing some basic contact
 information. The last part consists of questions regarding current employment.
 
-Kind regards, 
+Kind regards,
 
 Secretariat Anton Pannekoek Institute for Astronomy
 University of Amsterdam

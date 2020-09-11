@@ -40,11 +40,11 @@
                 {% endif %}
                 {% for field in form.visible_fields %}
 
-                    {% if forloop.counter == 1 %} 
+                    {% if forloop.counter == 1 %}
                     <legend> Second job after leaving API </legend>
                     {% endif %}
 
-                    {% if field.errors %} 
+                    {% if field.errors %}
                     <div class="form-group has-error has-feedback">
                     {% else %}
                     <div class="form-group">
@@ -67,7 +67,7 @@
                 <button type="submit" name="prev" class="btn btn-success pull-left"> Previous </button>
                 <button type="submit" name="next" class="btn btn-success center-block pull-right"> Next </button>
                 <button type="submit" name="finish" class="btn btn-warning center-block pull-right"> Finish Survey </button>
-                    
+
                 </form>
         </div>
     </div>

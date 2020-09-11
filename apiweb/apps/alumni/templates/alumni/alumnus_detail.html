@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %} 
+{% load static %}
 {% load bootstrap3 %}
 {% load template_filters %}
 {% load main_tags %}
@@ -45,25 +45,25 @@
 
                         {% if alumnus.facebook %}
                             {% if alumnus.show_facebook %}
-                                <tr><th>Facebook</th><td><a href="{{ alumnus.facebook }}" target="blank">{{ alumnus.facebook }}</a></td></tr>                
+                                <tr><th>Facebook</th><td><a href="{{ alumnus.facebook }}" target="blank">{{ alumnus.facebook }}</a></td></tr>
                             {% endif %}
                         {% endif %}
-                        
+
                         {% if alumnus.twitter %}
                             {% if alumnus.show_twitter %}
-                                <tr><th>Twitter</th><td><a href="{{ alumnus.twitter }}" target="blank">{{ alumnus.twitter }}</td></tr>                
+                                <tr><th>Twitter</th><td><a href="{{ alumnus.twitter }}" target="blank">{{ alumnus.twitter }}</td></tr>
                             {% endif %}
                         {% endif %}
-                        
+
                         {% if alumnus.linkedin %}
-                            {% if alumnus.show_linkedin %} 
-                                <tr><th>Linkedin</th><td><a href="{{ alumnus.linkedin }}" target="blank">{{ alumnus.linkedin }}</a></td></tr>                
+                            {% if alumnus.show_linkedin %}
+                                <tr><th>Linkedin</th><td><a href="{{ alumnus.linkedin }}" target="blank">{{ alumnus.linkedin }}</a></td></tr>
                             {% endif %}
                         {% endif %}
-                        
+
                         {% if alumnus.homepage %}
                             {% if alumnus.show_homepage %}
-                                <tr><th>Homepage</th><td><a href="{{ alumnus.homepage }}" target="blank">{{ alumnus.homepage }}</a></td></tr>                
+                                <tr><th>Homepage</th><td><a href="{{ alumnus.homepage }}" target="blank">{{ alumnus.homepage }}</a></td></tr>
                             {% endif %}
                         {% endif %}
                     </tbody>
@@ -222,7 +222,7 @@
             {% if amt_msc_supervisors > 0 %}
                 <h3 class="text-left">MSc</h3>
                 <table class="table">
-                    <thead></thead>                    
+                    <thead></thead>
                     <tbody>
                         {% for msc_supervisor, date_of_defence, type in msc_supervisors %}
                             <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' msc_supervisor.slug %}">{{ msc_supervisor.full_name }}
@@ -231,11 +231,11 @@
                     </tbody>
                 </table>
             {% endif %}
-        
+
             {% if amt_bsc_supervisors > 0 %}
                 <h3 class="text-left">BSc</h3>
                 <table class="table">
-                    <thead></thead>                    
+                    <thead></thead>
                     <tbody>
                         {% for bsc_supervisor, date_of_defence, type in bsc_supervisors %}
                             <tr><td style="padding-left: 0px;"><a href="{% url 'alumni:alumnus-detail' bsc_supervisor.slug %}">{{ bsc_supervisor.full_name }}
@@ -266,7 +266,7 @@
                 {% if amt_phd_students > 1 %}
                     <h3 class="text-left">PhD Students</h3>
                 {% else %}
-                    <h3 class="text-left">PhD Student</h3>                
+                    <h3 class="text-left">PhD Student</h3>
                 {% endif %}
 
                 <table class="table">

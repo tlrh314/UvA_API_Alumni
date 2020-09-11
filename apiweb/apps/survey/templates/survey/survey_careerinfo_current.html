@@ -41,11 +41,11 @@
                 {% endif %}
                 {% for field in form.visible_fields %}
 
-                    {% if forloop.counter == 1 %} 
+                    {% if forloop.counter == 1 %}
                     <legend> Current Position </legend>
                     {% endif %}
 
-                    {% if field.errors %} 
+                    {% if field.errors %}
                     <div class="form-group has-error has-feedback">
                     {% else %}
                     <div class="form-group">

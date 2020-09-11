@@ -1,13 +1,12 @@
-from __future__ import unicode_literals, absolute_import, division
+from __future__ import absolute_import, division, unicode_literals
 
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from tinymce.models import HTMLField
 
 from ..alumni.models import Alumnus
-
 
 # def save_teaser_picture(instance, filename):
 #     """ Determine upload path for teaser pictures. The instance's _meta attribute
@@ -34,13 +33,17 @@ from ..alumni.models import Alumnus
 
 
 class Category(models.Model):
-    name             = models.CharField(max_length=200)
-    slug             = models.SlugField(unique=True, blank=True, null=True)
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
-    date_created     = models.DateTimeField(_("Date Created"), auto_now_add=True)
-    date_updated     = models.DateTimeField(_("Date Last Changed"), auto_now=True)
-    last_updated_by  = models.ForeignKey(get_user_model(), null=True,
-        on_delete=models.SET_NULL, related_name="categories_updated")
+    date_created = models.DateTimeField(_("Date Created"), auto_now_add=True)
+    date_updated = models.DateTimeField(_("Date Last Changed"), auto_now=True)
+    last_updated_by = models.ForeignKey(
+        get_user_model(),
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="categories_updated",
+    )
 
     def __str__(self):
         return self.name
@@ -50,29 +53,41 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    author          = models.ForeignKey(Alumnus, on_delete=models.CASCADE)
-    title           = models.CharField(max_length=300)
-    slug            = models.SlugField(unique=True, blank=True, null=True)
-    teaser          = models.TextField(blank=True, help_text=_("Short teaser for the list of posts."))
+    author = models.ForeignKey(Alumnus, on_delete=models.CASCADE)
+    title = models.CharField(max_length=300)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+    teaser = models.TextField(
+        blank=True, help_text=_("Short teaser for the list of posts.")
+    )
 
     # TODO: implement the teaser picture
     # teaser_picture  = models.ImageField(
     #     upload_to=save_teaser_picture, blank=True, null=True,
     #     help_text=_("Small (100x100 pixels maximum) teaser picture for the list of posts.")
     # )
-    content         = HTMLField(default="")
+    content = HTMLField(default="")
 
-    alumnus         = models.ForeignKey(Alumnus, related_name="interviews",
-        blank=True, null=True, on_delete=models.SET_NULL)
+    alumnus = models.ForeignKey(
+        Alumnus,
+        related_name="interviews",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
 
-    is_published    = models.BooleanField(default=False)
-    date_created    = models.DateTimeField(auto_now_add=True)
-    date_published  = models.DateTimeField(blank=True, null=True)
-    last_updated_by = models.ForeignKey(get_user_model(), null=True,
-        on_delete=models.SET_NULL, related_name="posts_updated")
+    is_published = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_published = models.DateTimeField(blank=True, null=True)
+    last_updated_by = models.ForeignKey(
+        get_user_model(),
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="posts_updated",
+    )
 
-    category = models.ForeignKey(Category, blank=True, null=True,
-        on_delete=models.SET_NULL)
+    category = models.ForeignKey(
+        Category, blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     # featured = models.BooleanField(default=False,
     #         help_text="Should this post be shown in the featured list?")
@@ -84,7 +99,9 @@ class Post(models.Model):
     class Meta:
         verbose_name = _("Interview")
         verbose_name_plural = _("Interviews")
-        ordering = ['-date_published',]
+        ordering = [
+            "-date_published",
+        ]
 
     def publish(self):
         self.date_published = timezone.now()
@@ -104,4 +121,3 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-

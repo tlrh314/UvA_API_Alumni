@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block stylesheets %} {{ block.super }} 
-<style>    
-    .body { 
+{% block stylesheets %} {{ block.super }}
+<style>
+    .body {
         margin:0;
         position:fixed;
         top:0;
         right:0;
         bottom:0;
-        left:0; 
+        left:0;
     }
 </style>{% endblock stylesheets %}
 
@@ -27,7 +27,7 @@
     <li><a href="#" id="msc">Msc</a></li>
     <li><a href="#" id="phd">PhD</a></li>
   </ul>
-</div> 
+</div>
     <h1 class="text-center">Some graphs</h1>
     <div id="tree-wrapper">
         <canvas id="chart" width="400" height="400"></canvas>
