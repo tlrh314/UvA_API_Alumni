@@ -10,7 +10,9 @@ from apiweb.apps.alumni.factories import UserFactory
 class PasswordResetTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.ralph = UserFactory.build()
+        cls.ralph = UserFactory.build(
+            username="ralph", first_name="Ralph", last_name="Wijers"
+        )
         cls.ralph_password = "ProfDrRalphWijers"
         cls.ralph.set_password(cls.ralph_password)
         cls.ralph.save()

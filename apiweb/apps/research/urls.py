@@ -1,7 +1,6 @@
-from __future__ import unicode_literals, absolute_import, division
-
 from django.urls import path
-from .views import thesis_list, thesis_detail, thesis_has_no_pdf
+
+from .views import thesis_detail, thesis_has_no_pdf, thesis_list
 
 app_name = "research"
 urlpatterns = [

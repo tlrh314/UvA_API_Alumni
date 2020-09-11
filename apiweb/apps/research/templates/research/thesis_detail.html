@@ -7,7 +7,7 @@
 
 <div class="main-content" role="main">
     {% bootstrap_messages %}
-    
+
     <div class="span9">
         <h1 class="text-center">{{ thesis.title }}</h1>
     </div>
@@ -44,8 +44,7 @@
                         {% if thesis.pdf.name %}
                             <a href="{{ thesis.pdf.url }}" target="_blank"> Available. Click here for the full text. </a>
                         {% else %}
-                            <a href="{% url 'contact' %}"> Unavailable. Please contact us if you can provide the full text!</a>
-                            {# <a href="{% url 'research:thesis-has-no-pdf' %}"> PDF </a> #}
+                            <a href="mailto:{{ contactinfo.secretary_email_address }}"> Unavailable. Please contact us if you can provide the full text!</a>
                         {% endif %}
                     </td></tr>
                     </tbody>
