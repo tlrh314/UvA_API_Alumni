@@ -1,3 +1,4 @@
+# syntax = docker/dockerfile:experimental
 FROM python:3.8-slim-buster
 ENV PYTHONUNBUFFERED 1
 
@@ -5,7 +6,8 @@ LABEL maintainer="Timo Halbesma <timo@halbesma.com>"
 
 # Install system packages
 WORKDIR /app
-RUN set -ex \
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN --mount=type=cache,mode=0755,target=/var/cache/apt --mount=type=cache,mode=0755,target=/var/lib/apt set -ex \
     && apt-get update \
 \
     # Install Build/Runtime dependencies ...
@@ -32,10 +34,10 @@ RUN set -ex \
 
 # Install python packages for Django
 COPY requirements.txt /app/apiweb/requirements.txt
-RUN set -ex && \
+RUN --mount=type=cache,mode=0755,target=/root/.cache/pip set -ex && \
     pip install --upgrade pip \
-    && pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r /app/apiweb/requirements.txt \
+    && pip install --upgrade pip \
+    && pip install -r /app/apiweb/requirements.txt \
     && pip install mysqlclient uwsgi
 
 # NB, we link the repo at runtime (which 'overwrites' files copied in on build)

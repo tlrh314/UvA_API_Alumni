@@ -69,7 +69,7 @@
   (see [Docker docs](https://docs.docker.com/install/))
 
 ### **Running with Django's built-in development server w/ sqlite3 database (Option 2a)**
-- Build the image: `docker build -t apiweb .`
+- Build the image: /w [BuildKit](https://stackoverflow.com/a/58021389): `DOCKER_BUILDKIT=1 docker build -t apiweb .`
 - Setup local settings: `cp apiweb/settings/.env.example apiweb/settings/.env`
 - Edit `settings/.env` to tailor to your machine.
 - TODO: command below misses a considerable number of volumes linked into the container. See `docker-compose.yml`
