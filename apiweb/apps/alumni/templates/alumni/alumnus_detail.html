@@ -88,7 +88,7 @@
                                     {% if thesis.title %}
                                         {{ thesis.title }}
                                     {% else %}
-                                        <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
+                                        <a href="mailto:{{ contactinfo.secretary_email_address }}">Title Unknown. Please contact us if you know the title!</a>
                                     {% endif %}
                                 </a>
                                     {% if thesis.date_of_defence %}

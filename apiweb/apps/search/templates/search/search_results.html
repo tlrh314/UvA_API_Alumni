@@ -35,7 +35,7 @@
                     {% if thesis.title %}
                         <a href="{% url 'research:thesis-detail' thesis.slug %}">{{ thesis.title }} </a><br>
                     {% else %}
-                        <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a><br>
+                        <a href="mailto:{{ contactinfo.secretary_email_address }}">Title Unknown. Please contact us if you know the title!</a><br>
                     {% endif %}
                 {% endfor %}
                 </td>

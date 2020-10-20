@@ -198,7 +198,7 @@
                     {% if thesis.title %}
                         <a href="{% url 'research:thesis-detail' thesis.slug %}">{{ thesis.title }}
                     {% else %}
-                        <a href="{% url 'contact' %}">Title Unknown. Please contact us if you know the title!</a>
+                        <a href="mailto:{{ contactinfo.secretary_email_address }}">Title Unknown. Please contact us if you know the title!</a>
                     {% endif %}
                     {% if thesis.pdf.name %}
                         (<a href="{{ thesis.pdf.url }}">PDF</a>)

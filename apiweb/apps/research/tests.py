@@ -50,6 +50,22 @@ class ResearchViewTestCase(ResearchTestMixin, TestCase):
 
         self.assertTemplateUsed(response, "research/thesis_list.html")
 
+    def test_thesis_list_when_logged_in_but_title_is_unknown(self):
+        # Regression test for API-ALUMNI-D
+        self.thesis.title = ""
+        self.thesis.save()
+
+        login_status = self.client.login(
+            username=self.ralph.username, password=self.ralph_password
+        )
+        self.assertTrue(login_status)
+
+        url = reverse("research:thesis-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTemplateUsed(response, "research/thesis_list.html")
+
     def test_thesis_detail_when_logged_in(self):
         login_status = self.client.login(
             username=self.ralph.username, password=self.ralph_password
