@@ -1,21 +1,13 @@
-from __future__ import absolute_import, division, unicode_literals
-
 import sys
 
 from django.contrib import admin
-from django.contrib.admin import DateFieldListFilter, FieldListFilter
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import (
-    AdminPasswordChangeForm,
-    PasswordResetForm,
-    UserCreationForm,
-)
+from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordResetForm
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import models
-from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -130,7 +122,8 @@ class ThesisAdminInline(admin.StackedInline):
                 pass
 
 
-# Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659, also present in theses admin and jobs admin
+# Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659,
+# also present in theses admin and jobs admin
 class ExtendedActionsMixin(object):
     # actions that can be executed with no items selected on the admin change list.
     # The filtered queryset displayed to the user will be used instead
@@ -416,7 +409,7 @@ class AlumnusAdmin(UserAdmin):
             return "Current"
 
         postdoc_set = obj.positions.filter(type=postdoc)
-        if len(postdoc_set) is 0:
+        if len(postdoc_set) == 0:
             return "-"
 
         # Could have multiple date_stop
@@ -431,7 +424,7 @@ class AlumnusAdmin(UserAdmin):
 
     def show_phd_year(self, obj):
         theses = obj.theses.filter(type="phd")
-        if len(theses) is not 0:
+        if len(theses) != 0:
             if theses[0].date_of_defence:
                 return theses[0].date_of_defence.strftime("%Y")
             elif theses[0].date_stop:
@@ -442,7 +435,7 @@ class AlumnusAdmin(UserAdmin):
 
     def show_msc_year(self, obj):
         theses = obj.theses.filter(type="msc")
-        if len(theses) is not 0:
+        if len(theses) != 0:
             if theses[0].date_of_defence:
                 return theses[0].date_of_defence.strftime("%Y")
             elif theses[0].date_stop:
@@ -528,7 +521,8 @@ class AlumnusAdmin(UserAdmin):
         if "runserver" in sys.argv:
             self.message_user(
                 request,
-                "The Survey Email was Successfully Sent to the terminal to {0} alumni (because this is development)!".format(
+                "The Survey Email was Successfully Sent to the terminal to "
+                + "{0} alumni (because this is development)!".format(
                     str(queryset.count() - len(exclude_alumni))
                 ),
             )
@@ -580,8 +574,10 @@ class AlumnusAdmin(UserAdmin):
 
     export_all_alumni_to_excel.short_description = "Export all Alumni to Excel"
 
-    # In this function, I override the queryset. If the user wants to select (with checkbox) they can use 'export selected..'
-    # This override will ignore the queryset of checkboxes but will use the get_filtered_queryset result value, based on the active filters
+    # In this function, I override the queryset. If the user wants to select
+    # (with checkbox) they can use 'export selected..'
+    # This override will ignore the queryset of checkboxes but will use the
+    # get_filtered_queryset result value, based on the active filters
     def export_filtered_alumni_to_excel(self, request, queryset):
         queryset = self.get_filtered_queryset(request)
         return save_alumni_to_xls(request, queryset)
