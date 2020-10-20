@@ -85,7 +85,7 @@
 - `./nginx/generate_sslcert.sh`
 - `docker-compose up -d mariadb`
   - On first launch, the database and user will be created (you don't have to do anything)
-- `docker-compose build django nginx`
+- `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build django nginx`
 - `docker-compose up --build`
 - In a new terminal, one can attach to the container in an interactive session:
   - `docker exec -it apiweb bash`
