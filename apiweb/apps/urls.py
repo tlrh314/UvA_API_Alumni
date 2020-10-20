@@ -1,14 +1,10 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from ajax_select import urls as ajax_select_urls
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import include, path, reverse, reverse_lazy
+from django.urls import include, path
 from filebrowser.sites import site
 
 from apiweb.context_processors import contactinfo
-
-from .survey.views import survey_success
 
 admin.autodiscover()
 
@@ -17,7 +13,7 @@ handler500 = "apiweb.apps.main.views.handler500"
 
 
 def trigger_error(request):
-    division_by_zero = 1 / 0
+    division_by_zero = 1 / 0  # noqa F841
 
 
 urlpatterns = [

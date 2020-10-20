@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext

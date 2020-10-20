@@ -1,7 +1,3 @@
-from __future__ import absolute_import, division, unicode_literals
-
-import os.path
-
 from django import template
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required

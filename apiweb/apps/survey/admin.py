@@ -1,6 +1,4 @@
-from __future__ import absolute_import, division, unicode_literals
-
-from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
+from ajax_select.fields import AutoCompleteSelectField
 from django import forms
 from django.contrib import admin
 
@@ -9,7 +7,8 @@ from .actions import save_all_jobs_to_xls
 from .models import JobAfterLeaving, Sector
 
 
-# Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659, also present in theses admin and jobs admin
+# Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659,
+# also present in theses admin and jobs admin
 class ExtendedActionsMixin(object):
     # actions that can be executed with no items selected on the admin change list.
     # The filtered queryset displayed to the user will be used instead

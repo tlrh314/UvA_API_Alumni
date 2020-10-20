@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from ..jobs.sitemap import JobSitemap
 from ..news.sitemap import ColloquiumSitemap, EventSitemap, PizzaSitemap, PressSitemap
 from ..people.sitemap import PersonSitemap

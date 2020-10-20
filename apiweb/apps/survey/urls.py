@@ -1,13 +1,8 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.forms import SetPasswordForm
-from django.urls import include, path, reverse, reverse_lazy
+from django.urls import path, reverse_lazy
 
 from apiweb.context_processors import contactinfo
 
-from ..alumni.backends import EmailOrUsernameModelBackend
-from .forms import SendSurveyForm
 from .views import (
     survey_careerinfo_current,
     survey_careerinfo_first,

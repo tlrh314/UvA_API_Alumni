@@ -1,20 +1,16 @@
-from __future__ import absolute_import, division, unicode_literals
-
 import json
 import re
-from functools import reduce
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from ...settings import GOOGLE_API_KEY, GOOGLE_CX_ID
 from ..alumni.models import Alumnus
-from ..research.models import Thesis
 from .forms import SearchForm
 
 try:
@@ -148,7 +144,7 @@ class SearchView(FormView):
         try:
             search_response = urlopen(url)
             search_results = search_response.read()
-        except URLError as exc:
+        except URLError:
             return None
         results = json.loads(search_results.decode("utf-8"))
         return results.get("items", [])

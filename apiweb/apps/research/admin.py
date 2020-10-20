@@ -1,17 +1,15 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from django.contrib import admin
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from ...settings import ADMIN_MEDIA_JS
-from ..alumni.models import Alumnus
 from .actions import save_all_theses_to_xls
 from .models import Thesis
 
 
-# Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659, also present in theses admin and jobs admin
+# Copied from https://gist.github.com/rafen/eff7adae38903eee76600cff40b8b659,
+# also present in theses admin and jobs admin
 class ExtendedActionsMixin(object):
     # actions that can be executed with no items selected on the admin change list.
     # The filtered queryset displayed to the user will be used instead
@@ -118,7 +116,7 @@ class ThesisAdmin(admin.ModelAdmin):
     fieldsets = [
         (
             "Thesis Information",
-            {"fields": ["alumnus", "type", "date_start", "date_stop"],},
+            {"fields": ["alumnus", "type", "date_start", "date_stop"]},
         ),
         (
             "Thesis Information",

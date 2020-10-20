@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from datetime import datetime
 
 import xlwt
@@ -67,7 +65,8 @@ def save_all_theses_to_xls(request, queryset=None):
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
 
-            # The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary
+            # The formatter cannot handle bytes type classes (unicode is not evaluated in bytes).
+            # Change to unicode if necessary
             if type(value) is bytes:
                 value = value.decode("unicode_escape")
 
@@ -105,7 +104,8 @@ def save_all_theses_to_xls(request, queryset=None):
                 if len(str(thesis)) == 0:
                     value = ""
 
-            # The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary
+            # The formatter cannot handle bytes type classes (unicode is not evaluated in bytes).
+            # Change to unicode if necessary
             if type(value) is bytes:
                 value = value.decode("unicode_escape")
 

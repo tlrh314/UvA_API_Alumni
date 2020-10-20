@@ -1,18 +1,10 @@
-from __future__ import absolute_import, division, unicode_literals
-
-import os
-import os.path
-from datetime import date
-
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
-from tinymce.models import HTMLField
 
 from ..alumni.models import Alumnus
-from ..main.models import validate_only_one_instance
 
 
 @python_2_unicode_compatible

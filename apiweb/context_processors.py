@@ -1,15 +1,11 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from django.contrib.sites.models import Site
-from django.db.models import Q
 from django.db.utils import OperationalError
 from django.db.utils import ProgrammingError as ProgError1
 
-from apiweb.apps.interviews.models import Category, Post
+from apiweb.apps.interviews.models import Post
 from apiweb.apps.main.models import ContactInfo
 from apiweb.apps.research.models import Thesis
 
-from .decorators import IPAddress
 from .ipaddress import IPAddress
 from .settings import ALLOWED_IPS
 
@@ -38,11 +34,11 @@ def contactinfo(request):
         else:
             contactinfo = ContactInfoDefault()
             p = contactinfo.telephone_api
-    except (OperationalError, ProgError1, ProgError2) as e:
+    except (OperationalError, ProgError1, ProgError2):
         # Catch in case the database was not yet created
         contactinfo = ContactInfoDefault()
         p = contactinfo.telephone_api
-    except:
+    except Exception:
         print("Other error was raised. Please check the code and catch if needed")
         raise
 

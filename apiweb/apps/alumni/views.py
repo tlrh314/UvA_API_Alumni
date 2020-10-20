@@ -1,7 +1,3 @@
-from __future__ import absolute_import, division, unicode_literals
-
-import os.path
-
 from django import template
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -22,7 +18,6 @@ def alumnus_list(request):
     # Get filters
     defence_year = request.GET.getlist("year", None)
     degree_type = request.GET.getlist("type", None)
-    positions = request.GET.getlist("positions", None)
     sort_on = request.GET.getlist("sort", None)
 
     # Apply filters
@@ -91,20 +86,17 @@ def alumnus_list(request):
 
         if sort_on[0] == "pd_lh":
             alumni = (
-                alumni.filter(positions__type__name__in=["Postdoc",])
+                alumni.filter(positions__type__name__in=["Postdoc"])
                 .distinct()
                 .order_by("positions__date_stop")
             )
 
         if sort_on[0] == "pd_hl":
             alumni = (
-                alumni.filter(positions__type__name__in=["Postdoc",])
+                alumni.filter(positions__type__name__in=["Postdoc"])
                 .distinct()
                 .order_by("positions__date_start")
             )
-
-        # if sort_on[0] == "pd_hl":
-        #     alumni = alumni.filter(positions__type__name__in=["Postdoc",]).distinct().order_by("-positions__date_stop")
 
         # TODO: if an alumnus has several staff positions, then the latest date_stop must be returned.
         # Is this aggregating / grouping several tables together, then taking the max?
@@ -182,7 +174,7 @@ def alumnus_list(request):
     # FIX: use python to uniqueify
     alumnus_unique = []
     for alumnus in alumni:
-        if not alumnus in alumnus_unique:
+        if alumnus not in alumnus_unique:
             alumnus_unique.append(alumnus)
     alumni = alumnus_unique[:]
 

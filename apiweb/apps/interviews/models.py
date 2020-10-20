@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone

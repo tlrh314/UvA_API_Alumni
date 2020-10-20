@@ -1,30 +1,22 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
-
-import copy
 import logging
 import sys
 from datetime import datetime
 
 from django import forms
-from django.contrib.auth import _get_backends, get_user_model
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sessions.models import Session
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import widgets
 from django.forms.utils import ErrorList
 from django.template import loader
-from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 from django_countries import countries
 from tinymce.widgets import TinyMCE
 
-from ...settings import TINYMCE_MINIMAL_CONFIG
 from ..alumni.models import AcademicTitle, Alumnus
 from .models import JobAfterLeaving, Sector
 
@@ -42,7 +34,7 @@ TINYMCE_LOCAL_CONFIG = {
     "menubar": False,
     "statusbar": False,
     "elementpath": False,
-    "plugins": ["paste",],
+    "plugins": ["paste"],
     "toolbar1": "undo redo | bold italic | bullist numlist outdent indent | ",
     "toolbar2": "",
     "paste_as_text": True,
@@ -51,11 +43,13 @@ TINYMCE_LOCAL_CONFIG = {
 
 class SendSurveyForm(PasswordResetForm):
     email = forms.EmailField(label=_("Email"), max_length=254)
+
     # Here we overwrite the save method because the PasswordResetForm gets
     # all users given an e-mail address, but we want to e-mail one specific
     # alumnus only once. This avoids sending the same mail multiple times.
     # Also, here we set the templates to use for the subject and e-mail.
     # Based on Django 1.11, if Django is upgraded: check changes to PasswordResetForm
+
     def save(
         self,
         alumnus,
@@ -508,8 +502,10 @@ class SurveyContactInfoForm(forms.ModelForm):
             self._errors["mobile"] = ErrorList()
             self._errors["mobile"].append(error_messages["numbers"])
 
-        # Because there is also a possibility to log in with email, one must not use an email which is already in use.
-        # TODO: if the user has an email, but the form is empty, that means that the person wants to remove the data, but this way wouldt let it
+        # Because there is also a possibility to log in with email, one must not use an
+        # email which is already in use.
+        # TODO: if the user has an email, but the form is empty, that means that the
+        # person wants to remove the data, but this way wouldt let it
         # SO make a check whether there is instance data but form data is empty
         email = self.cleaned_data.get("email")
         # Remove this instance object from duplicate emails object list

@@ -1,14 +1,10 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
-from django.http import Http404, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import RedirectView, TemplateView
 
 from .forms import SurveyCareerInfoForm, SurveyContactInfoForm
 from .models import JobAfterLeaving
@@ -33,7 +29,7 @@ def survey_contactinfo(request, use_for_main=False):
     else:
         form = SurveyContactInfoForm(instance=request.user)
 
-    return render(request, "survey/survey_contactinfo.html", {"form": form,})
+    return render(request, "survey/survey_contactinfo.html", {"form": form})
 
 
 @login_required

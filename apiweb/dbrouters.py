@@ -1,6 +1,5 @@
 # Turn off pylint warning us for sticking to the function definition:
 # pylint: disable=unused-argument
-from __future__ import absolute_import, division, unicode_literals
 
 
 class DefaultRouter(object):

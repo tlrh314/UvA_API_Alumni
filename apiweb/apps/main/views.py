@@ -1,10 +1,8 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from datetime import datetime
 
 from dal import autocomplete
 from django.contrib import messages
-from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+from django.contrib.admin.models import CHANGE, LogEntry
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
@@ -193,7 +191,7 @@ def site_contactinfo(request):
     else:
         form = SurveyContactInfoForm(instance=request.user)
 
-    return render(request, "main/contactinfo_change_form.html", {"form": form,})
+    return render(request, "main/contactinfo_change_form.html", {"form": form})
 
 
 @login_required
@@ -223,7 +221,7 @@ def site_thesis_select(request):
     else:
         form = SelectThesisForm(alumnus=request.user)
 
-    return render(request, "main/thesis_select.html", {"form": form,})
+    return render(request, "main/thesis_select.html", {"form": form})
 
 
 class AlumnusAutocomplete(autocomplete.Select2QuerySetView):
@@ -236,7 +234,6 @@ class AlumnusAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs.filter(
                 Q(last_name__icontains=self.q) | Q(first_name__icontains=self.q)
             )
-        #            qs = qs.filter(Q(last_name__icontains=self.q) | Q(first_name__icontains=self.q)) | Q(full_name_no_title__icontains=self.q)
 
         return qs
 
@@ -270,7 +267,7 @@ def site_thesis_update(request, slug):
     else:
         form = ThesisForm(instance=get_object_or_404(Thesis, slug=slug))
 
-    return render(request, "main/thesis_change.html", {"form": form,})
+    return render(request, "main/thesis_change.html", {"form": form})
 
 
 @login_required
@@ -300,7 +297,7 @@ def site_thesis_create(request):
     else:
         form = ThesisForm()
 
-    return render(request, "main/thesis_add.html", {"form": form,})
+    return render(request, "main/thesis_add.html", {"form": form})
 
 
 @login_required
@@ -353,7 +350,7 @@ def site_careerinfo(request, which_position_value=0):
     return render(
         request,
         "main/careerinfo_change_form.html",
-        {"form": form, "which_position_value": which_position_value,},
+        {"form": form, "which_position_value": which_position_value},
     )
 
 
@@ -415,7 +412,7 @@ class DetailRedirectView(RedirectView):
     easily be given through as_view() in the url configuration, for
     example:
 
-        url(r"^pizza/detail/(?P<slug>[-\w]+)/$",
+        url(r"^pizza/detail/(?P<slug>[-\w]+)/$",  # noqa W605
             view=RedirectView.as_view(model=Pizza),
             name="pizza-redirect"),
 

@@ -1,14 +1,10 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from django.contrib.auth import views as auth_views
-from django.urls import include, path, reverse, reverse_lazy
+from django.urls import path, reverse_lazy
 
 from apiweb.context_processors import contactinfo
 
 from .views import (
     AlumnusAutocomplete,
-    contact,
-    contact_success,
     index,
     page_not_found,
     privacy_policy,
@@ -23,8 +19,6 @@ from .views import (
 urlpatterns = [
     path("", index, name="index"),
     path("404.html", page_not_found, name="page_not_found"),
-    # path('contact/', contact, name='contact'),
-    # path('thanks/', contact_success, name='contact_success'),
     path("privacy-policy/", privacy_policy, name="privacy_policy"),
     path(
         "login/",

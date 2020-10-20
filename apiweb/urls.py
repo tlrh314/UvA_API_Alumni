@@ -1,11 +1,6 @@
-from __future__ import absolute_import, division, unicode_literals
-
-import sys
-
 from django.conf import settings
-from django.conf.urls import handler404
 from django.conf.urls.static import static
-from django.urls import include, path, re_path
+from django.urls import include, path
 from django.views import defaults as default_views
 
 handler404 = "apiweb.apps.main.views.page_not_found"

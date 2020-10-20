@@ -1,12 +1,10 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from datetime import datetime
 
 import xlwt
 from django.http import HttpResponse
 
 from ..alumni.models import Alumnus
-from .models import JobAfterLeaving, Sector
+from .models import JobAfterLeaving
 
 
 def save_all_jobs_to_xls(request, queryset=None):
@@ -52,7 +50,6 @@ def save_all_jobs_to_xls(request, queryset=None):
         jobs = queryset
     else:  # used to export all theses to Excel
         jobs = JobAfterLeaving.objects.all()
-        # 		jobs = JobAfterLeaving.objects.filter(which_position=0) | JobAfterLeaving.objects.filter(which_position=1) | JobAfterLeaving.objects.filter(which_position=2) | JobAfterLeaving.objects.filter(which_position=3)
         jobs = jobs.order_by("alumnus__last_name")
 
     for row, job in enumerate(jobs):
@@ -67,7 +64,8 @@ def save_all_jobs_to_xls(request, queryset=None):
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
 
-            # The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary
+            # The formatter cannot handle bytes type classes (unicode is not evaluated in bytes).
+            # Change to unicode if necessary
             if type(value) is bytes:
                 value = value.decode("unicode_escape")
 
@@ -94,7 +92,8 @@ def save_all_jobs_to_xls(request, queryset=None):
             except UnicodeEncodeError:
                 value = "UnicodeEncodeError"
 
-            # The formatter cannot handle bytes type classes (unicode is not evaluated in bytes). Change to unicode if necessary
+            # The formatter cannot handle bytes type classes (unicode is not evaluated in bytes).
+            # Change to unicode if necessary
             if type(value) is bytes:
                 value = value.decode("unicode_escape")
 
