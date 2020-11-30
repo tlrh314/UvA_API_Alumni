@@ -213,7 +213,7 @@ def menulist(menu, selected_item="", href_for_select=0):
                 menu_string += '<a href="{}">'.format(ref)
         menu_string += label
         if ref:
-            if label != selected_item or href_for_select == True:
+            if label != selected_item or href_for_select is True:
                 menu_string += "</a> "
         if isinstance(submenu, (tuple, list)):
             menu_string += "\n" + menulist(submenu, selected_item, href_for_select)
@@ -224,7 +224,7 @@ def menulist(menu, selected_item="", href_for_select=0):
 
 @register.filter
 def paginate(page, arg="3,2"):
-    """  Provide a HTML rendered pagination section, with leading,
+    """Provide a HTML rendered pagination section, with leading,
     trailing and surrounding page numbers
 
     First part of the argument is the number of surrounding page numbers,

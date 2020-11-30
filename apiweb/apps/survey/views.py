@@ -12,11 +12,11 @@ from .models import JobAfterLeaving
 
 @login_required
 def survey_contactinfo(request, use_for_main=False):
-    """ Step 0 of the survey is a modified password reset url/template. Once the
-        Alumnus has received a personal email with a tokened url to the modified
-        password reset template, pressing 'next' on that password reset form leads
-        here. This form surves the purpose to gather contact information, and
-        on success this form then moves on to the survey_careerinfo view/form. """
+    """Step 0 of the survey is a modified password reset url/template. Once the
+    Alumnus has received a personal email with a tokened url to the modified
+    password reset template, pressing 'next' on that password reset form leads
+    here. This form surves the purpose to gather contact information, and
+    on success this form then moves on to the survey_careerinfo view/form."""
     if request.method == "POST":
         form = SurveyContactInfoForm(
             data=request.POST, instance=request.user, files=request.FILES

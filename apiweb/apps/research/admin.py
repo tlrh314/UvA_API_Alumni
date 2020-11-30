@@ -167,8 +167,8 @@ class ThesisAdmin(admin.ModelAdmin):
     #     return super(ThesisAdmin, self).changelist_view(request, extra_context)
 
     def get_queryset(self, request):
-        """ This function defines how to sort on alumnus column in the list_display
-            http://stackoverflow.com/a/29083623 """
+        """This function defines how to sort on alumnus column in the list_display
+        http://stackoverflow.com/a/29083623"""
         qs = super(ThesisAdmin, self).get_queryset(request)
         qs = qs.annotate()
         # TODO: this does not take into account the type of the Thesis. Also, when

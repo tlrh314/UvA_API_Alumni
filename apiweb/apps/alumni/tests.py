@@ -57,7 +57,10 @@ class AlumniViewTestCase(AlumniTestMixin, TestCase):
         )
         self.assertTrue(login_status)
 
-        url = reverse("alumni:alumnus-detail", args=[self.ralph.slug],)
+        url = reverse(
+            "alumni:alumnus-detail",
+            args=[self.ralph.slug],
+        )
         self.assertEqual(url, "/alumni/alumnus/{}/".format(self.ralph.slug))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

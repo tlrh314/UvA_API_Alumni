@@ -200,8 +200,10 @@ def alumnus_list(request):
         alumni_per_page = 15
         messages.error(request, msg)
     if alumni_per_page > 200:
-        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(
-            alumni_per_page
+        msg = (
+            "Error: '{0}' is not a valid limit, please use a number below 200.".format(
+                alumni_per_page
+            )
         )
         messages.error(request, msg)
         alumni_per_page = 200

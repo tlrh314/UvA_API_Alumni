@@ -1,16 +1,12 @@
-import copy
-
-from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
+from ajax_select.fields import AutoCompleteSelectField
 from django import forms
 from django.contrib import admin
-from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+from django.contrib.admin.models import CHANGE, LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
-from tinymce.widgets import TinyMCE
 
-from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
-from ..alumni.models import Alumnus
-from .models import Category, Post
+from ...settings import ADMIN_MEDIA_JS
+from .models import Post
 
 
 # @admin.register(Category)
@@ -18,7 +14,14 @@ class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ("date_created", "date_updated", "last_updated_by")
 
     fieldsets = [
-        ("Category Names", {"fields": ["name",]}),
+        (
+            "Category Names",
+            {
+                "fields": [
+                    "name",
+                ]
+            },
+        ),
         (
             "Meta Info",
             {
@@ -45,16 +48,6 @@ class InterviewAdminForm(forms.ModelForm):
         fields = "__all__"
         model = Post
 
-    # look = copy.copy(TINYMCE_MINIMAL_CONFIG)
-    # look["width"] = ""
-    # look["height"] = "200"
-
-    # Teaser was a charfield shown as a TinyMCE field. This allowed to
-    # copy-paste text/images which preserved formatting and html syntax. This
-    # could easily break the front-end as well as the functionality when a rogue
-    # user puts crazy stuff in the field. Also, copy-paste as plain text is ignored.
-    # teaser = forms.CharField(required=False, widget=TinyMCE(mce_attrs=look))
-
     author = AutoCompleteSelectField("author", required=True, help_text=None)
     alumnus = AutoCompleteSelectField(
         "alumnus",
@@ -62,7 +55,6 @@ class InterviewAdminForm(forms.ModelForm):
         show_help_text=False,
         help_text="Select which Alumnus is interviewed.",
     )
-    # help_text="Select Alumnus if the Category is an Interview. Leave blank when the Category is News.",)
 
 
 @admin.register(Post)

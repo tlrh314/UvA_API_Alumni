@@ -138,8 +138,8 @@ class AcademicTitle(models.Model):
 
 @python_2_unicode_compatible
 class Alumnus(AbstractBaseUser, PermissionsMixin):
-    """ Represents an alumnus of API. Since we extend the AbstractBaseUser
-        we inherit the password, last_login, is_active fields. """
+    """Represents an alumnus of API. Since we extend the AbstractBaseUser
+    we inherit the password, last_login, is_active fields."""
 
     GENDER_CHOICES = (
         (1, "Male"),

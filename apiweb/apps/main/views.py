@@ -127,8 +127,10 @@ def contact(request):
             msg += "-------------------------------------------------\n\n"
             msg += "From: {0}\n".format(name)
             msg += "Email Address: {0}\n\n".format(sender)
-            msg += "This message was automatically send from https://{0}/contact".format(
-                site_name
+            msg += (
+                "This message was automatically send from https://{0}/contact".format(
+                    site_name
+                )
             )
 
             email = EmailMessage(

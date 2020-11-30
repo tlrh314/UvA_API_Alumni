@@ -72,7 +72,10 @@ class ResearchViewTestCase(ResearchTestMixin, TestCase):
         )
         self.assertTrue(login_status)
 
-        url = reverse("research:thesis-detail", kwargs={"slug": self.thesis.slug},)
+        url = reverse(
+            "research:thesis-detail",
+            kwargs={"slug": self.thesis.slug},
+        )
         self.assertEqual(url, "/theses/{}".format(self.thesis.slug))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

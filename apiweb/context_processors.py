@@ -65,8 +65,7 @@ def get_latest_theses(request):
 
 
 def ipaddress(request):
-    """
-    """
+    """"""
 
     ipaddress = IPAddress(request.META["REMOTE_ADDR"])
 

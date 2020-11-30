@@ -2,25 +2,17 @@ import datetime
 
 from django import template
 
-from ...alumni.models import Alumnus, PositionType, PreviousPosition
-
 register = template.Library()
-
-# @register.filter
-# def author_name(post):
-#     alumnus = Alumnus.objects.filter(user=post.author)
-#     if alumnus:
-#         return alumnus.full_name
-#     else:
-#         return post.author
-#
-#
 
 
 @register.simple_tag(name="get_postdoc_year")
 def get_postdoc_year(alumnus):
     # TODO: which position type to include as staff?
-    postdoc_set = alumnus.positions.filter(type__name__in=["Postdoc",])
+    postdoc_set = alumnus.positions.filter(
+        type__name__in=[
+            "Postdoc",
+        ]
+    )
 
     show_start_date_postdoc = True
     today = datetime.date.today()
@@ -155,14 +147,3 @@ def get_obp_year(alumnus):
         else:
             date_string += date_stop.strftime("%Y")
     return date_string
-
-    # for pos in obp_set:
-    #     if not pos.date_stop:
-    #         continue
-    #     if pos.date_stop > date_stop:
-    #         date_stop = pos.date_stop
-
-    # if not date_stop:
-    #     return "Current"
-    # else:
-    #     return date_stop.strftime("%Y")

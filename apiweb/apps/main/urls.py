@@ -22,7 +22,9 @@ urlpatterns = [
     path("privacy-policy/", privacy_policy, name="privacy_policy"),
     path(
         "login/",
-        auth_views.LoginView.as_view(template_name="main/login.html",),
+        auth_views.LoginView.as_view(
+            template_name="main/login.html",
+        ),
         name="site_login",
     ),
     path("redirect_to_profile/", redirect_to_profile, name="login_success"),

@@ -2,23 +2,21 @@ from __future__ import absolute_import, division, unicode_literals
 
 from django import template
 from django.contrib.staticfiles.templatetags.staticfiles import static
-from django.template.defaultfilters import stringfilter
 from django.utils.html import conditional_escape
 from django.utils.http import urlquote
 from django.utils.safestring import mark_safe
 from urlobject import URLObject
 
 from ...research.models import Thesis
-from ..models import Alumnus
 
 register = template.Library()
 
 
 @register.simple_tag(name="filter_objects", takes_context=True)
 def filter_objects(context, filter_type, value):
-    """ Takes two string parameters: filtertype is the category that will be
+    """Takes two string parameters: filtertype is the category that will be
     filtered (e.g. "year"), value is the subselection that is wanted
-    (e.g. 2010-2019). """
+    (e.g. 2010-2019)."""
 
     url = URLObject(context.request.get_full_path())
 
@@ -56,8 +54,8 @@ def filter_objects(context, filter_type, value):
 
 @register.simple_tag(name="check_dropdown", takes_context=True)
 def check_dropdown(context, filter_type, value):
-    """ Checks for each filter type and value if the dropdown checkbox should
-    be marked or not (whether it is on or off) """
+    """Checks for each filter type and value if the dropdown checkbox should
+    be marked or not (whether it is on or off)"""
 
     url = URLObject(context.request.get_full_path())
 
@@ -184,12 +182,10 @@ def display_length_result(advisors_list):
 
 @register.simple_tag(name="filter_content", takes_context=True)
 def filter_content(context, filter_type, value):
-    """ Takes two string parameters: filtertype is the thesis type that will be
-    filtered, value is the subselection that is wanted. """
+    """Takes two string parameters: filtertype is the thesis type that will be
+    filtered, value is the subselection that is wanted."""
 
     url = URLObject(context.request.get_full_path())
-
-    filterdict = url.query.multi_dict
 
     if filter_type == "page":
         new_url = url.set_query_param(filter_type, value)
@@ -237,7 +233,6 @@ def get_supervisors(alumnus):
     """
     phd_theses = alumnus.theses.filter(type="phd")
     msc_theses = alumnus.theses.filter(type="msc")
-    supervisors = alumnus.theses.none()
     thesis_supervisors = []
     date_of_defence = []
     type_theses = []
@@ -263,8 +258,8 @@ def get_supervisors(alumnus):
 @register.filter
 @template.defaultfilters.stringfilter
 def ads_url(value, autoescape=None):
-    """ Returns ADS link based on name or on personal library
-        See http://doc.adsabs.harvard.edu/abs_doc/help_pages/linking.html """
+    """Returns ADS link based on name or on personal library
+    See http://doc.adsabs.harvard.edu/abs_doc/help_pages/linking.html"""
 
     # see http://docs.djangoproject.com/en/dev/howto/custom-template-tags/\
     # #filters-and-auto-escaping

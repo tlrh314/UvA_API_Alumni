@@ -110,8 +110,10 @@ def thesis_list(request):
         messages.error(request, msg)
         theses_per_page = 15
     if theses_per_page > 200:
-        msg = "Error: '{0}' is not a valid limit, please use a number below 200.".format(
-            theses_per_page
+        msg = (
+            "Error: '{0}' is not a valid limit, please use a number below 200.".format(
+                theses_per_page
+            )
         )
         messages.error(request, msg)
         theses_per_page = 200

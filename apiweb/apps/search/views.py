@@ -15,15 +15,16 @@ from .forms import SearchForm
 
 try:
     from urllib import urlencode
-    from urllib2 import urlopen, URLError
+
+    from urllib2 import URLError, urlopen
 except ImportError:
     from urllib.parse import urlencode
-    from urllib.request import urlopen, URLError
+    from urllib.request import URLError, urlopen
 
 
 @login_required
 def search(request):
-    """  Searches through following fields:
+    """Searches through following fields:
             - Alumni first name
             - Alumni last name
             - Thesis title
@@ -33,7 +34,7 @@ def search(request):
 
             - Exact matches if input is given between quotes ' or "
 
-    Return list of alumni with all thesis links """
+    Return list of alumni with all thesis links"""
 
     words = request.GET.get("terms", "")
     terms = []
@@ -164,9 +165,10 @@ class SearchView(FormView):
         search_terms = self.request.session.pop("search_terms", "")
         context["results"] = self.request.session.pop("results", None)
         if context["results"]:
-            context["google_link"] = (
-                "http://www.google.com/search?q={}+"
-                "site:www.astro.uva.nl".format(search_terms)
+            context[
+                "google_link"
+            ] = "http://www.google.com/search?q={}+" "site:www.astro.uva.nl".format(
+                search_terms
             )
         else:
             context["results_empty"] = True

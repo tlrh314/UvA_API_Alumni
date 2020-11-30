@@ -25,7 +25,9 @@ class PasswordResetTestCase(TestCase):
         self.assertEqual(url, "/password_reset/")
 
     def test_password_reset_done(self):
-        url = reverse("site_password_reset_done",)
+        url = reverse(
+            "site_password_reset_done",
+        )
         self.assertEqual(url, "/password_reset/done/")
 
         response = self.client.get(url)
@@ -42,7 +44,8 @@ class PasswordResetTestCase(TestCase):
         uidb64 = urlsafe_base64_encode(force_bytes(self.ralph.pk))
         token = default_token_generator.make_token(self.ralph)
         url = reverse(
-            "site_password_reset_confirm", kwargs={"uidb64": uidb64, "token": token},
+            "site_password_reset_confirm",
+            kwargs={"uidb64": uidb64, "token": token},
         )
         self.assertEqual(url, "/reset/{}/{}/".format(uidb64, token))
 
