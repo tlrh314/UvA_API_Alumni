@@ -1,7 +1,7 @@
 # UvA_API_Alumni
 
 - **Dependencies**
-  - Python 3.8.6
+  - Python 3.8.7
   - Django 2.2.17 (end of extended support for 2.2 LTS: April 2022)
   - See requirements.txt for package dependencies
   - Note that iPython and its dependencies are not strictly necessary
@@ -85,8 +85,8 @@
 - `./nginx/generate_sslcert.sh`
 - `docker-compose up -d mariadb`
   - On first launch, the database and user will be created (you don't have to do anything)
-- `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build django nginx`
-- `docker-compose up --build`
+- `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml build django nginx`
+- `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml up --build`
 - In a new terminal, one can attach to the container in an interactive session:
   - `docker exec -it apiweb bash`
 - Now add the initial data (run this command in the container!)
