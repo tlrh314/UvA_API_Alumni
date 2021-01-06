@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib import admin
-from django.core.exceptions import ValidationError
 
 from ...settings import ADMIN_MEDIA_JS
 from .models import ContactInfo, PrivacyPolicy, WelcomeMessage

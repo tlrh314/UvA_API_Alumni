@@ -299,6 +299,7 @@ TINYMCE_FILEBROWSER = True
 # https://www.tinymce.com/docs/demo/full-featured/
 TINYMCE_DEFAULT_CONFIG = {
     "selector": "textarea",
+    "width": "auto",
     "height": 500,
     "theme": "modern",
     "plugins": [
