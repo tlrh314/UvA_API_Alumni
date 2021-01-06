@@ -2,7 +2,7 @@
 
 - **Dependencies**
   - Python 3.8.6
-  - Django 2.2.16
+  - Django 2.2.17 (end of extended support for 2.2 LTS: April 2022)
   - See requirements.txt for package dependencies
   - Note that iPython and its dependencies are not strictly necessary
 
