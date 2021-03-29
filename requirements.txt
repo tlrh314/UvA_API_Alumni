@@ -30,7 +30,7 @@ Pillow==7.2.0
 progressbar2==3.53.1
 prompt-toolkit==3.0.7
 ptyprocess==0.6.0
-Pygments==2.6.1
+Pygments==2.7.4
 pyparsing==2.4.7
 python-utils==2.4.0
 pytz==2020.1
