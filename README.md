@@ -1,8 +1,8 @@
 # UvA_API_Alumni
 
 - **Dependencies**
-  - Python 3.8.7
-  - Django 2.2.17 (end of extended support for 2.2 LTS: April 2022)
+  - Python 3.9.2
+  - Django 3.1.7
   - See requirements.txt for package dependencies
   - Note that iPython and its dependencies are not strictly necessary
 
