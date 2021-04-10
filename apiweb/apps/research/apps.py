@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class ResearchConfig(AppConfig):
-    name = "research"
+    name = "apiweb.apps.research"

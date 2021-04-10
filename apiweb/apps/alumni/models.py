@@ -10,7 +10,6 @@ from django.db.utils import IntegrityError
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
 from jsonfield import JSONField
@@ -29,7 +28,6 @@ def get_mugshot_location(instance, filename):
 # Custom validator to block @ symbol
 
 
-@python_2_unicode_compatible
 class PositionType(models.Model):
     name = models.CharField(
         max_length=80,
@@ -55,7 +53,6 @@ class PositionType(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class PreviousPosition(models.Model):
     NOVA_NETWORK = (
         ("NW1", "Nova Network 1"),
@@ -124,7 +121,6 @@ class PreviousPosition(models.Model):
         return self.type.name
 
 
-@python_2_unicode_compatible
 class AcademicTitle(models.Model):
     title = models.CharField(_("title"), max_length=20)
 
@@ -136,7 +132,6 @@ class AcademicTitle(models.Model):
         return self.title
 
 
-@python_2_unicode_compatible
 class Alumnus(AbstractBaseUser, PermissionsMixin):
     """Represents an alumnus of API. Since we extend the AbstractBaseUser
     we inherit the password, last_login, is_active fields."""

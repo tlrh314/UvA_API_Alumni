@@ -5,7 +5,6 @@ from django.conf import settings
 from django.db import IntegrityError, models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from ..alumni.models import Alumnus
@@ -21,7 +20,6 @@ def get_thesis_photo_location(instance, filename):
     return os.path.join("uploads", "theses", instance.type, filename)
 
 
-@python_2_unicode_compatible
 class Thesis(models.Model):
     """ Represents a thesis at API, either MSc or PhD. """
 

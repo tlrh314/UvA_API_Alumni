@@ -1,7 +1,5 @@
-from __future__ import absolute_import, division, unicode_literals
-
 from django import template
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 from django.utils.html import conditional_escape
 from django.utils.http import urlquote
 from django.utils.safestring import mark_safe

@@ -1,10 +1,7 @@
 import socket
 import unittest
 
-from django.utils.encoding import python_2_unicode_compatible
 
-
-@python_2_unicode_compatible
 class IPAddress(object):
     def __init__(self, *args, **kwargs):
         if not args and "ip" in kwargs:

@@ -192,6 +192,9 @@ if "mysql" in DATABASES["default"]["ENGINE"]:
     DATABASES["default"]["OPTIONS"]["init_command"] = "SET foreign_key_checks = 0;"
 DATABASE_ROUTERS = ["apiweb.dbrouters.WikiRouter", "apiweb.dbrouters.DefaultRouter"]
 
+# https://docs.djangoproject.com/en/3.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 ALLOWED_HOSTS = ["*"]
 ALLOWED_IPS = ["allowed-ips"]

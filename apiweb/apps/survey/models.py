@@ -1,13 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
 
 from ..alumni.models import Alumnus
 
 
-@python_2_unicode_compatible
 class Sector(models.Model):
     name = models.CharField(max_length=200)
 
@@ -28,7 +26,6 @@ class Sector(models.Model):
         verbose_name_plural = "Job Sectors"
 
 
-@python_2_unicode_compatible
 class JobAfterLeaving(models.Model):
     """ Represents a job after leaving API """
 
