@@ -21,7 +21,7 @@ jobs:
         env:
           MYSQL_USER: dbuser
           MYSQL_PASSWORD: dbpassword
-          MYSQL_DATABASE: test_apiweb
+          MYSQL_DATABASE: apiweb
           MYSQL_ROOT_PASSWORD: root
           MYSQL_ALLOW_EMPTY_PASSWORD: no
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
@@ -29,18 +29,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Verify MariaDB connection
-        env:
-          PORT: ${{ job.services.mariadb.ports[3306] }}
-        run: |
-          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-            sleep 1
-          done
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_production.txt') }}-${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
