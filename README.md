@@ -2,7 +2,7 @@
 
 - **Dependencies**
   - Python 3.9.2
-  - Django 3.1.7
+  - Django 3.2+
   - See requirements.txt for package dependencies
   - Note that iPython and its dependencies are not strictly necessary
 
@@ -73,8 +73,7 @@
 - Setup local settings: `cp apiweb/settings/.env.example apiweb/settings/.env`
 - Edit `settings/.env` to tailor to your machine.
 - TODO: command below misses a considerable number of volumes linked into the container. See `docker-compose.yml`
-- Run the server: `docker run --rm -it -v "$(pwd)/apiweb/settings/.env:/apiweb/settings/.env" -v "$(pwd)":/apiweb -p 1337:1337
-  --name runserver apiweb bash -c "python manage.py runserver 0.0.0.0:1337"` (and leave running)
+- Run the server: `docker run --rm -it -v "$(pwd)/apiweb/settings/.env:/apiweb/settings/.env" -v "$(pwd)":/app -p 1337:1337 --name runserver apiweb bash -c "python manage.py runserver 0.0.0.0:1337"` (and leave running)
   - Visit the website at http://localhost:1337
 - In a new terminal, one can execute commands in the running container. Load the fixtures:
   - `docker exec runserver bash -c "python manage.py loaddata apps/*/fixtures/*.json"`
