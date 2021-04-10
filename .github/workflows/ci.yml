@@ -45,6 +45,7 @@ jobs:
 
       - name: Setup .env
         run: |
+          touch apiweb/templates/piwik.html
           cp apiweb/settings/.env.example apiweb/settings/.env
           sed -i.bak -e "s/DATABASE_DEFAULT=.*/DATABASE_DEFAULT=mysql:\/\/root:root@127.0.0.1:${{ job.services.mariadb.ports[3306] }}\/apiweb/g" apiweb/settings/.env
           grep "DATABASE_DEFAULT" apiweb/settings/.env
