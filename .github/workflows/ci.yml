@@ -15,36 +15,44 @@ jobs:
 
     services:
       mariadb:
-          image: mariadb:10.3
-          env:
-            MYSQL_ALLOW_EMPTY_PASSWORD: no
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_USER: dbuser
-            MYSQL_PASSWORD: dbpassword
-            MYSQL_DATABASE: test_apiweb
-          ports:
-            - 3306
-          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        image: mariadb:10.3
+        ports:
+          - 3306
+        env:
+          MYSQL_USER: dbuser
+          MYSQL_PASSWORD: dbpassword
+          MYSQL_DATABASE: test_apiweb
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: no
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Verify MariaDB connection
+        env:
+          PORT: ${{ job.services.mariadb.ports[3306] }}
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        if [ -f requirements_production.txt ]; then pip install -r requirements_production.txt; fi
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Setup .env
-      run: |
-        cp apiweb/settings/.env.example apiweb/settings/.env
-        sed -i.bak -e "s/DATABASE_DEFAULT=.*/DATABASE_DEFAULT=mysql:\/\/dbuser:dbpassword@mariadb:${{ job.services.mariadb.ports[3306] }}\/apiweb/g" apiweb/settings/.env
-        grep "DATABASE_DEFAULT" apiweb/settings/.env
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements_production.txt ]; then pip install -r requirements_production.txt; fi
 
-    - name: Run the tests
-      run: python manage.py test
+      - name: Setup .env
+        run: |
+          cp apiweb/settings/.env.example apiweb/settings/.env
+          sed -i.bak -e "s/DATABASE_DEFAULT=.*/DATABASE_DEFAULT=mysql:\/\/dbuser:dbpassword@mariadb:${{ job.services.mariadb.ports[3306] }}\/apiweb/g" apiweb/settings/.env
+          grep "DATABASE_DEFAULT" apiweb/settings/.env
+
+      - name: Run the tests
+        run: python manage.py test
