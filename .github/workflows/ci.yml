@@ -33,7 +33,7 @@ jobs:
         env:
           PORT: ${{ job.services.mariadb.ports[3306] }}
         run: |
-          while ! mysqladmin ping -h"mariadb" -P"$PORT" --silent; do
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
             sleep 1
           done
 
@@ -51,7 +51,7 @@ jobs:
       - name: Setup .env
         run: |
           cp apiweb/settings/.env.example apiweb/settings/.env
-          sed -i.bak -e "s/DATABASE_DEFAULT=.*/DATABASE_DEFAULT=mysql:\/\/dbuser:dbpassword@mariadb:${{ job.services.mariadb.ports[3306] }}\/apiweb/g" apiweb/settings/.env
+          sed -i.bak -e "s/DATABASE_DEFAULT=.*/DATABASE_DEFAULT=mysql:\/\/dbuser:dbpassword@127.0.0.1:${{ job.services.mariadb.ports[3306] }}\/apiweb/g" apiweb/settings/.env
           grep "DATABASE_DEFAULT" apiweb/settings/.env
 
       - name: Run the tests
