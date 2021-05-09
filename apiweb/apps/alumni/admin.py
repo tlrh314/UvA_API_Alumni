@@ -87,7 +87,7 @@ class PreviousPositionAdmin(admin.ModelAdmin):
         obj.save()
 
     def get_queryset(self, request):
-        """ This function defines how to sort on alumnus column in the list_display """
+        """This function defines how to sort on alumnus column in the list_display"""
         qs = super(PreviousPositionAdmin, self).get_queryset(request)
         qs = qs.annotate(models.Count("alumnus"))
         return qs
@@ -359,7 +359,7 @@ class AlumnusAdmin(UserAdmin):
         css = {"all": ("css/admin_extra.css",)}
 
     def get_alumnus(self, obj):
-        """ We could use author instead of get_alumnus in list_display """
+        """We could use author instead of get_alumnus in list_display"""
         return obj.full_name
 
     get_alumnus.short_description = "Alumnus"

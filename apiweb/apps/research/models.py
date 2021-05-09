@@ -11,17 +11,17 @@ from ..alumni.models import Alumnus
 
 
 def get_thesis_pdf_location(instance, filename):
-    """ the media directory is already included """
+    """the media directory is already included"""
     return os.path.join("uploads", "theses", instance.type, filename)
 
 
 def get_thesis_photo_location(instance, filename):
-    """ the media directory is already included """
+    """the media directory is already included"""
     return os.path.join("uploads", "theses", instance.type, filename)
 
 
 class Thesis(models.Model):
-    """ Represents a thesis at API, either MSc or PhD. """
+    """Represents a thesis at API, either MSc or PhD."""
 
     THESIS_TYPE = (
         ("phd", "PhD"),

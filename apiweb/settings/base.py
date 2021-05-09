@@ -193,7 +193,7 @@ if "mysql" in DATABASES["default"]["ENGINE"]:
 DATABASE_ROUTERS = ["apiweb.dbrouters.WikiRouter", "apiweb.dbrouters.DefaultRouter"]
 
 # https://docs.djangoproject.com/en/3.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 ALLOWED_HOSTS = ["*"]
@@ -230,7 +230,7 @@ WSGI_APPLICATION = "apiweb.server.wsgi.application"
 
 
 class GroupWriteRotatingFileHandler(logging.handlers.RotatingFileHandler):
-    """ https://stackoverflow.com/questions/1407474 """
+    """https://stackoverflow.com/questions/1407474"""
 
     def _open(self):
         prevumask = os.umask(0o002)

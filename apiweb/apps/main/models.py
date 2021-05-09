@@ -11,7 +11,7 @@ def place_welcome_photo(instance, filename):
 
 
 def validate_only_one_instance(obj):
-    """ Allow only one instance of a model to be created, in this case WelcomeMessage and ContactInfo """
+    """Allow only one instance of a model to be created, in this case WelcomeMessage and ContactInfo"""
     model = obj.__class__
     if model.objects.count() > 0 and obj.id != model.objects.get().id:
         raise ValidationError(

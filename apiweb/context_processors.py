@@ -17,7 +17,7 @@ except ModuleNotFoundError:
 
 class ContactInfoDefault(object):
     def __init__(self):
-        """ Hardcoded in case there is no ContactInfo object """
+        """Hardcoded in case there is no ContactInfo object"""
         self.secretary_email_address = "secr-astro-science@uva.nl"
         self.address_api = "Sciencepark 904, 1098XH, Amsterdam"
         self.postbox_address_api = "PO Box 94249, 1090 GE Amsterdam"
@@ -65,7 +65,7 @@ def get_latest_theses(request):
 
 
 def ipaddress(request):
-    """"""
+    """ """
 
     ipaddress = IPAddress(request.META["REMOTE_ADDR"])
 

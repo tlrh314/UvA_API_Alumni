@@ -21,7 +21,7 @@ from .validators import MyValidator
 
 
 def get_mugshot_location(instance, filename):
-    """ the media directory is already included """
+    """the media directory is already included"""
     return os.path.join("uploads", "alumni", "mugshots", instance.username, filename)
 
 
@@ -305,7 +305,7 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
         ordering = ("last_name", "first_name")
 
     def get_full_name(self):
-        """ Required when extending AbstractBaseUser """
+        """Required when extending AbstractBaseUser"""
         title_last = self.academic_title in AcademicTitle.objects.filter(
             title__in=["MA", "MSc", "BSc", "PhD"]
         )
@@ -328,11 +328,11 @@ class Alumnus(AbstractBaseUser, PermissionsMixin):
         )
 
     def get_short_name(self):
-        """ Required when extending AbstractBaseUser """
+        """Required when extending AbstractBaseUser"""
         return self.first_name
 
     def email_user(self, subject, message, from_email=None, **kwargs):
-        """ Required when extending AbstractBaseUser (?) """
+        """Required when extending AbstractBaseUser (?)"""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def __str__(self):

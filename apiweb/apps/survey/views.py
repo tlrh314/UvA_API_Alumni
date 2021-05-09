@@ -34,7 +34,7 @@ def survey_contactinfo(request, use_for_main=False):
 
 @login_required
 def survey_careerinfo_current(request):
-    """ Career info form is shown on success of the survey_contactinfo view/form. """
+    """Career info form is shown on success of the survey_contactinfo view/form."""
     which_position_value = 0
     try:
         prefill_instance = JobAfterLeaving.objects.all().filter(
@@ -82,7 +82,7 @@ def survey_careerinfo_current(request):
 
 @login_required
 def survey_careerinfo_first(request):
-    """ Career info form is shown on success of the survey_contactinfo view/form. """
+    """Career info form is shown on success of the survey_contactinfo view/form."""
     which_position_value = 1
     try:
         prefill_instance = JobAfterLeaving.objects.all().filter(
@@ -127,7 +127,7 @@ def survey_careerinfo_first(request):
 
 @login_required
 def survey_careerinfo_second(request):
-    """ Career info form is shown on success of the survey_contactinfo view/form. """
+    """Career info form is shown on success of the survey_contactinfo view/form."""
     which_position_value = 2
     try:
         prefill_instance = JobAfterLeaving.objects.all().filter(
@@ -173,7 +173,7 @@ def survey_careerinfo_second(request):
 
 @login_required
 def survey_careerinfo_third(request):
-    """ Career info form is shown on success of the survey_contactinfo view/form. """
+    """Career info form is shown on success of the survey_contactinfo view/form."""
     which_position_value = 3
     try:
         prefill_instance = JobAfterLeaving.objects.all().filter(

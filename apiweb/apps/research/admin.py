@@ -191,7 +191,7 @@ class ThesisAdmin(admin.ModelAdmin):
     #             pass
 
     def get_author(self, obj):
-        """ We could use author instead of get_alumnus in list_display """
+        """We could use author instead of get_alumnus in list_display"""
         return obj.alumnus.full_name
 
     get_author.short_description = "Author"

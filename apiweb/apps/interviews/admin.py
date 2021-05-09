@@ -120,7 +120,7 @@ class InterviewAdmin(admin.ModelAdmin):
         obj.save()
 
     def get_alumnus(self, obj):
-        """ We could use author instead of get_alumnus in list_display """
+        """We could use author instead of get_alumnus in list_display"""
         return obj.alumnus.full_name
 
     get_alumnus.short_description = "Interviewed Alumnus"

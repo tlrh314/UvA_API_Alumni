@@ -27,7 +27,7 @@ class Sector(models.Model):
 
 
 class JobAfterLeaving(models.Model):
-    """ Represents a job after leaving API """
+    """Represents a job after leaving API"""
 
     YES_OR_NO = (
         (1, "Yes"),
