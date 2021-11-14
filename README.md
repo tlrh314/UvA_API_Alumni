@@ -1,7 +1,7 @@
 # UvA_API_Alumni
 
 - **Dependencies**
-  - Python 3.9.2
+  - Python 3.7 || 3.8 || 3.9
   - Django 3.2+
   - See requirements.txt for package dependencies
   - Note that iPython and its dependencies are not strictly necessary
