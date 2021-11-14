@@ -74,7 +74,7 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
         headers = requests.utils.default_headers()
         headers.update(
             {
-                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36"
+                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36"  # noqa: E501
             }
         )
         r = requests.get(url, headers=headers, verify=verify_val)
@@ -111,7 +111,7 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
                 if "API" in str(j):
                     api_record = True
 
-            if api_record == True:
+            if api_record is True:
                 api_record_set.append(i)
 
         # Per record in api_record set we have 3 sub entries:
@@ -125,7 +125,7 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
             second_contents = api_record_set[j][1].findAll("td")
             third_contents = api_record_set[j][2].findAll("td")
 
-            ##First_info
+            # First_info
             name_el = first_contents[0]
             master_program_el = first_contents[1]
             date_el = first_contents[2]
@@ -155,7 +155,7 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
                 supervisor_el.text.split("</td>")[0].split(":")[1].strip("\t\n\r")[1:]
             )
 
-            ##Second_info
+            # Second_info
             # Sometimes, no profile picture is present, so we count backwards and try it
             try:
                 profilePicture_el = second_contents[-3]
@@ -178,11 +178,12 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
             )
             thesisPicture_link = thesisPicture_el.find("img")["src"]
 
-            ##Third info
+            # Third info
             theses_els = third_contents[0].findAll("a")
 
             # format the info
-            # Sometimes, no abstract is present, so first we test, and count backwards in order to be able to get it if present
+            # Sometimes, no abstract is present, so first we test, and
+            # count backwards in order to be able to get it if present
             abstract_index = None
             fulltext_index = -1
 
@@ -191,14 +192,14 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
                     abstract_index = -2
 
             abstract_link = ""
-            if not abstract_index == None:
+            if abstract_index is not None:
                 abstract_el = theses_els[abstract_index]
                 abstract_link = abstract_el["href"]
 
             fulltext_link = ""
             fulltext_mail = ""
 
-            if not fulltext_index == None:
+            if fulltext_index is not None:
                 fulltext_el = theses_els[fulltext_index]
                 fulltext_temp = fulltext_el["href"]
                 if "https" in fulltext_temp:
@@ -216,7 +217,7 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
             local_thesispicture_location = not_found_name
 
             if download_abstract:
-                if not abstract_link == not_found_name:
+                if abstract_link != not_found_name:
                     abstract_filename = abstract_link.split("/")[-1]
                     target_filename_full = str(file_target_location + abstract_filename)
                     if not os.path.exists(target_filename_full):
@@ -263,7 +264,7 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
                         file_target_location + thesispicture_filename
                     )
                     if not os.path.exists(target_filename_full):
-                        downloaded_filename = wget.download(
+                        downloaded_filename = wget.download(  # noqa: F841
                             thesisPicture_link, out=target_filename_full
                         )
                         if os.path.exists(target_filename_full):
@@ -312,7 +313,6 @@ def get_persons(base_url, page, degree_type, use_headers, file_target_location):
 
             print("date = %s" % date)
             sub_dict["date"] = date
-            datetime_date = make_datetime_object(date)
 
             print("thesis_title = %s" % thesis_title)
             sub_dict["thesis_title"] = thesis_title
@@ -357,7 +357,7 @@ def loop_over(file_target_location):
         if os.path.isdir(file_target_location):
             print("Succesfully created target directory")
 
-    while has_results == True:
+    while has_results is True:
         # base_url = 'https://esc.fnwi.uva.nl/thesis/apart/phys/thesis.php?page=phys&start=%d&level=%s'%(10*i+1, degree)
         base_url = "https://esc.fnwi.uva.nl/thesis/apart/phys/thesis.php?page=phys&start=%d&level=%s"
 

@@ -2,10 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import Http404
 from django.shortcuts import render
-from django.urls import reverse
-from django.views.generic import RedirectView, TemplateView
 
 from ..alumni.models import Alumnus
 from ..research.models import Thesis
@@ -119,7 +116,8 @@ def view_b(request):
 @login_required
 def view_c(request):
     """
-    View to visualize, if the job is in the field of astronomy, whether it is at a university, or a different institute type
+    View to visualize, if the job is in the field of astronomy, whether it is
+    at a university, or a different institute type
     """
     pass
 
@@ -239,7 +237,7 @@ def tree(request):
         student = thesis.alumnus
 
         for i, supervisor in enumerate(thesis.advisor.all()):
-            if not supervisor in all_people:
+            if supervisor not in all_people:
                 all_people.append(supervisor)
 
             link_dict = {"data": {}}
@@ -250,7 +248,7 @@ def tree(request):
             link_dict["strength"] = 1
             links_list.append(link_dict)
 
-        if not student in all_people:
+        if student not in all_people:
             all_people.append(student)
 
     # Get all the nodes

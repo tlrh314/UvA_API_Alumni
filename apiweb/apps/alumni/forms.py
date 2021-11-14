@@ -1,17 +1,13 @@
 import copy
 
-from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 from django import forms
-from django.contrib import admin
-from django.contrib.admin import widgets
-from django.contrib.auth import authenticate, get_user_model, password_validation
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from tinymce.widgets import TinyMCE
 
-from ...settings import ADMIN_MEDIA_JS, TINYMCE_MINIMAL_CONFIG
+from ...settings import TINYMCE_MINIMAL_CONFIG
 from .models import Alumnus, PreviousPosition
 
 
@@ -105,8 +101,10 @@ class AlumnusAdminForm(UserChangeForm):
             self._errors["work_phone"] = ErrorList()
             self._errors["work_phone"].append("Phone numbers can only contain numbers")
 
-        # Because there is also a possibility to log in with email, one must not use an email which is already in use.
-        # TODO: if the user has an email, but the form is empty, that means that the person wants to remove the data, but this way wouldt let it
+        # Because there is also a possibility to log in with email, one must not
+        # use an email which is already in use.
+        # TODO: if the user has an email, but the form is empty, that means that
+        # the person wants to remove the data, but this way wouldt let it
         # SO make a check whether there is instance data but form data is empty
 
         email = self.cleaned_data.get("email")

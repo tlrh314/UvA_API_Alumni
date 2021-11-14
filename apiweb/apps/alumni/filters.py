@@ -1,8 +1,6 @@
 from datetime import datetime, timedelta
 
 from django.contrib import admin
-from django.contrib.admin import DateFieldListFilter, FieldListFilter
-from django.contrib.admin.filters import ChoicesFieldListFilter
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -97,7 +95,7 @@ class SurveyListFilter(admin.SimpleListFilter):
         value = self.value()
         self.dates_dict = return_dates()
 
-        if value == None:
+        if value is None:
             return queryset
 
         if value == "today":
