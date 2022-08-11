@@ -1,5 +1,5 @@
 beautifulsoup4==4.10.0
-Django==3.2.9
+Django==3.2.15
 django-ajax-selects==2.1.0
 django-autocomplete-light==3.8.2
 django-autoslug==1.9.8
